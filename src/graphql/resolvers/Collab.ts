@@ -1,9 +1,13 @@
-import { Collab } from '../../db/models/Collab';
-import { IResolvers } from '../types.d';
+import { User } from '../../db/models/User';
+import { Collab as ModelCollab } from '../../db/models/Collab';
+import { Resolvers } from '../types.d';
 
-const collabResolver: IResolvers = {
+const collabResolver: Resolvers = {
   Mutation: {
-    createCollab: (root, { collab }) => Collab.createCollab(collab.ownerId),
+    createCollab: (root, { collab }) => ModelCollab.createCollab(collab),
+  },
+  Collab: {
+    owner: ({ ownerId }) => User.findByPk(ownerId, { raw: true }),
   },
 };
 

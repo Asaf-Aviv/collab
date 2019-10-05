@@ -1,8 +1,8 @@
 import { Collab } from '../../db/models/Collab';
 import { User } from '../../db/models/User';
-import { IResolvers } from '../types.d';
+import { Resolvers } from '../types.d';
 
-const userResolver: IResolvers = {
+const userResolver: Resolvers = {
   Query: {
     users: () => User.findAll(),
   },
@@ -11,7 +11,7 @@ const userResolver: IResolvers = {
     login: (root, { credentials }) => User.login(credentials),
   },
   User: {
-    collabs: (root) => Collab.userCollabs(root.id),
+    collabs: (root) => Collab.getUserCollabs(root.id),
   },
 };
 

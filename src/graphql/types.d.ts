@@ -22,11 +22,27 @@ export type Collab = {
    __typename?: 'Collab',
   id: Scalars['ID'],
   ownerId: Scalars['ID'],
+  owner?: Maybe<User>,
+  experience: Scalars['String'],
+  stack: Array<Scalars['String']>,
+  description: Scalars['String'],
 };
 
 export type CollabArgs = {
   ownerId: Scalars['ID'],
+  experience: Experience,
+  stack: Array<Scalars['String']>,
+  description: Scalars['String'],
 };
+
+export enum Experience {
+  All = 'ALL',
+  Junior = 'JUNIOR',
+  JuniorMid = 'JUNIOR_MID',
+  Mid = 'MID',
+  MidSenior = 'MID_SENIOR',
+  Senior = 'SENIOR'
+}
 
 export type LoginArgs = {
   email: Scalars['String'],
@@ -157,6 +173,7 @@ export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   LoginArgs: LoginArgs,
   CollabArgs: CollabArgs,
+  Experience: Experience,
   CacheControlScope: CacheControlScope,
   Upload: ResolverTypeWrapper<Scalars['Upload']>,
   Int: ResolverTypeWrapper<Scalars['Int']>,
@@ -174,6 +191,7 @@ export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean'],
   LoginArgs: LoginArgs,
   CollabArgs: CollabArgs,
+  Experience: Experience,
   CacheControlScope: CacheControlScope,
   Upload: Scalars['Upload'],
   Int: Scalars['Int'],
@@ -185,6 +203,10 @@ export type CacheControlDirectiveResolver<Result, Parent, ContextType = any, Arg
 export type CollabResolvers<ContextType = any, ParentType extends ResolversParentTypes['Collab'] = ResolversParentTypes['Collab']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   ownerId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  owner?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
+  experience?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  stack?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>,
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
 }>;
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
