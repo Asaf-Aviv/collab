@@ -10,9 +10,9 @@ import {
   BeforeCreate,
   DefaultScope,
   HasMany,
-  Length,
   AllowNull,
   Validate,
+  BeforeValidate,
 } from 'sequelize-typescript';
 import uuid from 'uuid/v4';
 import bcrypt from 'bcrypt';
@@ -25,7 +25,7 @@ import {
 } from 'sequelize';
 import { SignupArgs, LoginArgs } from '../../graphql/types.d';
 import { Collab } from './Collab';
-import { emailRegex } from '../../util';
+import { passwordRegex } from '../../utils';
 
 @DefaultScope(() => ({
   attributes: { exclude: ['password'] },
@@ -43,17 +43,22 @@ export class User extends Model<User> {
     msg: 'Username is already taken',
     name: 'unique_username',
   })
-  @Length({
-    min: 3,
-    max: 16,
-    msg: 'Username should be between 3 and 16 characters',
+  @Validate({
+    len: {
+      msg: 'Username should be between 3 and 16 characters',
+      args: [3, 16],
+    },
+    is: {
+      args: /^[\w]+$/,
+      msg: 'Username can contain only letters numbers and underscores',
+    },
   })
   @Column(DataType.CITEXT)
   username!: string;
 
   @Validate({
     is: {
-      args: emailRegex,
+      args: passwordRegex,
       msg: 'Password must contain atleast eight characters, one letter and one number',
     },
   })
@@ -65,6 +70,7 @@ export class User extends Model<User> {
     msg: 'Email is already taken',
     name: 'unique_email',
   })
+  @AllowNull(false)
   @Column({ validate: { isEmail: { msg: 'Invalid Email' } } })
   email!: string;
 
@@ -85,15 +91,20 @@ export class User extends Model<User> {
   countCollabs!: HasManyCountAssociationsMixin;
   createCollab!: HasManyCreateAssociationMixin<Collab>;
 
-  @BeforeCreate
+  @BeforeValidate
   static formatFields(instance: User) {
     instance.username = instance.username.trim();
     instance.email = instance.email.trim().toLowerCase();
   }
 
+  @BeforeCreate
+  static async hashPassword(instance: User) {
+    const password = await bcrypt.hash(instance.password, 12);
+    Object.assign(instance, { password });
+  }
+
   static async createUser(credentials: SignupArgs) {
-    const hashedPassword = await bcrypt.hash(credentials.password, 12);
-    await this.create({ ...credentials, password: hashedPassword });
+    await this.create(credentials);
     return true;
   }
 
@@ -109,10 +120,20 @@ export class User extends Model<User> {
 
     const isMatchedPasswords = await bcrypt.compare(password, user.password);
 
-    if (isMatchedPasswords) {
-      return user;
+    if (!isMatchedPasswords) {
+      throw new Error('Incorrect Credentials');
     }
 
-    throw new Error('Incorrect Credentials');
+    return user;
+  }
+
+  static async deleteUser(id: string) {
+    const isDeleted = await this.destroy({ where: { id } });
+
+    if (!isDeleted) {
+      throw new Error('User Not Found');
+    }
+
+    return true;
   }
 }
