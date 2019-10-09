@@ -31,9 +31,11 @@ export class Collab extends Model<Collab> {
   @Column
   id!: string;
 
+  @AllowNull(false)
   @Column(DataType.ENUM('ALL', 'JUNIOR', 'JUNIOR_MID', 'MID_SENIOR', 'SENIOR'))
   experience!: string;
 
+  @AllowNull(false)
   @Column(DataType.ARRAY(DataType.STRING))
   stack!: string[];
 
@@ -42,6 +44,7 @@ export class Collab extends Model<Collab> {
     min: 10,
     max: 500,
   })
+  @AllowNull(false)
   @Column
   description!: string;
 
