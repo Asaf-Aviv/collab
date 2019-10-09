@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize-typescript';
 
-export const sequelize = new Sequelize(
+export default new Sequelize(
   'collab',
   process.env.PG_USER as string,
   process.env.PG_PASS,
@@ -13,6 +13,9 @@ export const sequelize = new Sequelize(
       acquire: 30000,
       idle: 10000,
     },
-    logging: false,
+    logging: true,
+    define: {
+      underscored: true,
+    },
   },
 );

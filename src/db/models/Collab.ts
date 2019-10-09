@@ -6,16 +6,24 @@ import {
   PrimaryKey,
   Default,
   ForeignKey,
-  BelongsTo,
   DataType,
   Length,
+  BelongsTo,
+  HasMany,
+  AllowNull,
 } from 'sequelize-typescript';
 import uuid from 'uuid/v4';
-import { CollabArgs } from '../../graphql/types.d';
-
+import {
+  HasManyGetAssociationsMixin,
+  HasManyAddAssociationMixin,
+  HasManyHasAssociationMixin,
+  HasManyCountAssociationsMixin,
+  HasManyCreateAssociationMixin,
+} from 'sequelize';
+import { CollabMember } from './CollabMember';
 import { User } from './User';
 
-@Table
+@Table({ tableName: 'collabs' })
 export class Collab extends Model<Collab> {
   @IsUUID(4)
   @PrimaryKey
@@ -34,21 +42,23 @@ export class Collab extends Model<Collab> {
     min: 10,
     max: 500,
   })
-  @Column(DataType.STRING())
+  @Column
   description!: string;
 
   @ForeignKey(() => User)
+  @AllowNull(false)
   @Column
   ownerId!: string;
 
-  @BelongsTo(() => User)
+  @BelongsTo(() => User, { foreignKey: 'ownerId', onDelete: 'cascade' })
   owner!: User;
 
-  static async createCollab(collab: CollabArgs) {
-    return this.create(collab);
-  }
+  @HasMany(() => CollabMember)
+  members!: CollabMember[];
 
-  static async getUserCollabs(userId: string) {
-    return this.findAll({ raw: true, where: { ownerId: userId } });
-  }
+  getMembers!: HasManyGetAssociationsMixin<CollabMember>;
+  addMember!: HasManyAddAssociationMixin<CollabMember, string>;
+  hasMember!: HasManyHasAssociationMixin<CollabMember, string>;
+  countMembers!: HasManyCountAssociationsMixin;
+  createMember!: HasManyCreateAssociationMixin<CollabMember>;
 }

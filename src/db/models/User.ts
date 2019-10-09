@@ -7,30 +7,30 @@ import {
   IsUUID,
   PrimaryKey,
   Default,
-  Sequelize,
   BeforeCreate,
   DefaultScope,
   HasMany,
+  Length,
+  AllowNull,
+  Validate,
 } from 'sequelize-typescript';
-import { IndexesOptions } from 'sequelize';
 import uuid from 'uuid/v4';
 import bcrypt from 'bcrypt';
+import {
+  HasManyGetAssociationsMixin,
+  HasManyAddAssociationMixin,
+  HasManyHasAssociationMixin,
+  HasManyCreateAssociationMixin,
+  HasManyCountAssociationsMixin,
+} from 'sequelize';
 import { SignupArgs, LoginArgs } from '../../graphql/types.d';
 import { Collab } from './Collab';
+import { emailRegex } from '../../util';
 
 @DefaultScope(() => ({
   attributes: { exclude: ['password'] },
 }))
-@Table({
-  indexes: [{
-    name: 'username',
-    unique: true,
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    // @ts-ignore
-    fields: [Sequelize.fn('lower', Sequelize.col('username'))] as IndexesOptions['fields'],
-  },
-  ],
-})
+@Table({ tableName: 'users' })
 export class User extends Model<User> {
   @IsUUID(4)
   @PrimaryKey
@@ -38,25 +38,34 @@ export class User extends Model<User> {
   @Column
   id!: string;
 
-  @Column({
-    validate: {
-      len: {
-        args: [3, 16],
-        msg: 'Username should be between 3 and 16 characters',
-      },
-    },
+  @AllowNull(false)
+  @Unique({
+    msg: 'Username is already taken',
+    name: 'unique_username',
   })
+  @Length({
+    min: 3,
+    max: 16,
+    msg: 'Username should be between 3 and 16 characters',
+  })
+  @Column(DataType.CITEXT)
   username!: string;
 
+  @Validate({
+    is: {
+      args: emailRegex,
+      msg: 'Password must contain atleast eight characters, one letter and one number',
+    },
+  })
+  @AllowNull(false)
   @Column
   password!: string;
 
-  @Unique(true)
-  @Column({
-    validate: {
-      isEmail: true,
-    },
+  @Unique({
+    msg: 'Email is already taken',
+    name: 'unique_email',
   })
+  @Column({ validate: { isEmail: { msg: 'Invalid Email' } } })
   email!: string;
 
   @Default(Date.now)
@@ -68,7 +77,13 @@ export class User extends Model<User> {
   updatedAt!: number;
 
   @HasMany(() => Collab)
-  collabs!: Collab[];
+  collabs?: Collab[];
+
+  getCollabs!: HasManyGetAssociationsMixin<Collab>;
+  addCollab!: HasManyAddAssociationMixin<Collab, string>;
+  hasCollab!: HasManyHasAssociationMixin<Collab, string>;
+  countCollabs!: HasManyCountAssociationsMixin;
+  createCollab!: HasManyCreateAssociationMixin<Collab>;
 
   @BeforeCreate
   static formatFields(instance: User) {
@@ -77,19 +92,8 @@ export class User extends Model<User> {
   }
 
   static async createUser(credentials: SignupArgs) {
-    const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-    const validPassword = regex.test(credentials.password);
-
-    if (!validPassword) {
-      throw new Error(
-        'Password must contain atleast eight characters, one letter and one number',
-      );
-    }
-
     const hashedPassword = await bcrypt.hash(credentials.password, 12);
-
     await this.create({ ...credentials, password: hashedPassword });
-
     return true;
   }
 
