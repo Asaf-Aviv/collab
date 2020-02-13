@@ -2,55 +2,26 @@
   "name": "collab",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": ".eslintrc.js",
   "scripts": {
-    "start": "ts-node-dev --watch 'src/**/**.ts' --respawn src/server.ts",
-    "dev": "concurrently --kill-others-on-fail \"npm:start\" \"npm run generate --watch\"",
-    "generate": "graphql-codegen"
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm start",
+    "seed": "cd server && npm run seed",
+    "dev": "npm run seed && concurrently \"npm:server\" \"npm:client\"",
+    "copy": "xcopy . F:\\collab /EXCLUDE:exclude.txt /S /Y > nul"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Asaf-Aviv/collab.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "apollo-server-express": "^2.9.4",
-    "bcrypt": "^3.0.6",
-    "dataloader": "^1.4.0",
-    "dotenv": "^8.1.0",
-    "express": "^4.17.1",
-    "graphql": "^14.5.8",
-    "graphql-tools": "^4.0.5",
-    "jsonwebtoken": "^8.5.1",
-    "mem": "^5.1.1",
-    "merge-graphql-schemas": "^1.7.0",
-    "morgan": "^1.9.1",
-    "pg": "^7.12.1",
-    "reflect-metadata": "^0.1.13",
-    "sequelize": "^5.19.4",
-    "sequelize-typescript": "^1.0.0",
-    "uuid": "^3.3.3"
+  "bugs": {
+    "url": "https://github.com/Asaf-Aviv/collab/issues"
   },
-  "devDependencies": {
-    "@graphql-codegen/cli": "^1.8.0",
-    "@graphql-codegen/typescript": "^1.8.0",
-    "@graphql-codegen/typescript-resolvers": "^1.8.0",
-    "@types/bcrypt": "^3.0.0",
-    "@types/bluebird": "^3.5.27",
-    "@types/dotenv": "^6.1.1",
-    "@types/express": "^4.17.1",
-    "@types/jsonwebtoken": "^8.3.4",
-    "@types/morgan": "^1.7.37",
-    "@types/uuid": "^3.4.5",
-    "@types/validator": "^10.11.3",
-    "@typescript-eslint/eslint-plugin": "^2.3.2",
-    "@typescript-eslint/parser": "^2.3.2",
-    "eslint": "^6.5.1",
-    "eslint-config-airbnb": "^18.0.1",
-    "eslint-plugin-flowtype": "^4.3.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-react": "^7.15.1",
-    "eslint-plugin-react-hooks": "^2.1.1",
-    "ts-node-dev": "^1.0.0-pre.43",
-    "typescript": "^3.7.0-beta"
+  "homepage": "https://github.com/Asaf-Aviv/collab#readme",
+  "dependencies": {
+    "concurrently": "^5.1.0"
   }
 }
