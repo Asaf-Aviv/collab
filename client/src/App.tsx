@@ -3,6 +3,7 @@ import { useQuery, useMutation } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 import { hot } from 'react-hot-loader/root'
 import CreateCollab from './components/CreateCollab/CreateCollab'
+import { ThemeProvider, CSSReset } from '@chakra-ui/core'
 
 const USERS = gql`
   {
@@ -27,7 +28,7 @@ export const LOGIN = gql`
   }
 `
 
-const App: React.FC = () => {
+const App = () => {
   const { data, loading, error } = useQuery(USERS)
   const [login] = useMutation(LOGIN, {
     variables: {
@@ -43,12 +44,15 @@ const App: React.FC = () => {
   if (error) return <p>Error :(</p>
 
   return (
-    <div className="App">
-      {data.users.map((user: any) => (
-        <div key={user.id}>{user.username}</div>
-      ))}
-      <CreateCollab />
-    </div>
+    <ThemeProvider>
+      <CSSReset />
+      <div>
+        {data.users.map((user: any) => (
+          <div key={user.id}>{user.username}</div>
+        ))}
+        <CreateCollab />
+      </div>
+    </ThemeProvider>
   )
 }
 
