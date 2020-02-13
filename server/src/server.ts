@@ -1,12 +1,10 @@
 require('dotenv').config()
-/* eslint-disable import/first */
 import { Sequelize } from 'sequelize'
 import { User } from './db/models/User'
 import sequelize from './db/sequelize'
 import { app } from './app'
 import { Collab } from './db/models/Collab'
 import { CollabMember } from './db/models/CollabMember'
-/* eslint-enable import/first */
 
 const PORT = 5555
 

@@ -27,7 +27,7 @@ const fakeAutocomplete = (text: string): Promise<string[]> =>
     console.log('running')
 
     const sug = suggestions.filter(s =>
-      [...text].every(c => new RegExp(`${c}`, 'i').test(s))
+      [...text].every(c => new RegExp(`${c}`, 'i').test(s)),
     )
     console.log(sug)
 
@@ -55,7 +55,7 @@ const CreateCollab: React.FC = () => {
     const inStack = stack.includes(name)
     console.log(inStack)
     setStack(prevState =>
-      inStack ? prevState.filter(s => s !== name) : [...prevState, name]
+      inStack ? prevState.filter(s => s !== name) : [...prevState, name],
     )
   }
 
@@ -69,11 +69,7 @@ const CreateCollab: React.FC = () => {
         Create
       </button>
       <h3>Title</h3>
-      <input
-        type="text"
-        value={title}
-        onChange={e => setTitle(e.target.value)}
-      />
+      <input type="text" value={title} onChange={e => setTitle(e.target.value)} />
       <h3>experience</h3>
       <select value={experience} onChange={e => setExperience(e.target.value)}>
         <option value="" selected disabled hidden>
