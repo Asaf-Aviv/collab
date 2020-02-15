@@ -3,7 +3,7 @@ import { useQuery, useMutation } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 import { hot } from 'react-hot-loader/root'
 import CreateCollab from './components/CreateCollab/CreateCollab'
-import { ThemeProvider, CSSReset } from '@chakra-ui/core'
+import { NavBar } from './components/NavBar/NavBar'
 
 const USERS = gql`
   {
@@ -44,15 +44,13 @@ const App = () => {
   if (error) return <p>Error :(</p>
 
   return (
-    <ThemeProvider>
-      <CSSReset />
-      <div>
-        {data.users.map((user: any) => (
-          <div key={user.id}>{user.username}</div>
-        ))}
-        <CreateCollab />
-      </div>
-    </ThemeProvider>
+    <div>
+      <NavBar />
+      {data.users.map((user: any) => (
+        <div key={user.id}>{user.username}</div>
+      ))}
+      <CreateCollab />
+    </div>
   )
 }
 
