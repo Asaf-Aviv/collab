@@ -1,9 +1,13 @@
 import React, { useEffect } from 'react'
+import { Link, Box, Flex } from '@chakra-ui/core'
 
 export const NavBar = () => {
-  const foo = 1
-  useEffect(() => {
-    console.log(foo)
-  }, [])
-  return <div></div>
+  return (
+    <Flex as="header" background="gray50">
+      <Flex as="nav">
+        <Link>Collab</Link>
+        <Link>Showcase</Link>
+      </Flex>
+    </Flex>
+  )
 }

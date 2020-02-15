@@ -21,11 +21,14 @@ module.exports = {
     sourceType: 'module',
   },
 
-  plugins: ['react', '@typescript-eslint'],
+  plugins: ['react', 'react-hooks', '@typescript-eslint'],
   settings: {
     react: {
       version: 'detect',
     },
   },
-  rules: {},
+  rules: {
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
+  },
 }
