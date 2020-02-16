@@ -7,11 +7,15 @@ const collabResolver: Resolvers = {
     collabs: () => Collab.findAll(),
   },
   Mutation: {
-    createCollab: async (root, { collab, userId }) => Collab.createCollab(collab, userId),
+    createCollab: async (root, { collab }, context) => {
+      console.log(context)
+      return Collab.createCollab(collab, context.user.get('id'))
+    },
     deleteCollab: (root, { id }) => Collab.deleteCollab(id),
   },
   Collab: {
-    owner: ({ ownerId }) => User.findByPk(ownerId, { raw: true }) as Promise<User>,
+    owner: ({ ownerId }) =>
+      User.findByPk(ownerId, { raw: true }) as Promise<User>,
   },
 }
 

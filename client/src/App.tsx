@@ -1,19 +1,9 @@
 import React, { useEffect } from 'react'
-import { useQuery, useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 import { hot } from 'react-hot-loader/root'
-import CreateCollab from './components/CreateCollab/CreateCollab'
+import { CreateCollab } from './components/CreateCollab/CreateCollab'
 import { NavBar } from './components/NavBar/NavBar'
-
-const USERS = gql`
-  {
-    users {
-      id
-      username
-      email
-    }
-  }
-`
 
 export const LOGIN = gql`
   mutation Login($credentials: LoginArgs!) {
@@ -29,10 +19,12 @@ export const LOGIN = gql`
 `
 
 const App = () => {
-  const { data, loading, error } = useQuery(USERS)
   const [login] = useMutation(LOGIN, {
     variables: {
       credentials: { email: 'asafaviv89@gmail.com', password: 'test1234' },
+    },
+    onCompleted: ({ login }) => {
+      localStorage.setItem('token', login.token)
     },
   })
 
@@ -40,15 +32,9 @@ const App = () => {
     login()
   }, [login])
 
-  if (loading) return <p>Loading...</p>
-  if (error) return <p>Error :(</p>
-
   return (
     <div>
       <NavBar />
-      {data.users.map((user: any) => (
-        <div key={user.id}>{user.username}</div>
-      ))}
       <CreateCollab />
     </div>
   )

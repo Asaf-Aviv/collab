@@ -1,4 +1,4 @@
-import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+import { GraphQLResolveInfo } from 'graphql';
 export type Maybe<T> = T | null;
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
@@ -8,7 +8,6 @@ export type Scalars = {
   Boolean: boolean,
   Int: number,
   Float: number,
-  Upload: any,
 };
 
 export type AuthPayload = {
@@ -17,25 +16,20 @@ export type AuthPayload = {
   user: User,
 };
 
-export enum CacheControlScope {
-  Public = 'PUBLIC',
-  Private = 'PRIVATE'
-}
-
 export type Collab = {
    __typename?: 'Collab',
-  id: Scalars['ID'],
-  ownerId: Scalars['ID'],
-  owner: User,
-  experience: Scalars['String'],
-  stack: Array<Scalars['String']>,
   description: Scalars['String'],
+  experience: Scalars['String'],
+  id: Scalars['ID'],
+  owner: User,
+  ownerId: Scalars['ID'],
+  stack: Array<Scalars['String']>,
 };
 
 export type CollabArgs = {
+  description: Scalars['String'],
   experience: Experience,
   stack: Array<Scalars['String']>,
-  description: Scalars['String'],
 };
 
 export enum Experience {
@@ -54,21 +48,22 @@ export type LoginArgs = {
 
 export type Mutation = {
    __typename?: 'Mutation',
-  signUp: Scalars['Boolean'],
-  login: AuthPayload,
-  deleteUser: Scalars['Boolean'],
+  /** user model will come througt context, for now use userId as args */
   createCollab: Collab,
   deleteCollab: Scalars['Boolean'],
+  deleteUser: Scalars['Boolean'],
+  login: AuthPayload,
+  signUp: Scalars['Boolean'],
 };
 
 
-export type MutationSignUpArgs = {
-  credentials: SignupArgs
+export type MutationCreateCollabArgs = {
+  collab: CollabArgs
 };
 
 
-export type MutationLoginArgs = {
-  credentials: LoginArgs
+export type MutationDeleteCollabArgs = {
+  id: Scalars['ID']
 };
 
 
@@ -77,35 +72,33 @@ export type MutationDeleteUserArgs = {
 };
 
 
-export type MutationCreateCollabArgs = {
-  collab: CollabArgs,
-  userId: Scalars['String']
+export type MutationLoginArgs = {
+  credentials: LoginArgs
 };
 
 
-export type MutationDeleteCollabArgs = {
-  id: Scalars['ID']
+export type MutationSignUpArgs = {
+  credentials: SignupArgs
 };
 
 export type Query = {
    __typename?: 'Query',
-  users: Array<User>,
   collabs: Array<Collab>,
+  users: Array<User>,
 };
 
 export type SignupArgs = {
-  username: Scalars['String'],
   email: Scalars['String'],
   password: Scalars['String'],
+  username: Scalars['String'],
 };
-
 
 export type User = {
    __typename?: 'User',
+  collabs: Array<Collab>,
+  email: Scalars['String'],
   id: Scalars['ID'],
   username: Scalars['String'],
-  email: Scalars['String'],
-  collabs: Array<Collab>,
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -183,37 +176,33 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>,
-  User: ResolverTypeWrapper<User>,
-  ID: ResolverTypeWrapper<Scalars['ID']>,
-  String: ResolverTypeWrapper<Scalars['String']>,
   Collab: ResolverTypeWrapper<Collab>,
+  String: ResolverTypeWrapper<Scalars['String']>,
+  ID: ResolverTypeWrapper<Scalars['ID']>,
+  User: ResolverTypeWrapper<User>,
   Mutation: ResolverTypeWrapper<{}>,
-  SignupArgs: SignupArgs,
+  CollabArgs: CollabArgs,
+  Experience: Experience,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   LoginArgs: LoginArgs,
   AuthPayload: ResolverTypeWrapper<AuthPayload>,
-  CollabArgs: CollabArgs,
-  Experience: Experience,
-  CacheControlScope: CacheControlScope,
-  Upload: ResolverTypeWrapper<Scalars['Upload']>,
+  SignupArgs: SignupArgs,
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Query: {},
-  User: User,
-  ID: Scalars['ID'],
-  String: Scalars['String'],
   Collab: Collab,
+  String: Scalars['String'],
+  ID: Scalars['ID'],
+  User: User,
   Mutation: {},
-  SignupArgs: SignupArgs,
+  CollabArgs: CollabArgs,
+  Experience: Experience,
   Boolean: Scalars['Boolean'],
   LoginArgs: LoginArgs,
   AuthPayload: AuthPayload,
-  CollabArgs: CollabArgs,
-  Experience: Experience,
-  CacheControlScope: CacheControlScope,
-  Upload: Scalars['Upload'],
+  SignupArgs: SignupArgs,
 }>;
 
 export type AuthPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuthPayload'] = ResolversParentTypes['AuthPayload']> = ResolversObject<{
@@ -223,37 +212,33 @@ export type AuthPayloadResolvers<ContextType = any, ParentType extends Resolvers
 }>;
 
 export type CollabResolvers<ContextType = any, ParentType extends ResolversParentTypes['Collab'] = ResolversParentTypes['Collab']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
-  ownerId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
-  owner?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
-  experience?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  stack?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>,
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  experience?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  owner?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
+  ownerId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  stack?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
-  signUp?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'credentials'>>,
-  login?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'credentials'>>,
-  deleteUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'id'>>,
-  createCollab?: Resolver<ResolversTypes['Collab'], ParentType, ContextType, RequireFields<MutationCreateCollabArgs, 'collab' | 'userId'>>,
+  createCollab?: Resolver<ResolversTypes['Collab'], ParentType, ContextType, RequireFields<MutationCreateCollabArgs, 'collab'>>,
   deleteCollab?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteCollabArgs, 'id'>>,
+  deleteUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'id'>>,
+  login?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'credentials'>>,
+  signUp?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'credentials'>>,
 }>;
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  users?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>,
   collabs?: Resolver<Array<ResolversTypes['Collab']>, ParentType, ContextType>,
+  users?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>,
 }>;
 
-export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
-  name: 'Upload'
-}
-
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
+  collabs?: Resolver<Array<ResolversTypes['Collab']>, ParentType, ContextType>,
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  collabs?: Resolver<Array<ResolversTypes['Collab']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
@@ -262,7 +247,6 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Collab?: CollabResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
-  Upload?: GraphQLScalarType,
   User?: UserResolvers<ContextType>,
 }>;
 
