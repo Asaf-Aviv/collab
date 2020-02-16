@@ -23,7 +23,7 @@ import {
   HasManyCreateAssociationMixin,
   HasManyCountAssociationsMixin,
 } from 'sequelize'
-import { CollabArgs, SignupArgs, LoginArgs } from '../../graphql/types'
+import { SignupArgs, LoginArgs } from '../../graphql/types'
 import { Collab } from './Collab'
 import { passwordRegex } from '../../utils'
 
@@ -59,7 +59,8 @@ export class User extends Model<User> {
   @Validate({
     is: {
       args: passwordRegex,
-      msg: 'Password must contain atleast eight characters, one letter and one number',
+      msg:
+        'Password must contain atleast eight characters, one letter and one number',
     },
   })
   @AllowNull(false)

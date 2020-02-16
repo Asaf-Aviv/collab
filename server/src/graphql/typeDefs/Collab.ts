@@ -1,4 +1,4 @@
-import { gql } from 'apollo-server-express';
+import { gql } from 'apollo-server-express'
 
 const collabTypeDefs = gql`
   type Query {
@@ -7,7 +7,7 @@ const collabTypeDefs = gql`
 
   type Mutation {
     # user model will come througt context, for now use userId as args
-    createCollab(collab: CollabArgs!, userId: String!): Collab!
+    createCollab(collab: CollabArgs!): Collab!
     deleteCollab(id: ID!): Boolean!
   }
 
@@ -34,6 +34,6 @@ const collabTypeDefs = gql`
     MID_SENIOR
     SENIOR
   }
-`;
+`
 
-export default collabTypeDefs;
+export default collabTypeDefs

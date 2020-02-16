@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { gql } from 'apollo-boost'
 import { useMutation } from '@apollo/react-hooks'
+import styled from 'styled-components'
 
 const CREATE_COLLAB = gql`
   mutation CreateCollab($collab: CollabArgs!) {
@@ -26,14 +27,14 @@ const fakeAutocomplete = (text: string): Promise<string[]> =>
     console.log('running')
 
     const sug = suggestions.filter(s =>
-      [...text].every(c => new RegExp(`${c}`, 'i').test(s)),
+      [...text].every(c => new RegExp(`${c}`, 'i').test(s))
     )
     console.log(sug)
 
     setTimeout(() => res(sug), 200)
   })
 
-const CreateCollab: React.FC = () => {
+export const CreateCollab = () => {
   const [experience, setExperience] = useState('')
   const [title, setTitle] = useState('')
   const [stack, setStack] = useState<string[]>([])
@@ -54,7 +55,7 @@ const CreateCollab: React.FC = () => {
     const inStack = stack.includes(name)
     console.log(inStack)
     setStack(prevState =>
-      inStack ? prevState.filter(s => s !== name) : [...prevState, name],
+      inStack ? prevState.filter(s => s !== name) : [...prevState, name]
     )
   }
 
@@ -63,15 +64,17 @@ const CreateCollab: React.FC = () => {
   }, [stackInput])
 
   return (
-    <div>
-      <button type="button" onClick={() => createCollab()}>
-        Create
-      </button>
+    <Container>
       <h3>Title</h3>
-      <input type="text" value={title} onChange={e => setTitle(e.target.value)} />
+      <Input
+        type="text"
+        value={title}
+        placeholder="Title"
+        onChange={e => setTitle(e.target.value)}
+      />
       <h3>experience</h3>
       <select value={experience} onChange={e => setExperience(e.target.value)}>
-        <option value="" selected disabled hidden>
+        <option selected disabled hidden>
           Experience
         </option>
         <option value="ALL">ALL</option>
@@ -84,11 +87,13 @@ const CreateCollab: React.FC = () => {
       <h3>description</h3>
       <textarea
         rows={10}
+        placeholder="Collab description"
         value={description}
         onChange={e => setDescription(e.target.value)}
       />
       <h3>suggerstions</h3>
       <input
+        placeholder="Stack"
         type="text"
         value={stackInput}
         onChange={e => setstackInput(e.target.value)}
@@ -104,8 +109,37 @@ const CreateCollab: React.FC = () => {
           {s}
         </button>
       ))}
-    </div>
+      <Button onClick={() => createCollab()}>Create</Button>
+    </Container>
   )
 }
+const Button = styled.button.attrs({
+  type: 'button',
+})`
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  text-transform: uppercase;
+  border-radius: 6px;
+  color: white;
+  background: #2884b0;
+  transition: background 200ms;
+  &:hover {
+    background: #216f95;
+  }
+  &:active {
+    background: #17516c;
+  }
+`
 
-export default CreateCollab
+const Input = styled.input`
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #c2c2c2;
+`
+
+const Container = styled.div`
+  max-width: 900px;
+  margin: 0 auto;
+`

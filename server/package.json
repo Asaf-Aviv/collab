@@ -8,7 +8,7 @@
     "client": "cd client && npm start",
     "server": "ts-node-dev --no-notify --watch 'src/**/**.ts' --respawn src/server.ts",
     "dev": "concurrently \"npm run server\" \"npm run generate\"",
-    "generate": "graphql-codegen --watch",
+    "generate": "graphql-codegen",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "coverage": "jest --coverage",
@@ -57,6 +57,7 @@
     "jest": "^25.1.0",
     "sequelize-cli": "^5.5.1",
     "ts-jest": "^25.2.0",
+    "ts-node": "^8.6.2",
     "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.7.5"
   },

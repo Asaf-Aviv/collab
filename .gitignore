@@ -3,5 +3,4 @@ node_modules
 dist
 
 .env
-
-client/.env.development
+.env.development

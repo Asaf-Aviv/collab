@@ -1,4 +1,6 @@
-schema: http://localhost:5555/graphql
+schema: ./src/graphql/typeDefs/*.ts
+overwrite: true
+watch: true
 generates:
   ./src/graphql/types.d.ts:
     plugins:
@@ -6,3 +8,4 @@ generates:
       - typescript-resolvers
     config:
       useIndexSignature: true
+require: ts-node/register/transpile-only
