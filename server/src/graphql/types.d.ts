@@ -18,18 +18,39 @@ export type AuthPayload = {
 
 export type Collab = {
    __typename?: 'Collab',
+  comments: Array<CollabComment>,
   description: Scalars['String'],
   experience: Scalars['String'],
   id: Scalars['ID'],
+  members: Array<User>,
   owner: User,
   ownerId: Scalars['ID'],
+  pendingInvites: Array<User>,
   stack: Array<Scalars['String']>,
+  title: Scalars['String'],
 };
 
 export type CollabArgs = {
   description: Scalars['String'],
   experience: Experience,
   stack: Array<Scalars['String']>,
+  title: Scalars['String'],
+};
+
+export type CollabComment = {
+   __typename?: 'CollabComment',
+  author: User,
+  authorId: Scalars['ID'],
+  collab: Collab,
+  collabId: Scalars['ID'],
+  content: Scalars['String'],
+  id: Scalars['ID'],
+};
+
+export type CollabRequest = {
+   __typename?: 'CollabRequest',
+  collab: Collab,
+  member: User,
 };
 
 export enum Experience {
@@ -48,12 +69,36 @@ export type LoginArgs = {
 
 export type Mutation = {
    __typename?: 'Mutation',
-  /** user model will come througt context, for now use userId as args */
+  acceptCollabInvite: User,
+  addComment: CollabComment,
+  addMember: Collab,
   createCollab: Collab,
+  declineCollabInvite: Scalars['Boolean'],
   deleteCollab: Scalars['Boolean'],
+  deleteComment: Scalars['Boolean'],
   deleteUser: Scalars['Boolean'],
+  inviteMember: User,
   login: AuthPayload,
+  removeMember: Collab,
+  requestToJoin: Scalars['Boolean'],
   signUp: Scalars['Boolean'],
+};
+
+
+export type MutationAcceptCollabInviteArgs = {
+  collabId: Scalars['ID']
+};
+
+
+export type MutationAddCommentArgs = {
+  collabId: Scalars['ID'],
+  content: Scalars['String']
+};
+
+
+export type MutationAddMemberArgs = {
+  collabId: Scalars['ID'],
+  memberId: Scalars['ID']
 };
 
 
@@ -62,8 +107,18 @@ export type MutationCreateCollabArgs = {
 };
 
 
+export type MutationDeclineCollabInviteArgs = {
+  collabId: Scalars['ID']
+};
+
+
 export type MutationDeleteCollabArgs = {
-  id: Scalars['ID']
+  collabId: Scalars['ID']
+};
+
+
+export type MutationDeleteCommentArgs = {
+  commentId: Scalars['ID']
 };
 
 
@@ -72,8 +127,25 @@ export type MutationDeleteUserArgs = {
 };
 
 
+export type MutationInviteMemberArgs = {
+  collabId: Scalars['ID'],
+  memberId: Scalars['ID']
+};
+
+
 export type MutationLoginArgs = {
   credentials: LoginArgs
+};
+
+
+export type MutationRemoveMemberArgs = {
+  collabId: Scalars['ID'],
+  memberId: Scalars['ID']
+};
+
+
+export type MutationRequestToJoinArgs = {
+  collabId: Scalars['ID']
 };
 
 
@@ -83,8 +155,14 @@ export type MutationSignUpArgs = {
 
 export type Query = {
    __typename?: 'Query',
+  collab?: Maybe<Collab>,
   collabs: Array<Collab>,
   users: Array<User>,
+};
+
+
+export type QueryCollabArgs = {
+  collabId: Scalars['ID']
 };
 
 export type SignupArgs = {
@@ -95,6 +173,8 @@ export type SignupArgs = {
 
 export type User = {
    __typename?: 'User',
+  collabInvites: Array<Collab>,
+  collabRequests: Array<CollabRequest>,
   collabs: Array<Collab>,
   email: Scalars['String'],
   id: Scalars['ID'],
@@ -176,10 +256,12 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>,
-  Collab: ResolverTypeWrapper<Collab>,
-  String: ResolverTypeWrapper<Scalars['String']>,
   ID: ResolverTypeWrapper<Scalars['ID']>,
+  Collab: ResolverTypeWrapper<Collab>,
+  CollabComment: ResolverTypeWrapper<CollabComment>,
   User: ResolverTypeWrapper<User>,
+  CollabRequest: ResolverTypeWrapper<CollabRequest>,
+  String: ResolverTypeWrapper<Scalars['String']>,
   Mutation: ResolverTypeWrapper<{}>,
   CollabArgs: CollabArgs,
   Experience: Experience,
@@ -192,10 +274,12 @@ export type ResolversTypes = ResolversObject<{
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Query: {},
-  Collab: Collab,
-  String: Scalars['String'],
   ID: Scalars['ID'],
+  Collab: Collab,
+  CollabComment: CollabComment,
   User: User,
+  CollabRequest: CollabRequest,
+  String: Scalars['String'],
   Mutation: {},
   CollabArgs: CollabArgs,
   Experience: Experience,
@@ -212,29 +296,60 @@ export type AuthPayloadResolvers<ContextType = any, ParentType extends Resolvers
 }>;
 
 export type CollabResolvers<ContextType = any, ParentType extends ResolversParentTypes['Collab'] = ResolversParentTypes['Collab']> = ResolversObject<{
+  comments?: Resolver<Array<ResolversTypes['CollabComment']>, ParentType, ContextType>,
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   experience?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  members?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>,
   owner?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
   ownerId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  pendingInvites?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>,
   stack?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>,
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+}>;
+
+export type CollabCommentResolvers<ContextType = any, ParentType extends ResolversParentTypes['CollabComment'] = ResolversParentTypes['CollabComment']> = ResolversObject<{
+  author?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
+  authorId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  collab?: Resolver<ResolversTypes['Collab'], ParentType, ContextType>,
+  collabId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  content?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+}>;
+
+export type CollabRequestResolvers<ContextType = any, ParentType extends ResolversParentTypes['CollabRequest'] = ResolversParentTypes['CollabRequest']> = ResolversObject<{
+  collab?: Resolver<ResolversTypes['Collab'], ParentType, ContextType>,
+  member?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  acceptCollabInvite?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationAcceptCollabInviteArgs, 'collabId'>>,
+  addComment?: Resolver<ResolversTypes['CollabComment'], ParentType, ContextType, RequireFields<MutationAddCommentArgs, 'collabId' | 'content'>>,
+  addMember?: Resolver<ResolversTypes['Collab'], ParentType, ContextType, RequireFields<MutationAddMemberArgs, 'collabId' | 'memberId'>>,
   createCollab?: Resolver<ResolversTypes['Collab'], ParentType, ContextType, RequireFields<MutationCreateCollabArgs, 'collab'>>,
-  deleteCollab?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteCollabArgs, 'id'>>,
+  declineCollabInvite?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeclineCollabInviteArgs, 'collabId'>>,
+  deleteCollab?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteCollabArgs, 'collabId'>>,
+  deleteComment?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteCommentArgs, 'commentId'>>,
   deleteUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'id'>>,
+  inviteMember?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationInviteMemberArgs, 'collabId' | 'memberId'>>,
   login?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'credentials'>>,
+  removeMember?: Resolver<ResolversTypes['Collab'], ParentType, ContextType, RequireFields<MutationRemoveMemberArgs, 'collabId' | 'memberId'>>,
+  requestToJoin?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRequestToJoinArgs, 'collabId'>>,
   signUp?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'credentials'>>,
 }>;
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  collab?: Resolver<Maybe<ResolversTypes['Collab']>, ParentType, ContextType, RequireFields<QueryCollabArgs, 'collabId'>>,
   collabs?: Resolver<Array<ResolversTypes['Collab']>, ParentType, ContextType>,
   users?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>,
 }>;
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
+  collabInvites?: Resolver<Array<ResolversTypes['Collab']>, ParentType, ContextType>,
+  collabRequests?: Resolver<Array<ResolversTypes['CollabRequest']>, ParentType, ContextType>,
   collabs?: Resolver<Array<ResolversTypes['Collab']>, ParentType, ContextType>,
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
@@ -245,6 +360,8 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 export type Resolvers<ContextType = any> = ResolversObject<{
   AuthPayload?: AuthPayloadResolvers<ContextType>,
   Collab?: CollabResolvers<ContextType>,
+  CollabComment?: CollabCommentResolvers<ContextType>,
+  CollabRequest?: CollabRequestResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
   User?: UserResolvers<ContextType>,

@@ -2,8 +2,9 @@ import React, { useEffect } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 import { hot } from 'react-hot-loader/root'
-import { CreateCollab } from './components/CreateCollab/CreateCollab'
-import { NavBar } from './components/NavBar/NavBar'
+import { NavBar } from '../NavBar/NavBar'
+import { Routes } from '../Routes'
+import { useLoginMutation } from '../../graphql/generates'
 
 export const LOGIN = gql`
   mutation Login($credentials: LoginArgs!) {
@@ -18,8 +19,8 @@ export const LOGIN = gql`
   }
 `
 
-const App = () => {
-  const [login] = useMutation(LOGIN, {
+export const App = hot(() => {
+  const [login] = useLoginMutation({
     variables: {
       credentials: { email: 'asafaviv89@gmail.com', password: 'test1234' },
     },
@@ -35,9 +36,7 @@ const App = () => {
   return (
     <div>
       <NavBar />
-      <CreateCollab />
+      <Routes />
     </div>
   )
-}
-
-export default hot(App)
+})

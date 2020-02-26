@@ -1,3 +1,4 @@
+import { CollabMember } from './CollabMember'
 import {
   Model,
   Column,
@@ -26,6 +27,7 @@ import {
 import { SignupArgs, LoginArgs } from '../../graphql/types'
 import { Collab } from './Collab'
 import { passwordRegex } from '../../utils'
+import { CollabMemberRequest } from './CollabMemberRequest'
 
 @DefaultScope(() => ({
   attributes: { exclude: ['password'] },
@@ -59,8 +61,7 @@ export class User extends Model<User> {
   @Validate({
     is: {
       args: passwordRegex,
-      msg:
-        'Password must contain atleast eight characters, one letter and one number',
+      msg: 'Password must contain atleast eight characters, one letter and one number',
     },
   })
   @AllowNull(false)
@@ -77,6 +78,12 @@ export class User extends Model<User> {
 
   @HasMany(() => Collab)
   collabs!: Collab[]
+
+  @HasMany(() => CollabMemberRequest)
+  collabInvites!: Collab[]
+
+  @HasMany(() => CollabMemberRequest)
+  collabRequests!: CollabMemberRequest[]
 
   getCollabs!: HasManyGetAssociationsMixin<Collab>
   addCollab!: HasManyAddAssociationMixin<Collab, string>
@@ -131,5 +138,40 @@ export class User extends Model<User> {
     }
 
     return true
+  }
+
+  static async acceptCollabInvite(collabId: string, memberId: string) {
+    return this.sequelize!.transaction(async () => {
+      const invite = await CollabMemberRequest.findOne({ where: { collabId, memberId } })
+
+      if (!invite) {
+        throw new Error('Invititation does not exist')
+      }
+
+      const [newMember] = await Promise.all([
+        this.findByPk(memberId),
+        invite.destroy(),
+        CollabMember.create({
+          collabId,
+          memberId,
+        }),
+      ])
+
+      return newMember!
+    })
+  }
+
+  static async declineCollabInvite(collabId: string, memberId: string) {
+    return this.sequelize!.transaction(async () => {
+      const invite = await CollabMemberRequest.findOne({ where: { collabId, memberId } })
+
+      if (!invite) {
+        throw new Error('Invititation does not exist')
+      }
+
+      await invite.destroy()
+
+      return true
+    })
   }
 }
