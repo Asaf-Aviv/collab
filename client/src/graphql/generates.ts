@@ -17,11 +17,14 @@ export type AuthPayload = {
 
 export type Collab = {
    __typename?: 'Collab',
+  acceptsInvites: Scalars['Boolean'],
   comments: Array<CollabComment>,
   description: Scalars['String'],
   experience: Scalars['String'],
+  hasStarted: Scalars['Boolean'],
   id: Scalars['ID'],
   members: Array<User>,
+  name: Scalars['String'],
   owner: User,
   ownerId: Scalars['ID'],
   pendingInvites: Array<User>,
@@ -32,6 +35,8 @@ export type Collab = {
 export type CollabArgs = {
   description: Scalars['String'],
   experience: Experience,
+  hasStarted: Scalars['Boolean'],
+  name: Scalars['String'],
   stack: Array<Scalars['String']>,
   title: Scalars['String'],
 };

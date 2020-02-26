@@ -37,6 +37,10 @@ export class Collab extends Model<Collab> {
 
   @AllowNull(false)
   @Column
+  name!: string
+
+  @AllowNull(false)
+  @Column
   title!: string
 
   @AllowNull(false)
@@ -55,6 +59,14 @@ export class Collab extends Model<Collab> {
   @AllowNull(false)
   @Column
   description!: string
+
+  @AllowNull(false)
+  @Default(false)
+  @Column
+  acceptsInvites!: boolean
+
+  @Column
+  hasStarted!: boolean
 
   @ForeignKey(() => User)
   @AllowNull(false)

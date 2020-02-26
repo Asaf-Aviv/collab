@@ -18,11 +18,14 @@ export type AuthPayload = {
 
 export type Collab = {
    __typename?: 'Collab',
+  acceptsInvites: Scalars['Boolean'],
   comments: Array<CollabComment>,
   description: Scalars['String'],
   experience: Scalars['String'],
+  hasStarted: Scalars['Boolean'],
   id: Scalars['ID'],
   members: Array<User>,
+  name: Scalars['String'],
   owner: User,
   ownerId: Scalars['ID'],
   pendingInvites: Array<User>,
@@ -33,6 +36,8 @@ export type Collab = {
 export type CollabArgs = {
   description: Scalars['String'],
   experience: Experience,
+  hasStarted: Scalars['Boolean'],
+  name: Scalars['String'],
   stack: Array<Scalars['String']>,
   title: Scalars['String'],
 };
@@ -258,6 +263,7 @@ export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>,
   ID: ResolverTypeWrapper<Scalars['ID']>,
   Collab: ResolverTypeWrapper<Collab>,
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   CollabComment: ResolverTypeWrapper<CollabComment>,
   User: ResolverTypeWrapper<User>,
   CollabRequest: ResolverTypeWrapper<CollabRequest>,
@@ -265,7 +271,6 @@ export type ResolversTypes = ResolversObject<{
   Mutation: ResolverTypeWrapper<{}>,
   CollabArgs: CollabArgs,
   Experience: Experience,
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   LoginArgs: LoginArgs,
   AuthPayload: ResolverTypeWrapper<AuthPayload>,
   SignupArgs: SignupArgs,
@@ -276,6 +281,7 @@ export type ResolversParentTypes = ResolversObject<{
   Query: {},
   ID: Scalars['ID'],
   Collab: Collab,
+  Boolean: Scalars['Boolean'],
   CollabComment: CollabComment,
   User: User,
   CollabRequest: CollabRequest,
@@ -283,7 +289,6 @@ export type ResolversParentTypes = ResolversObject<{
   Mutation: {},
   CollabArgs: CollabArgs,
   Experience: Experience,
-  Boolean: Scalars['Boolean'],
   LoginArgs: LoginArgs,
   AuthPayload: AuthPayload,
   SignupArgs: SignupArgs,
@@ -296,11 +301,14 @@ export type AuthPayloadResolvers<ContextType = any, ParentType extends Resolvers
 }>;
 
 export type CollabResolvers<ContextType = any, ParentType extends ResolversParentTypes['Collab'] = ResolversParentTypes['Collab']> = ResolversObject<{
+  acceptsInvites?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   comments?: Resolver<Array<ResolversTypes['CollabComment']>, ParentType, ContextType>,
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   experience?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  hasStarted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   members?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>,
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   owner?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
   ownerId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   pendingInvites?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>,
