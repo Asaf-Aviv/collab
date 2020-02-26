@@ -9,6 +9,8 @@ const userTypeDefs = gql`
     signUp(credentials: SignupArgs!): Boolean!
     login(credentials: LoginArgs!): AuthPayload!
     deleteUser(id: ID!): Boolean!
+    acceptCollabInvite(collabId: ID!): User!
+    declineCollabInvite(collabId: ID!): Boolean!
   }
 
   type User {
@@ -16,6 +18,13 @@ const userTypeDefs = gql`
     username: String!
     email: String!
     collabs: [Collab!]!
+    collabInvites: [Collab!]!
+    collabRequests: [CollabRequest!]!
+  }
+
+  type CollabRequest {
+    collab: Collab!
+    member: User!
   }
 
   type AuthPayload {
@@ -36,4 +45,3 @@ const userTypeDefs = gql`
 `
 
 export default userTypeDefs
-

@@ -21,7 +21,6 @@ const server = new ApolloServer({
       const user = await User.findByPk(userId)
       return { user }
     } catch (err) {
-      console.log(err)
       return { user: null }
     }
   },

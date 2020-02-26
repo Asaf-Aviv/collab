@@ -1,3 +1,4 @@
+import { CollabMemberRequest } from './CollabMemberRequest'
 import {
   Model,
   Column,
@@ -23,6 +24,7 @@ import {
 } from 'sequelize'
 import { CollabArgs } from '../../graphql/types'
 import { CollabMember } from './CollabMember'
+import { CollabComment } from './CollabComment'
 import { User } from './User'
 
 @Table({ tableName: 'collabs' })
@@ -32,6 +34,10 @@ export class Collab extends Model<Collab> {
   @Default(uuid)
   @Column
   id!: string
+
+  @AllowNull(false)
+  @Column
+  title!: string
 
   @AllowNull(false)
   @Column(DataType.ENUM('ALL', 'JUNIOR', 'JUNIOR_MID', 'MID_SENIOR', 'SENIOR'))
@@ -59,7 +65,13 @@ export class Collab extends Model<Collab> {
   owner!: User
 
   @HasMany(() => CollabMember)
-  members!: CollabMember[]
+  members!: User[]
+
+  @HasMany(() => CollabComment)
+  comments!: CollabComment[]
+
+  @HasMany(() => CollabMemberRequest)
+  pendingInvites!: User[]
 
   getMembers!: HasManyGetAssociationsMixin<CollabMember>
   addMember!: HasManyAddAssociationMixin<CollabMember, string>
@@ -82,9 +94,24 @@ export class Collab extends Model<Collab> {
     })
   }
 
+  static async getCollab(collabId: string) {
+    const collab = await this.findByPk(collabId, {
+      include: [User, CollabMember],
+      raw: true,
+    })
+
+    if (!collab) {
+      throw new Error('Collab not found')
+    }
+
+    return collab
+  }
+
   static async addMember(collabId: string, ownerId: string, memberId: string) {
     return this.sequelize!.transaction(async () => {
-      const collab = await Collab.findByPk(collabId, { raw: false })
+      console.log(collabId)
+      const collab = await Collab.findByPk(collabId)
+      console.log(collab)
       const isMember = await CollabMember.findOne({
         where: { collabId, memberId },
       })
@@ -100,14 +127,11 @@ export class Collab extends Model<Collab> {
       }
 
       await collab.createMember({ memberId })
+      return collab
     })
   }
 
-  static async removeMember(
-    collabId: string,
-    ownerId: string,
-    memberId: string
-  ) {
+  static async removeMember(collabId: string, ownerId: string, memberId: string) {
     return this.sequelize!.transaction(async () => {
       const collab = await Collab.findByPk(collabId, { raw: false })
       const isMember = await CollabMember.findOne({
@@ -132,7 +156,7 @@ export class Collab extends Model<Collab> {
         throw new Error('Something went wrong')
       }
 
-      return true
+      return collab
     })
   }
 
@@ -144,5 +168,52 @@ export class Collab extends Model<Collab> {
     }
 
     throw new Error('Collab not found')
+  }
+
+  static async inviteMember(ownerId: string, memberId: string, collabId: string) {
+    const collab = await this.findByPk(collabId)
+
+    if (!collab) {
+      throw new Error('Collab not found')
+    }
+
+    if (collab.get('ownerId') !== ownerId) {
+      throw new Error('You have no permissions to invite members')
+    }
+
+    const newMember = await User.findByPk(memberId)
+
+    if (!newMember) {
+      throw new Error('User not found')
+    }
+
+    await CollabMemberRequest.create({ collabId, memberId, type: 'invitation' })
+
+    return newMember
+  }
+
+  static async requestToJoin(collabId: string, memberId: string) {
+    const [collab, invitation] = await Promise.all([
+      this.findByPk(collabId),
+      CollabMemberRequest.findOne({ where: { collabId, memberId } }),
+    ])
+
+    if (!collab) {
+      throw new Error('Collab not found')
+    }
+
+    if (invitation && invitation.type === 'request') {
+      throw new Error('Your request is still pending approval')
+    }
+
+    if (invitation && invitation.type === 'invitation') {
+      throw new Error(
+        'The owner of this collab already invited you to join, please check your invitations',
+      )
+    }
+
+    await CollabMemberRequest.create({ collabId, memberId, type: 'request' })
+
+    return true
   }
 }

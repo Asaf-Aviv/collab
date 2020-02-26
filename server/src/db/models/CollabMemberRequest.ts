@@ -4,33 +4,30 @@ import {
   ForeignKey,
   Column,
   PrimaryKey,
-  Default,
   BelongsTo,
-  AllowNull,
+  DataType,
 } from 'sequelize-typescript'
 import { Collab } from './Collab'
 import { User } from './User'
 
-@Table({ tableName: 'collab_members' })
-export class CollabMember extends Model<CollabMember> {
+@Table({ tableName: 'collab_member_requests' })
+export class CollabMemberRequest extends Model<CollabMemberRequest> {
   @PrimaryKey
   @ForeignKey(() => Collab)
   @Column
   collabId!: string
-
-  @BelongsTo(() => Collab, { foreignKey: 'collabId', onDelete: 'CASCADE' })
-  collab!: Collab
 
   @PrimaryKey
   @ForeignKey(() => User)
   @Column
   memberId!: string
 
+  @BelongsTo(() => Collab, { foreignKey: 'collabId', onDelete: 'CASCADE' })
+  collab!: Collab
+
   @BelongsTo(() => User, { foreignKey: 'memberId', onDelete: 'CASCADE' })
   member!: User
 
-  @AllowNull(false)
-  @Default(false)
-  @Column
-  isOwner!: boolean
+  @Column(DataType.ENUM('request', 'invitation'))
+  type!: 'request' | 'invitation'
 }

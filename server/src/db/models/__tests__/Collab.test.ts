@@ -21,6 +21,7 @@ describe('Collab model', () => {
 
     const collab = await Collab.createCollab(
       {
+        title: 'First collab',
         description: 'my first collab',
         experience: 'JUNIOR' as Experience,
         stack: ['TypeScript', 'React'],
@@ -51,6 +52,7 @@ describe('Collab model', () => {
 
   it('should throw when an error occurs during collab creation', async done => {
     const collabArgs = {
+      title: 'First collab',
       description: 'my first collab',
       experience: 'JUNIOR' as Experience,
       stack: ['TypeScript', 'React'],
@@ -69,6 +71,7 @@ describe('Collab model', () => {
 
     const collab = await Collab.createCollab(
       {
+        title: 'First collab',
         description: 'my first collab',
         experience: 'JUNIOR' as Experience,
         stack: ['TypeScript', 'React'],

@@ -1,5 +1,5 @@
 schema: ./src/graphql/typeDefs/*.ts
-overwrite: true
+# documents: '../client/src/components/**/*.tsx'
 watch: true
 generates:
   ./src/graphql/types.d.ts:
@@ -8,4 +8,13 @@ generates:
       - typescript-resolvers
     config:
       useIndexSignature: true
+  ../client/src/graphql/generates.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+    config:
+      withHooks: true
+      withHOC: false
+      withComponent: false
 require: ts-node/register/transpile-only
