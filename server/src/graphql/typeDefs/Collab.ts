@@ -19,11 +19,14 @@ const collabTypeDefs = gql`
 
   type Collab {
     id: ID!
+    name: String!
     title: String!
     ownerId: ID!
     owner: User!
     experience: String!
     stack: [String!]!
+    hasStarted: Boolean!
+    acceptsInvites: Boolean!
     description: String!
     members: [User!]!
     comments: [CollabComment!]!
@@ -31,10 +34,12 @@ const collabTypeDefs = gql`
   }
 
   input CollabArgs {
+    name: String!
     title: String!
     experience: Experience!
     stack: [String!]!
     description: String!
+    hasStarted: Boolean!
   }
 
   type CollabComment {
