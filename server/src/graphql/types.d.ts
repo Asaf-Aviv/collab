@@ -1,4 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
+import { CollabContext, CollabContextWithUser } from './context/CollabContext';
 export type Maybe<T> = T | null;
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
@@ -162,12 +163,18 @@ export type Query = {
    __typename?: 'Query',
   collab?: Maybe<Collab>,
   collabs: Array<Collab>,
+  user?: Maybe<User>,
   users: Array<User>,
 };
 
 
 export type QueryCollabArgs = {
   collabId: Scalars['ID']
+};
+
+
+export type QueryUserArgs = {
+  id: Scalars['ID']
 };
 
 export type SignupArgs = {
@@ -294,13 +301,13 @@ export type ResolversParentTypes = ResolversObject<{
   SignupArgs: SignupArgs,
 }>;
 
-export type AuthPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuthPayload'] = ResolversParentTypes['AuthPayload']> = ResolversObject<{
+export type AuthPayloadResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['AuthPayload'] = ResolversParentTypes['AuthPayload']> = ResolversObject<{
   token?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
-export type CollabResolvers<ContextType = any, ParentType extends ResolversParentTypes['Collab'] = ResolversParentTypes['Collab']> = ResolversObject<{
+export type CollabResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Collab'] = ResolversParentTypes['Collab']> = ResolversObject<{
   acceptsInvites?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   comments?: Resolver<Array<ResolversTypes['CollabComment']>, ParentType, ContextType>,
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
@@ -317,7 +324,7 @@ export type CollabResolvers<ContextType = any, ParentType extends ResolversParen
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
-export type CollabCommentResolvers<ContextType = any, ParentType extends ResolversParentTypes['CollabComment'] = ResolversParentTypes['CollabComment']> = ResolversObject<{
+export type CollabCommentResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['CollabComment'] = ResolversParentTypes['CollabComment']> = ResolversObject<{
   author?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
   authorId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   collab?: Resolver<ResolversTypes['Collab'], ParentType, ContextType>,
@@ -327,16 +334,16 @@ export type CollabCommentResolvers<ContextType = any, ParentType extends Resolve
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
-export type CollabRequestResolvers<ContextType = any, ParentType extends ResolversParentTypes['CollabRequest'] = ResolversParentTypes['CollabRequest']> = ResolversObject<{
+export type CollabRequestResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['CollabRequest'] = ResolversParentTypes['CollabRequest']> = ResolversObject<{
   collab?: Resolver<ResolversTypes['Collab'], ParentType, ContextType>,
   member?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
-export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+export type MutationResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   acceptCollabInvite?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationAcceptCollabInviteArgs, 'collabId'>>,
   addComment?: Resolver<ResolversTypes['CollabComment'], ParentType, ContextType, RequireFields<MutationAddCommentArgs, 'collabId' | 'content'>>,
-  addMember?: Resolver<ResolversTypes['Collab'], ParentType, ContextType, RequireFields<MutationAddMemberArgs, 'collabId' | 'memberId'>>,
+  addMember?: Resolver<ResolversTypes['Collab'], ParentType, CollabContextWithUser, RequireFields<MutationAddMemberArgs, 'collabId' | 'memberId'>>,
   createCollab?: Resolver<ResolversTypes['Collab'], ParentType, ContextType, RequireFields<MutationCreateCollabArgs, 'collab'>>,
   declineCollabInvite?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeclineCollabInviteArgs, 'collabId'>>,
   deleteCollab?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteCollabArgs, 'collabId'>>,
@@ -349,13 +356,14 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   signUp?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'credentials'>>,
 }>;
 
-export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+export type QueryResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   collab?: Resolver<Maybe<ResolversTypes['Collab']>, ParentType, ContextType, RequireFields<QueryCollabArgs, 'collabId'>>,
   collabs?: Resolver<Array<ResolversTypes['Collab']>, ParentType, ContextType>,
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>,
   users?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>,
 }>;
 
-export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
+export type UserResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   collabInvites?: Resolver<Array<ResolversTypes['Collab']>, ParentType, ContextType>,
   collabRequests?: Resolver<Array<ResolversTypes['CollabRequest']>, ParentType, ContextType>,
   collabs?: Resolver<Array<ResolversTypes['Collab']>, ParentType, ContextType>,
@@ -365,7 +373,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
-export type Resolvers<ContextType = any> = ResolversObject<{
+export type Resolvers<ContextType = CollabContext> = ResolversObject<{
   AuthPayload?: AuthPayloadResolvers<ContextType>,
   Collab?: CollabResolvers<ContextType>,
   CollabComment?: CollabCommentResolvers<ContextType>,
@@ -380,4 +388,4 @@ export type Resolvers<ContextType = any> = ResolversObject<{
  * @deprecated
  * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
 */
-export type IResolvers<ContextType = any> = Resolvers<ContextType>;
+export type IResolvers<ContextType = CollabContext> = Resolvers<ContextType>;

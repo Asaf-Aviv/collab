@@ -161,12 +161,18 @@ export type Query = {
    __typename?: 'Query',
   collab?: Maybe<Collab>,
   collabs: Array<Collab>,
+  user?: Maybe<User>,
   users: Array<User>,
 };
 
 
 export type QueryCollabArgs = {
   collabId: Scalars['ID']
+};
+
+
+export type QueryUserArgs = {
+  id: Scalars['ID']
 };
 
 export type SignupArgs = {

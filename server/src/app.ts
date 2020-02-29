@@ -4,6 +4,7 @@ import typeDefs from './graphql/typeDefs'
 import resolvers from './graphql/resolvers'
 import { decodeToken } from './utils'
 import { User } from './db/models/User'
+import { createLoaders } from './graphql/loaders/loaders'
 
 export const app = express()
 
@@ -16,12 +17,17 @@ const server = new ApolloServer({
   context: async ({ req }) => {
     try {
       const token = (req.headers.authorization || '').replace('Bearer ', '')
-      console.log(token)
       const { userId } = await decodeToken(token)
       const user = await User.findByPk(userId)
-      return { user }
+      return {
+        ...createLoaders(),
+        user,
+      }
     } catch (err) {
-      return { user: null }
+      return {
+        ...createLoaders(),
+        user: null,
+      }
     }
   },
 })
