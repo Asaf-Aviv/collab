@@ -4,6 +4,16 @@ import { CollabComment } from './../../db/models/CollabComment'
 import { Collab } from '../../db/models/Collab'
 import { Resolvers } from '../types'
 import { User } from '../../db/models/User'
+import { assertUserInContext } from '../helpers/assertUserInContext'
+import { AuthenticationError } from 'apollo-server-express'
+
+const isAuthenticared = (...args: any[]) => {
+  const context = args[2]
+  if (!context.user) {
+    throw new AuthenticationError('Unauthorized')
+  }
+  return
+}
 
 const collabResolver: Resolvers = {
   Query: {
@@ -12,7 +22,7 @@ const collabResolver: Resolvers = {
   },
   Mutation: {
     createCollab: async (parent, { collab }, context) => {
-      console.log(context)
+      assertUserInContext(context)
       return Collab.createCollab(collab, context.user.get('id'))
     },
     deleteCollab: (parent, { collabId }) => Collab.deleteCollab(collabId),
@@ -30,7 +40,8 @@ const collabResolver: Resolvers = {
       Collab.requestToJoin(collabId, context.user.get('id')),
   },
   Collab: {
-    owner: ({ ownerId }) => User.findByPk(ownerId, { raw: true }) as Promise<User>,
+    owner: ({ ownerId }, args, { userLoader }) =>
+      userLoader.load(ownerId) as Promise<User>,
     members: async ({ id }) => {
       const members = await CollabMember.findAll({
         where: { collabId: id },

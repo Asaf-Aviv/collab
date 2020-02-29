@@ -3,6 +3,7 @@ import { gql } from 'apollo-server-express'
 const userTypeDefs = gql`
   type Query {
     users: [User!]!
+    user(id: ID!): User
   }
 
   type Mutation {

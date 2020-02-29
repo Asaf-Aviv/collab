@@ -7,6 +7,7 @@ import { Resolvers } from '../types'
 const userResolver: Resolvers = {
   Query: {
     users: () => UserModel.findAll(),
+    user: (parent, { id }, { userLoader }) => userLoader.load(id),
   },
   Mutation: {
     signUp: (root, { credentials }) => UserModel.createUser(credentials),

@@ -1,6 +1,7 @@
 schema: ./src/graphql/typeDefs/*.ts
 # documents: '../client/src/components/**/*.tsx'
 watch: true
+require: ts-node/register/transpile-only
 generates:
   ./src/graphql/types.d.ts:
     plugins:
@@ -8,6 +9,9 @@ generates:
       - typescript-resolvers
     config:
       useIndexSignature: true
+      contextType: ./context/CollabContext#CollabContext
+      fieldContextTypes:
+        - Mutation.addMember#./context/CollabContext#CollabContextWithUser
   ../client/src/graphql/generates.ts:
     plugins:
       - typescript
@@ -17,4 +21,3 @@ generates:
       withHooks: true
       withHOC: false
       withComponent: false
-require: ts-node/register/transpile-only
