@@ -28,6 +28,7 @@ export type Collab = {
   owner: User,
   ownerId: Scalars['ID'],
   pendingInvites: Array<User>,
+  pendingRequests: Array<User>,
   stack: Array<Scalars['String']>,
   title: Scalars['String'],
 };
@@ -78,6 +79,7 @@ export type Mutation = {
   addMember: Collab,
   createCollab: Collab,
   declineCollabInvite: Scalars['Boolean'],
+  declineMemberRequest: Scalars['Boolean'],
   deleteCollab: Scalars['Boolean'],
   deleteComment: Scalars['Boolean'],
   deleteUser: Scalars['Boolean'],
@@ -86,6 +88,7 @@ export type Mutation = {
   removeMember: Collab,
   requestToJoin: Scalars['Boolean'],
   signUp: Scalars['Boolean'],
+  toggleAcceptInvites: Collab,
 };
 
 
@@ -116,6 +119,12 @@ export type MutationDeclineCollabInviteArgs = {
 };
 
 
+export type MutationDeclineMemberRequestArgs = {
+  collabId: Scalars['ID'],
+  memberId: Scalars['ID']
+};
+
+
 export type MutationDeleteCollabArgs = {
   collabId: Scalars['ID']
 };
@@ -123,11 +132,6 @@ export type MutationDeleteCollabArgs = {
 
 export type MutationDeleteCommentArgs = {
   commentId: Scalars['ID']
-};
-
-
-export type MutationDeleteUserArgs = {
-  id: Scalars['ID']
 };
 
 
@@ -155,6 +159,11 @@ export type MutationRequestToJoinArgs = {
 
 export type MutationSignUpArgs = {
   credentials: SignupArgs
+};
+
+
+export type MutationToggleAcceptInvitesArgs = {
+  collabId: Scalars['ID']
 };
 
 export type Query = {
