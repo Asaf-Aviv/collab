@@ -9,7 +9,7 @@ const userTypeDefs = gql`
   type Mutation {
     signUp(credentials: SignupArgs!): Boolean!
     login(credentials: LoginArgs!): AuthPayload!
-    deleteUser(id: ID!): Boolean!
+    deleteUser: Boolean!
     acceptCollabInvite(collabId: ID!): User!
     declineCollabInvite(collabId: ID!): Boolean!
   }

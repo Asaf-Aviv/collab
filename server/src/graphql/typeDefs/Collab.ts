@@ -15,6 +15,8 @@ const collabTypeDefs = gql`
     requestToJoin(collabId: ID!): Boolean!
     addComment(content: String!, collabId: ID!): CollabComment!
     deleteComment(commentId: ID!): Boolean!
+    toggleAcceptInvites(collabId: ID!): Collab!
+    declineMemberRequest(collabId: ID!, memberId: ID!): Boolean!
   }
 
   type Collab {
@@ -31,6 +33,7 @@ const collabTypeDefs = gql`
     members: [User!]!
     comments: [CollabComment!]!
     pendingInvites: [User!]!
+    pendingRequests: [User!]!
   }
 
   input CollabArgs {
