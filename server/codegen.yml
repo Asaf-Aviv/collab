@@ -11,7 +11,21 @@ generates:
       useIndexSignature: true
       contextType: ./context/CollabContext#CollabContext
       fieldContextTypes:
+        # User
+        - Mutation.deleteUser#./context/CollabContext#CollabContextWithUser
+        - Mutation.acceptCollabInvite#./context/CollabContext#CollabContextWithUser
+        - Mutation.declineCollabInvite#./context/CollabContext#CollabContextWithUser
+        # Collab
+        - Mutation.createCollab#./context/CollabContext#CollabContextWithUser
+        - Mutation.deleteCollab#./context/CollabContext#CollabContextWithUser
         - Mutation.addMember#./context/CollabContext#CollabContextWithUser
+        - Mutation.removeMember#./context/CollabContext#CollabContextWithUser
+        - Mutation.addComment#./context/CollabContext#CollabContextWithUser
+        - Mutation.deleteComment#./context/CollabContext#CollabContextWithUser
+        - Mutation.inviteMember#./context/CollabContext#CollabContextWithUser
+        - Mutation.requestToJoin#./context/CollabContext#CollabContextWithUser
+        - Mutation.toggleAcceptInvites#./context/CollabContext#CollabContextWithUser
+        - Mutation.declineMemberRequest#./context/CollabContext#CollabContextWithUser
   ../client/src/graphql/generates.ts:
     plugins:
       - typescript
