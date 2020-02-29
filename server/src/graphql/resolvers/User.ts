@@ -1,3 +1,5 @@
+import { isAuthenticated } from './../middleware/isAuthenticated'
+import { and } from 'graphql-shield'
 import { CollabMemberRequest } from '../../db/models/CollabMemberRequest'
 import { generateToken } from '../../utils/index'
 import { User as UserModel } from '../../db/models/User'
@@ -16,11 +18,11 @@ const userResolver: Resolvers = {
       const token = await generateToken({ userId: user.id })
       return { user, token }
     },
-    deleteUser: (root, { id }) => UserModel.deleteUser(id),
-    acceptCollabInvite: (root, { collabId }, context) =>
-      UserModel.acceptCollabInvite(collabId, context.get('id')),
-    declineCollabInvite: (root, { collabId }, context) =>
-      UserModel.declineCollabInvite(collabId, context.get('id')),
+    deleteUser: (root, args, { user }) => UserModel.deleteUser(user.get('id')),
+    acceptCollabInvite: (root, { collabId }, { user }) =>
+      UserModel.acceptCollabInvite(collabId, user.get('id')),
+    declineCollabInvite: (root, { collabId }, { user }) =>
+      UserModel.declineCollabInvite(collabId, user.get('id')),
   },
   User: {
     collabs: ({ id }) => Collab.findAll({ where: { ownerId: id } }),
@@ -43,6 +45,14 @@ const userResolver: Resolvers = {
 
       return collabRequests
     },
+  },
+}
+
+export const userMiddleware = {
+  Mutation: {
+    deleteUser: and(isAuthenticated),
+    acceptCollabInvite: and(isAuthenticated),
+    declineCollabInvite: and(isAuthenticated),
   },
 }
 

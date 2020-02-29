@@ -1,19 +1,11 @@
+import { isAuthenticated } from './../middleware/isAuthenticated'
+import { and } from 'graphql-shield'
 import { CollabMemberRequest } from '../../db/models/CollabMemberRequest'
 import { CollabMember } from './../../db/models/CollabMember'
 import { CollabComment } from './../../db/models/CollabComment'
 import { Collab } from '../../db/models/Collab'
 import { Resolvers } from '../types'
 import { User } from '../../db/models/User'
-import { assertUserInContext } from '../helpers/assertUserInContext'
-import { AuthenticationError } from 'apollo-server-express'
-
-const isAuthenticared = (...args: any[]) => {
-  const context = args[2]
-  if (!context.user) {
-    throw new AuthenticationError('Unauthorized')
-  }
-  return
-}
 
 const collabResolver: Resolvers = {
   Query: {
@@ -21,49 +13,75 @@ const collabResolver: Resolvers = {
     collab: (parent, { collabId }) => Collab.getCollab(collabId),
   },
   Mutation: {
-    createCollab: async (parent, { collab }, context) => {
-      assertUserInContext(context)
-      return Collab.createCollab(collab, context.user.get('id'))
-    },
+    createCollab: async (parent, { collab }, { user }) =>
+      Collab.createCollab(collab, user.id),
     deleteCollab: (parent, { collabId }) => Collab.deleteCollab(collabId),
-    addMember: (parent, { collabId, memberId }, context) =>
-      Collab.addMember(collabId, context.user.get('id'), memberId),
-    removeMember: (parent, { collabId, memberId }, context) =>
-      Collab.removeMember(collabId, context.user.get('id'), memberId),
-    addComment: (parent, { content, collabId }, context) =>
-      CollabComment.addComment(content, context.user.get('id'), collabId),
-    deleteComment: (parent, { commentId }, context) =>
-      CollabComment.deleteComment(commentId, context.user.get('id')),
-    inviteMember: (parent, { collabId, memberId }, context) =>
-      Collab.inviteMember(context.user.get('id'), memberId, collabId),
-    requestToJoin: (parent, { collabId }, context) =>
-      Collab.requestToJoin(collabId, context.user.get('id')),
+    addMember: (parent, { collabId, memberId }, { user }) =>
+      Collab.addMember(collabId, user.id, memberId),
+    removeMember: (parent, { collabId, memberId }, { user }) =>
+      Collab.removeMember(collabId, user.id, memberId),
+    addComment: (parent, { content, collabId }, { user }) =>
+      CollabComment.addComment(content, user.id, collabId),
+    deleteComment: (parent, { commentId }, { user }) =>
+      CollabComment.deleteComment(commentId, user.id),
+    inviteMember: (parent, { collabId, memberId }, { user }) =>
+      Collab.inviteMember(user.id, memberId, collabId),
+    requestToJoin: (parent, { collabId }, { user }) =>
+      Collab.requestToJoin(collabId, user.id),
+    toggleAcceptInvites: (parent, { collabId }, { user }) =>
+      Collab.toggleAcceptInvites(collabId, user.id),
+    declineMemberRequest: (parent, { collabId, memberId }, { user }) =>
+      Collab.declineMemberRequest(collabId, memberId, user.id),
   },
   Collab: {
     owner: ({ ownerId }, args, { userLoader }) =>
       userLoader.load(ownerId) as Promise<User>,
-    members: async ({ id }) => {
+    members: async ({ id }, args, { userLoader }) => {
       const members = await CollabMember.findAll({
         where: { collabId: id },
-        attributes: [],
-        include: [User],
+        attributes: ['memberId'],
       })
-      return members.map(({ member }) => member)
+      const memberIds = members.map(({ memberId }) => memberId)
+      return userLoader.loadMany(memberIds) as Promise<User[]>
     },
     comments: ({ id }) => CollabComment.findAll({ where: { collabId: id } }),
-    pendingInvites: async ({ id }) => {
+    pendingInvites: async ({ id }, args, { userLoader }) => {
       const pendingInviteMembers = await CollabMemberRequest.findAll({
-        where: { collabId: id },
-        attributes: [],
-        include: [User],
+        where: { collabId: id, type: 'invitation' },
+        attributes: ['memberId'],
       })
-      console.log(pendingInviteMembers)
-      return pendingInviteMembers.map(({ member }) => member)
+      const memberIds = pendingInviteMembers.map(({ memberId }) => memberId)
+      return userLoader.loadMany(memberIds) as Promise<User[]>
+    },
+    pendingRequests: async ({ id }, args, { userLoader }) => {
+      const pendingInviteMembers = await CollabMemberRequest.findAll({
+        where: { collabId: id, type: 'request' },
+        attributes: ['memberId'],
+      })
+      const memberIds = pendingInviteMembers.map(({ memberId }) => memberId)
+      return userLoader.loadMany(memberIds) as Promise<User[]>
     },
   },
   CollabComment: {
-    author: ({ authorId }) => User.findByPk(authorId) as Promise<User>,
-    collab: ({ collabId }) => Collab.findByPk(collabId) as Promise<Collab>,
+    author: ({ authorId }, args, { userLoader }) =>
+      userLoader.load(authorId) as Promise<User>,
+    collab: ({ collabId }, args, { collabLoader }) =>
+      collabLoader.load(collabId) as Promise<Collab>,
+  },
+}
+
+export const collabMiddleware = {
+  Mutation: {
+    createCollab: and(isAuthenticated),
+    deleteCollab: and(isAuthenticated),
+    addMember: and(isAuthenticated),
+    removeMember: and(isAuthenticated),
+    addComment: and(isAuthenticated),
+    deleteComment: and(isAuthenticated),
+    inviteMember: and(isAuthenticated),
+    requestToJoin: and(isAuthenticated),
+    toggleAcceptInvites: and(isAuthenticated),
+    declineMemberRequest: and(isAuthenticated),
   },
 }
 
