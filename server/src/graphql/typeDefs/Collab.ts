@@ -17,6 +17,14 @@ const collabTypeDefs = gql`
     deleteComment(commentId: ID!): Boolean!
     toggleAcceptInvites(collabId: ID!): Collab!
     declineMemberRequest(collabId: ID!, memberId: ID!): Boolean!
+    createTaskList(collabId: ID!, name: String!, order: Int!): TaskList
+    deleteTaskList(taskListId: ID!): Boolean!
+    createTaskComment(
+      collabId: ID!
+      taskId: ID!
+      content: String!
+    ): TaskComment!
+    deleteTaskComment(commentId: ID!): Boolean!
   }
 
   type Collab {
@@ -34,6 +42,29 @@ const collabTypeDefs = gql`
     comments: [CollabComment!]!
     pendingInvites: [User!]!
     pendingRequests: [User!]!
+    taskList: [TaskList!]!
+  }
+
+  type TaskList {
+    id: ID!
+    name: String!
+    order: Int!
+    tasks: [Task!]!
+  }
+
+  type Task {
+    id: ID!
+    authorId: ID!
+    author: User!
+    description: ID!
+    comments: [TaskComment!]!
+  }
+
+  type TaskComment {
+    id: ID!
+    content: String!
+    authorId: ID!
+    author: User!
   }
 
   input CollabArgs {
