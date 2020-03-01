@@ -6,6 +6,9 @@ import { CollabComment } from './../../db/models/CollabComment'
 import { Collab } from '../../db/models/Collab'
 import { Resolvers } from '../types'
 import { User } from '../../db/models/User'
+import { CollabTaskList } from '../../db/models/CollabTaskList'
+import { CollabTask } from '../../db/models/CollabTask'
+import { CollabTaskComment } from '../../db/models/CollabTaskComment'
 
 const collabResolver: Resolvers = {
   Query: {
@@ -32,6 +35,14 @@ const collabResolver: Resolvers = {
       Collab.toggleAcceptInvites(collabId, user.id),
     declineMemberRequest: (parent, { collabId, memberId }, { user }) =>
       Collab.declineMemberRequest(collabId, memberId, user.id),
+    createTaskList: (parent, { collabId, name, order }, { user }) =>
+      Collab.createTaskList(collabId, name, order, user.id),
+    deleteTaskList: (parent, { taskListId }, { user }) =>
+      Collab.deleteTaskList(taskListId, user.id),
+    createTaskComment: (parent, { collabId, content, taskId }, { user }) =>
+      CollabTaskComment.createComment(collabId, content, user.id, taskId),
+    deleteTaskComment: (parent, { commentId }, { user }) =>
+      CollabTaskComment.deleteComment(commentId, user.id),
   },
   Collab: {
     owner: ({ ownerId }, args, { userLoader }) =>
@@ -61,6 +72,20 @@ const collabResolver: Resolvers = {
       const memberIds = pendingInviteMembers.map(({ memberId }) => memberId)
       return userLoader.loadMany(memberIds) as Promise<User[]>
     },
+    taskList: ({ id }) => CollabTaskList.findAll({ where: { collabId: id } }),
+  },
+  TaskList: {
+    tasks: ({ id }) => CollabTask.findAll({ where: { taskListId: id } }),
+  },
+  Task: {
+    comments: ({ id }) =>
+      CollabTaskComment.findAll({ where: { collabTaskId: id } }),
+    author: ({ authorId }, args, { userLoader }) =>
+      userLoader.load(authorId) as Promise<User>,
+  },
+  TaskComment: {
+    author: ({ authorId }, args, { userLoader }) =>
+      userLoader.load(authorId) as Promise<User>,
   },
   CollabComment: {
     author: ({ authorId }, args, { userLoader }) =>
@@ -82,6 +107,10 @@ export const collabMiddleware = {
     requestToJoin: and(isAuthenticated),
     toggleAcceptInvites: and(isAuthenticated),
     declineMemberRequest: and(isAuthenticated),
+    createTaskList: and(isAuthenticated),
+    deleteTaskList: and(isAuthenticated),
+    createTaskComment: and(isAuthenticated),
+    deleteTaskComment: and(isAuthenticated),
   },
 }
 
