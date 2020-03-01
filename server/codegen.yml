@@ -26,6 +26,10 @@ generates:
         - Mutation.requestToJoin#./context/CollabContext#CollabContextWithUser
         - Mutation.toggleAcceptInvites#./context/CollabContext#CollabContextWithUser
         - Mutation.declineMemberRequest#./context/CollabContext#CollabContextWithUser
+        - Mutation.createTaskList#./context/CollabContext#CollabContextWithUser
+        - Mutation.deleteTaskList#./context/CollabContext#CollabContextWithUser
+        - Mutation.createTaskComment#./context/CollabContext#CollabContextWithUser
+        - Mutation.deleteTaskComment#./context/CollabContext#CollabContextWithUser
   ../client/src/graphql/generates.ts:
     plugins:
       - typescript
