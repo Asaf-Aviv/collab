@@ -61,7 +61,8 @@ export class User extends Model<User> {
   @Validate({
     is: {
       args: passwordRegex,
-      msg: 'Password must contain atleast eight characters, one letter and one number',
+      msg:
+        'Password must contain atleast eight characters, one letter and one number',
     },
   })
   @AllowNull(false)
@@ -112,7 +113,6 @@ export class User extends Model<User> {
     const user = await this.findOne({
       where: { email: email.toLowerCase() },
       attributes: { include: ['password'] },
-      raw: true,
     })
 
     if (!user) {
@@ -125,9 +125,7 @@ export class User extends Model<User> {
       throw new Error('Incorrect Credentials')
     }
 
-    const { password: omit, ...userWithoutPassword } = user
-
-    return userWithoutPassword
+    return user
   }
 
   static async deleteUser(id: string) {
@@ -142,7 +140,9 @@ export class User extends Model<User> {
 
   static async acceptCollabInvite(collabId: string, memberId: string) {
     return this.sequelize!.transaction(async () => {
-      const invite = await CollabMemberRequest.findOne({ where: { collabId, memberId } })
+      const invite = await CollabMemberRequest.findOne({
+        where: { collabId, memberId },
+      })
 
       if (!invite) {
         throw new Error('Invititation does not exist')
@@ -163,7 +163,9 @@ export class User extends Model<User> {
 
   static async declineCollabInvite(collabId: string, memberId: string) {
     return this.sequelize!.transaction(async () => {
-      const invite = await CollabMemberRequest.findOne({ where: { collabId, memberId } })
+      const invite = await CollabMemberRequest.findOne({
+        where: { collabId, memberId },
+      })
 
       if (!invite) {
         throw new Error('Invititation does not exist')

@@ -6,16 +6,17 @@ import { User as UserModel } from '../../db/models/User'
 import { Collab } from '../../db/models/Collab'
 import { Resolvers } from '../types'
 
-const userResolver: Resolvers = {
+export const userResolver: Resolvers = {
   Query: {
     users: () => UserModel.findAll(),
-    user: (parent, { id }, { userLoader }) => userLoader.load(id),
+    user: (root, { id }, { loaders }) => loaders.userLoader.load(id),
   },
   Mutation: {
     signUp: (root, { credentials }) => UserModel.createUser(credentials),
-    login: async (root, { credentials }) => {
+    login: async (root, { credentials }, context) => {
       const user = await UserModel.login(credentials)
       const token = await generateToken({ userId: user.id })
+      context.user = user
       return { user, token }
     },
     deleteUser: (root, args, { user }) => UserModel.deleteUser(user.get('id')),
@@ -24,8 +25,9 @@ const userResolver: Resolvers = {
     declineCollabInvite: (root, { collabId }, { user }) =>
       UserModel.declineCollabInvite(collabId, user.get('id')),
   },
-  User: {
-    collabs: ({ id }) => Collab.findAll({ where: { ownerId: id } }),
+  CurrentUser: {
+    collabs: ({ id }, args, { models }) =>
+      models.Collab.findAll({ where: { ownerId: id } }),
     collabInvites: async ({ id }) => {
       const collabs = await CollabMemberRequest.findAll({
         where: { memberId: id },
@@ -34,17 +36,18 @@ const userResolver: Resolvers = {
       })
       return collabs.map(({ collab }) => collab)
     },
-    collabRequests: async ({ id }) => {
-      const collabRequests = await CollabMemberRequest.findAll({
+    collabRequests: async ({ id }, args, { models }) =>
+      models.CollabMemberRequest.findAll({
         where: { type: 'request' },
         include: [
           { model: UserModel }, //
           { model: Collab, where: { ownerId: id } },
         ],
-      })
-
-      return collabRequests
-    },
+      }),
+  },
+  User: {
+    collabs: ({ id }, args, { models }) =>
+      models.Collab.findAll({ where: { ownerId: id } }),
   },
 }
 
@@ -55,5 +58,3 @@ export const userMiddleware = {
     declineCollabInvite: and(isAuthenticated),
   },
 }
-
-export default userResolver

@@ -1,31 +1,34 @@
-import { decodeToken } from './../../utils/index'
 import { ApolloServerExpressConfig } from 'apollo-server-express'
-import { createLoaders } from '../loaders/loaders'
+import { models, Models } from '../../db/models/index'
+import { decodeToken } from '../../utils/index'
+import { createLoaders, Loaders } from '../loaders/loaders'
 import { User } from '../../db/models/User'
 
-type Loaders = ReturnType<typeof createLoaders>
-
-export type CollabContext = Loaders & {
+export type CollabContext = {
+  loaders: Loaders
+  models: Models
   user: User | null
 }
 
-export type CollabContextWithUser = Loaders & {
+export type CollabContextWithUser = CollabContext & {
   user: User
 }
 
-export const apolloContext: ApolloServerExpressConfig['context'] = async ({ req }) => {
+export const apolloContext: ApolloServerExpressConfig['context'] = async ({
+  req,
+}) => {
+  let user: User | null = null
+
   try {
     const token = (req.headers.authorization || '').replace('Bearer ', '')
     const { userId } = await decodeToken(token)
-    const user = await User.findByPk(userId, { raw: true })
-    return {
-      ...createLoaders(),
-      user,
-    }
-  } catch (err) {
-    return {
-      ...createLoaders(),
-      user: null,
-    }
+    user = await User.findByPk(userId, { raw: true })
+    // eslint-disable-next-line no-empty
+  } catch (err) {}
+
+  return {
+    loaders: createLoaders(),
+    models,
+    user,
   }
 }

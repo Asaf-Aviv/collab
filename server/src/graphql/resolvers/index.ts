@@ -1,10 +1,16 @@
-import { mergeResolvers } from 'merge-graphql-schemas';
-import userResolver from './User';
-import collabResolver from './Collab';
+import { mergeResolvers } from 'merge-graphql-schemas'
+import { collabCommentResolver } from './CollabComment'
+import { userResolver } from './User'
+import { collabResolver } from './Collab'
+import { taskCommentResolver } from './TaskComment'
+import { collabTaskResolver } from './Task'
+import { collabDiscussionMessageResolver } from './collabDiscussionMessage'
 
-const resolvers = [
+export const resolvers = mergeResolvers([
   userResolver,
   collabResolver,
-];
-
-export default mergeResolvers(resolvers);
+  taskCommentResolver,
+  collabTaskResolver,
+  collabCommentResolver,
+  collabDiscussionMessageResolver,
+])

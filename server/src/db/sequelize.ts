@@ -1,7 +1,8 @@
 import { Sequelize, SequelizeOptions } from 'sequelize-typescript'
+import { models } from './models/index'
 
 const baseConfig: SequelizeOptions = {
-  modelPaths: [`${__dirname}/models`],
+  models: Object.values(models),
   dialect: 'postgres',
   pool: {
     max: 5,

@@ -13,6 +13,7 @@ import uuid from 'uuid/v4'
 import { CollabTaskList } from './CollabTaskList'
 import { CollabTaskComment } from './CollabTaskComment'
 import { User } from './User'
+import { CollabMember } from './CollabMember'
 
 @Table({ tableName: 'collab_tasks' })
 export class CollabTask extends Model<CollabTask> {
@@ -44,4 +45,36 @@ export class CollabTask extends Model<CollabTask> {
 
   @HasMany(() => CollabTaskComment)
   comments!: CollabTaskComment[]
+
+  static async createTask(
+    collabId: string,
+    taskListId: string,
+    description: string,
+    authorId: string
+  ) {
+    const isMember = await CollabMember.findOne({
+      where: { collabId, memberId: authorId },
+    })
+
+    if (!isMember) {
+      throw new Error('You are not a member of this Collab')
+    }
+
+    return this.create({ description, authorId })
+  }
+
+  static async deleteTask(taskListId: string, authorId: string) {
+    const task = await this.findByPk(taskListId)
+
+    if (!task) {
+      throw new Error('Task not found')
+    }
+    if (task.authorId !== authorId) {
+      throw new Error('You are not the author of this Task')
+    }
+
+    await task.destroy()
+
+    return true
+  }
 }

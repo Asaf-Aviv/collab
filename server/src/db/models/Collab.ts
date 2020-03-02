@@ -27,6 +27,7 @@ import { CollabMember } from './CollabMember'
 import { CollabComment } from './CollabComment'
 import { User } from './User'
 import { CollabTaskList } from './CollabTaskList'
+import { CollabDiscussionMessage } from './CollabDiscussionMessage'
 
 @Table({ tableName: 'collabs' })
 export class Collab extends Model<Collab> {
@@ -66,6 +67,8 @@ export class Collab extends Model<Collab> {
   @Column
   acceptsInvites!: boolean
 
+  @AllowNull(false)
+  @Default(false)
   @Column
   hasStarted!: boolean
 
@@ -91,6 +94,9 @@ export class Collab extends Model<Collab> {
 
   @HasMany(() => CollabTaskList)
   taskList!: CollabTaskList[]
+
+  @HasMany(() => CollabDiscussionMessage)
+  discussionMessages!: CollabDiscussionMessage[]
 
   getMembers!: HasManyGetAssociationsMixin<CollabMember>
   addMember!: HasManyAddAssociationMixin<CollabMember, string>
