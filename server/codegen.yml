@@ -28,8 +28,13 @@ generates:
         - Mutation.declineMemberRequest#./context/CollabContext#CollabContextWithUser
         - Mutation.createTaskList#./context/CollabContext#CollabContextWithUser
         - Mutation.deleteTaskList#./context/CollabContext#CollabContextWithUser
+        - Mutation.createTask#./context/CollabContext#CollabContextWithUser
+        - Mutation.deleteTask#./context/CollabContext#CollabContextWithUser
         - Mutation.createTaskComment#./context/CollabContext#CollabContextWithUser
         - Mutation.deleteTaskComment#./context/CollabContext#CollabContextWithUser
+        # Collab Discussion Messages
+        - Mutation.createCollabDiscussionMessage#./context/CollabContext#CollabContextWithUser
+        - Mutation.deleteCollabDiscussionMessage#./context/CollabContext#CollabContextWithUser
   ../client/src/graphql/generates.ts:
     plugins:
       - typescript

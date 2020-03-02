@@ -1,97 +1,98 @@
 import { isAuthenticated } from './../middleware/isAuthenticated'
 import { and } from 'graphql-shield'
-import { CollabMemberRequest } from '../../db/models/CollabMemberRequest'
-import { CollabMember } from './../../db/models/CollabMember'
-import { CollabComment } from './../../db/models/CollabComment'
-import { Collab } from '../../db/models/Collab'
 import { Resolvers } from '../types'
-import { User } from '../../db/models/User'
-import { CollabTaskList } from '../../db/models/CollabTaskList'
-import { CollabTask } from '../../db/models/CollabTask'
-import { CollabTaskComment } from '../../db/models/CollabTaskComment'
+import { replaceErrorWithNull } from '../helpers/replaceErrorWithNull'
 
-const collabResolver: Resolvers = {
+export const collabResolver: Resolvers = {
   Query: {
-    collabs: () => Collab.findAll(),
-    collab: (parent, { collabId }) => Collab.getCollab(collabId),
+    collabs: (root, args, { models }) => models.Collab.findAll(),
+    collab: (root, { collabId }, { models }) =>
+      models.Collab.getCollab(collabId),
   },
   Mutation: {
-    createCollab: async (parent, { collab }, { user }) =>
-      Collab.createCollab(collab, user.id),
-    deleteCollab: (parent, { collabId }) => Collab.deleteCollab(collabId),
-    addMember: (parent, { collabId, memberId }, { user }) =>
-      Collab.addMember(collabId, user.id, memberId),
-    removeMember: (parent, { collabId, memberId }, { user }) =>
-      Collab.removeMember(collabId, user.id, memberId),
-    addComment: (parent, { content, collabId }, { user }) =>
-      CollabComment.addComment(content, user.id, collabId),
-    deleteComment: (parent, { commentId }, { user }) =>
-      CollabComment.deleteComment(commentId, user.id),
-    inviteMember: (parent, { collabId, memberId }, { user }) =>
-      Collab.inviteMember(user.id, memberId, collabId),
-    requestToJoin: (parent, { collabId }, { user }) =>
-      Collab.requestToJoin(collabId, user.id),
-    toggleAcceptInvites: (parent, { collabId }, { user }) =>
-      Collab.toggleAcceptInvites(collabId, user.id),
-    declineMemberRequest: (parent, { collabId, memberId }, { user }) =>
-      Collab.declineMemberRequest(collabId, memberId, user.id),
-    createTaskList: (parent, { collabId, name, order }, { user }) =>
-      Collab.createTaskList(collabId, name, order, user.id),
-    deleteTaskList: (parent, { taskListId }, { user }) =>
-      Collab.deleteTaskList(taskListId, user.id),
-    createTaskComment: (parent, { collabId, content, taskId }, { user }) =>
-      CollabTaskComment.createComment(collabId, content, user.id, taskId),
-    deleteTaskComment: (parent, { commentId }, { user }) =>
-      CollabTaskComment.deleteComment(commentId, user.id),
+    createCollab: async (root, { collab }, { user, models }) =>
+      models.Collab.createCollab(collab, user.id),
+    deleteCollab: (root, { collabId }, { models }) =>
+      models.Collab.deleteCollab(collabId),
+    addMember: (root, { collabId, memberId }, { user, models }) =>
+      models.Collab.addMember(collabId, user.id, memberId),
+    removeMember: (root, { collabId, memberId }, { user, models }) =>
+      models.Collab.removeMember(collabId, user.id, memberId),
+    inviteMember: (root, { collabId, memberId }, { user, models }) =>
+      models.Collab.inviteMember(user.id, memberId, collabId),
+    requestToJoin: (root, { collabId }, { user, models }) =>
+      models.Collab.requestToJoin(collabId, user.id),
+    toggleAcceptInvites: (root, { collabId }, { user, models }) =>
+      models.Collab.toggleAcceptInvites(collabId, user.id),
+    declineMemberRequest: (root, { collabId, memberId }, { user, models }) =>
+      models.Collab.declineMemberRequest(collabId, memberId, user.id),
+    createTaskList: (root, { collabId, name, order }, { user, models }) =>
+      models.Collab.createTaskList(collabId, name, order, user.id),
+    deleteTaskList: (root, { taskListId }, { user, models }) =>
+      models.Collab.deleteTaskList(taskListId, user.id),
+    createTaskComment: (
+      root,
+      { collabId, content, taskId },
+      { user, models }
+    ) =>
+      models.CollabTaskComment.createComment(
+        collabId,
+        content,
+        user.id,
+        taskId
+      ),
+    deleteTaskComment: (root, { commentId }, { user, models }) =>
+      models.CollabTaskComment.deleteComment(commentId, user.id),
   },
   Collab: {
-    owner: ({ ownerId }, args, { userLoader }) =>
-      userLoader.load(ownerId) as Promise<User>,
-    members: async ({ id }, args, { userLoader }) => {
-      const members = await CollabMember.findAll({
+    owner: async ({ ownerId }, args, { loaders }) =>
+      loaders.userLoader.load(ownerId),
+    members: async ({ id }, args, { loaders, models }) => {
+      const members = await models.CollabMember.findAll({
         where: { collabId: id },
         attributes: ['memberId'],
       })
+
       const memberIds = members.map(({ memberId }) => memberId)
-      return userLoader.loadMany(memberIds) as Promise<User[]>
+      const users = await loaders.userLoader.loadMany(memberIds)
+      return users.map(replaceErrorWithNull)
     },
-    comments: ({ id }) => CollabComment.findAll({ where: { collabId: id } }),
-    pendingInvites: async ({ id }, args, { userLoader }) => {
-      const pendingInviteMembers = await CollabMemberRequest.findAll({
+    comments: ({ id }, args, { models }) =>
+      models.CollabComment.findAll({ where: { collabId: id } }),
+    pendingInvites: async ({ id }, args, { models, loaders }) => {
+      const pendingInviteMembers = await models.CollabMemberRequest.findAll({
         where: { collabId: id, type: 'invitation' },
         attributes: ['memberId'],
       })
+
       const memberIds = pendingInviteMembers.map(({ memberId }) => memberId)
-      return userLoader.loadMany(memberIds) as Promise<User[]>
+      const users = await loaders.userLoader.loadMany(memberIds)
+      return users.map(replaceErrorWithNull)
     },
-    pendingRequests: async ({ id }, args, { userLoader }) => {
-      const pendingInviteMembers = await CollabMemberRequest.findAll({
+    pendingRequests: async ({ id }, args, { loaders, models }) => {
+      const pendingInviteMembers = await models.CollabMemberRequest.findAll({
         where: { collabId: id, type: 'request' },
         attributes: ['memberId'],
       })
       const memberIds = pendingInviteMembers.map(({ memberId }) => memberId)
-      return userLoader.loadMany(memberIds) as Promise<User[]>
+      const users = await loaders.userLoader.loadMany(memberIds)
+
+      return users.map(replaceErrorWithNull)
     },
-    taskList: ({ id }) => CollabTaskList.findAll({ where: { collabId: id } }),
+    discussionMessages: ({ id }, args, { models }) =>
+      models.CollabDiscussionMessage.findAll({ where: { collabId: id } }),
+    taskList: ({ id }, args, { models }) =>
+      models.CollabTaskList.findAll({ where: { collabId: id } }),
   },
   TaskList: {
-    tasks: ({ id }) => CollabTask.findAll({ where: { taskListId: id } }),
-  },
-  Task: {
-    comments: ({ id }) =>
-      CollabTaskComment.findAll({ where: { collabTaskId: id } }),
-    author: ({ authorId }, args, { userLoader }) =>
-      userLoader.load(authorId) as Promise<User>,
-  },
-  TaskComment: {
-    author: ({ authorId }, args, { userLoader }) =>
-      userLoader.load(authorId) as Promise<User>,
+    tasks: ({ id }, args, { models }) =>
+      models.CollabTask.findAll({ where: { taskListId: id } }),
   },
   CollabComment: {
-    author: ({ authorId }, args, { userLoader }) =>
-      userLoader.load(authorId) as Promise<User>,
-    collab: ({ collabId }, args, { collabLoader }) =>
-      collabLoader.load(collabId) as Promise<Collab>,
+    author: async ({ authorId }, args, { loaders }) =>
+      loaders.userLoader.load(authorId),
+    collab: async ({ collabId }, args, { loaders }) =>
+      loaders.collabLoader.load(collabId),
   },
 }
 
@@ -101,17 +102,11 @@ export const collabMiddleware = {
     deleteCollab: and(isAuthenticated),
     addMember: and(isAuthenticated),
     removeMember: and(isAuthenticated),
-    addComment: and(isAuthenticated),
-    deleteComment: and(isAuthenticated),
     inviteMember: and(isAuthenticated),
     requestToJoin: and(isAuthenticated),
     toggleAcceptInvites: and(isAuthenticated),
     declineMemberRequest: and(isAuthenticated),
     createTaskList: and(isAuthenticated),
     deleteTaskList: and(isAuthenticated),
-    createTaskComment: and(isAuthenticated),
-    deleteTaskComment: and(isAuthenticated),
   },
 }
-
-export default collabResolver

@@ -1,6 +1,6 @@
 import { gql } from 'apollo-server-express'
 
-const userTypeDefs = gql`
+export const userTypeDefs = gql`
   type Query {
     users: [User!]!
     user(id: ID!): User
@@ -14,13 +14,19 @@ const userTypeDefs = gql`
     declineCollabInvite(collabId: ID!): Boolean!
   }
 
-  type User {
+  type CurrentUser {
     id: ID!
     username: String!
     email: String!
     collabs: [Collab!]!
     collabInvites: [Collab!]!
     collabRequests: [CollabRequest!]!
+  }
+
+  type User {
+    id: ID!
+    username: String!
+    collabs: [Collab!]!
   }
 
   type CollabRequest {
@@ -30,7 +36,7 @@ const userTypeDefs = gql`
 
   type AuthPayload {
     token: String!
-    user: User!
+    user: CurrentUser!
   }
 
   input SignupArgs {
@@ -44,5 +50,3 @@ const userTypeDefs = gql`
     password: String!
   }
 `
-
-export default userTypeDefs

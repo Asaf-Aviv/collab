@@ -1,10 +1,10 @@
 import express from 'express'
 import { ApolloServer, makeExecutableSchema } from 'apollo-server-express'
 import { applyMiddleware } from 'graphql-middleware'
-import typeDefs from './graphql/typeDefs'
+import { typeDefs } from './graphql/typeDefs'
 import { apolloContext } from './graphql/context/CollabContext'
 import { permissions } from './graphql/middleware/permissions'
-import resolvers from './graphql/resolvers'
+import { resolvers } from './graphql/resolvers'
 
 export const app = express()
 
@@ -16,7 +16,7 @@ const schema = applyMiddleware(
     typeDefs,
     resolvers,
   }),
-  permissions,
+  permissions
 )
 
 const server = new ApolloServer({
