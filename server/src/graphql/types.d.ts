@@ -120,6 +120,7 @@ export type Mutation = {
   requestToJoin: Scalars['Boolean'],
   signUp: Scalars['Boolean'],
   toggleAcceptInvites: Collab,
+  validateToken: AuthPayload,
 };
 
 
@@ -505,6 +506,7 @@ export type MutationResolvers<ContextType = CollabContext, ParentType extends Re
   requestToJoin?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationRequestToJoinArgs, 'collabId'>>,
   signUp?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'credentials'>>,
   toggleAcceptInvites?: Resolver<ResolversTypes['Collab'], ParentType, CollabContextWithUser, RequireFields<MutationToggleAcceptInvitesArgs, 'collabId'>>,
+  validateToken?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType>,
 }>;
 
 export type QueryResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
