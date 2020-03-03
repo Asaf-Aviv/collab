@@ -5,6 +5,7 @@ import { generateToken } from '../../utils/index'
 import { User as UserModel } from '../../db/models/User'
 import { Collab } from '../../db/models/Collab'
 import { Resolvers } from '../types'
+import { AuthenticationError } from 'apollo-server-express'
 
 export const userResolver: Resolvers = {
   Query: {
@@ -17,6 +18,11 @@ export const userResolver: Resolvers = {
       const user = await UserModel.login(credentials)
       const token = await generateToken({ userId: user.id })
       context.user = user
+      return { user, token }
+    },
+    validateToken: async (root, args, { user }) => {
+      if (!user) throw new AuthenticationError('Invalid token')
+      const token = await generateToken({ userId: user.id })
       return { user, token }
     },
     deleteUser: (root, args, { user }) => UserModel.deleteUser(user.get('id')),
