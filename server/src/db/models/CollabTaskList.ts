@@ -12,6 +12,7 @@ import {
 import uuid from 'uuid/v4'
 import { Collab } from './Collab'
 import { CollabTask } from './CollabTask'
+import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 
 @Table({ tableName: 'collab_task_list', timestamps: false })
 export class CollabTaskList extends Model<CollabTaskList> {
@@ -21,15 +22,15 @@ export class CollabTaskList extends Model<CollabTaskList> {
   @Column
   id!: string
 
-  @ForeignKey(() => Collab)
-  @Column
-  collabId!: string
-
   @Column
   name!: string
 
   @Column
   order!: number
+
+  @ForeignKey(() => Collab)
+  @Column
+  collabId!: string
 
   @BelongsTo(() => Collab, { foreignKey: 'collabId', onDelete: 'CASCADE' })
   collab!: Collab
@@ -37,3 +38,8 @@ export class CollabTaskList extends Model<CollabTaskList> {
   @HasMany(() => CollabTask)
   tasks!: CollabTask[]
 }
+
+export type GQLCollabTaskList = GQLResolverTypes<
+  CollabTaskList,
+  'collab' | 'tasks'
+>

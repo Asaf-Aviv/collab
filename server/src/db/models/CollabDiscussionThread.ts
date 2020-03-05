@@ -1,3 +1,4 @@
+import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 import {
   Model,
   Table,
@@ -7,19 +8,24 @@ import {
   Default,
   BelongsTo,
   IsUUID,
+  HasMany,
 } from 'sequelize-typescript'
 import uuid from 'uuid/v4'
 import { Collab } from './Collab'
 import { User } from './User'
 import { CollabMember } from './CollabMember'
+import { CollabDiscussionThreadComment } from './CollabDiscussionThreadComment'
 
-@Table({ tableName: 'collab_discussion_messages' })
-export class CollabDiscussionMessage extends Model<CollabDiscussionMessage> {
+@Table({ tableName: 'collab_discussion_threads' })
+export class CollabDiscussionThread extends Model<CollabDiscussionThread> {
   @IsUUID(4)
   @Default(uuid)
   @PrimaryKey
   @Column
   id!: string
+
+  @Column
+  title!: string
 
   @ForeignKey(() => Collab)
   @Column
@@ -35,14 +41,10 @@ export class CollabDiscussionMessage extends Model<CollabDiscussionMessage> {
   @BelongsTo(() => User, { foreignKey: 'authorId', onDelete: 'CASCADE' })
   author!: User
 
-  @Column
-  content!: string
+  @HasMany(() => CollabDiscussionThreadComment)
+  comments!: CollabDiscussionThreadComment[]
 
-  static async createMessage(
-    content: string,
-    authorId: string,
-    collabId: string
-  ) {
+  static async createThread(title: string, authorId: string, collabId: string) {
     const isMember = await CollabMember.findOne({
       where: { collabId, memberId: authorId },
     })
@@ -52,25 +54,30 @@ export class CollabDiscussionMessage extends Model<CollabDiscussionMessage> {
     }
 
     return this.create({
-      content,
+      title,
       authorId,
       collabId,
     })
   }
 
-  static async deleteMessage(messageId: string, authorId: string) {
-    const message = await this.findByPk(messageId)
+  static async deleteThread(threadId: string, authorId: string) {
+    const thread = await this.findByPk(threadId)
 
-    if (!message) {
-      throw new Error('Message not found')
+    if (!thread) {
+      throw new Error('Thread not found')
     }
 
-    if (message.get('authorId') !== authorId) {
-      throw new Error('You are not the author of this message')
+    if (thread.get('authorId') !== authorId) {
+      throw new Error('You are not the author of this thread')
     }
 
-    await message.destroy()
+    await thread.destroy()
 
     return true
   }
 }
+
+export type GQLCollabDiscussionThread = GQLResolverTypes<
+  CollabDiscussionThread,
+  'collab' | 'author'
+>

@@ -1,27 +1,25 @@
-import { isAuthenticated } from './../middleware/isAuthenticated'
 import { and } from 'graphql-shield'
 import { CollabMemberRequest } from '../../db/models/CollabMemberRequest'
 import { generateToken } from '../../utils/index'
+import { isAuthenticated } from '../middleware/isAuthenticated'
 import { User as UserModel } from '../../db/models/User'
 import { Collab } from '../../db/models/Collab'
 import { Resolvers } from '../types'
-import { AuthenticationError } from 'apollo-server-express'
 
 export const userResolver: Resolvers = {
   Query: {
     users: () => UserModel.findAll(),
     user: (root, { id }, { loaders }) => loaders.userLoader.load(id),
+    currentUser: async (root, args, { user }) => user,
   },
   Mutation: {
-    signUp: (root, { credentials }) => UserModel.createUser(credentials),
-    login: async (root, { credentials }, context) => {
-      const user = await UserModel.login(credentials)
+    signUp: async (root, { credentials }) => {
+      const user = await UserModel.createUser(credentials)
       const token = await generateToken({ userId: user.id })
-      context.user = user
       return { user, token }
     },
-    validateToken: async (root, args, { user }) => {
-      if (!user) throw new AuthenticationError('Invalid token')
+    login: async (root, { credentials }) => {
+      const user = await UserModel.login(credentials)
       const token = await generateToken({ userId: user.id })
       return { user, token }
     },
@@ -36,7 +34,7 @@ export const userResolver: Resolvers = {
       models.Collab.findAll({ where: { ownerId: id } }),
     collabInvites: async ({ id }) => {
       const collabs = await CollabMemberRequest.findAll({
-        where: { memberId: id },
+        where: { memberId: id, type: 'invitation' },
         attributes: [],
         include: [Collab],
       })
@@ -44,7 +42,7 @@ export const userResolver: Resolvers = {
     },
     collabRequests: async ({ id }, args, { models }) =>
       models.CollabMemberRequest.findAll({
-        where: { type: 'request' },
+        where: { memberid: id, type: 'request' },
         include: [
           { model: UserModel }, //
           { model: Collab, where: { ownerId: id } },

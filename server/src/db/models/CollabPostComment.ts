@@ -1,3 +1,4 @@
+import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 import {
   Model,
   Table,
@@ -9,23 +10,23 @@ import {
   IsUUID,
 } from 'sequelize-typescript'
 import uuid from 'uuid/v4'
-import { Collab } from './Collab'
 import { User } from './User'
+import { CollabPost } from './CollabPost'
 
-@Table({ tableName: 'collab_comments' })
-export class CollabComment extends Model<CollabComment> {
+@Table({ tableName: 'collab_post_comments' })
+export class CollabPostComment extends Model<CollabPostComment> {
   @IsUUID(4)
   @Default(uuid)
   @PrimaryKey
   @Column
   id!: string
 
-  @ForeignKey(() => Collab)
+  @ForeignKey(() => CollabPost)
   @Column
-  collabId!: string
+  postId!: string
 
-  @BelongsTo(() => Collab, { foreignKey: 'collabId', onDelete: 'CASCADE' })
-  collab!: Collab
+  @BelongsTo(() => CollabPost, { foreignKey: 'postId', onDelete: 'CASCADE' })
+  post!: CollabPost
 
   @ForeignKey(() => User)
   @Column
@@ -37,14 +38,18 @@ export class CollabComment extends Model<CollabComment> {
   @Column
   content!: string
 
-  static async addComment(content: string, authorId: string, collabId: string) {
-    const [collab, user] = await Promise.all([
-      Collab.findByPk(collabId),
+  static async createComment(
+    content: string,
+    authorId: string,
+    postId: string
+  ) {
+    const [post, user] = await Promise.all([
+      CollabPost.findByPk(postId),
       User.findByPk(authorId),
     ])
 
-    if (!collab) {
-      throw new Error('Collab not found')
+    if (!post) {
+      throw new Error('Post not found')
     }
 
     if (!user) {
@@ -54,7 +59,7 @@ export class CollabComment extends Model<CollabComment> {
     return this.create({
       content,
       authorId,
-      collabId,
+      postId,
     })
   }
 
@@ -74,3 +79,8 @@ export class CollabComment extends Model<CollabComment> {
     return true
   }
 }
+
+export type GQLCollabPostComment = GQLResolverTypes<
+  CollabPostComment,
+  'author' | 'post'
+>

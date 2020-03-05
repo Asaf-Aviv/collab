@@ -13,7 +13,7 @@ export const taskCommentTypeDefs = gql`
   type TaskComment {
     id: ID!
     content: String!
-    authorId: ID!
-    author: User!
+    author: User
+    task: Task
   }
 `

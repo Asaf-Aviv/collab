@@ -1,3 +1,4 @@
+import { GQLResolverTypes } from './../../graphql/helpers/GQLResolverTypes'
 import {
   Model,
   Table,
@@ -26,16 +27,16 @@ export class CollabTask extends Model<CollabTask> {
   @Column
   description!: string
 
-  @ForeignKey(() => CollabTaskList)
-  @Column
-  taskListId!: string
-
   @ForeignKey(() => User)
   @Column
   authorId!: string
 
   @BelongsTo(() => User, { foreignKey: 'authorId', onDelete: 'CASCADE' })
   author!: User
+
+  @ForeignKey(() => CollabTaskList)
+  @Column
+  taskListId!: string
 
   @BelongsTo(() => CollabTaskList, {
     foreignKey: 'taskListId',
@@ -60,11 +61,11 @@ export class CollabTask extends Model<CollabTask> {
       throw new Error('You are not a member of this Collab')
     }
 
-    return this.create({ description, authorId })
+    return this.create({ description, authorId, taskListId })
   }
 
-  static async deleteTask(taskListId: string, authorId: string) {
-    const task = await this.findByPk(taskListId)
+  static async deleteTask(taskId: string, authorId: string) {
+    const task = await this.findByPk(taskId)
 
     if (!task) {
       throw new Error('Task not found')
@@ -78,3 +79,8 @@ export class CollabTask extends Model<CollabTask> {
     return true
   }
 }
+
+export type GQLCollabTask = GQLResolverTypes<
+  CollabTask,
+  'author' | 'comments' | 'taskList'
+>

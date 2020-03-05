@@ -6,8 +6,18 @@ generates:
   ./src/graphql/types.d.ts:
     plugins:
       - typescript
-      - typescript-resolvers
+      - typescript-resolvers:
     config:
+      mappers:
+        Collab: '../db/models/Collab#GQLCollab'
+        CollabDiscussionThreadComment: '../db/models/CollabDiscussionThreadComment#GQLCollabDiscussionThreadComment'
+        CollabDiscussionThread: '../db/models/CollabDiscussionThread#GQLCollabDiscussionThread'
+        CollabPost: '../db/models/CollabPost#GQLCollabPost'
+        CollabPostComment: '../db/models/CollabPostComment#GQLCollabPostComment'
+        Task: '../db/models/CollabTask#GQLCollabTask'
+        TaskComment: '../db/models/CollabTaskComment#GQLCollabTaskComment'
+        TaskList: '../db/models/CollabTaskList#GQLCollabTaskList'
+        User: '../db/models/User#GQLUser'
       useIndexSignature: true
       contextType: ./context/CollabContext#CollabContext
       fieldContextTypes:
@@ -20,21 +30,22 @@ generates:
         - Mutation.deleteCollab#./context/CollabContext#CollabContextWithUser
         - Mutation.addMember#./context/CollabContext#CollabContextWithUser
         - Mutation.removeMember#./context/CollabContext#CollabContextWithUser
-        - Mutation.addComment#./context/CollabContext#CollabContextWithUser
-        - Mutation.deleteComment#./context/CollabContext#CollabContextWithUser
         - Mutation.inviteMember#./context/CollabContext#CollabContextWithUser
         - Mutation.requestToJoin#./context/CollabContext#CollabContextWithUser
         - Mutation.toggleAcceptInvites#./context/CollabContext#CollabContextWithUser
         - Mutation.declineMemberRequest#./context/CollabContext#CollabContextWithUser
+        # Collab Comment
+        - Mutation.addComment#./context/CollabContext#CollabContextWithUser
+        - Mutation.deleteComment#./context/CollabContext#CollabContextWithUser
+        # Collab Task List
         - Mutation.createTaskList#./context/CollabContext#CollabContextWithUser
         - Mutation.deleteTaskList#./context/CollabContext#CollabContextWithUser
+        # Collab Task
         - Mutation.createTask#./context/CollabContext#CollabContextWithUser
         - Mutation.deleteTask#./context/CollabContext#CollabContextWithUser
+        # Collab Task Comment
         - Mutation.createTaskComment#./context/CollabContext#CollabContextWithUser
         - Mutation.deleteTaskComment#./context/CollabContext#CollabContextWithUser
-        # Collab Discussion Messages
-        - Mutation.createCollabDiscussionMessage#./context/CollabContext#CollabContextWithUser
-        - Mutation.deleteCollabDiscussionMessage#./context/CollabContext#CollabContextWithUser
   ../client/src/graphql/generates.ts:
     plugins:
       - typescript

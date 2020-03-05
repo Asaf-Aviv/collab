@@ -12,6 +12,7 @@ import {
 import uuid from 'uuid/v4'
 import { User } from './User'
 import { CollabTask } from './CollabTask'
+import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 
 @Table({ tableName: 'collab_task_comments' })
 export class CollabTaskComment extends Model<CollabTaskComment> {
@@ -23,7 +24,7 @@ export class CollabTaskComment extends Model<CollabTaskComment> {
 
   @ForeignKey(() => CollabTask)
   @Column
-  collabTaskId!: string
+  taskId!: string
 
   @BelongsTo(() => CollabTask, {
     foreignKey: 'collabTaskId',
@@ -45,10 +46,10 @@ export class CollabTaskComment extends Model<CollabTaskComment> {
     collabId: string,
     content: string,
     authorId: string,
-    collabTaskId: string
+    taskId: string
   ) {
     const [task, isMemberOfCollab] = await Promise.all([
-      CollabTask.findByPk(collabTaskId),
+      CollabTask.findByPk(taskId),
       CollabMember.findOne({ where: { collabId, memberId: authorId } }),
     ])
 
@@ -60,7 +61,7 @@ export class CollabTaskComment extends Model<CollabTaskComment> {
     }
 
     return this.create({
-      collabTaskId,
+      taskId,
       content,
       authorId,
     })
@@ -82,3 +83,8 @@ export class CollabTaskComment extends Model<CollabTaskComment> {
     return true
   }
 }
+
+export type GQLCollabTaskComment = GQLResolverTypes<
+  CollabTaskComment,
+  'author' | 'task'
+>

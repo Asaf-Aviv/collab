@@ -1,16 +1,22 @@
+import { collabTaskListResolver } from './TaskList'
 import { mergeResolvers } from 'merge-graphql-schemas'
-import { collabCommentResolver } from './CollabComment'
+import { collabPostCommentResolver } from './CollabPostComment'
 import { userResolver } from './User'
 import { collabResolver } from './Collab'
 import { taskCommentResolver } from './TaskComment'
 import { collabTaskResolver } from './Task'
-import { collabDiscussionMessageResolver } from './collabDiscussionMessage'
+import { collabDiscussionThreadResolver } from './CollabDiscussionThread'
+import { collabDiscussionThreadCommentResolver } from './CollabDiscussionThreadComment'
+import { collabPostResolver } from './CollabPost'
 
 export const resolvers = mergeResolvers([
   userResolver,
   collabResolver,
   taskCommentResolver,
+  collabPostResolver,
   collabTaskResolver,
-  collabCommentResolver,
-  collabDiscussionMessageResolver,
+  collabTaskListResolver,
+  collabPostCommentResolver,
+  collabDiscussionThreadResolver,
+  collabDiscussionThreadCommentResolver,
 ])
