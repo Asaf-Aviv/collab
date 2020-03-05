@@ -3,59 +3,36 @@ import { and } from 'graphql-shield'
 import { Resolvers } from '../types'
 import { replaceErrorWithNull } from '../helpers/replaceErrorWithNull'
 
-export const collabResolver: Resolvers = {
+export const collabPostResolver: Resolvers = {
   Query: {
-    collabs: (root, args, { models }) => models.Collab.findAll(),
-    collab: (root, { collabId }, { models }) =>
-      models.Collab.getCollab(collabId),
+    collabPosts: (root, args, { models }) => models.CollabPost.findAll(),
+    collabPost: (root, { postId }, { models }) =>
+      models.CollabPost.findByPk(postId),
   },
   Mutation: {
-    deleteCollab: (root, { collabId }, { models }) =>
-      models.Collab.deleteCollab(collabId),
-    addMember: (root, { collabId, memberId }, { user, models }) =>
-      models.Collab.addMember(collabId, user.id, memberId),
-    removeMember: (root, { collabId, memberId }, { user, models }) =>
-      models.Collab.removeMember(collabId, user.id, memberId),
-    inviteMember: (root, { collabId, memberId }, { user, models }) =>
-      models.Collab.inviteMember(user.id, memberId, collabId),
-    requestToJoin: (root, { collabId }, { user, models }) =>
-      models.Collab.requestToJoin(collabId, user.id),
-    toggleAcceptInvites: (root, { collabId }, { user, models }) =>
-      models.Collab.toggleAcceptInvites(collabId, user.id),
-    declineMemberRequest: (root, { collabId, memberId }, { user, models }) =>
-      models.Collab.declineMemberRequest(collabId, memberId, user.id),
-    createTaskList: (root, { collabId, name, order }, { user, models }) =>
-      models.Collab.createTaskList(collabId, name, order, user.id),
-    deleteTaskList: (root, { taskListId }, { user, models }) =>
-      models.Collab.deleteTaskList(taskListId, user.id),
-    createTaskComment: (
-      root,
-      { collabId, content, taskId },
-      { user, models }
-    ) =>
-      models.CollabTaskComment.createComment(
-        collabId,
-        content,
-        user.id,
-        taskId
-      ),
-    deleteTaskComment: (root, { commentId }, { user, models }) =>
-      models.CollabTaskComment.deleteComment(commentId, user.id),
+    createCollabPost: async (root, { post }, { user, models }) =>
+      models.CollabPost.createPost(post, user!.id),
+    deleteCollabPost: (root, { postId }, { models, user }) =>
+      models.CollabPost.deletePost(postId, user!.id),
   },
-  Collab: {
+  CollabPost: {
     owner: async ({ ownerId }, args, { loaders }) =>
       loaders.userLoader.load(ownerId),
     isOwner: ({ ownerId }, args, { user }) => user?.id === ownerId,
-    isMember: async ({ id }, args, { user, models }) => {
+    isMember: async ({ collabId }, args, { user, models }) => {
       if (!user?.id) {
         return false
       }
 
       const isMember = await models.CollabMember.findOne({
-        where: { collabId: id, memberId: user.id },
+        where: { collabId, memberId: user.id },
       })
 
       return Boolean(isMember)
+    },
+    acceptsInvites: async ({ collabId }, args, { loaders }) => {
+      const collab = await loaders.collabLoader.load(collabId)
+      return collab!.acceptsInvites
     },
     invitationPending: async ({ id }, args, { user, models }) => {
       if (!user?.id) {
@@ -79,9 +56,9 @@ export const collabResolver: Resolvers = {
 
       return Boolean(invitation)
     },
-    members: async ({ id }, args, { loaders, models }) => {
+    members: async ({ collabId }, args, { loaders, models }) => {
       const members = await models.CollabMember.findAll({
-        where: { collabId: id },
+        where: { collabId },
         attributes: ['memberId'],
       })
 
@@ -89,9 +66,11 @@ export const collabResolver: Resolvers = {
       const users = await loaders.userLoader.loadMany(memberIds)
       return users.map(replaceErrorWithNull)
     },
-    pendingInvites: async ({ id }, args, { models, loaders }) => {
+    comments: ({ id }, args, { models }) =>
+      models.CollabPostComment.findAll({ where: { postId: id } }),
+    pendingInvites: async ({ collabId }, args, { models, loaders }) => {
       const pendingInviteMembers = await models.CollabMemberRequest.findAll({
-        where: { collabId: id, type: 'invitation' },
+        where: { collabId, type: 'invitation' },
         attributes: ['memberId'],
       })
 
@@ -99,9 +78,9 @@ export const collabResolver: Resolvers = {
       const users = await loaders.userLoader.loadMany(memberIds)
       return users.map(replaceErrorWithNull)
     },
-    pendingRequests: async ({ id }, args, { loaders, models }) => {
+    pendingRequests: async ({ collabId }, args, { loaders, models }) => {
       const pendingInviteMembers = await models.CollabMemberRequest.findAll({
-        where: { collabId: id, type: 'request' },
+        where: { collabId, type: 'request' },
         attributes: ['memberId'],
       })
       const memberIds = pendingInviteMembers.map(({ memberId }) => memberId)
@@ -109,15 +88,12 @@ export const collabResolver: Resolvers = {
 
       return users.map(replaceErrorWithNull)
     },
-    discussionThreads: ({ id }, args, { models }) =>
-      models.CollabDiscussionThread.findAll({ where: { collabId: id } }),
-    taskList: ({ id }, args, { models }) =>
-      models.CollabTaskList.findAll({ where: { collabId: id } }),
   },
 }
 
 export const collabMiddleware = {
   Mutation: {
+    createCollab: and(isAuthenticated),
     deleteCollab: and(isAuthenticated),
     addMember: and(isAuthenticated),
     removeMember: and(isAuthenticated),

@@ -24,10 +24,11 @@ import {
   HasManyCreateAssociationMixin,
   HasManyCountAssociationsMixin,
 } from 'sequelize'
-import { SignupArgs, LoginArgs } from '../../graphql/types'
+import { SignUpArgs, LoginArgs } from '../../graphql/types'
 import { Collab } from './Collab'
 import { passwordRegex } from '../../utils'
 import { CollabMemberRequest } from './CollabMemberRequest'
+import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 
 @DefaultScope(() => ({
   attributes: { exclude: ['password'] },
@@ -61,12 +62,16 @@ export class User extends Model<User> {
   @Validate({
     is: {
       args: passwordRegex,
-      msg: 'Password must contain atleast eight characters, one letter and one number',
+      msg:
+        'Password must contain atleast eight characters, one letter and one number',
     },
   })
   @AllowNull(false)
   @Column
   password!: string
+
+  @Column
+  avatar!: string
 
   @Unique({
     msg: 'Email is already taken',
@@ -103,16 +108,14 @@ export class User extends Model<User> {
     Object.assign(instance, { password })
   }
 
-  static async createUser(credentials: SignupArgs) {
-    await this.create(credentials)
-    return true
+  static createUser(credentials: SignUpArgs) {
+    return this.create(credentials)
   }
 
   static async login({ email, password }: LoginArgs) {
     const user = await this.findOne({
       where: { email: email.toLowerCase() },
       attributes: { include: ['password'] },
-      raw: true,
     })
 
     if (!user) {
@@ -125,9 +128,7 @@ export class User extends Model<User> {
       throw new Error('Incorrect Credentials')
     }
 
-    const { password: omit, ...userWithoutPassword } = user
-
-    return userWithoutPassword
+    return user
   }
 
   static async deleteUser(id: string) {
@@ -142,7 +143,9 @@ export class User extends Model<User> {
 
   static async acceptCollabInvite(collabId: string, memberId: string) {
     return this.sequelize!.transaction(async () => {
-      const invite = await CollabMemberRequest.findOne({ where: { collabId, memberId } })
+      const invite = await CollabMemberRequest.findOne({
+        where: { collabId, memberId },
+      })
 
       if (!invite) {
         throw new Error('Invititation does not exist')
@@ -163,7 +166,9 @@ export class User extends Model<User> {
 
   static async declineCollabInvite(collabId: string, memberId: string) {
     return this.sequelize!.transaction(async () => {
-      const invite = await CollabMemberRequest.findOne({ where: { collabId, memberId } })
+      const invite = await CollabMemberRequest.findOne({
+        where: { collabId, memberId },
+      })
 
       if (!invite) {
         throw new Error('Invititation does not exist')
@@ -175,3 +180,8 @@ export class User extends Model<User> {
     })
   }
 }
+
+export type GQLUser = GQLResolverTypes<
+  User,
+  'collabInvites' | 'collabRequests' | 'collabs'
+>

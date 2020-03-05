@@ -1,3 +1,4 @@
+import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 import { CollabMemberRequest } from './CollabMemberRequest'
 import {
   Model,
@@ -7,25 +8,15 @@ import {
   PrimaryKey,
   Default,
   ForeignKey,
-  DataType,
-  Length,
   BelongsTo,
   HasMany,
   AllowNull,
 } from 'sequelize-typescript'
 import uuid from 'uuid/v4'
-import {
-  HasManyGetAssociationsMixin,
-  HasManyAddAssociationMixin,
-  HasManyHasAssociationMixin,
-  HasManyCountAssociationsMixin,
-  HasManyCreateAssociationMixin,
-  HasOneCreateAssociationMixin,
-} from 'sequelize'
-import { CollabArgs } from '../../graphql/types'
 import { CollabMember } from './CollabMember'
-import { CollabComment } from './CollabComment'
 import { User } from './User'
+import { CollabTaskList } from './CollabTaskList'
+import { CollabDiscussionThreadComment } from './CollabDiscussionThreadComment'
 
 @Table({ tableName: 'collabs' })
 export class Collab extends Model<Collab> {
@@ -37,24 +28,12 @@ export class Collab extends Model<Collab> {
 
   @AllowNull(false)
   @Column
-  title!: string
+  name!: string
 
   @AllowNull(false)
-  @Column(DataType.ENUM('ALL', 'JUNIOR', 'JUNIOR_MID', 'MID_SENIOR', 'SENIOR'))
-  experience!: string
-
-  @AllowNull(false)
-  @Column(DataType.ARRAY(DataType.STRING))
-  stack!: string[]
-
-  @Length({
-    msg: 'Description must be between 10 characters and 500',
-    min: 10,
-    max: 500,
-  })
-  @AllowNull(false)
+  @Default(false)
   @Column
-  description!: string
+  acceptsInvites!: boolean
 
   @ForeignKey(() => User)
   @AllowNull(false)
@@ -67,20 +46,19 @@ export class Collab extends Model<Collab> {
   @HasMany(() => CollabMember)
   members!: User[]
 
-  @HasMany(() => CollabComment)
-  comments!: CollabComment[]
-
   @HasMany(() => CollabMemberRequest)
   pendingInvites!: User[]
 
-  getMembers!: HasManyGetAssociationsMixin<CollabMember>
-  addMember!: HasManyAddAssociationMixin<CollabMember, string>
-  hasMember!: HasManyHasAssociationMixin<CollabMember, string>
-  countMembers!: HasManyCountAssociationsMixin
-  createMember!: HasManyCreateAssociationMixin<CollabMember>
-  setOwner!: HasOneCreateAssociationMixin<CollabMember>
+  @HasMany(() => CollabMemberRequest)
+  pendingRequests!: User[]
 
-  static createCollab(collabArgs: CollabArgs, userId: string) {
+  @HasMany(() => CollabTaskList)
+  taskList!: CollabTaskList[]
+
+  @HasMany(() => CollabDiscussionThreadComment)
+  discussionComments!: CollabDiscussionThreadComment[]
+
+  static createCollab(collabArgs: any, userId: string) {
     return this.sequelize!.transaction(async () => {
       const collab = await this.create({ ...collabArgs, ownerId: userId })
 
@@ -95,10 +73,7 @@ export class Collab extends Model<Collab> {
   }
 
   static async getCollab(collabId: string) {
-    const collab = await this.findByPk(collabId, {
-      include: [User, CollabMember],
-      raw: true,
-    })
+    const collab = await this.findByPk(collabId)
 
     if (!collab) {
       throw new Error('Collab not found')
@@ -109,12 +84,15 @@ export class Collab extends Model<Collab> {
 
   static async addMember(collabId: string, ownerId: string, memberId: string) {
     return this.sequelize!.transaction(async () => {
-      console.log(collabId)
-      const collab = await Collab.findByPk(collabId)
-      console.log(collab)
-      const isMember = await CollabMember.findOne({
-        where: { collabId, memberId },
-      })
+      const [collab, isMember, memberRequest] = await Promise.all([
+        Collab.findByPk(collabId),
+        CollabMember.findOne({
+          where: { collabId, memberId },
+        }),
+        CollabMemberRequest.findOne({
+          where: { collabId, memberId },
+        }),
+      ])
 
       if (!collab) {
         throw new Error('Collab not found')
@@ -125,13 +103,25 @@ export class Collab extends Model<Collab> {
       if (isMember) {
         throw new Error('User is already a member')
       }
+      if (!memberRequest) {
+        throw new Error('Request does not exist anymore')
+      }
 
-      await collab.createMember({ memberId })
+      await Promise.all([
+        //
+        CollabMember.create({ collabId, memberId }),
+        memberRequest.destroy(),
+      ])
+
       return collab
     })
   }
 
-  static async removeMember(collabId: string, ownerId: string, memberId: string) {
+  static async removeMember(
+    collabId: string,
+    ownerId: string,
+    memberId: string
+  ) {
     return this.sequelize!.transaction(async () => {
       const collab = await Collab.findByPk(collabId, { raw: false })
       const isMember = await CollabMember.findOne({
@@ -170,7 +160,11 @@ export class Collab extends Model<Collab> {
     throw new Error('Collab not found')
   }
 
-  static async inviteMember(ownerId: string, memberId: string, collabId: string) {
+  static async inviteMember(
+    ownerId: string,
+    memberId: string,
+    collabId: string
+  ) {
     const collab = await this.findByPk(collabId)
 
     if (!collab) {
@@ -193,13 +187,18 @@ export class Collab extends Model<Collab> {
   }
 
   static async requestToJoin(collabId: string, memberId: string) {
-    const [collab, invitation] = await Promise.all([
+    const [collab, invitation, isMember] = await Promise.all([
       this.findByPk(collabId),
       CollabMemberRequest.findOne({ where: { collabId, memberId } }),
+      CollabMember.findOne({ where: { collabId, memberId } }),
     ])
 
     if (!collab) {
       throw new Error('Collab not found')
+    }
+
+    if (isMember) {
+      throw new Error('You are already a member of this Collab')
     }
 
     if (invitation && invitation.type === 'request') {
@@ -208,7 +207,7 @@ export class Collab extends Model<Collab> {
 
     if (invitation && invitation.type === 'invitation') {
       throw new Error(
-        'The owner of this collab already invited you to join, please check your invitations',
+        'The owner of this collab already invited you to join, please check your invitations'
       )
     }
 
@@ -216,4 +215,107 @@ export class Collab extends Model<Collab> {
 
     return true
   }
+
+  static async toggleAcceptInvites(collabId: string, ownerId: string) {
+    const collab = await this.findByPk(collabId)
+
+    if (!collab) {
+      throw new Error('Collab not found')
+    }
+
+    if (collab.get('ownerId') !== ownerId) {
+      throw new Error('You have no permissions to update invitation status')
+    }
+
+    collab.acceptsInvites = !collab.acceptsInvites
+    await collab.save()
+
+    return collab
+  }
+
+  static async declineMemberRequest(
+    collabId: string,
+    memberId: string,
+    ownerId: string
+  ) {
+    return this.sequelize!.transaction(async () => {
+      const [collab, requestExist] = await Promise.all([
+        Collab.findByPk(collabId),
+        CollabMemberRequest.findOne({
+          where: { collabId, memberId },
+        }),
+      ])
+
+      if (!collab) {
+        throw new Error('Collab not found')
+      }
+      if (ownerId !== collab.ownerId) {
+        throw new Error('You have no permissions to decline this request')
+      }
+      if (!requestExist) {
+        throw new Error('Request does not exist anymore')
+      }
+
+      const removed = await CollabMember.destroy({
+        where: { memberId, collabId },
+      })
+
+      if (!removed) {
+        throw new Error('Something went wrong')
+      }
+
+      return true
+    })
+  }
+
+  static async createTaskList(
+    collabId: string,
+    name: string,
+    order: number,
+    ownerId: string
+  ) {
+    const collab = await this.findByPk(collabId)
+
+    if (!collab) {
+      throw new Error('Collab not found')
+    }
+    if (ownerId !== collab.ownerId) {
+      throw new Error('You have no permissions to create a task list')
+    }
+
+    return CollabTaskList.create({
+      collabId,
+      name,
+      order,
+    })
+  }
+
+  static async deleteTaskList(taskListId: string, ownerId: string) {
+    const taskList = await CollabTaskList.findByPk(taskListId, {
+      include: [
+        {
+          model: Collab,
+          where: { ownerId },
+        },
+      ],
+    })
+
+    if (!taskList) {
+      throw new Error('Task list not found')
+    }
+
+    await taskList.destroy()
+
+    return true
+  }
 }
+
+export type GQLCollab = GQLResolverTypes<
+  Collab,
+  | 'owner'
+  | 'taskList'
+  | 'discussionComments'
+  | 'members'
+  | 'pendingInvites'
+  | 'pendingRequests'
+>
