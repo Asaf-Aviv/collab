@@ -1,59 +1,34 @@
 import { gql } from 'apollo-server-express'
 
-const collabTypeDefs = gql`
+export const collabTypeDefs = gql`
   type Query {
     collabs: [Collab!]!
     collab(collabId: ID!): Collab
   }
 
   type Mutation {
-    createCollab(collab: CollabArgs!): Collab!
     deleteCollab(collabId: ID!): Boolean!
     inviteMember(collabId: ID!, memberId: ID!): User!
     addMember(collabId: ID!, memberId: ID!): Collab!
     removeMember(collabId: ID!, memberId: ID!): Collab!
     requestToJoin(collabId: ID!): Boolean!
-    addComment(content: String!, collabId: ID!): CollabComment!
-    deleteComment(commentId: ID!): Boolean!
+    toggleAcceptInvites(collabId: ID!): Collab!
+    declineMemberRequest(collabId: ID!, memberId: ID!): Boolean!
   }
 
   type Collab {
     id: ID!
-    title: String!
-    ownerId: ID!
-    owner: User!
-    experience: String!
-    stack: [String!]!
-    description: String!
-    members: [User!]!
-    comments: [CollabComment!]!
-    pendingInvites: [User!]!
-  }
-
-  input CollabArgs {
-    title: String!
-    experience: Experience!
-    stack: [String!]!
-    description: String!
-  }
-
-  type CollabComment {
-    id: ID!
-    content: String!
-    authorId: ID!
-    author: User!
-    collabId: ID!
-    collab: Collab!
-  }
-
-  enum Experience {
-    ALL
-    JUNIOR
-    JUNIOR_MID
-    MID
-    MID_SENIOR
-    SENIOR
+    name: String!
+    owner: User
+    acceptsInvites: Boolean!
+    members: [User]!
+    isOwner: Boolean!
+    isMember: Boolean!
+    invitationPending: Boolean!
+    requestToJoinPending: Boolean!
+    pendingInvites: [User]!
+    pendingRequests: [User]!
+    taskList: [TaskList!]!
+    discussionThreads: [CollabDiscussionThread!]!
   }
 `
-
-export default collabTypeDefs

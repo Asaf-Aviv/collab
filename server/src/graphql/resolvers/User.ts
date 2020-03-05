@@ -1,48 +1,64 @@
+import { and } from 'graphql-shield'
 import { CollabMemberRequest } from '../../db/models/CollabMemberRequest'
 import { generateToken } from '../../utils/index'
+import { isAuthenticated } from '../middleware/isAuthenticated'
 import { User as UserModel } from '../../db/models/User'
 import { Collab } from '../../db/models/Collab'
 import { Resolvers } from '../types'
 
-const userResolver: Resolvers = {
+export const userResolver: Resolvers = {
   Query: {
     users: () => UserModel.findAll(),
+    user: (root, { id }, { loaders }) => loaders.userLoader.load(id),
+    currentUser: async (root, args, { user }) => user,
   },
   Mutation: {
-    signUp: (root, { credentials }) => UserModel.createUser(credentials),
+    signUp: async (root, { credentials }) => {
+      const user = await UserModel.createUser(credentials)
+      const token = await generateToken({ userId: user.id })
+      return { user, token }
+    },
     login: async (root, { credentials }) => {
       const user = await UserModel.login(credentials)
       const token = await generateToken({ userId: user.id })
       return { user, token }
     },
-    deleteUser: (root, { id }) => UserModel.deleteUser(id),
-    acceptCollabInvite: (root, { collabId }, context) =>
-      UserModel.acceptCollabInvite(collabId, context.get('id')),
-    declineCollabInvite: (root, { collabId }, context) =>
-      UserModel.declineCollabInvite(collabId, context.get('id')),
+    deleteUser: (root, args, { user }) => UserModel.deleteUser(user.get('id')),
+    acceptCollabInvite: (root, { collabId }, { user }) =>
+      UserModel.acceptCollabInvite(collabId, user.get('id')),
+    declineCollabInvite: (root, { collabId }, { user }) =>
+      UserModel.declineCollabInvite(collabId, user.get('id')),
   },
-  User: {
-    collabs: ({ id }) => Collab.findAll({ where: { ownerId: id } }),
+  CurrentUser: {
+    collabs: ({ id }, args, { models }) =>
+      models.Collab.findAll({ where: { ownerId: id } }),
     collabInvites: async ({ id }) => {
       const collabs = await CollabMemberRequest.findAll({
-        where: { memberId: id },
+        where: { memberId: id, type: 'invitation' },
         attributes: [],
         include: [Collab],
       })
       return collabs.map(({ collab }) => collab)
     },
-    collabRequests: async ({ id }) => {
-      const collabRequests = await CollabMemberRequest.findAll({
-        where: { type: 'request' },
+    collabRequests: async ({ id }, args, { models }) =>
+      models.CollabMemberRequest.findAll({
+        where: { memberid: id, type: 'request' },
         include: [
           { model: UserModel }, //
           { model: Collab, where: { ownerId: id } },
         ],
-      })
-
-      return collabRequests
-    },
+      }),
+  },
+  User: {
+    collabs: ({ id }, args, { models }) =>
+      models.Collab.findAll({ where: { ownerId: id } }),
   },
 }
 
-export default userResolver
+export const userMiddleware = {
+  Mutation: {
+    deleteUser: and(isAuthenticated),
+    acceptCollabInvite: and(isAuthenticated),
+    declineCollabInvite: and(isAuthenticated),
+  },
+}

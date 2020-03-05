@@ -1,25 +1,35 @@
 import { gql } from 'apollo-server-express'
 
-const userTypeDefs = gql`
+export const userTypeDefs = gql`
   type Query {
     users: [User!]!
+    user(id: ID!): User
+    currentUser: CurrentUser
   }
 
   type Mutation {
-    signUp(credentials: SignupArgs!): Boolean!
+    signUp(credentials: SignUpArgs!): AuthPayload!
     login(credentials: LoginArgs!): AuthPayload!
-    deleteUser(id: ID!): Boolean!
+    deleteUser: Boolean!
     acceptCollabInvite(collabId: ID!): User!
     declineCollabInvite(collabId: ID!): Boolean!
+  }
+
+  type CurrentUser {
+    id: ID!
+    username: String!
+    email: String!
+    avatar: String
+    collabs: [Collab!]!
+    collabInvites: [Collab!]!
+    collabRequests: [CollabRequest!]!
   }
 
   type User {
     id: ID!
     username: String!
-    email: String!
+    avatar: String
     collabs: [Collab!]!
-    collabInvites: [Collab!]!
-    collabRequests: [CollabRequest!]!
   }
 
   type CollabRequest {
@@ -29,10 +39,9 @@ const userTypeDefs = gql`
 
   type AuthPayload {
     token: String!
-    user: User!
   }
 
-  input SignupArgs {
+  input SignUpArgs {
     username: String!
     email: String!
     password: String!
@@ -43,5 +52,3 @@ const userTypeDefs = gql`
     password: String!
   }
 `
-
-export default userTypeDefs

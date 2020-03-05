@@ -1,7 +1,8 @@
 import { Sequelize, SequelizeOptions } from 'sequelize-typescript'
+import { models } from './models/index'
 
 const baseConfig: SequelizeOptions = {
-  modelPaths: [`${__dirname}/models`],
+  models: Object.values(models),
   dialect: 'postgres',
   pool: {
     max: 5,
@@ -9,7 +10,6 @@ const baseConfig: SequelizeOptions = {
     acquire: 30000,
     idle: 10000,
   },
-  logging: false, //process.env.NODE_ENV === 'development',
   define: {
     underscored: true,
   },
@@ -25,5 +25,5 @@ export default new Sequelize(
   dbByEnv[process.env.NODE_ENV as keyof typeof dbByEnv],
   'yojimbozx',
   'omgwtfbbq89',
-  baseConfig,
+  baseConfig
 )

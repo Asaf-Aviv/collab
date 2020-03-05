@@ -1,29 +1,27 @@
 import express from 'express'
-import { ApolloServer } from 'apollo-server-express'
-import typeDefs from './graphql/typeDefs'
-import resolvers from './graphql/resolvers'
-import { decodeToken } from './utils'
-import { User } from './db/models/User'
+import { ApolloServer, makeExecutableSchema } from 'apollo-server-express'
+import { applyMiddleware } from 'graphql-middleware'
+import { typeDefs } from './graphql/typeDefs'
+import { apolloContext } from './graphql/context/CollabContext'
+import { permissions } from './graphql/middleware/permissions'
+import { resolvers } from './graphql/resolvers'
 
 export const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
+const schema = applyMiddleware(
+  makeExecutableSchema({
+    typeDefs,
+    resolvers,
+  }),
+  permissions
+)
+
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  context: async ({ req }) => {
-    try {
-      const token = (req.headers.authorization || '').replace('Bearer ', '')
-      console.log(token)
-      const { userId } = await decodeToken(token)
-      const user = await User.findByPk(userId)
-      return { user }
-    } catch (err) {
-      return { user: null }
-    }
-  },
+  schema,
+  context: apolloContext,
 })
 
 server.applyMiddleware({ app })
