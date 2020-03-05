@@ -3,18 +3,22 @@ import { userTypeDefs } from './User'
 import { collabTypeDefs } from './Collab'
 import { taskTypeDefs } from './Task'
 import { taskListTypeDefs } from './TaskList'
+import { collabPostTypeDefs } from './CollabPost'
 import { taskCommentTypeDefs } from './TaskComment'
-import { collabCommentTypeDefs } from './CollabComment'
-import { collabDiscussionMessageTypeDefs } from './CollabDiscussionMessage'
+import { collabPostCommentTypeDefs } from './CollabPostComment'
+import { collabDiscussionThreadTypeDefs } from './CollabDisussionThread'
+import { collabDiscussionThreadCommentTypeDefs } from './CollabDiscussionThreadComment'
 
 const types = [
   userTypeDefs,
   collabTypeDefs,
-  collabCommentTypeDefs,
+  collabPostCommentTypeDefs,
+  collabPostTypeDefs,
   taskTypeDefs,
   taskListTypeDefs,
   taskCommentTypeDefs,
-  collabDiscussionMessageTypeDefs,
+  collabDiscussionThreadTypeDefs,
+  collabDiscussionThreadCommentTypeDefs,
 ]
 
 export const typeDefs = mergeTypes(types, { all: true })

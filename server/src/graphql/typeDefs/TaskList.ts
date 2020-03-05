@@ -11,5 +11,6 @@ export const taskListTypeDefs = gql`
     name: String!
     order: Int!
     tasks: [Task!]!
+    collab: Collab
   }
 `

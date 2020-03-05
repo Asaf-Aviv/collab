@@ -21,6 +21,7 @@ export const taskCommentResolver: Resolvers = {
   TaskComment: {
     author: ({ authorId }, args, { loaders }) =>
       loaders.userLoader.load(authorId),
+    task: ({ taskId }, args, { models }) => models.CollabTask.findByPk(taskId),
   },
 }
 

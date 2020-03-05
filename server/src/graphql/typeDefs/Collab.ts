@@ -7,7 +7,6 @@ export const collabTypeDefs = gql`
   }
 
   type Mutation {
-    createCollab(collab: CollabArgs!): Collab!
     deleteCollab(collabId: ID!): Boolean!
     inviteMember(collabId: ID!, memberId: ID!): User!
     addMember(collabId: ID!, memberId: ID!): Collab!
@@ -20,37 +19,16 @@ export const collabTypeDefs = gql`
   type Collab {
     id: ID!
     name: String!
-    title: String!
-    ownerId: ID!
     owner: User
-    experience: String!
-    stack: [String!]!
-    hasStarted: Boolean!
     acceptsInvites: Boolean!
-    description: String!
     members: [User]!
-    comments: [CollabComment!]!
+    isOwner: Boolean!
+    isMember: Boolean!
+    invitationPending: Boolean!
+    requestToJoinPending: Boolean!
     pendingInvites: [User]!
     pendingRequests: [User]!
     taskList: [TaskList!]!
-    discussionMessages: [CollabDiscussionMessage!]!
-  }
-
-  input CollabArgs {
-    name: String!
-    title: String!
-    experience: Experience!
-    stack: [String!]!
-    description: String!
-    hasStarted: Boolean!
-  }
-
-  enum Experience {
-    ALL
-    JUNIOR
-    JUNIOR_MID
-    MID
-    MID_SENIOR
-    SENIOR
+    discussionThreads: [CollabDiscussionThread!]!
   }
 `

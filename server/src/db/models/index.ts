@@ -1,23 +1,27 @@
 import { User } from './User'
 import { Collab } from './Collab'
-import { CollabComment } from './CollabComment'
+import { CollabPost } from './CollabPost'
+import { CollabPostComment } from './CollabPostComment'
 import { CollabMember } from './CollabMember'
 import { CollabTask } from './CollabTask'
 import { CollabTaskList } from './CollabTaskList'
 import { CollabTaskComment } from './CollabTaskComment'
 import { CollabMemberRequest } from './CollabMemberRequest'
-import { CollabDiscussionMessage } from './CollabDiscussionMessage'
+import { CollabDiscussionThread } from './CollabDiscussionThread'
+import { CollabDiscussionThreadComment } from './CollabDiscussionThreadComment'
 
 export const models = {
   User,
   Collab,
-  CollabComment,
+  CollabPost,
+  CollabPostComment,
   CollabMember,
   CollabTaskList,
   CollabTask,
   CollabTaskComment,
   CollabMemberRequest,
-  CollabDiscussionMessage,
+  CollabDiscussionThread,
+  CollabDiscussionThreadComment,
 }
 
 export type Models = typeof models

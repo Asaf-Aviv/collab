@@ -4,12 +4,12 @@ export const userTypeDefs = gql`
   type Query {
     users: [User!]!
     user(id: ID!): User
+    currentUser: CurrentUser
   }
 
   type Mutation {
-    signUp(credentials: SignupArgs!): Boolean!
+    signUp(credentials: SignUpArgs!): AuthPayload!
     login(credentials: LoginArgs!): AuthPayload!
-    validateToken: AuthPayload!
     deleteUser: Boolean!
     acceptCollabInvite(collabId: ID!): User!
     declineCollabInvite(collabId: ID!): Boolean!
@@ -19,6 +19,7 @@ export const userTypeDefs = gql`
     id: ID!
     username: String!
     email: String!
+    avatar: String
     collabs: [Collab!]!
     collabInvites: [Collab!]!
     collabRequests: [CollabRequest!]!
@@ -27,6 +28,7 @@ export const userTypeDefs = gql`
   type User {
     id: ID!
     username: String!
+    avatar: String
     collabs: [Collab!]!
   }
 
@@ -37,10 +39,9 @@ export const userTypeDefs = gql`
 
   type AuthPayload {
     token: String!
-    user: CurrentUser!
   }
 
-  input SignupArgs {
+  input SignUpArgs {
     username: String!
     email: String!
     password: String!

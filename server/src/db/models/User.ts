@@ -24,10 +24,11 @@ import {
   HasManyCreateAssociationMixin,
   HasManyCountAssociationsMixin,
 } from 'sequelize'
-import { SignupArgs, LoginArgs } from '../../graphql/types'
+import { SignUpArgs, LoginArgs } from '../../graphql/types'
 import { Collab } from './Collab'
 import { passwordRegex } from '../../utils'
 import { CollabMemberRequest } from './CollabMemberRequest'
+import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 
 @DefaultScope(() => ({
   attributes: { exclude: ['password'] },
@@ -69,6 +70,9 @@ export class User extends Model<User> {
   @Column
   password!: string
 
+  @Column
+  avatar!: string
+
   @Unique({
     msg: 'Email is already taken',
     name: 'unique_email',
@@ -104,9 +108,8 @@ export class User extends Model<User> {
     Object.assign(instance, { password })
   }
 
-  static async createUser(credentials: SignupArgs) {
-    await this.create(credentials)
-    return true
+  static createUser(credentials: SignUpArgs) {
+    return this.create(credentials)
   }
 
   static async login({ email, password }: LoginArgs) {
@@ -177,3 +180,8 @@ export class User extends Model<User> {
     })
   }
 }
+
+export type GQLUser = GQLResolverTypes<
+  User,
+  'collabInvites' | 'collabRequests' | 'collabs'
+>

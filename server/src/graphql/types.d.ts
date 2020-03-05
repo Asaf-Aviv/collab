@@ -1,6 +1,16 @@
 import { GraphQLResolveInfo } from 'graphql';
+import { GQLCollab } from '../db/models/Collab';
+import { GQLCollabDiscussionThreadComment } from '../db/models/CollabDiscussionThreadComment';
+import { GQLCollabDiscussionThread } from '../db/models/CollabDiscussionThread';
+import { GQLCollabPost } from '../db/models/CollabPost';
+import { GQLCollabPostComment } from '../db/models/CollabPostComment';
+import { GQLCollabTask } from '../db/models/CollabTask';
+import { GQLCollabTaskComment } from '../db/models/CollabTaskComment';
+import { GQLCollabTaskList } from '../db/models/CollabTaskList';
+import { GQLUser } from '../db/models/User';
 import { CollabContext, CollabContextWithUser } from './context/CollabContext';
 export type Maybe<T> = T | null;
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -14,30 +24,65 @@ export type Scalars = {
 export type AuthPayload = {
    __typename?: 'AuthPayload',
   token: Scalars['String'],
-  user: CurrentUser,
 };
 
 export type Collab = {
    __typename?: 'Collab',
   acceptsInvites: Scalars['Boolean'],
-  comments: Array<CollabComment>,
-  description: Scalars['String'],
-  discussionMessages: Array<CollabDiscussionMessage>,
-  experience: Scalars['String'],
-  hasStarted: Scalars['Boolean'],
+  discussionThreads: Array<CollabDiscussionThread>,
   id: Scalars['ID'],
+  invitationPending: Scalars['Boolean'],
+  isMember: Scalars['Boolean'],
+  isOwner: Scalars['Boolean'],
   members: Array<Maybe<User>>,
   name: Scalars['String'],
   owner?: Maybe<User>,
-  ownerId: Scalars['ID'],
   pendingInvites: Array<Maybe<User>>,
   pendingRequests: Array<Maybe<User>>,
-  stack: Array<Scalars['String']>,
+  requestToJoinPending: Scalars['Boolean'],
   taskList: Array<TaskList>,
+};
+
+export type CollabDiscussionThread = {
+   __typename?: 'CollabDiscussionThread',
+  author?: Maybe<User>,
+  collab?: Maybe<Collab>,
+  comments: Array<CollabDiscussionThreadComment>,
+  id: Scalars['ID'],
   title: Scalars['String'],
 };
 
-export type CollabArgs = {
+export type CollabDiscussionThreadComment = {
+   __typename?: 'CollabDiscussionThreadComment',
+  author?: Maybe<User>,
+  collab?: Maybe<Collab>,
+  content: Scalars['String'],
+  id: Scalars['ID'],
+  thread?: Maybe<CollabDiscussionThread>,
+};
+
+export type CollabPost = {
+   __typename?: 'CollabPost',
+  acceptsInvites: Scalars['Boolean'],
+  comments: Array<CollabPostComment>,
+  description: Scalars['String'],
+  experience: Scalars['String'],
+  hasStarted: Scalars['Boolean'],
+  id: Scalars['ID'],
+  invitationPending: Scalars['Boolean'],
+  isMember: Scalars['Boolean'],
+  isOwner: Scalars['Boolean'],
+  members: Array<User>,
+  name: Scalars['String'],
+  owner: User,
+  pendingInvites: Array<User>,
+  pendingRequests: Array<User>,
+  requestToJoinPending: Scalars['Boolean'],
+  stack: Array<Scalars['String']>,
+  title: Scalars['String'],
+};
+
+export type CollabPostArgs = {
   description: Scalars['String'],
   experience: Experience,
   hasStarted: Scalars['Boolean'],
@@ -46,21 +91,9 @@ export type CollabArgs = {
   title: Scalars['String'],
 };
 
-export type CollabComment = {
-   __typename?: 'CollabComment',
+export type CollabPostComment = {
+   __typename?: 'CollabPostComment',
   author?: Maybe<User>,
-  authorId: Scalars['ID'],
-  collab?: Maybe<Collab>,
-  collabId: Scalars['ID'],
-  content: Scalars['String'],
-  id: Scalars['ID'],
-};
-
-export type CollabDiscussionMessage = {
-   __typename?: 'CollabDiscussionMessage',
-  author?: Maybe<User>,
-  authorId: Scalars['ID'],
-  collabId: Scalars['ID'],
   content: Scalars['String'],
   id: Scalars['ID'],
 };
@@ -73,6 +106,7 @@ export type CollabRequest = {
 
 export type CurrentUser = {
    __typename?: 'CurrentUser',
+  avatar?: Maybe<Scalars['String']>,
   collabInvites: Array<Collab>,
   collabRequests: Array<CollabRequest>,
   collabs: Array<Collab>,
@@ -98,17 +132,20 @@ export type LoginArgs = {
 export type Mutation = {
    __typename?: 'Mutation',
   acceptCollabInvite: User,
-  addComment: CollabComment,
   addMember: Collab,
-  createCollab: Collab,
-  createCollabDiscussionMessage: CollabDiscussionMessage,
+  createCollabDiscussionThread: CollabDiscussionThread,
+  createCollabDiscussionThreadComment: CollabDiscussionThreadComment,
+  createCollabPost: CollabPost,
+  createComment: CollabPostComment,
   createTask: Task,
   createTaskComment: TaskComment,
   createTaskList: TaskList,
   declineCollabInvite: Scalars['Boolean'],
   declineMemberRequest: Scalars['Boolean'],
   deleteCollab: Scalars['Boolean'],
-  deleteCollabDiscussionMessage: Scalars['Boolean'],
+  deleteCollabDiscussionThread: Scalars['Boolean'],
+  deleteCollabDiscussionThreadComment: Scalars['Boolean'],
+  deleteCollabPost: Scalars['Boolean'],
   deleteComment: Scalars['Boolean'],
   deleteTask: Scalars['Boolean'],
   deleteTaskComment: Scalars['Boolean'],
@@ -118,20 +155,13 @@ export type Mutation = {
   login: AuthPayload,
   removeMember: Collab,
   requestToJoin: Scalars['Boolean'],
-  signUp: Scalars['Boolean'],
+  signUp: AuthPayload,
   toggleAcceptInvites: Collab,
-  validateToken: AuthPayload,
 };
 
 
 export type MutationAcceptCollabInviteArgs = {
   collabId: Scalars['ID']
-};
-
-
-export type MutationAddCommentArgs = {
-  collabId: Scalars['ID'],
-  content: Scalars['String']
 };
 
 
@@ -141,14 +171,27 @@ export type MutationAddMemberArgs = {
 };
 
 
-export type MutationCreateCollabArgs = {
-  collab: CollabArgs
+export type MutationCreateCollabDiscussionThreadArgs = {
+  collabId: Scalars['ID'],
+  title: Scalars['String']
 };
 
 
-export type MutationCreateCollabDiscussionMessageArgs = {
-  collabId: Scalars['ID'],
-  content: Scalars['String']
+export type MutationCreateCollabDiscussionThreadCommentArgs = {
+  collabId: Scalars['String'],
+  content: Scalars['String'],
+  threadId: Scalars['ID']
+};
+
+
+export type MutationCreateCollabPostArgs = {
+  post: CollabPostArgs
+};
+
+
+export type MutationCreateCommentArgs = {
+  content: Scalars['String'],
+  postId: Scalars['ID']
 };
 
 
@@ -189,8 +232,18 @@ export type MutationDeleteCollabArgs = {
 };
 
 
-export type MutationDeleteCollabDiscussionMessageArgs = {
-  messageId: Scalars['ID']
+export type MutationDeleteCollabDiscussionThreadArgs = {
+  threadId: Scalars['ID']
+};
+
+
+export type MutationDeleteCollabDiscussionThreadCommentArgs = {
+  commentId: Scalars['ID']
+};
+
+
+export type MutationDeleteCollabPostArgs = {
+  postId: Scalars['ID']
 };
 
 
@@ -237,7 +290,7 @@ export type MutationRequestToJoinArgs = {
 
 
 export type MutationSignUpArgs = {
-  credentials: SignupArgs
+  credentials: SignUpArgs
 };
 
 
@@ -248,7 +301,10 @@ export type MutationToggleAcceptInvitesArgs = {
 export type Query = {
    __typename?: 'Query',
   collab?: Maybe<Collab>,
+  collabPost?: Maybe<CollabPost>,
+  collabPosts: Array<CollabPost>,
   collabs: Array<Collab>,
+  currentUser?: Maybe<CurrentUser>,
   user?: Maybe<User>,
   users: Array<User>,
 };
@@ -259,11 +315,16 @@ export type QueryCollabArgs = {
 };
 
 
+export type QueryCollabPostArgs = {
+  postId: Scalars['ID']
+};
+
+
 export type QueryUserArgs = {
   id: Scalars['ID']
 };
 
-export type SignupArgs = {
+export type SignUpArgs = {
   email: Scalars['String'],
   password: Scalars['String'],
   username: Scalars['String'],
@@ -280,14 +341,15 @@ export type Task = {
 
 export type TaskComment = {
    __typename?: 'TaskComment',
-  author: User,
-  authorId: Scalars['ID'],
+  author?: Maybe<User>,
   content: Scalars['String'],
   id: Scalars['ID'],
+  task?: Maybe<Task>,
 };
 
 export type TaskList = {
    __typename?: 'TaskList',
+  collab?: Maybe<Collab>,
   id: Scalars['ID'],
   name: Scalars['String'],
   order: Scalars['Int'],
@@ -296,6 +358,7 @@ export type TaskList = {
 
 export type User = {
    __typename?: 'User',
+  avatar?: Maybe<Scalars['String']>,
   collabs: Array<Collab>,
   id: Scalars['ID'],
   username: Scalars['String'],
@@ -377,90 +440,117 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>,
   ID: ResolverTypeWrapper<Scalars['ID']>,
-  Collab: ResolverTypeWrapper<Collab>,
+  Collab: ResolverTypeWrapper<GQLCollab>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
-  CollabComment: ResolverTypeWrapper<CollabComment>,
-  User: ResolverTypeWrapper<User>,
+  CollabDiscussionThread: ResolverTypeWrapper<GQLCollabDiscussionThread>,
+  User: ResolverTypeWrapper<GQLUser>,
   String: ResolverTypeWrapper<Scalars['String']>,
-  CollabDiscussionMessage: ResolverTypeWrapper<CollabDiscussionMessage>,
-  TaskList: ResolverTypeWrapper<TaskList>,
+  CollabDiscussionThreadComment: ResolverTypeWrapper<GQLCollabDiscussionThreadComment>,
+  TaskList: ResolverTypeWrapper<GQLCollabTaskList>,
   Int: ResolverTypeWrapper<Scalars['Int']>,
-  Task: ResolverTypeWrapper<Task>,
-  TaskComment: ResolverTypeWrapper<TaskComment>,
+  Task: ResolverTypeWrapper<GQLCollabTask>,
+  TaskComment: ResolverTypeWrapper<GQLCollabTaskComment>,
+  CollabPost: ResolverTypeWrapper<GQLCollabPost>,
+  CollabPostComment: ResolverTypeWrapper<GQLCollabPostComment>,
+  CurrentUser: ResolverTypeWrapper<Omit<CurrentUser, 'collabInvites' | 'collabRequests' | 'collabs'> & { collabInvites: Array<ResolversTypes['Collab']>, collabRequests: Array<ResolversTypes['CollabRequest']>, collabs: Array<ResolversTypes['Collab']> }>,
+  CollabRequest: ResolverTypeWrapper<Omit<CollabRequest, 'collab' | 'member'> & { collab: ResolversTypes['Collab'], member: ResolversTypes['User'] }>,
   Mutation: ResolverTypeWrapper<{}>,
-  CollabArgs: CollabArgs,
+  CollabPostArgs: CollabPostArgs,
   Experience: Experience,
   LoginArgs: LoginArgs,
   AuthPayload: ResolverTypeWrapper<AuthPayload>,
-  CurrentUser: ResolverTypeWrapper<CurrentUser>,
-  CollabRequest: ResolverTypeWrapper<CollabRequest>,
-  SignupArgs: SignupArgs,
+  SignUpArgs: SignUpArgs,
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Query: {},
   ID: Scalars['ID'],
-  Collab: Collab,
+  Collab: GQLCollab,
   Boolean: Scalars['Boolean'],
-  CollabComment: CollabComment,
-  User: User,
+  CollabDiscussionThread: GQLCollabDiscussionThread,
+  User: GQLUser,
   String: Scalars['String'],
-  CollabDiscussionMessage: CollabDiscussionMessage,
-  TaskList: TaskList,
+  CollabDiscussionThreadComment: GQLCollabDiscussionThreadComment,
+  TaskList: GQLCollabTaskList,
   Int: Scalars['Int'],
-  Task: Task,
-  TaskComment: TaskComment,
+  Task: GQLCollabTask,
+  TaskComment: GQLCollabTaskComment,
+  CollabPost: GQLCollabPost,
+  CollabPostComment: GQLCollabPostComment,
+  CurrentUser: Omit<CurrentUser, 'collabInvites' | 'collabRequests' | 'collabs'> & { collabInvites: Array<ResolversParentTypes['Collab']>, collabRequests: Array<ResolversParentTypes['CollabRequest']>, collabs: Array<ResolversParentTypes['Collab']> },
+  CollabRequest: Omit<CollabRequest, 'collab' | 'member'> & { collab: ResolversParentTypes['Collab'], member: ResolversParentTypes['User'] },
   Mutation: {},
-  CollabArgs: CollabArgs,
+  CollabPostArgs: CollabPostArgs,
   Experience: Experience,
   LoginArgs: LoginArgs,
   AuthPayload: AuthPayload,
-  CurrentUser: CurrentUser,
-  CollabRequest: CollabRequest,
-  SignupArgs: SignupArgs,
+  SignUpArgs: SignUpArgs,
 }>;
 
 export type AuthPayloadResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['AuthPayload'] = ResolversParentTypes['AuthPayload']> = ResolversObject<{
   token?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  user?: Resolver<ResolversTypes['CurrentUser'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
 export type CollabResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Collab'] = ResolversParentTypes['Collab']> = ResolversObject<{
   acceptsInvites?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
-  comments?: Resolver<Array<ResolversTypes['CollabComment']>, ParentType, ContextType>,
-  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  discussionMessages?: Resolver<Array<ResolversTypes['CollabDiscussionMessage']>, ParentType, ContextType>,
-  experience?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  hasStarted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  discussionThreads?: Resolver<Array<ResolversTypes['CollabDiscussionThread']>, ParentType, ContextType>,
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  invitationPending?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  isMember?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  isOwner?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   members?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   owner?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
-  ownerId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   pendingInvites?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType>,
   pendingRequests?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType>,
-  stack?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>,
+  requestToJoinPending?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   taskList?: Resolver<Array<ResolversTypes['TaskList']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+}>;
+
+export type CollabDiscussionThreadResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['CollabDiscussionThread'] = ResolversParentTypes['CollabDiscussionThread']> = ResolversObject<{
+  author?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
+  collab?: Resolver<Maybe<ResolversTypes['Collab']>, ParentType, ContextType>,
+  comments?: Resolver<Array<ResolversTypes['CollabDiscussionThreadComment']>, ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
-export type CollabCommentResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['CollabComment'] = ResolversParentTypes['CollabComment']> = ResolversObject<{
+export type CollabDiscussionThreadCommentResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['CollabDiscussionThreadComment'] = ResolversParentTypes['CollabDiscussionThreadComment']> = ResolversObject<{
   author?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
-  authorId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   collab?: Resolver<Maybe<ResolversTypes['Collab']>, ParentType, ContextType>,
-  collabId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   content?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  thread?: Resolver<Maybe<ResolversTypes['CollabDiscussionThread']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
-export type CollabDiscussionMessageResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['CollabDiscussionMessage'] = ResolversParentTypes['CollabDiscussionMessage']> = ResolversObject<{
+export type CollabPostResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['CollabPost'] = ResolversParentTypes['CollabPost']> = ResolversObject<{
+  acceptsInvites?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  comments?: Resolver<Array<ResolversTypes['CollabPostComment']>, ParentType, ContextType>,
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  experience?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  hasStarted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  invitationPending?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  isMember?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  isOwner?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  members?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>,
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  owner?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
+  pendingInvites?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>,
+  pendingRequests?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>,
+  requestToJoinPending?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  stack?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>,
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+}>;
+
+export type CollabPostCommentResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['CollabPostComment'] = ResolversParentTypes['CollabPostComment']> = ResolversObject<{
   author?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
-  authorId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
-  collabId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   content?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
@@ -473,6 +563,7 @@ export type CollabRequestResolvers<ContextType = CollabContext, ParentType exten
 }>;
 
 export type CurrentUserResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['CurrentUser'] = ResolversParentTypes['CurrentUser']> = ResolversObject<{
+  avatar?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   collabInvites?: Resolver<Array<ResolversTypes['Collab']>, ParentType, ContextType>,
   collabRequests?: Resolver<Array<ResolversTypes['CollabRequest']>, ParentType, ContextType>,
   collabs?: Resolver<Array<ResolversTypes['Collab']>, ParentType, ContextType>,
@@ -484,17 +575,20 @@ export type CurrentUserResolvers<ContextType = CollabContext, ParentType extends
 
 export type MutationResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   acceptCollabInvite?: Resolver<ResolversTypes['User'], ParentType, CollabContextWithUser, RequireFields<MutationAcceptCollabInviteArgs, 'collabId'>>,
-  addComment?: Resolver<ResolversTypes['CollabComment'], ParentType, CollabContextWithUser, RequireFields<MutationAddCommentArgs, 'collabId' | 'content'>>,
   addMember?: Resolver<ResolversTypes['Collab'], ParentType, CollabContextWithUser, RequireFields<MutationAddMemberArgs, 'collabId' | 'memberId'>>,
-  createCollab?: Resolver<ResolversTypes['Collab'], ParentType, CollabContextWithUser, RequireFields<MutationCreateCollabArgs, 'collab'>>,
-  createCollabDiscussionMessage?: Resolver<ResolversTypes['CollabDiscussionMessage'], ParentType, CollabContextWithUser, RequireFields<MutationCreateCollabDiscussionMessageArgs, 'collabId' | 'content'>>,
+  createCollabDiscussionThread?: Resolver<ResolversTypes['CollabDiscussionThread'], ParentType, ContextType, RequireFields<MutationCreateCollabDiscussionThreadArgs, 'collabId' | 'title'>>,
+  createCollabDiscussionThreadComment?: Resolver<ResolversTypes['CollabDiscussionThreadComment'], ParentType, ContextType, RequireFields<MutationCreateCollabDiscussionThreadCommentArgs, 'collabId' | 'content' | 'threadId'>>,
+  createCollabPost?: Resolver<ResolversTypes['CollabPost'], ParentType, ContextType, RequireFields<MutationCreateCollabPostArgs, 'post'>>,
+  createComment?: Resolver<ResolversTypes['CollabPostComment'], ParentType, ContextType, RequireFields<MutationCreateCommentArgs, 'content' | 'postId'>>,
   createTask?: Resolver<ResolversTypes['Task'], ParentType, CollabContextWithUser, RequireFields<MutationCreateTaskArgs, 'collabId' | 'description' | 'taskListId'>>,
   createTaskComment?: Resolver<ResolversTypes['TaskComment'], ParentType, CollabContextWithUser, RequireFields<MutationCreateTaskCommentArgs, 'collabId' | 'content' | 'taskId'>>,
   createTaskList?: Resolver<ResolversTypes['TaskList'], ParentType, CollabContextWithUser, RequireFields<MutationCreateTaskListArgs, 'collabId' | 'name' | 'order'>>,
   declineCollabInvite?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeclineCollabInviteArgs, 'collabId'>>,
   declineMemberRequest?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeclineMemberRequestArgs, 'collabId' | 'memberId'>>,
   deleteCollab?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeleteCollabArgs, 'collabId'>>,
-  deleteCollabDiscussionMessage?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeleteCollabDiscussionMessageArgs, 'messageId'>>,
+  deleteCollabDiscussionThread?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteCollabDiscussionThreadArgs, 'threadId'>>,
+  deleteCollabDiscussionThreadComment?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteCollabDiscussionThreadCommentArgs, 'commentId'>>,
+  deleteCollabPost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteCollabPostArgs, 'postId'>>,
   deleteComment?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeleteCommentArgs, 'commentId'>>,
   deleteTask?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeleteTaskArgs, 'taskId'>>,
   deleteTaskComment?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeleteTaskCommentArgs, 'commentId'>>,
@@ -504,14 +598,16 @@ export type MutationResolvers<ContextType = CollabContext, ParentType extends Re
   login?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'credentials'>>,
   removeMember?: Resolver<ResolversTypes['Collab'], ParentType, CollabContextWithUser, RequireFields<MutationRemoveMemberArgs, 'collabId' | 'memberId'>>,
   requestToJoin?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationRequestToJoinArgs, 'collabId'>>,
-  signUp?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'credentials'>>,
+  signUp?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'credentials'>>,
   toggleAcceptInvites?: Resolver<ResolversTypes['Collab'], ParentType, CollabContextWithUser, RequireFields<MutationToggleAcceptInvitesArgs, 'collabId'>>,
-  validateToken?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType>,
 }>;
 
 export type QueryResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   collab?: Resolver<Maybe<ResolversTypes['Collab']>, ParentType, ContextType, RequireFields<QueryCollabArgs, 'collabId'>>,
+  collabPost?: Resolver<Maybe<ResolversTypes['CollabPost']>, ParentType, ContextType, RequireFields<QueryCollabPostArgs, 'postId'>>,
+  collabPosts?: Resolver<Array<ResolversTypes['CollabPost']>, ParentType, ContextType>,
   collabs?: Resolver<Array<ResolversTypes['Collab']>, ParentType, ContextType>,
+  currentUser?: Resolver<Maybe<ResolversTypes['CurrentUser']>, ParentType, ContextType>,
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>,
   users?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>,
 }>;
@@ -526,14 +622,15 @@ export type TaskResolvers<ContextType = CollabContext, ParentType extends Resolv
 }>;
 
 export type TaskCommentResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['TaskComment'] = ResolversParentTypes['TaskComment']> = ResolversObject<{
-  author?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
-  authorId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  author?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
   content?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  task?: Resolver<Maybe<ResolversTypes['Task']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
 export type TaskListResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['TaskList'] = ResolversParentTypes['TaskList']> = ResolversObject<{
+  collab?: Resolver<Maybe<ResolversTypes['Collab']>, ParentType, ContextType>,
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   order?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
@@ -542,6 +639,7 @@ export type TaskListResolvers<ContextType = CollabContext, ParentType extends Re
 }>;
 
 export type UserResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
+  avatar?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   collabs?: Resolver<Array<ResolversTypes['Collab']>, ParentType, ContextType>,
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
@@ -551,8 +649,10 @@ export type UserResolvers<ContextType = CollabContext, ParentType extends Resolv
 export type Resolvers<ContextType = CollabContext> = ResolversObject<{
   AuthPayload?: AuthPayloadResolvers<ContextType>,
   Collab?: CollabResolvers<ContextType>,
-  CollabComment?: CollabCommentResolvers<ContextType>,
-  CollabDiscussionMessage?: CollabDiscussionMessageResolvers<ContextType>,
+  CollabDiscussionThread?: CollabDiscussionThreadResolvers<ContextType>,
+  CollabDiscussionThreadComment?: CollabDiscussionThreadCommentResolvers<ContextType>,
+  CollabPost?: CollabPostResolvers<ContextType>,
+  CollabPostComment?: CollabPostCommentResolvers<ContextType>,
   CollabRequest?: CollabRequestResolvers<ContextType>,
   CurrentUser?: CurrentUserResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,

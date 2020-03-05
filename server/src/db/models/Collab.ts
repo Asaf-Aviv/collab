@@ -1,3 +1,4 @@
+import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 import { CollabMemberRequest } from './CollabMemberRequest'
 import {
   Model,
@@ -7,27 +8,15 @@ import {
   PrimaryKey,
   Default,
   ForeignKey,
-  DataType,
-  Length,
   BelongsTo,
   HasMany,
   AllowNull,
 } from 'sequelize-typescript'
 import uuid from 'uuid/v4'
-import {
-  HasManyGetAssociationsMixin,
-  HasManyAddAssociationMixin,
-  HasManyHasAssociationMixin,
-  HasManyCountAssociationsMixin,
-  HasManyCreateAssociationMixin,
-  HasOneCreateAssociationMixin,
-} from 'sequelize'
-import { CollabArgs } from '../../graphql/types'
 import { CollabMember } from './CollabMember'
-import { CollabComment } from './CollabComment'
 import { User } from './User'
 import { CollabTaskList } from './CollabTaskList'
-import { CollabDiscussionMessage } from './CollabDiscussionMessage'
+import { CollabDiscussionThreadComment } from './CollabDiscussionThreadComment'
 
 @Table({ tableName: 'collabs' })
 export class Collab extends Model<Collab> {
@@ -42,35 +31,9 @@ export class Collab extends Model<Collab> {
   name!: string
 
   @AllowNull(false)
-  @Column
-  title!: string
-
-  @AllowNull(false)
-  @Column(DataType.ENUM('ALL', 'JUNIOR', 'JUNIOR_MID', 'MID_SENIOR', 'SENIOR'))
-  experience!: string
-
-  @AllowNull(false)
-  @Column(DataType.ARRAY(DataType.STRING))
-  stack!: string[]
-
-  @Length({
-    msg: 'Description must be between 10 characters and 500',
-    min: 10,
-    max: 500,
-  })
-  @AllowNull(false)
-  @Column
-  description!: string
-
-  @AllowNull(false)
   @Default(false)
   @Column
   acceptsInvites!: boolean
-
-  @AllowNull(false)
-  @Default(false)
-  @Column
-  hasStarted!: boolean
 
   @ForeignKey(() => User)
   @AllowNull(false)
@@ -83,9 +46,6 @@ export class Collab extends Model<Collab> {
   @HasMany(() => CollabMember)
   members!: User[]
 
-  @HasMany(() => CollabComment)
-  comments!: CollabComment[]
-
   @HasMany(() => CollabMemberRequest)
   pendingInvites!: User[]
 
@@ -95,17 +55,10 @@ export class Collab extends Model<Collab> {
   @HasMany(() => CollabTaskList)
   taskList!: CollabTaskList[]
 
-  @HasMany(() => CollabDiscussionMessage)
-  discussionMessages!: CollabDiscussionMessage[]
+  @HasMany(() => CollabDiscussionThreadComment)
+  discussionComments!: CollabDiscussionThreadComment[]
 
-  getMembers!: HasManyGetAssociationsMixin<CollabMember>
-  addMember!: HasManyAddAssociationMixin<CollabMember, string>
-  hasMember!: HasManyHasAssociationMixin<CollabMember, string>
-  countMembers!: HasManyCountAssociationsMixin
-  createMember!: HasManyCreateAssociationMixin<CollabMember>
-  setOwner!: HasOneCreateAssociationMixin<CollabMember>
-
-  static createCollab(collabArgs: CollabArgs, userId: string) {
+  static createCollab(collabArgs: any, userId: string) {
     return this.sequelize!.transaction(async () => {
       const collab = await this.create({ ...collabArgs, ownerId: userId })
 
@@ -156,7 +109,7 @@ export class Collab extends Model<Collab> {
 
       await Promise.all([
         //
-        collab.createMember({ memberId }),
+        CollabMember.create({ collabId, memberId }),
         memberRequest.destroy(),
       ])
 
@@ -234,13 +187,18 @@ export class Collab extends Model<Collab> {
   }
 
   static async requestToJoin(collabId: string, memberId: string) {
-    const [collab, invitation] = await Promise.all([
+    const [collab, invitation, isMember] = await Promise.all([
       this.findByPk(collabId),
       CollabMemberRequest.findOne({ where: { collabId, memberId } }),
+      CollabMember.findOne({ where: { collabId, memberId } }),
     ])
 
     if (!collab) {
       throw new Error('Collab not found')
+    }
+
+    if (isMember) {
+      throw new Error('You are already a member of this Collab')
     }
 
     if (invitation && invitation.type === 'request') {
@@ -351,3 +309,13 @@ export class Collab extends Model<Collab> {
     return true
   }
 }
+
+export type GQLCollab = GQLResolverTypes<
+  Collab,
+  | 'owner'
+  | 'taskList'
+  | 'discussionComments'
+  | 'members'
+  | 'pendingInvites'
+  | 'pendingRequests'
+>
