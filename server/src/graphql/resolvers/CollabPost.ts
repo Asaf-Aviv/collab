@@ -34,24 +34,24 @@ export const collabPostResolver: Resolvers = {
       const collab = await loaders.collabLoader.load(collabId)
       return collab!.acceptsInvites
     },
-    invitationPending: async ({ id }, args, { user, models }) => {
+    invitationPending: async ({ colladId }, args, { user, models }) => {
       if (!user?.id) {
         return false
       }
 
       const invitation = await models.CollabMemberRequest.findOne({
-        where: { collabId: id, memberId: user.id, type: 'invitation' },
+        where: { collabId, memberId: user.id, type: 'invitation' },
       })
 
       return Boolean(invitation)
     },
-    requestToJoinPending: async ({ id }, args, { user, models }) => {
+    requestToJoinPending: async ({ colladId }, args, { user, models }) => {
       if (!user?.id) {
         return false
       }
 
       const invitation = await models.CollabMemberRequest.findOne({
-        where: { collabId: id, memberId: user.id, type: 'request' },
+        where: { collabId, memberId: user.id, type: 'request' },
       })
 
       return Boolean(invitation)
