@@ -1,7 +1,7 @@
 const uuid = require('uuid/v4')
 const faker = require('faker')
 const { seededUsers } = require('../mocks/users')
-const { seededCollabs, allInvites } = require('../mocks/collabs')
+const { seededCollabs } = require('../mocks/collabs')
 
 const _ = require('lodash')
 
@@ -41,14 +41,10 @@ module.exports = {
     queryInterface
       .bulkInsert({ tableName: 'collab_posts' }, collabPosts)
       .then(() =>
-        queryInterface
-          .bulkInsert({ tableName: 'collab_post_comments' }, comments)
-          .then(() =>
-            queryInterface.bulkInsert(
-              { tableName: 'collab_member_requests' },
-              allInvites
-            )
-          )
+        queryInterface.bulkInsert(
+          { tableName: 'collab_post_comments' },
+          comments
+        )
       )
       .catch(err => {
         console.log(err.message)

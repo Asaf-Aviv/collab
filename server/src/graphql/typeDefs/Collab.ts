@@ -9,9 +9,10 @@ export const collabTypeDefs = gql`
   type Mutation {
     deleteCollab(collabId: ID!): Boolean!
     inviteMember(collabId: ID!, memberId: ID!): User!
-    addMember(collabId: ID!, memberId: ID!): Collab!
+    acceptMemberRequest(collabId: ID!, memberId: ID!): Collab!
     removeMember(collabId: ID!, memberId: ID!): Collab!
     requestToJoin(collabId: ID!): Boolean!
+    cancelRequestToJoin(collabId: ID!): Boolean!
     toggleAcceptInvites(collabId: ID!): Collab!
     declineMemberRequest(collabId: ID!, memberId: ID!): Boolean!
   }
@@ -20,6 +21,7 @@ export const collabTypeDefs = gql`
     id: ID!
     name: String!
     owner: User
+    collabPostId: ID
     acceptsInvites: Boolean!
     members: [User]!
     isOwner: Boolean!

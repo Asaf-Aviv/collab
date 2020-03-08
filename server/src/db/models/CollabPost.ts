@@ -77,9 +77,13 @@ export class CollabPost extends Model<CollabPost> {
 
   static createPost(postArgs: CollabPostArgs, userId: string) {
     return this.sequelize!.transaction(async () => {
-      const post = new this({ ...postArgs, ownerId: userId })
       const collab = new Collab({
         name: postArgs.name,
+        ownerId: userId,
+      })
+      const post = new this({
+        ...postArgs,
+        collabId: collab.id,
         ownerId: userId,
       })
       const collabMember = new CollabMember({
@@ -88,9 +92,14 @@ export class CollabPost extends Model<CollabPost> {
         isOwner: true,
       })
 
-      await Promise.all([post, collab, collabMember])
+      await Promise.all([
+        //
+        post.save(),
+        collab.save(),
+        collabMember.save(),
+      ])
 
-      return collab
+      return post
     })
   }
 

@@ -3,27 +3,17 @@ const faker = require('faker')
 const { asaf, seededUsers } = require('../mocks/users')
 const _ = require('lodash')
 
-const generageCollab = () => ({
-  id: uuid(),
-  name: faker.lorem.words(3),
-  accepts_invites: false,
-  owner_id: _.sample(seededUsers).id,
-  updated_at: new Date(),
-  created_at: new Date(),
-})
-
-const asafCollab = {
+const generageCollab = owner_id => ({
   id: uuid(),
   name: faker.lorem.words(3),
   accepts_invites: true,
-  owner_id: asaf.id,
+  owner_id,
   updated_at: new Date(),
   created_at: new Date(),
-}
+  collab_post_id: null,
+})
 
-exports.asafCollab = asafCollab
-
-const seededCollabs = [...Array(10)].map(generageCollab).concat(asafCollab)
+const seededCollabs = seededUsers.map(user => generageCollab(user.id))
 
 exports.seededCollabs = seededCollabs
 
@@ -39,16 +29,15 @@ exports.collabOwners = collabOwners
 
 const memberInvitations = _.flatten(
   seededCollabs.map(({ id, owner_id }) =>
-    _.take(
-      _.filter(seededUsers, ({ id }) => id !== owner_id),
-      _.random(1, 4)
-    ).map(({ id: userId }) => ({
-      collab_id: id,
-      type: 'invitation',
-      member_id: userId,
-      updated_at: new Date(),
-      created_at: new Date(),
-    }))
+    _.filter(seededUsers, ({ id }) => id !== owner_id).map(
+      ({ id: userId }) => ({
+        collab_id: id,
+        type: 'invitation',
+        member_id: userId,
+        updated_at: new Date(),
+        created_at: new Date(),
+      })
+    )
   )
 )
 
@@ -63,7 +52,7 @@ const memberRequests = _.flatten(
             invite => invite.collab_id === collab_id && invite.member_id === id
           )
       ),
-      _.random(1, 4)
+      _.random(2, 7)
     ).map(({ id: userId }) => ({
       collab_id,
       type: 'request',

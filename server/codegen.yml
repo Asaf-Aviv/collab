@@ -1,5 +1,5 @@
 schema: ./src/graphql/typeDefs/*.ts
-# documents: '../client/src/components/**/*.tsx'
+documents: '../client/src/components/**/*.tsx'
 watch: true
 require: ts-node/register/transpile-only
 generates:
@@ -23,12 +23,12 @@ generates:
       fieldContextTypes:
         # User
         - Mutation.deleteUser#./context/CollabContext#CollabContextWithUser
-        - Mutation.acceptCollabInvite#./context/CollabContext#CollabContextWithUser
-        - Mutation.declineCollabInvite#./context/CollabContext#CollabContextWithUser
+        - Mutation.acceptCollabInvitation#./context/CollabContext#CollabContextWithUser
+        - Mutation.declineCollabInvitation#./context/CollabContext#CollabContextWithUser
         # Collab
         - Mutation.createCollab#./context/CollabContext#CollabContextWithUser
         - Mutation.deleteCollab#./context/CollabContext#CollabContextWithUser
-        - Mutation.addMember#./context/CollabContext#CollabContextWithUser
+        - Mutation.acceptMemberRequest#./context/CollabContext#CollabContextWithUser
         - Mutation.removeMember#./context/CollabContext#CollabContextWithUser
         - Mutation.inviteMember#./context/CollabContext#CollabContextWithUser
         - Mutation.requestToJoin#./context/CollabContext#CollabContextWithUser

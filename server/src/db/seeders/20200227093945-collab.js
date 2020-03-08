@@ -5,6 +5,7 @@ const {
   collabOwners,
   collabThreads,
   threadComments,
+  allInvites,
 } = require('../mocks/collabs')
 const _ = require('lodash')
 
@@ -68,6 +69,12 @@ module.exports = {
       .bulkInsert({ tableName: 'collabs' }, seededCollabs)
       .then(() =>
         queryInterface.bulkInsert({ tableName: 'collab_members' }, collabOwners)
+      )
+      .then(() =>
+        queryInterface.bulkInsert(
+          { tableName: 'collab_member_requests' },
+          allInvites
+        )
       )
       .then(() =>
         queryInterface.bulkInsert(

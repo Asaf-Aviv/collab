@@ -15,12 +15,13 @@ export const collabPostTypeDefs = gql`
     id: ID!
     name: String!
     title: String!
+    description: String!
     owner: User!
+    collabId: ID!
     experience: String!
     stack: [String!]!
     hasStarted: Boolean!
     acceptsInvites: Boolean!
-    description: String!
     members: [User!]!
     isOwner: Boolean!
     isMember: Boolean!

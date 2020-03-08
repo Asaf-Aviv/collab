@@ -34,7 +34,7 @@ export const collabPostResolver: Resolvers = {
       const collab = await loaders.collabLoader.load(collabId)
       return collab!.acceptsInvites
     },
-    invitationPending: async ({ colladId }, args, { user, models }) => {
+    invitationPending: async ({ collabId }, args, { user, models }) => {
       if (!user?.id) {
         return false
       }
@@ -45,7 +45,7 @@ export const collabPostResolver: Resolvers = {
 
       return Boolean(invitation)
     },
-    requestToJoinPending: async ({ colladId }, args, { user, models }) => {
+    requestToJoinPending: async ({ collabId }, args, { user, models }) => {
       if (!user?.id) {
         return false
       }
@@ -95,7 +95,6 @@ export const collabMiddleware = {
   Mutation: {
     createCollab: and(isAuthenticated),
     deleteCollab: and(isAuthenticated),
-    addMember: and(isAuthenticated),
     removeMember: and(isAuthenticated),
     inviteMember: and(isAuthenticated),
     requestToJoin: and(isAuthenticated),

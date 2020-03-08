@@ -17,6 +17,7 @@ import { CollabMember } from './CollabMember'
 import { User } from './User'
 import { CollabTaskList } from './CollabTaskList'
 import { CollabDiscussionThreadComment } from './CollabDiscussionThreadComment'
+import { CollabPost } from './CollabPost'
 
 @Table({ tableName: 'collabs' })
 export class Collab extends Model<Collab> {
@@ -34,6 +35,11 @@ export class Collab extends Model<Collab> {
   @Default(false)
   @Column
   acceptsInvites!: boolean
+
+  @ForeignKey(() => CollabPost)
+  @Default(null)
+  @Column
+  collabPostId!: string
 
   @ForeignKey(() => User)
   @AllowNull(false)
@@ -82,7 +88,11 @@ export class Collab extends Model<Collab> {
     return collab
   }
 
-  static async addMember(collabId: string, ownerId: string, memberId: string) {
+  static async acceptMemberRequest(
+    collabId: string,
+    ownerId: string,
+    memberId: string
+  ) {
     return this.sequelize!.transaction(async () => {
       const [collab, isMember, memberRequest] = await Promise.all([
         Collab.findByPk(collabId),
@@ -90,7 +100,7 @@ export class Collab extends Model<Collab> {
           where: { collabId, memberId },
         }),
         CollabMemberRequest.findOne({
-          where: { collabId, memberId },
+          where: { collabId, memberId, type: 'request' },
         }),
       ])
 
@@ -104,7 +114,7 @@ export class Collab extends Model<Collab> {
         throw new Error('User is already a member')
       }
       if (!memberRequest) {
-        throw new Error('Request does not exist anymore')
+        throw new Error('Request does not exist')
       }
 
       await Promise.all([
@@ -212,6 +222,20 @@ export class Collab extends Model<Collab> {
     }
 
     await CollabMemberRequest.create({ collabId, memberId, type: 'request' })
+
+    return true
+  }
+
+  static async cancelRequestToJoin(collabId: string, memberId: string) {
+    const request = await CollabMemberRequest.findOne({
+      where: { collabId, memberId, type: 'request' },
+    })
+
+    if (!request) {
+      throw new Error('Request does not exist')
+    }
+
+    await request.destroy()
 
     return true
   }

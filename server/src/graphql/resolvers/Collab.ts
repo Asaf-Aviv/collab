@@ -12,8 +12,8 @@ export const collabResolver: Resolvers = {
   Mutation: {
     deleteCollab: (root, { collabId }, { models }) =>
       models.Collab.deleteCollab(collabId),
-    addMember: (root, { collabId, memberId }, { user, models }) =>
-      models.Collab.addMember(collabId, user.id, memberId),
+    acceptMemberRequest: (root, { collabId, memberId }, { user, models }) =>
+      models.Collab.acceptMemberRequest(collabId, user.id, memberId),
     removeMember: (root, { collabId, memberId }, { user, models }) =>
       models.Collab.removeMember(collabId, user.id, memberId),
     inviteMember: (root, { collabId, memberId }, { user, models }) =>
@@ -41,6 +41,8 @@ export const collabResolver: Resolvers = {
       ),
     deleteTaskComment: (root, { commentId }, { user, models }) =>
       models.CollabTaskComment.deleteComment(commentId, user.id),
+    cancelRequestToJoin: (root, { collabId }, { user, models }) =>
+      models.Collab.cancelRequestToJoin(collabId, user!.id),
   },
   Collab: {
     owner: async ({ ownerId }, args, { loaders }) =>
@@ -119,7 +121,7 @@ export const collabResolver: Resolvers = {
 export const collabMiddleware = {
   Mutation: {
     deleteCollab: and(isAuthenticated),
-    addMember: and(isAuthenticated),
+    acceptMemberRequest: and(isAuthenticated),
     removeMember: and(isAuthenticated),
     inviteMember: and(isAuthenticated),
     requestToJoin: and(isAuthenticated),

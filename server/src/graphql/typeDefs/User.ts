@@ -11,8 +11,8 @@ export const userTypeDefs = gql`
     signUp(credentials: SignUpArgs!): AuthPayload!
     login(credentials: LoginArgs!): AuthPayload!
     deleteUser: Boolean!
-    acceptCollabInvite(collabId: ID!): User!
-    declineCollabInvite(collabId: ID!): Boolean!
+    acceptCollabInvitation(collabId: ID!): User!
+    declineCollabInvitation(collabId: ID!): Boolean!
   }
 
   type CurrentUser {
