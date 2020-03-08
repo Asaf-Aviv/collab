@@ -10,8 +10,8 @@ import { createLoaders } from './graphql/loaders/loaders'
 const PORT = 5555
 
 sequelize
-  .sync({ force: true })
-  // .authenticate()
+  // .sync({ force: true })
+  .authenticate()
   .then(async () => {
     console.log('Connected to postgres')
     createLoaders()

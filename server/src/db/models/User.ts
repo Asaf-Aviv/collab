@@ -141,10 +141,10 @@ export class User extends Model<User> {
     return true
   }
 
-  static async acceptCollabInvite(collabId: string, memberId: string) {
+  static async acceptCollabInvitation(collabId: string, memberId: string) {
     return this.sequelize!.transaction(async () => {
       const invite = await CollabMemberRequest.findOne({
-        where: { collabId, memberId },
+        where: { collabId, memberId, type: 'invitation' },
       })
 
       if (!invite) {
@@ -164,10 +164,10 @@ export class User extends Model<User> {
     })
   }
 
-  static async declineCollabInvite(collabId: string, memberId: string) {
+  static async declineCollabInvitation(collabId: string, memberId: string) {
     return this.sequelize!.transaction(async () => {
       const invite = await CollabMemberRequest.findOne({
-        where: { collabId, memberId },
+        where: { collabId, memberId, type: 'invitation' },
       })
 
       if (!invite) {

@@ -1,24 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import { gql } from 'apollo-boost'
-import { useMutation } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import { FlexColumn, H1 } from '../global'
 import { useHistory } from 'react-router-dom'
+import { Radio, RadioGroup } from '@chakra-ui/core'
+import {
+  useCreateCollabPostMutation,
+  Experience,
+} from '../../graphql/generates'
 
-const CREATE_COLLAB = gql`
-  mutation CreateCollab($collab: CollabArgs!) {
-    createCollab(collab: $collab) {
+const CREATE_COLLAB_POST = gql`
+  mutation CreateCollabPost($post: CollabPostArgs!) {
+    createCollabPost(post: $post) {
       id
-      title
-      ownerId
-      owner {
-        id
-        username
-        email
-      }
-      experience
-      stack
-      description
     }
   }
 `
@@ -30,7 +24,7 @@ const fakeAutocomplete = (text: string): Promise<string[]> =>
     console.log('running')
 
     const sug = suggestions.filter(s =>
-      [...text].every(c => new RegExp(`${c}`, 'i').test(s)),
+      [...text].every(c => new RegExp(`${c}`, 'i').test(s))
     )
     console.log(sug)
 
@@ -38,34 +32,36 @@ const fakeAutocomplete = (text: string): Promise<string[]> =>
   })
 
 export const CreateCollab = () => {
+  const [name, setName] = useState('Collabbbb')
   const [title, setTitle] = useState('React TypeScript next level app')
-  const [experience, setExperience] = useState('ALL')
+  const [experience, setExperience] = useState<Experience>('ALL' as Experience)
   const [stack, setStack] = useState<string[]>(['TypeScript', 'React'])
   const [description, setDescription] = useState('Our first Collab!')
   const [stackInput, setstackInput] = useState('')
+  const [hasStarted, setHasStarted] = useState('no')
   const [sugg, setSuggs] = useState<string[]>([])
   const history = useHistory()
-
-  const [createCollab] = useMutation(CREATE_COLLAB, {
+  const [createCollabPost] = useCreateCollabPostMutation({
     variables: {
-      collab: {
+      post: {
+        name,
         title,
         stack,
         experience,
         description,
+        hasStarted: hasStarted === 'yes',
       },
     },
-    onCompleted: ({ createCollab }) => {
-      history.push(`/collab/${createCollab.id}`)
+    onCompleted: ({ createCollabPost }) => {
+      history.push(`/collab/${createCollabPost.id}`)
     },
-    onError: err => console.error(err),
   })
 
   const toggleStack = (name: string) => () => {
     const inStack = stack.includes(name)
     console.log(inStack)
     setStack(prevState =>
-      inStack ? prevState.filter(s => s !== name) : [...prevState, name],
+      inStack ? prevState.filter(s => s !== name) : [...prevState, name]
     )
   }
 
@@ -77,6 +73,13 @@ export const CreateCollab = () => {
     <div>
       <FlexColumn>
         <H1>Create a Collab</H1>
+        <h3>name</h3>
+        <Input
+          type="text"
+          value={name}
+          placeholder="Name"
+          onChange={e => setName(e.target.value)}
+        />
         <h3>Title</h3>
         <Input
           type="text"
@@ -85,7 +88,17 @@ export const CreateCollab = () => {
           onChange={e => setTitle(e.target.value)}
         />
         <h3>experience</h3>
-        <select value={experience} onChange={e => setExperience(e.target.value)}>
+        <RadioGroup
+          onChange={e => setHasStarted(e.target.value)}
+          value={hasStarted}
+        >
+          <Radio value="no">No</Radio>
+          <Radio value="yes">Yes</Radio>
+        </RadioGroup>
+        <select
+          value={experience}
+          onChange={e => setExperience(e.target.value as Experience)}
+        >
           <option value="ALL">ALL</option>
           <option value="JUNIOR">JUNIOR</option>
           <option value="JUNIOR_MID">JUNIOR_MID</option>
@@ -100,7 +113,7 @@ export const CreateCollab = () => {
           value={description}
           onChange={e => setDescription(e.target.value)}
         />
-        <h3>suggerstions</h3>
+        <h3>suggestions</h3>
         <input
           placeholder="Stack"
           type="text"
@@ -118,7 +131,7 @@ export const CreateCollab = () => {
             {s}
           </button>
         ))}
-        <Button onClick={() => createCollab()}>Create</Button>
+        <Button onClick={() => createCollabPost()}>Create</Button>
       </FlexColumn>
     </div>
   )
