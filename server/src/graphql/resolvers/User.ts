@@ -20,8 +20,8 @@ export const userResolver: Resolvers = {
       const token = await generateToken({ userId: user.id })
       return { user, token }
     },
-    deleteUser: (root, args, { user }, { models }) =>
-      models.deleteUser(user.id),
+    deleteUser: (root, args, { user, models }) =>
+      models.User.deleteUser(user.id),
     acceptCollabInvitation: (root, { collabId }, { user, models }) =>
       models.User.acceptCollabInvitation(collabId, user.id),
     declineCollabInvitation: (root, { collabId }, { user, models }) =>
@@ -42,7 +42,7 @@ export const userResolver: Resolvers = {
       models.CollabMemberRequest.findAll({
         where: { memberid: id, type: 'request' },
         include: [
-          { model: models.UserModel }, //
+          { model: models.User }, //
           { model: models.Collab, where: { ownerId: id } },
         ],
       }),
