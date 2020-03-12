@@ -9,6 +9,6 @@ export const collabPostCommentTypeDefs = gql`
   type CollabPostComment {
     id: ID!
     content: String!
-    author: User
+    author: User!
   }
 `
