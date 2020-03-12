@@ -95,7 +95,7 @@ export type CollabPostArgs = {
 
 export type CollabPostComment = {
    __typename?: 'CollabPostComment',
-  author?: Maybe<User>,
+  author: User,
   content: Scalars['String'],
   id: Scalars['ID'],
 };
@@ -560,7 +560,7 @@ export type CollabPostResolvers<ContextType = CollabContext, ParentType extends 
 }>;
 
 export type CollabPostCommentResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['CollabPostComment'] = ResolversParentTypes['CollabPostComment']> = ResolversObject<{
-  author?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
+  author?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
   content?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,

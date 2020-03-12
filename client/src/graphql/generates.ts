@@ -85,7 +85,7 @@ export type CollabPostArgs = {
 
 export type CollabPostComment = {
    __typename?: 'CollabPostComment',
-  author?: Maybe<User>,
+  author: User,
   content: Scalars['String'],
   id: Scalars['ID'],
 };
@@ -422,12 +422,22 @@ export type GetCollabPostQuery = (
     )>, comments: Array<(
       { __typename?: 'CollabPostComment' }
       & Pick<CollabPostComment, 'id' | 'content'>
-      & { author: Maybe<(
+      & { author: (
         { __typename?: 'User' }
         & Pick<User, 'id' | 'username' | 'avatar'>
-      )> }
+      ) }
     )> }
   )> }
+);
+
+export type CancelCollabRequestToJoinMutationVariables = {
+  collabId: Scalars['ID']
+};
+
+
+export type CancelCollabRequestToJoinMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'cancelRequestToJoin'>
 );
 
 export type AcceptCollabInvitationMutationVariables = {
@@ -453,6 +463,24 @@ export type DeclineCollabInvitationMutation = (
   & Pick<Mutation, 'declineCollabInvitation'>
 );
 
+export type AddCollabPostCommentMutationVariables = {
+  content: Scalars['String'],
+  postId: Scalars['ID']
+};
+
+
+export type AddCollabPostCommentMutation = (
+  { __typename?: 'Mutation' }
+  & { createComment: (
+    { __typename?: 'CollabPostComment' }
+    & Pick<CollabPostComment, 'id' | 'content'>
+    & { author: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    ) }
+  ) }
+);
+
 export type CollabPostsQueryVariables = {};
 
 
@@ -460,7 +488,11 @@ export type CollabPostsQuery = (
   { __typename?: 'Query' }
   & { collabPosts: Array<(
     { __typename?: 'CollabPost' }
-    & Pick<CollabPost, 'id' | 'title'>
+    & Pick<CollabPost, 'id' | 'title' | 'stack' | 'experience' | 'hasStarted'>
+    & { owner: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    ) }
   )> }
 );
 
@@ -694,6 +726,36 @@ export function useGetCollabPostLazyQuery(baseOptions?: ApolloReactHooks.LazyQue
 export type GetCollabPostQueryHookResult = ReturnType<typeof useGetCollabPostQuery>;
 export type GetCollabPostLazyQueryHookResult = ReturnType<typeof useGetCollabPostLazyQuery>;
 export type GetCollabPostQueryResult = ApolloReactCommon.QueryResult<GetCollabPostQuery, GetCollabPostQueryVariables>;
+export const CancelCollabRequestToJoinDocument = gql`
+    mutation CancelCollabRequestToJoin($collabId: ID!) {
+  cancelRequestToJoin(collabId: $collabId)
+}
+    `;
+export type CancelCollabRequestToJoinMutationFn = ApolloReactCommon.MutationFunction<CancelCollabRequestToJoinMutation, CancelCollabRequestToJoinMutationVariables>;
+
+/**
+ * __useCancelCollabRequestToJoinMutation__
+ *
+ * To run a mutation, you first call `useCancelCollabRequestToJoinMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCancelCollabRequestToJoinMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [cancelCollabRequestToJoinMutation, { data, loading, error }] = useCancelCollabRequestToJoinMutation({
+ *   variables: {
+ *      collabId: // value for 'collabId'
+ *   },
+ * });
+ */
+export function useCancelCollabRequestToJoinMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CancelCollabRequestToJoinMutation, CancelCollabRequestToJoinMutationVariables>) {
+        return ApolloReactHooks.useMutation<CancelCollabRequestToJoinMutation, CancelCollabRequestToJoinMutationVariables>(CancelCollabRequestToJoinDocument, baseOptions);
+      }
+export type CancelCollabRequestToJoinMutationHookResult = ReturnType<typeof useCancelCollabRequestToJoinMutation>;
+export type CancelCollabRequestToJoinMutationResult = ApolloReactCommon.MutationResult<CancelCollabRequestToJoinMutation>;
+export type CancelCollabRequestToJoinMutationOptions = ApolloReactCommon.BaseMutationOptions<CancelCollabRequestToJoinMutation, CancelCollabRequestToJoinMutationVariables>;
 export const AcceptCollabInvitationDocument = gql`
     mutation AcceptCollabInvitation($collabId: ID!) {
   acceptCollabInvitation(collabId: $collabId) {
@@ -756,11 +818,58 @@ export function useDeclineCollabInvitationMutation(baseOptions?: ApolloReactHook
 export type DeclineCollabInvitationMutationHookResult = ReturnType<typeof useDeclineCollabInvitationMutation>;
 export type DeclineCollabInvitationMutationResult = ApolloReactCommon.MutationResult<DeclineCollabInvitationMutation>;
 export type DeclineCollabInvitationMutationOptions = ApolloReactCommon.BaseMutationOptions<DeclineCollabInvitationMutation, DeclineCollabInvitationMutationVariables>;
+export const AddCollabPostCommentDocument = gql`
+    mutation AddCollabPostComment($content: String!, $postId: ID!) {
+  createComment(content: $content, postId: $postId) {
+    id
+    content
+    author {
+      id
+      username
+      avatar
+    }
+  }
+}
+    `;
+export type AddCollabPostCommentMutationFn = ApolloReactCommon.MutationFunction<AddCollabPostCommentMutation, AddCollabPostCommentMutationVariables>;
+
+/**
+ * __useAddCollabPostCommentMutation__
+ *
+ * To run a mutation, you first call `useAddCollabPostCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddCollabPostCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addCollabPostCommentMutation, { data, loading, error }] = useAddCollabPostCommentMutation({
+ *   variables: {
+ *      content: // value for 'content'
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useAddCollabPostCommentMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AddCollabPostCommentMutation, AddCollabPostCommentMutationVariables>) {
+        return ApolloReactHooks.useMutation<AddCollabPostCommentMutation, AddCollabPostCommentMutationVariables>(AddCollabPostCommentDocument, baseOptions);
+      }
+export type AddCollabPostCommentMutationHookResult = ReturnType<typeof useAddCollabPostCommentMutation>;
+export type AddCollabPostCommentMutationResult = ApolloReactCommon.MutationResult<AddCollabPostCommentMutation>;
+export type AddCollabPostCommentMutationOptions = ApolloReactCommon.BaseMutationOptions<AddCollabPostCommentMutation, AddCollabPostCommentMutationVariables>;
 export const CollabPostsDocument = gql`
     query CollabPosts {
   collabPosts {
     id
     title
+    stack
+    experience
+    hasStarted
+    owner {
+      id
+      username
+      avatar
+    }
   }
 }
     `;
