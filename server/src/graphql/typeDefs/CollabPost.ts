@@ -30,6 +30,8 @@ export const collabPostTypeDefs = gql`
     comments: [CollabPostComment!]!
     pendingInvites: [User!]!
     pendingRequests: [User!]!
+    createdAt: String!
+    updatedAt: String!
   }
 
   input CollabPostArgs {
