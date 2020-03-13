@@ -1,46 +1,84 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { gql } from 'apollo-boost'
 import { Flex, Button } from '@chakra-ui/core'
-import {
-  useCollabQuery,
-  useRequestToJoinMutation,
-} from '../../graphql/generates'
+import { useCollabQuery } from '../../graphql/generates'
 
-const GET_COLLAB_BY_ID = gql`
+export const GET_COLLAB_BY_ID = gql`
   query Collab($collabId: ID!) {
     collab(collabId: $collabId) {
       id
       name
-      acceptsInvites
-      isOwner
-      isMember
-      invitationPending
-      requestToJoinPending
       owner {
         id
         username
+        avatar
       }
+      collabPostId
+      acceptsInvites
       members {
         id
         username
+        avatar
+      }
+      isOwner
+      pendingInvites {
+        id
+        username
+        avatar
+      }
+      pendingRequests {
+        id
+        username
+        avatar
+      }
+      taskList {
+        id
+        name
+        order
+        tasks {
+          id
+          description
+          author {
+            id
+            username
+            avatar
+          }
+          comments {
+            id
+            content
+            author {
+              id
+              username
+              avatar
+            }
+          }
+        }
+      }
+      discussionThreads {
+        id
+        title
+        author {
+          id
+          username
+          avatar
+        }
+        comments {
+          id
+          content
+          author {
+            id
+            username
+            avatar
+          }
+        }
       }
     }
   }
 `
 
-const REQUEST_TO_JOIN_COLLAB = gql`
-  mutation RequestToJoin($collabId: ID!) {
-    requestToJoin(collabId: $collabId)
-  }
-`
-
 export const Collab = () => {
   const { collabId } = useParams<{ collabId: string }>()
-  const [requestToJoin] = useRequestToJoinMutation({
-    variables: { collabId },
-    onError: err => console.error(err.message),
-  })
   const { data, loading, error } = useCollabQuery({
     variables: { collabId },
   })
@@ -49,36 +87,19 @@ export const Collab = () => {
   if (error) return <h1>Collab not found</h1>
   if (!data?.collab) return null
 
-  const {
-    name,
-    owner,
-    acceptsInvites,
-    members,
-    isMember,
-    invitationPending,
-    requestToJoinPending,
-  } = data.collab
+  const { name, owner, members } = data.collab
 
   return (
     <div>
+      <Flex as="nav" direction="column">
+        <Link to="/">Members</Link>
+        <Link to="/">Pending Invitations</Link>
+        <Link to="/">Pending Requests</Link>
+        <Link to="/">Task Board</Link>
+        <Link to="/">Discussions</Link>
+      </Flex>
       <h1>{name}</h1>
       <h3>{owner?.username}</h3>
-      {acceptsInvites && !isMember && (
-        <Button onClick={() => requestToJoin()}>Request to join</Button>
-      )}
-      {requestToJoinPending && (
-        // TODO: cancel request
-        <>
-          <Button onClick={() => requestToJoin()}>Pending</Button>
-        </>
-      )}
-      {invitationPending && (
-        // TODO: accept or decline request
-        <>
-          <Button onClick={() => requestToJoin()}>Accept</Button>
-          <Button onClick={() => requestToJoin()}>Decline</Button>
-        </>
-      )}
       <Flex>
         {members.filter(Boolean).map(member => (
           <div key={member!.id}>{member!.username}</div>

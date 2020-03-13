@@ -57,6 +57,7 @@ export type CollabPost = {
   acceptsInvites: Scalars['Boolean'],
   collabId: Scalars['ID'],
   comments: Array<CollabPostComment>,
+  createdAt: Scalars['String'],
   description: Scalars['String'],
   experience: Scalars['String'],
   hasStarted: Scalars['Boolean'],
@@ -72,6 +73,7 @@ export type CollabPost = {
   requestToJoinPending: Scalars['Boolean'],
   stack: Array<Scalars['String']>,
   title: Scalars['String'],
+  updatedAt: Scalars['String'],
 };
 
 export type CollabPostArgs = {
@@ -382,25 +384,53 @@ export type CollabQuery = (
   { __typename?: 'Query' }
   & { collab: Maybe<(
     { __typename?: 'Collab' }
-    & Pick<Collab, 'id' | 'name' | 'acceptsInvites' | 'isOwner' | 'isMember' | 'invitationPending' | 'requestToJoinPending'>
+    & Pick<Collab, 'id' | 'name' | 'collabPostId' | 'acceptsInvites' | 'isOwner'>
     & { owner: Maybe<(
       { __typename?: 'User' }
-      & Pick<User, 'id' | 'username'>
+      & Pick<User, 'id' | 'username' | 'avatar'>
     )>, members: Array<Maybe<(
       { __typename?: 'User' }
-      & Pick<User, 'id' | 'username'>
-    )>> }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    )>>, pendingInvites: Array<Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    )>>, pendingRequests: Array<Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    )>>, taskList: Array<(
+      { __typename?: 'TaskList' }
+      & Pick<TaskList, 'id' | 'name' | 'order'>
+      & { tasks: Array<(
+        { __typename?: 'Task' }
+        & Pick<Task, 'id' | 'description'>
+        & { author: (
+          { __typename?: 'User' }
+          & Pick<User, 'id' | 'username' | 'avatar'>
+        ), comments: Array<(
+          { __typename?: 'TaskComment' }
+          & Pick<TaskComment, 'id' | 'content'>
+          & { author: Maybe<(
+            { __typename?: 'User' }
+            & Pick<User, 'id' | 'username' | 'avatar'>
+          )> }
+        )> }
+      )> }
+    )>, discussionThreads: Array<(
+      { __typename?: 'CollabDiscussionThread' }
+      & Pick<CollabDiscussionThread, 'id' | 'title'>
+      & { author: Maybe<(
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'avatar'>
+      )>, comments: Array<(
+        { __typename?: 'CollabDiscussionThreadComment' }
+        & Pick<CollabDiscussionThreadComment, 'id' | 'content'>
+        & { author: Maybe<(
+          { __typename?: 'User' }
+          & Pick<User, 'id' | 'username' | 'avatar'>
+        )> }
+      )> }
+    )> }
   )> }
-);
-
-export type RequestToJoinMutationVariables = {
-  collabId: Scalars['ID']
-};
-
-
-export type RequestToJoinMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'requestToJoin'>
 );
 
 export type GetCollabPostQueryVariables = {
@@ -412,7 +442,7 @@ export type GetCollabPostQuery = (
   { __typename?: 'Query' }
   & { collabPost: Maybe<(
     { __typename?: 'CollabPost' }
-    & Pick<CollabPost, 'id' | 'name' | 'title' | 'description' | 'collabId' | 'experience' | 'stack' | 'hasStarted' | 'acceptsInvites' | 'isOwner' | 'isMember' | 'invitationPending' | 'requestToJoinPending'>
+    & Pick<CollabPost, 'id' | 'name' | 'title' | 'description' | 'collabId' | 'experience' | 'stack' | 'hasStarted' | 'acceptsInvites' | 'isOwner' | 'isMember' | 'invitationPending' | 'requestToJoinPending' | 'createdAt'>
     & { owner: (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username'>
@@ -428,6 +458,16 @@ export type GetCollabPostQuery = (
       ) }
     )> }
   )> }
+);
+
+export type RequestToJoinMutationVariables = {
+  collabId: Scalars['ID']
+};
+
+
+export type RequestToJoinMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'requestToJoin'>
 );
 
 export type CancelCollabRequestToJoinMutationVariables = {
@@ -591,18 +631,69 @@ export const CollabDocument = gql`
   collab(collabId: $collabId) {
     id
     name
-    acceptsInvites
-    isOwner
-    isMember
-    invitationPending
-    requestToJoinPending
     owner {
       id
       username
+      avatar
     }
+    collabPostId
+    acceptsInvites
     members {
       id
       username
+      avatar
+    }
+    isOwner
+    pendingInvites {
+      id
+      username
+      avatar
+    }
+    pendingRequests {
+      id
+      username
+      avatar
+    }
+    taskList {
+      id
+      name
+      order
+      tasks {
+        id
+        description
+        author {
+          id
+          username
+          avatar
+        }
+        comments {
+          id
+          content
+          author {
+            id
+            username
+            avatar
+          }
+        }
+      }
+    }
+    discussionThreads {
+      id
+      title
+      author {
+        id
+        username
+        avatar
+      }
+      comments {
+        id
+        content
+        author {
+          id
+          username
+          avatar
+        }
+      }
     }
   }
 }
@@ -633,36 +724,6 @@ export function useCollabLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookO
 export type CollabQueryHookResult = ReturnType<typeof useCollabQuery>;
 export type CollabLazyQueryHookResult = ReturnType<typeof useCollabLazyQuery>;
 export type CollabQueryResult = ApolloReactCommon.QueryResult<CollabQuery, CollabQueryVariables>;
-export const RequestToJoinDocument = gql`
-    mutation RequestToJoin($collabId: ID!) {
-  requestToJoin(collabId: $collabId)
-}
-    `;
-export type RequestToJoinMutationFn = ApolloReactCommon.MutationFunction<RequestToJoinMutation, RequestToJoinMutationVariables>;
-
-/**
- * __useRequestToJoinMutation__
- *
- * To run a mutation, you first call `useRequestToJoinMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRequestToJoinMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [requestToJoinMutation, { data, loading, error }] = useRequestToJoinMutation({
- *   variables: {
- *      collabId: // value for 'collabId'
- *   },
- * });
- */
-export function useRequestToJoinMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RequestToJoinMutation, RequestToJoinMutationVariables>) {
-        return ApolloReactHooks.useMutation<RequestToJoinMutation, RequestToJoinMutationVariables>(RequestToJoinDocument, baseOptions);
-      }
-export type RequestToJoinMutationHookResult = ReturnType<typeof useRequestToJoinMutation>;
-export type RequestToJoinMutationResult = ApolloReactCommon.MutationResult<RequestToJoinMutation>;
-export type RequestToJoinMutationOptions = ApolloReactCommon.BaseMutationOptions<RequestToJoinMutation, RequestToJoinMutationVariables>;
 export const GetCollabPostDocument = gql`
     query GetCollabPost($postId: ID!) {
   collabPost(postId: $postId) {
@@ -697,6 +758,7 @@ export const GetCollabPostDocument = gql`
         avatar
       }
     }
+    createdAt
   }
 }
     `;
@@ -726,6 +788,36 @@ export function useGetCollabPostLazyQuery(baseOptions?: ApolloReactHooks.LazyQue
 export type GetCollabPostQueryHookResult = ReturnType<typeof useGetCollabPostQuery>;
 export type GetCollabPostLazyQueryHookResult = ReturnType<typeof useGetCollabPostLazyQuery>;
 export type GetCollabPostQueryResult = ApolloReactCommon.QueryResult<GetCollabPostQuery, GetCollabPostQueryVariables>;
+export const RequestToJoinDocument = gql`
+    mutation RequestToJoin($collabId: ID!) {
+  requestToJoin(collabId: $collabId)
+}
+    `;
+export type RequestToJoinMutationFn = ApolloReactCommon.MutationFunction<RequestToJoinMutation, RequestToJoinMutationVariables>;
+
+/**
+ * __useRequestToJoinMutation__
+ *
+ * To run a mutation, you first call `useRequestToJoinMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRequestToJoinMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [requestToJoinMutation, { data, loading, error }] = useRequestToJoinMutation({
+ *   variables: {
+ *      collabId: // value for 'collabId'
+ *   },
+ * });
+ */
+export function useRequestToJoinMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RequestToJoinMutation, RequestToJoinMutationVariables>) {
+        return ApolloReactHooks.useMutation<RequestToJoinMutation, RequestToJoinMutationVariables>(RequestToJoinDocument, baseOptions);
+      }
+export type RequestToJoinMutationHookResult = ReturnType<typeof useRequestToJoinMutation>;
+export type RequestToJoinMutationResult = ApolloReactCommon.MutationResult<RequestToJoinMutation>;
+export type RequestToJoinMutationOptions = ApolloReactCommon.BaseMutationOptions<RequestToJoinMutation, RequestToJoinMutationVariables>;
 export const CancelCollabRequestToJoinDocument = gql`
     mutation CancelCollabRequestToJoin($collabId: ID!) {
   cancelRequestToJoin(collabId: $collabId)
