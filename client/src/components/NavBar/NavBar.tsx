@@ -83,7 +83,9 @@ const UserNavMenu = () => {
       </MenuButton>
       <MenuList>
         <MenuGroup title="Profile">
-          <MenuItem>My Account</MenuItem>
+          <Link to="/profile">
+            <MenuItem>My Account</MenuItem>
+          </Link>
           <Link to="/profile/my-collabs">
             <MenuItem>My Collabs</MenuItem>
           </Link>

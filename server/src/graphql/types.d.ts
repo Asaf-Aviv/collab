@@ -67,6 +67,7 @@ export type CollabPost = {
   acceptsInvites: Scalars['Boolean'],
   collabId: Scalars['ID'],
   comments: Array<CollabPostComment>,
+  createdAt: Scalars['String'],
   description: Scalars['String'],
   experience: Scalars['String'],
   hasStarted: Scalars['Boolean'],
@@ -82,6 +83,7 @@ export type CollabPost = {
   requestToJoinPending: Scalars['Boolean'],
   stack: Array<Scalars['String']>,
   title: Scalars['String'],
+  updatedAt: Scalars['String'],
 };
 
 export type CollabPostArgs = {
@@ -541,6 +543,7 @@ export type CollabPostResolvers<ContextType = CollabContext, ParentType extends 
   acceptsInvites?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   collabId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   comments?: Resolver<Array<ResolversTypes['CollabPostComment']>, ParentType, ContextType>,
+  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   experience?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   hasStarted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
@@ -556,6 +559,7 @@ export type CollabPostResolvers<ContextType = CollabContext, ParentType extends 
   requestToJoinPending?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   stack?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>,
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 

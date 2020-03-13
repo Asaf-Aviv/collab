@@ -57,7 +57,14 @@ export const GET_COLLAB_POST = gql`
           avatar
         }
       }
+      createdAt
     }
+  }
+`
+
+export const REQUEST_TO_JOIN_COLLAB = gql`
+  mutation RequestToJoin($collabId: ID!) {
+    requestToJoin(collabId: $collabId)
   }
 `
 
@@ -128,6 +135,7 @@ export const CollabPost = () => {
     name,
     title,
     description,
+    createdAt,
     // owner,
     collabId,
     experience,
@@ -190,6 +198,7 @@ export const CollabPost = () => {
             <Heading as="h2">{name}</Heading>
             <Heading as="h1">{title}</Heading>
           </Stack>
+          <time>{createdAt}</time>
           <Text>{stack}</Text>
           <Text>{experience}</Text>
           <Text>{String(hasStarted)}</Text>
