@@ -51,7 +51,7 @@ export class CollabTask extends Model<CollabTask> {
     collabId: string,
     taskListId: string,
     description: string,
-    authorId: string
+    authorId: string,
   ) {
     const isMember = await CollabMember.findOne({
       where: { collabId, memberId: authorId },

@@ -1,8 +1,16 @@
 import React from 'react'
-import { useParams, Link } from 'react-router-dom'
+import {
+  useParams,
+  Link,
+  useLocation,
+  Switch,
+  Route,
+  useRouteMatch,
+} from 'react-router-dom'
 import { gql } from 'apollo-boost'
 import { Flex, Button } from '@chakra-ui/core'
 import { useCollabQuery } from '../../graphql/generates'
+import { TaskBoard } from '../TaskBoard/TaskBoard'
 
 export const GET_COLLAB_BY_ID = gql`
   query Collab($collabId: ID!) {
@@ -79,6 +87,8 @@ export const GET_COLLAB_BY_ID = gql`
 
 export const Collab = () => {
   const { collabId } = useParams<{ collabId: string }>()
+  const match = useRouteMatch()
+  const location = useLocation()
   const { data, loading, error } = useCollabQuery({
     variables: { collabId },
   })
@@ -95,7 +105,7 @@ export const Collab = () => {
         <Link to="/">Members</Link>
         <Link to="/">Pending Invitations</Link>
         <Link to="/">Pending Requests</Link>
-        <Link to="/">Task Board</Link>
+        <Link to={`${match.url}/task-board`}>Task Board</Link>
         <Link to="/">Discussions</Link>
       </Flex>
       <h1>{name}</h1>
@@ -105,6 +115,7 @@ export const Collab = () => {
           <div key={member!.id}>{member!.username}</div>
         ))}
       </Flex>
+      <Route path={`${match.path}/task-board`} component={TaskBoard} />
     </div>
   )
 }
