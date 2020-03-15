@@ -11,6 +11,8 @@ import { gql } from 'apollo-boost'
 import { Flex, Button } from '@chakra-ui/core'
 import { useCollabQuery } from '../../graphql/generates'
 import { TaskBoard } from '../TaskBoard/TaskBoard'
+import { CollabMembers } from '../CollabMembers/CollabMembers'
+import { Discussions } from '../Discussions/Discussions'
 
 export const GET_COLLAB_BY_ID = gql`
   query Collab($collabId: ID!) {
@@ -101,21 +103,14 @@ export const Collab = () => {
 
   return (
     <div>
-      <Flex as="nav" direction="column">
-        <Link to="/">Members</Link>
-        <Link to="/">Pending Invitations</Link>
-        <Link to="/">Pending Requests</Link>
+      <Flex as="nav" direction="column" position="fixed">
+        <Link to={`${match.url}/members`}>Members</Link>
         <Link to={`${match.url}/task-board`}>Task Board</Link>
-        <Link to="/">Discussions</Link>
+        <Link to={`${match.url}/discussions`}>Discussions</Link>
       </Flex>
-      <h1>{name}</h1>
-      <h3>{owner?.username}</h3>
-      <Flex>
-        {members.filter(Boolean).map(member => (
-          <div key={member!.id}>{member!.username}</div>
-        ))}
-      </Flex>
+      <Route path={`${match.path}/members`} component={CollabMembers} />
       <Route path={`${match.path}/task-board`} component={TaskBoard} />
+      <Route path={`${match.path}/discussions`} component={Discussions} />
     </div>
   )
 }
