@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { gql } from 'apollo-boost'
 import styled from 'styled-components'
 import { FlexColumn, H1 } from '../global'
 import { useHistory } from 'react-router-dom'
@@ -8,14 +7,6 @@ import {
   useCreateCollabPostMutation,
   Experience,
 } from '../../graphql/generates'
-
-const CREATE_COLLAB_POST = gql`
-  mutation CreateCollabPost($post: CollabPostArgs!) {
-    createCollabPost(post: $post) {
-      id
-    }
-  }
-`
 
 // fake autocomplete
 const suggestions = ['JavaScript', 'TypeScript', 'React', 'GraphQL']

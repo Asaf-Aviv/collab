@@ -1,18 +1,5 @@
 import React from 'react'
-import { gql } from 'apollo-boost'
 import { useGetMyCollabsQuery } from '../../graphql/generates'
-
-const GET_MY_COLLABS = gql`
-  query GetMyCollabs {
-    currentUser {
-      id
-      collabs {
-        id
-        name
-      }
-    }
-  }
-`
 
 export const MyCollabs = () => {
   const { data, loading, error } = useGetMyCollabsQuery()

@@ -3,89 +3,14 @@ import {
   useParams,
   Link,
   useLocation,
-  Switch,
   Route,
   useRouteMatch,
 } from 'react-router-dom'
-import { gql } from 'apollo-boost'
-import { Flex, Button } from '@chakra-ui/core'
+import { Flex } from '@chakra-ui/core'
 import { useCollabQuery } from '../../graphql/generates'
 import { TaskBoard } from '../TaskBoard/TaskBoard'
 import { CollabMembers } from '../CollabMembers/CollabMembers'
 import { Discussions } from '../Discussions/Discussions'
-
-export const GET_COLLAB_BY_ID = gql`
-  query Collab($collabId: ID!) {
-    collab(collabId: $collabId) {
-      id
-      name
-      owner {
-        id
-        username
-        avatar
-      }
-      collabPostId
-      acceptsInvites
-      members {
-        id
-        username
-        avatar
-      }
-      isOwner
-      pendingInvites {
-        id
-        username
-        avatar
-      }
-      pendingRequests {
-        id
-        username
-        avatar
-      }
-      taskList {
-        id
-        name
-        order
-        tasks {
-          id
-          description
-          author {
-            id
-            username
-            avatar
-          }
-          comments {
-            id
-            content
-            author {
-              id
-              username
-              avatar
-            }
-          }
-        }
-      }
-      discussionThreads {
-        id
-        title
-        author {
-          id
-          username
-          avatar
-        }
-        comments {
-          id
-          content
-          author {
-            id
-            username
-            avatar
-          }
-        }
-      }
-    }
-  }
-`
 
 export const Collab = () => {
   const { collabId } = useParams<{ collabId: string }>()
