@@ -364,6 +364,63 @@ export type User = {
   username: Scalars['String'],
 };
 
+export type SignUpMutationVariables = {
+  credentials: SignUpArgs
+};
+
+
+export type SignUpMutation = (
+  { __typename?: 'Mutation' }
+  & { signUp: (
+    { __typename?: 'AuthPayload' }
+    & Pick<AuthPayload, 'token'>
+  ) }
+);
+
+export type LoginMutationVariables = {
+  credentials: LoginArgs
+};
+
+
+export type LoginMutation = (
+  { __typename?: 'Mutation' }
+  & { login: (
+    { __typename?: 'AuthPayload' }
+    & Pick<AuthPayload, 'token'>
+  ) }
+);
+
+export type CreateCollabPostMutationVariables = {
+  post: CollabPostArgs
+};
+
+
+export type CreateCollabPostMutation = (
+  { __typename?: 'Mutation' }
+  & { createCollabPost: (
+    { __typename?: 'CollabPost' }
+    & Pick<CollabPost, 'id'>
+  ) }
+);
+
+export type AddCollabPostCommentMutationVariables = {
+  content: Scalars['String'],
+  postId: Scalars['ID']
+};
+
+
+export type AddCollabPostCommentMutation = (
+  { __typename?: 'Mutation' }
+  & { createComment: (
+    { __typename?: 'CollabPostComment' }
+    & Pick<CollabPostComment, 'id' | 'content'>
+    & { author: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    ) }
+  ) }
+);
+
 export type GetCurrentUserQueryVariables = {};
 
 
@@ -372,6 +429,63 @@ export type GetCurrentUserQuery = (
   & { currentUser: Maybe<(
     { __typename?: 'CurrentUser' }
     & Pick<CurrentUser, 'id' | 'username' | 'avatar' | 'email'>
+  )> }
+);
+
+export type GetMyCollabsQueryVariables = {};
+
+
+export type GetMyCollabsQuery = (
+  { __typename?: 'Query' }
+  & { currentUser: Maybe<(
+    { __typename?: 'CurrentUser' }
+    & Pick<CurrentUser, 'id'>
+    & { collabs: Array<(
+      { __typename?: 'Collab' }
+      & Pick<Collab, 'id' | 'name'>
+    )> }
+  )> }
+);
+
+export type CollabPostsQueryVariables = {};
+
+
+export type CollabPostsQuery = (
+  { __typename?: 'Query' }
+  & { collabPosts: Array<(
+    { __typename?: 'CollabPost' }
+    & Pick<CollabPost, 'id' | 'title' | 'stack' | 'experience' | 'hasStarted'>
+    & { owner: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    ) }
+  )> }
+);
+
+export type GetCollabPostQueryVariables = {
+  postId: Scalars['ID']
+};
+
+
+export type GetCollabPostQuery = (
+  { __typename?: 'Query' }
+  & { collabPost: Maybe<(
+    { __typename?: 'CollabPost' }
+    & Pick<CollabPost, 'id' | 'name' | 'title' | 'description' | 'collabId' | 'experience' | 'stack' | 'hasStarted' | 'acceptsInvites' | 'isOwner' | 'isMember' | 'invitationPending' | 'requestToJoinPending' | 'createdAt'>
+    & { owner: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username'>
+    ), members: Array<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    )>, comments: Array<(
+      { __typename?: 'CollabPostComment' }
+      & Pick<CollabPostComment, 'id' | 'content'>
+      & { author: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'avatar'>
+      ) }
+    )> }
   )> }
 );
 
@@ -433,33 +547,6 @@ export type CollabQuery = (
   )> }
 );
 
-export type GetCollabPostQueryVariables = {
-  postId: Scalars['ID']
-};
-
-
-export type GetCollabPostQuery = (
-  { __typename?: 'Query' }
-  & { collabPost: Maybe<(
-    { __typename?: 'CollabPost' }
-    & Pick<CollabPost, 'id' | 'name' | 'title' | 'description' | 'collabId' | 'experience' | 'stack' | 'hasStarted' | 'acceptsInvites' | 'isOwner' | 'isMember' | 'invitationPending' | 'requestToJoinPending' | 'createdAt'>
-    & { owner: (
-      { __typename?: 'User' }
-      & Pick<User, 'id' | 'username'>
-    ), members: Array<(
-      { __typename?: 'User' }
-      & Pick<User, 'id' | 'username' | 'avatar'>
-    )>, comments: Array<(
-      { __typename?: 'CollabPostComment' }
-      & Pick<CollabPostComment, 'id' | 'content'>
-      & { author: (
-        { __typename?: 'User' }
-        & Pick<User, 'id' | 'username' | 'avatar'>
-      ) }
-    )> }
-  )> }
-);
-
 export type RequestToJoinMutationVariables = {
   collabId: Scalars['ID']
 };
@@ -503,94 +590,142 @@ export type DeclineCollabInvitationMutation = (
   & Pick<Mutation, 'declineCollabInvitation'>
 );
 
-export type AddCollabPostCommentMutationVariables = {
-  content: Scalars['String'],
-  postId: Scalars['ID']
-};
 
+export const SignUpDocument = gql`
+    mutation SignUp($credentials: SignUpArgs!) {
+  signUp(credentials: $credentials) {
+    token
+  }
+}
+    `;
+export type SignUpMutationFn = ApolloReactCommon.MutationFunction<SignUpMutation, SignUpMutationVariables>;
 
-export type AddCollabPostCommentMutation = (
-  { __typename?: 'Mutation' }
-  & { createComment: (
-    { __typename?: 'CollabPostComment' }
-    & Pick<CollabPostComment, 'id' | 'content'>
-    & { author: (
-      { __typename?: 'User' }
-      & Pick<User, 'id' | 'username' | 'avatar'>
-    ) }
-  ) }
-);
+/**
+ * __useSignUpMutation__
+ *
+ * To run a mutation, you first call `useSignUpMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSignUpMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [signUpMutation, { data, loading, error }] = useSignUpMutation({
+ *   variables: {
+ *      credentials: // value for 'credentials'
+ *   },
+ * });
+ */
+export function useSignUpMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SignUpMutation, SignUpMutationVariables>) {
+        return ApolloReactHooks.useMutation<SignUpMutation, SignUpMutationVariables>(SignUpDocument, baseOptions);
+      }
+export type SignUpMutationHookResult = ReturnType<typeof useSignUpMutation>;
+export type SignUpMutationResult = ApolloReactCommon.MutationResult<SignUpMutation>;
+export type SignUpMutationOptions = ApolloReactCommon.BaseMutationOptions<SignUpMutation, SignUpMutationVariables>;
+export const LoginDocument = gql`
+    mutation Login($credentials: LoginArgs!) {
+  login(credentials: $credentials) {
+    token
+  }
+}
+    `;
+export type LoginMutationFn = ApolloReactCommon.MutationFunction<LoginMutation, LoginMutationVariables>;
 
-export type CollabPostsQueryVariables = {};
+/**
+ * __useLoginMutation__
+ *
+ * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginMutation, { data, loading, error }] = useLoginMutation({
+ *   variables: {
+ *      credentials: // value for 'credentials'
+ *   },
+ * });
+ */
+export function useLoginMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+        return ApolloReactHooks.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, baseOptions);
+      }
+export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export type LoginMutationResult = ApolloReactCommon.MutationResult<LoginMutation>;
+export type LoginMutationOptions = ApolloReactCommon.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const CreateCollabPostDocument = gql`
+    mutation CreateCollabPost($post: CollabPostArgs!) {
+  createCollabPost(post: $post) {
+    id
+  }
+}
+    `;
+export type CreateCollabPostMutationFn = ApolloReactCommon.MutationFunction<CreateCollabPostMutation, CreateCollabPostMutationVariables>;
 
+/**
+ * __useCreateCollabPostMutation__
+ *
+ * To run a mutation, you first call `useCreateCollabPostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCollabPostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCollabPostMutation, { data, loading, error }] = useCreateCollabPostMutation({
+ *   variables: {
+ *      post: // value for 'post'
+ *   },
+ * });
+ */
+export function useCreateCollabPostMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateCollabPostMutation, CreateCollabPostMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateCollabPostMutation, CreateCollabPostMutationVariables>(CreateCollabPostDocument, baseOptions);
+      }
+export type CreateCollabPostMutationHookResult = ReturnType<typeof useCreateCollabPostMutation>;
+export type CreateCollabPostMutationResult = ApolloReactCommon.MutationResult<CreateCollabPostMutation>;
+export type CreateCollabPostMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateCollabPostMutation, CreateCollabPostMutationVariables>;
+export const AddCollabPostCommentDocument = gql`
+    mutation AddCollabPostComment($content: String!, $postId: ID!) {
+  createComment(content: $content, postId: $postId) {
+    id
+    content
+    author {
+      id
+      username
+      avatar
+    }
+  }
+}
+    `;
+export type AddCollabPostCommentMutationFn = ApolloReactCommon.MutationFunction<AddCollabPostCommentMutation, AddCollabPostCommentMutationVariables>;
 
-export type CollabPostsQuery = (
-  { __typename?: 'Query' }
-  & { collabPosts: Array<(
-    { __typename?: 'CollabPost' }
-    & Pick<CollabPost, 'id' | 'title' | 'stack' | 'experience' | 'hasStarted'>
-    & { owner: (
-      { __typename?: 'User' }
-      & Pick<User, 'id' | 'username' | 'avatar'>
-    ) }
-  )> }
-);
-
-export type CreateCollabPostMutationVariables = {
-  post: CollabPostArgs
-};
-
-
-export type CreateCollabPostMutation = (
-  { __typename?: 'Mutation' }
-  & { createCollabPost: (
-    { __typename?: 'CollabPost' }
-    & Pick<CollabPost, 'id'>
-  ) }
-);
-
-export type LoginMutationVariables = {
-  credentials: LoginArgs
-};
-
-
-export type LoginMutation = (
-  { __typename?: 'Mutation' }
-  & { login: (
-    { __typename?: 'AuthPayload' }
-    & Pick<AuthPayload, 'token'>
-  ) }
-);
-
-export type GetMyCollabsQueryVariables = {};
-
-
-export type GetMyCollabsQuery = (
-  { __typename?: 'Query' }
-  & { currentUser: Maybe<(
-    { __typename?: 'CurrentUser' }
-    & Pick<CurrentUser, 'id'>
-    & { collabs: Array<(
-      { __typename?: 'Collab' }
-      & Pick<Collab, 'id' | 'name'>
-    )> }
-  )> }
-);
-
-export type SignUpMutationVariables = {
-  credentials: SignUpArgs
-};
-
-
-export type SignUpMutation = (
-  { __typename?: 'Mutation' }
-  & { signUp: (
-    { __typename?: 'AuthPayload' }
-    & Pick<AuthPayload, 'token'>
-  ) }
-);
-
-
+/**
+ * __useAddCollabPostCommentMutation__
+ *
+ * To run a mutation, you first call `useAddCollabPostCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddCollabPostCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addCollabPostCommentMutation, { data, loading, error }] = useAddCollabPostCommentMutation({
+ *   variables: {
+ *      content: // value for 'content'
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useAddCollabPostCommentMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AddCollabPostCommentMutation, AddCollabPostCommentMutationVariables>) {
+        return ApolloReactHooks.useMutation<AddCollabPostCommentMutation, AddCollabPostCommentMutationVariables>(AddCollabPostCommentDocument, baseOptions);
+      }
+export type AddCollabPostCommentMutationHookResult = ReturnType<typeof useAddCollabPostCommentMutation>;
+export type AddCollabPostCommentMutationResult = ApolloReactCommon.MutationResult<AddCollabPostCommentMutation>;
+export type AddCollabPostCommentMutationOptions = ApolloReactCommon.BaseMutationOptions<AddCollabPostCommentMutation, AddCollabPostCommentMutationVariables>;
 export const GetCurrentUserDocument = gql`
     query GetCurrentUser {
   currentUser {
@@ -626,6 +761,147 @@ export function useGetCurrentUserLazyQuery(baseOptions?: ApolloReactHooks.LazyQu
 export type GetCurrentUserQueryHookResult = ReturnType<typeof useGetCurrentUserQuery>;
 export type GetCurrentUserLazyQueryHookResult = ReturnType<typeof useGetCurrentUserLazyQuery>;
 export type GetCurrentUserQueryResult = ApolloReactCommon.QueryResult<GetCurrentUserQuery, GetCurrentUserQueryVariables>;
+export const GetMyCollabsDocument = gql`
+    query GetMyCollabs {
+  currentUser {
+    id
+    collabs {
+      id
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetMyCollabsQuery__
+ *
+ * To run a query within a React component, call `useGetMyCollabsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMyCollabsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMyCollabsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMyCollabsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetMyCollabsQuery, GetMyCollabsQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetMyCollabsQuery, GetMyCollabsQueryVariables>(GetMyCollabsDocument, baseOptions);
+      }
+export function useGetMyCollabsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetMyCollabsQuery, GetMyCollabsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetMyCollabsQuery, GetMyCollabsQueryVariables>(GetMyCollabsDocument, baseOptions);
+        }
+export type GetMyCollabsQueryHookResult = ReturnType<typeof useGetMyCollabsQuery>;
+export type GetMyCollabsLazyQueryHookResult = ReturnType<typeof useGetMyCollabsLazyQuery>;
+export type GetMyCollabsQueryResult = ApolloReactCommon.QueryResult<GetMyCollabsQuery, GetMyCollabsQueryVariables>;
+export const CollabPostsDocument = gql`
+    query CollabPosts {
+  collabPosts {
+    id
+    title
+    stack
+    experience
+    hasStarted
+    owner {
+      id
+      username
+      avatar
+    }
+  }
+}
+    `;
+
+/**
+ * __useCollabPostsQuery__
+ *
+ * To run a query within a React component, call `useCollabPostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCollabPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCollabPostsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCollabPostsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CollabPostsQuery, CollabPostsQueryVariables>) {
+        return ApolloReactHooks.useQuery<CollabPostsQuery, CollabPostsQueryVariables>(CollabPostsDocument, baseOptions);
+      }
+export function useCollabPostsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CollabPostsQuery, CollabPostsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<CollabPostsQuery, CollabPostsQueryVariables>(CollabPostsDocument, baseOptions);
+        }
+export type CollabPostsQueryHookResult = ReturnType<typeof useCollabPostsQuery>;
+export type CollabPostsLazyQueryHookResult = ReturnType<typeof useCollabPostsLazyQuery>;
+export type CollabPostsQueryResult = ApolloReactCommon.QueryResult<CollabPostsQuery, CollabPostsQueryVariables>;
+export const GetCollabPostDocument = gql`
+    query GetCollabPost($postId: ID!) {
+  collabPost(postId: $postId) {
+    id
+    name
+    title
+    description
+    owner {
+      id
+      username
+    }
+    collabId
+    experience
+    stack
+    hasStarted
+    members {
+      id
+      username
+      avatar
+    }
+    acceptsInvites
+    isOwner
+    isMember
+    invitationPending
+    requestToJoinPending
+    comments {
+      id
+      content
+      author {
+        id
+        username
+        avatar
+      }
+    }
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useGetCollabPostQuery__
+ *
+ * To run a query within a React component, call `useGetCollabPostQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCollabPostQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCollabPostQuery({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useGetCollabPostQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetCollabPostQuery, GetCollabPostQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetCollabPostQuery, GetCollabPostQueryVariables>(GetCollabPostDocument, baseOptions);
+      }
+export function useGetCollabPostLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetCollabPostQuery, GetCollabPostQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetCollabPostQuery, GetCollabPostQueryVariables>(GetCollabPostDocument, baseOptions);
+        }
+export type GetCollabPostQueryHookResult = ReturnType<typeof useGetCollabPostQuery>;
+export type GetCollabPostLazyQueryHookResult = ReturnType<typeof useGetCollabPostLazyQuery>;
+export type GetCollabPostQueryResult = ApolloReactCommon.QueryResult<GetCollabPostQuery, GetCollabPostQueryVariables>;
 export const CollabDocument = gql`
     query Collab($collabId: ID!) {
   collab(collabId: $collabId) {
@@ -724,70 +1000,6 @@ export function useCollabLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookO
 export type CollabQueryHookResult = ReturnType<typeof useCollabQuery>;
 export type CollabLazyQueryHookResult = ReturnType<typeof useCollabLazyQuery>;
 export type CollabQueryResult = ApolloReactCommon.QueryResult<CollabQuery, CollabQueryVariables>;
-export const GetCollabPostDocument = gql`
-    query GetCollabPost($postId: ID!) {
-  collabPost(postId: $postId) {
-    id
-    name
-    title
-    description
-    owner {
-      id
-      username
-    }
-    collabId
-    experience
-    stack
-    hasStarted
-    members {
-      id
-      username
-      avatar
-    }
-    acceptsInvites
-    isOwner
-    isMember
-    invitationPending
-    requestToJoinPending
-    comments {
-      id
-      content
-      author {
-        id
-        username
-        avatar
-      }
-    }
-    createdAt
-  }
-}
-    `;
-
-/**
- * __useGetCollabPostQuery__
- *
- * To run a query within a React component, call `useGetCollabPostQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCollabPostQuery` returns an object from Apollo Client that contains loading, error, and data properties 
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetCollabPostQuery({
- *   variables: {
- *      postId: // value for 'postId'
- *   },
- * });
- */
-export function useGetCollabPostQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetCollabPostQuery, GetCollabPostQueryVariables>) {
-        return ApolloReactHooks.useQuery<GetCollabPostQuery, GetCollabPostQueryVariables>(GetCollabPostDocument, baseOptions);
-      }
-export function useGetCollabPostLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetCollabPostQuery, GetCollabPostQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<GetCollabPostQuery, GetCollabPostQueryVariables>(GetCollabPostDocument, baseOptions);
-        }
-export type GetCollabPostQueryHookResult = ReturnType<typeof useGetCollabPostQuery>;
-export type GetCollabPostLazyQueryHookResult = ReturnType<typeof useGetCollabPostLazyQuery>;
-export type GetCollabPostQueryResult = ApolloReactCommon.QueryResult<GetCollabPostQuery, GetCollabPostQueryVariables>;
 export const RequestToJoinDocument = gql`
     mutation RequestToJoin($collabId: ID!) {
   requestToJoin(collabId: $collabId)
@@ -910,215 +1122,3 @@ export function useDeclineCollabInvitationMutation(baseOptions?: ApolloReactHook
 export type DeclineCollabInvitationMutationHookResult = ReturnType<typeof useDeclineCollabInvitationMutation>;
 export type DeclineCollabInvitationMutationResult = ApolloReactCommon.MutationResult<DeclineCollabInvitationMutation>;
 export type DeclineCollabInvitationMutationOptions = ApolloReactCommon.BaseMutationOptions<DeclineCollabInvitationMutation, DeclineCollabInvitationMutationVariables>;
-export const AddCollabPostCommentDocument = gql`
-    mutation AddCollabPostComment($content: String!, $postId: ID!) {
-  createComment(content: $content, postId: $postId) {
-    id
-    content
-    author {
-      id
-      username
-      avatar
-    }
-  }
-}
-    `;
-export type AddCollabPostCommentMutationFn = ApolloReactCommon.MutationFunction<AddCollabPostCommentMutation, AddCollabPostCommentMutationVariables>;
-
-/**
- * __useAddCollabPostCommentMutation__
- *
- * To run a mutation, you first call `useAddCollabPostCommentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAddCollabPostCommentMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [addCollabPostCommentMutation, { data, loading, error }] = useAddCollabPostCommentMutation({
- *   variables: {
- *      content: // value for 'content'
- *      postId: // value for 'postId'
- *   },
- * });
- */
-export function useAddCollabPostCommentMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AddCollabPostCommentMutation, AddCollabPostCommentMutationVariables>) {
-        return ApolloReactHooks.useMutation<AddCollabPostCommentMutation, AddCollabPostCommentMutationVariables>(AddCollabPostCommentDocument, baseOptions);
-      }
-export type AddCollabPostCommentMutationHookResult = ReturnType<typeof useAddCollabPostCommentMutation>;
-export type AddCollabPostCommentMutationResult = ApolloReactCommon.MutationResult<AddCollabPostCommentMutation>;
-export type AddCollabPostCommentMutationOptions = ApolloReactCommon.BaseMutationOptions<AddCollabPostCommentMutation, AddCollabPostCommentMutationVariables>;
-export const CollabPostsDocument = gql`
-    query CollabPosts {
-  collabPosts {
-    id
-    title
-    stack
-    experience
-    hasStarted
-    owner {
-      id
-      username
-      avatar
-    }
-  }
-}
-    `;
-
-/**
- * __useCollabPostsQuery__
- *
- * To run a query within a React component, call `useCollabPostsQuery` and pass it any options that fit your needs.
- * When your component renders, `useCollabPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCollabPostsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useCollabPostsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CollabPostsQuery, CollabPostsQueryVariables>) {
-        return ApolloReactHooks.useQuery<CollabPostsQuery, CollabPostsQueryVariables>(CollabPostsDocument, baseOptions);
-      }
-export function useCollabPostsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CollabPostsQuery, CollabPostsQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<CollabPostsQuery, CollabPostsQueryVariables>(CollabPostsDocument, baseOptions);
-        }
-export type CollabPostsQueryHookResult = ReturnType<typeof useCollabPostsQuery>;
-export type CollabPostsLazyQueryHookResult = ReturnType<typeof useCollabPostsLazyQuery>;
-export type CollabPostsQueryResult = ApolloReactCommon.QueryResult<CollabPostsQuery, CollabPostsQueryVariables>;
-export const CreateCollabPostDocument = gql`
-    mutation CreateCollabPost($post: CollabPostArgs!) {
-  createCollabPost(post: $post) {
-    id
-  }
-}
-    `;
-export type CreateCollabPostMutationFn = ApolloReactCommon.MutationFunction<CreateCollabPostMutation, CreateCollabPostMutationVariables>;
-
-/**
- * __useCreateCollabPostMutation__
- *
- * To run a mutation, you first call `useCreateCollabPostMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateCollabPostMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createCollabPostMutation, { data, loading, error }] = useCreateCollabPostMutation({
- *   variables: {
- *      post: // value for 'post'
- *   },
- * });
- */
-export function useCreateCollabPostMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateCollabPostMutation, CreateCollabPostMutationVariables>) {
-        return ApolloReactHooks.useMutation<CreateCollabPostMutation, CreateCollabPostMutationVariables>(CreateCollabPostDocument, baseOptions);
-      }
-export type CreateCollabPostMutationHookResult = ReturnType<typeof useCreateCollabPostMutation>;
-export type CreateCollabPostMutationResult = ApolloReactCommon.MutationResult<CreateCollabPostMutation>;
-export type CreateCollabPostMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateCollabPostMutation, CreateCollabPostMutationVariables>;
-export const LoginDocument = gql`
-    mutation Login($credentials: LoginArgs!) {
-  login(credentials: $credentials) {
-    token
-  }
-}
-    `;
-export type LoginMutationFn = ApolloReactCommon.MutationFunction<LoginMutation, LoginMutationVariables>;
-
-/**
- * __useLoginMutation__
- *
- * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useLoginMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [loginMutation, { data, loading, error }] = useLoginMutation({
- *   variables: {
- *      credentials: // value for 'credentials'
- *   },
- * });
- */
-export function useLoginMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
-        return ApolloReactHooks.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, baseOptions);
-      }
-export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
-export type LoginMutationResult = ApolloReactCommon.MutationResult<LoginMutation>;
-export type LoginMutationOptions = ApolloReactCommon.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
-export const GetMyCollabsDocument = gql`
-    query GetMyCollabs {
-  currentUser {
-    id
-    collabs {
-      id
-      name
-    }
-  }
-}
-    `;
-
-/**
- * __useGetMyCollabsQuery__
- *
- * To run a query within a React component, call `useGetMyCollabsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetMyCollabsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetMyCollabsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetMyCollabsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetMyCollabsQuery, GetMyCollabsQueryVariables>) {
-        return ApolloReactHooks.useQuery<GetMyCollabsQuery, GetMyCollabsQueryVariables>(GetMyCollabsDocument, baseOptions);
-      }
-export function useGetMyCollabsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetMyCollabsQuery, GetMyCollabsQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<GetMyCollabsQuery, GetMyCollabsQueryVariables>(GetMyCollabsDocument, baseOptions);
-        }
-export type GetMyCollabsQueryHookResult = ReturnType<typeof useGetMyCollabsQuery>;
-export type GetMyCollabsLazyQueryHookResult = ReturnType<typeof useGetMyCollabsLazyQuery>;
-export type GetMyCollabsQueryResult = ApolloReactCommon.QueryResult<GetMyCollabsQuery, GetMyCollabsQueryVariables>;
-export const SignUpDocument = gql`
-    mutation SignUp($credentials: SignUpArgs!) {
-  signUp(credentials: $credentials) {
-    token
-  }
-}
-    `;
-export type SignUpMutationFn = ApolloReactCommon.MutationFunction<SignUpMutation, SignUpMutationVariables>;
-
-/**
- * __useSignUpMutation__
- *
- * To run a mutation, you first call `useSignUpMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSignUpMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [signUpMutation, { data, loading, error }] = useSignUpMutation({
- *   variables: {
- *      credentials: // value for 'credentials'
- *   },
- * });
- */
-export function useSignUpMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SignUpMutation, SignUpMutationVariables>) {
-        return ApolloReactHooks.useMutation<SignUpMutation, SignUpMutationVariables>(SignUpDocument, baseOptions);
-      }
-export type SignUpMutationHookResult = ReturnType<typeof useSignUpMutation>;
-export type SignUpMutationResult = ApolloReactCommon.MutationResult<SignUpMutation>;
-export type SignUpMutationOptions = ApolloReactCommon.BaseMutationOptions<SignUpMutation, SignUpMutationVariables>;

@@ -1,5 +1,4 @@
 import React, { FormEvent, useState } from 'react'
-import { gql } from 'apollo-boost'
 import { useParams } from 'react-router-dom'
 import {
   useGetCollabPostQuery,
@@ -22,85 +21,7 @@ import {
 import { AvatarWithUsername } from '../AvatarWithUsername/AvatarWithUsername'
 import styled from '@emotion/styled'
 import { Comment } from '../Comment/Comment'
-
-export const GET_COLLAB_POST = gql`
-  query GetCollabPost($postId: ID!) {
-    collabPost(postId: $postId) {
-      id
-      name
-      title
-      description
-      owner {
-        id
-        username
-      }
-      collabId
-      experience
-      stack
-      hasStarted
-      members {
-        id
-        username
-        avatar
-      }
-      acceptsInvites
-      isOwner
-      isMember
-      invitationPending
-      requestToJoinPending
-      comments {
-        id
-        content
-        author {
-          id
-          username
-          avatar
-        }
-      }
-      createdAt
-    }
-  }
-`
-
-export const REQUEST_TO_JOIN_COLLAB = gql`
-  mutation RequestToJoin($collabId: ID!) {
-    requestToJoin(collabId: $collabId)
-  }
-`
-
-export const CANCEL_COLLAB_REQUEST_TO_JOIN = gql`
-  mutation CancelCollabRequestToJoin($collabId: ID!) {
-    cancelRequestToJoin(collabId: $collabId)
-  }
-`
-
-export const ACCEPT_COLLAB_INVITATION = gql`
-  mutation AcceptCollabInvitation($collabId: ID!) {
-    acceptCollabInvitation(collabId: $collabId) {
-      id
-    }
-  }
-`
-
-export const DECLINE_COLLAB_INVITATION = gql`
-  mutation DeclineCollabInvitation($collabId: ID!) {
-    declineCollabInvitation(collabId: $collabId)
-  }
-`
-
-export const ADD_COLLAB_POST_COMMENT = gql`
-  mutation AddCollabPostComment($content: String!, $postId: ID!) {
-    createComment(content: $content, postId: $postId) {
-      id
-      content
-      author {
-        id
-        username
-        avatar
-      }
-    }
-  }
-`
+import { GET_COLLAB_POST } from '../../graphql/queries'
 
 export const CollabPost = () => {
   const { postId } = useParams<{ postId: string }>()

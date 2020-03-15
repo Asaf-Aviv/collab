@@ -4,15 +4,6 @@ import {
   useGetCurrentUserLazyQuery,
 } from '../../graphql/generates'
 import { FormControl, Input, FormLabel, Button } from '@chakra-ui/core'
-import { gql } from 'apollo-boost'
-
-export const LOGIN = gql`
-  mutation Login($credentials: LoginArgs!) {
-    login(credentials: $credentials) {
-      token
-    }
-  }
-`
 
 export const Login = () => {
   const [email, setEmail] = useState('')

@@ -1,27 +1,9 @@
 import React from 'react'
-import { gql } from 'apollo-boost'
 import { useCollabPostsQuery, CollabPostsQuery } from '../../graphql/generates'
 import { Link } from 'react-router-dom'
 import { Flex, SimpleGrid, Heading, Button } from '@chakra-ui/core'
 import { AvatarWithUsername } from '../AvatarWithUsername/AvatarWithUsername'
 import styled from '@emotion/styled'
-
-export const GET_COLLAB_POSTS = gql`
-  query CollabPosts {
-    collabPosts {
-      id
-      title
-      stack
-      experience
-      hasStarted
-      owner {
-        id
-        username
-        avatar
-      }
-    }
-  }
-`
 
 export const CollabPosts = () => {
   const { data, loading, error } = useCollabPostsQuery()

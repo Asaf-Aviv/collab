@@ -5,15 +5,6 @@ import {
 } from '../../graphql/generates'
 import { FormControl, Input, FormLabel, Button } from '@chakra-ui/core'
 import { useHistory } from 'react-router-dom'
-import { gql } from 'apollo-boost'
-
-export const SIGNUP = gql`
-  mutation SignUp($credentials: SignUpArgs!) {
-    signUp(credentials: $credentials) {
-      token
-    }
-  }
-`
 
 export const SignUp = () => {
   const [username, setUsername] = useState('')

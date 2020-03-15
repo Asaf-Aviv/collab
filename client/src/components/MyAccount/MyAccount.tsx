@@ -1,5 +1,4 @@
 import React from 'react'
-import { gql } from 'apollo-boost'
 
 // export const MY_ACCOUNT = gql`
 //   queruy

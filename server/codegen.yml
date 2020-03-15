@@ -1,5 +1,7 @@
 schema: ./src/graphql/typeDefs/*.ts
-documents: '../client/src/components/**/*.tsx'
+documents:
+  - '../client/src/graphql/queries.ts'
+  - '../client/src/graphql/mutations.ts'
 watch: true
 require: ts-node/register/transpile-only
 generates:
