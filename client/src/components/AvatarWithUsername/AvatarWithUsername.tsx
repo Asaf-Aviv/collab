@@ -13,12 +13,13 @@ export const AvatarWithUsername = ({
   avatar,
   username,
   size = 'md',
-  className,
 }: Props) => (
   <Link to={`/user/${id}`}>
-    <Flex align="center" className={className}>
+    <Flex align="center">
       <Avatar boxShadow="md" size={size} src={avatar!} name={username} mr={2} />
-      <Text fontWeight={600}>{username}</Text>
+      <Text as="span" fontWeight={700}>
+        {username}
+      </Text>
     </Flex>
   </Link>
 )

@@ -32,6 +32,7 @@ export const collabPostTypeDefs = gql`
     pendingRequests: [User!]!
     createdAt: String!
     updatedAt: String!
+    isNew: Boolean!
   }
 
   input CollabPostArgs {

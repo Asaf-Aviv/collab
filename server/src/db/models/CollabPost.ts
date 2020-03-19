@@ -7,6 +7,7 @@ import {
   Default,
   ForeignKey,
   DataType,
+  CreatedAt,
   Length,
   BelongsTo,
   HasMany,
@@ -53,6 +54,10 @@ export class CollabPost extends Model<CollabPost> {
   @Column
   description!: string
 
+  @CreatedAt
+  @Column
+  createdAt!: Date
+
   @AllowNull(false)
   @Default(false)
   @Column
@@ -81,21 +86,24 @@ export class CollabPost extends Model<CollabPost> {
         name: postArgs.name,
         ownerId: userId,
       })
+
       const post = new this({
         ...postArgs,
         collabId: collab.id,
         ownerId: userId,
       })
+
       const collabMember = new CollabMember({
         collabId: collab.id,
         memberId: userId,
         isOwner: true,
       })
 
+      await collab.save()
+
       await Promise.all([
         //
         post.save(),
-        collab.save(),
         collabMember.save(),
       ])
 
@@ -111,7 +119,7 @@ export class CollabPost extends Model<CollabPost> {
     }
 
     throw new Error(
-      'Collab post not found or you are not the author of this post'
+      'Collab post not found or you are not the author of this post',
     )
   }
 }

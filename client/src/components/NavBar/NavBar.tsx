@@ -14,6 +14,7 @@ import {
 import styled from 'styled-components'
 import { useApolloClient } from '@apollo/react-hooks'
 import { useGetCurrentUserQuery } from '../../graphql/generates'
+import { Container } from '../global'
 
 export const NavBar = () => {
   const { data } = useGetCurrentUserQuery()
@@ -25,20 +26,21 @@ export const NavBar = () => {
       align="center"
       height="4rem"
       background="#FFF"
-      borderBottom="1px solid grey"
+      pos="relative"
+      boxShadow="0px 4px 5px 0 rgba(231, 216, 255, 0.38)"
     >
-      <Flex
-        mx="auto"
-        width="95%"
-        maxW="1200px"
-        d="flex"
-        justify="space-between"
-      >
+      <Container height="100%" d="flex" justifyContent="space-between">
         <StyledFlex as="nav">
-          <NavLink to="/">Home</NavLink>
-          <NavLink to="/collabs/posts">Collab Posts</NavLink>
-          <NavLink to="/showcase">Showcase</NavLink>
-          <NavLink to="/create">Create</NavLink>
+          <StyledLink exact to="/">
+            Home
+          </StyledLink>
+          <StyledLink exact to="/collabs/posts">
+            Collabs
+          </StyledLink>
+          <StyledLink exact to="/showcase">
+            Showcase
+          </StyledLink>
+          <StyledLink to="/create">Create</StyledLink>
         </StyledFlex>
         {currentUser ? (
           <UserNavMenu />
@@ -48,7 +50,7 @@ export const NavBar = () => {
             <NavLink to="/signup">Signup</NavLink>
           </StyledFlex>
         )}
-      </Flex>
+      </Container>
     </Flex>
   )
 }
@@ -56,8 +58,19 @@ export const NavBar = () => {
 const StyledFlex = styled(Flex)`
   display: flex;
   align-items: center;
-  > *:not(:last-of-type) {
-    margin-right: 1rem;
+  font-weight: 600;
+`
+
+const StyledLink = styled(NavLink)`
+  transition: color 250ms;
+
+  &:hover,
+  &.active {
+    color: #964cff;
+  }
+
+  & + & {
+    margin-left: 1rem;
   }
 `
 
@@ -75,13 +88,13 @@ const UserNavMenu = () => {
 
   return (
     <Menu>
-      <MenuButton>
+      <MenuButton width="64px">
         <Avatar
           src={currentUser.avatar ?? undefined}
           name={currentUser.username}
         />
       </MenuButton>
-      <MenuList>
+      <MenuList mt={0}>
         <MenuGroup title="Profile">
           <Link to="/profile">
             <MenuItem>My Account</MenuItem>

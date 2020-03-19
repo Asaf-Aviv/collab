@@ -9,6 +9,8 @@ import {
   Default,
   ForeignKey,
   BelongsTo,
+  CreatedAt,
+  UpdatedAt,
   HasMany,
   AllowNull,
 } from 'sequelize-typescript'
@@ -45,6 +47,14 @@ export class Collab extends Model<Collab> {
   @AllowNull(false)
   @Column
   ownerId!: string
+
+  @CreatedAt
+  @Column
+  createdAt!: Date
+
+  @UpdatedAt
+  @Column
+  updatedAt!: Date
 
   @BelongsTo(() => User, { foreignKey: 'ownerId', onDelete: 'cascade' })
   owner!: User
@@ -91,7 +101,7 @@ export class Collab extends Model<Collab> {
   static async acceptMemberRequest(
     collabId: string,
     ownerId: string,
-    memberId: string
+    memberId: string,
   ) {
     return this.sequelize!.transaction(async () => {
       const [collab, isMember, memberRequest] = await Promise.all([
@@ -130,7 +140,7 @@ export class Collab extends Model<Collab> {
   static async removeMember(
     collabId: string,
     ownerId: string,
-    memberId: string
+    memberId: string,
   ) {
     return this.sequelize!.transaction(async () => {
       const collab = await Collab.findByPk(collabId, { raw: false })
@@ -173,7 +183,7 @@ export class Collab extends Model<Collab> {
   static async inviteMember(
     ownerId: string,
     memberId: string,
-    collabId: string
+    collabId: string,
   ) {
     const collab = await this.findByPk(collabId)
 
@@ -217,7 +227,7 @@ export class Collab extends Model<Collab> {
 
     if (invitation && invitation.type === 'invitation') {
       throw new Error(
-        'The owner of this collab already invited you to join, please check your invitations'
+        'The owner of this collab already invited you to join, please check your invitations',
       )
     }
 
@@ -260,7 +270,7 @@ export class Collab extends Model<Collab> {
   static async declineMemberRequest(
     collabId: string,
     memberId: string,
-    ownerId: string
+    ownerId: string,
   ) {
     return this.sequelize!.transaction(async () => {
       const [collab, requestExist] = await Promise.all([
@@ -296,7 +306,7 @@ export class Collab extends Model<Collab> {
     collabId: string,
     name: string,
     order: number,
-    ownerId: string
+    ownerId: string,
   ) {
     const collab = await this.findByPk(collabId)
 

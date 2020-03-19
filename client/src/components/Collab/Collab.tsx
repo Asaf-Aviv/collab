@@ -2,7 +2,7 @@ import React from 'react'
 import {
   useParams,
   Link,
-  useLocation,
+  // useLocation,
   Route,
   useRouteMatch,
 } from 'react-router-dom'
@@ -15,7 +15,7 @@ import { Discussions } from '../Discussions/Discussions'
 export const Collab = () => {
   const { collabId } = useParams<{ collabId: string }>()
   const match = useRouteMatch()
-  const location = useLocation()
+  // const location = useLocation()
   const { data, loading, error } = useCollabQuery({
     variables: { collabId },
   })
@@ -24,7 +24,7 @@ export const Collab = () => {
   if (error) return <h1>Collab not found</h1>
   if (!data?.collab) return null
 
-  const { name, owner, members } = data.collab
+  // const { name, owner, members } = data.collab
 
   return (
     <div>
