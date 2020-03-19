@@ -64,6 +64,7 @@ export type CollabPost = {
   id: Scalars['ID'],
   invitationPending: Scalars['Boolean'],
   isMember: Scalars['Boolean'],
+  isNew: Scalars['Boolean'],
   isOwner: Scalars['Boolean'],
   members: Array<User>,
   name: Scalars['String'],
@@ -454,7 +455,7 @@ export type CollabPostsQuery = (
   { __typename?: 'Query' }
   & { collabPosts: Array<(
     { __typename?: 'CollabPost' }
-    & Pick<CollabPost, 'id' | 'title' | 'stack' | 'experience' | 'hasStarted'>
+    & Pick<CollabPost, 'id' | 'title' | 'stack' | 'experience' | 'hasStarted' | 'createdAt' | 'isNew'>
     & { owner: (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
@@ -471,14 +472,28 @@ export type GetCollabPostQuery = (
   { __typename?: 'Query' }
   & { collabPost: Maybe<(
     { __typename?: 'CollabPost' }
-    & Pick<CollabPost, 'id' | 'name' | 'title' | 'description' | 'collabId' | 'experience' | 'stack' | 'hasStarted' | 'acceptsInvites' | 'isOwner' | 'isMember' | 'invitationPending' | 'requestToJoinPending' | 'createdAt'>
+    & Pick<CollabPost, 'id' | 'name' | 'title' | 'description' | 'isNew' | 'collabId' | 'experience' | 'stack' | 'hasStarted' | 'acceptsInvites' | 'isOwner' | 'isMember' | 'invitationPending' | 'requestToJoinPending' | 'createdAt'>
     & { owner: (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username'>
     ), members: Array<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
-    )>, comments: Array<(
+    )> }
+  )> }
+);
+
+export type CollabPostCommentsQueryVariables = {
+  postId: Scalars['ID']
+};
+
+
+export type CollabPostCommentsQuery = (
+  { __typename?: 'Query' }
+  & { collabPost: Maybe<(
+    { __typename?: 'CollabPost' }
+    & Pick<CollabPost, 'id'>
+    & { comments: Array<(
       { __typename?: 'CollabPostComment' }
       & Pick<CollabPostComment, 'id' | 'content'>
       & { author: (
@@ -805,6 +820,8 @@ export const CollabPostsDocument = gql`
     stack
     experience
     hasStarted
+    createdAt
+    isNew
     owner {
       id
       username
@@ -845,6 +862,7 @@ export const GetCollabPostDocument = gql`
     name
     title
     description
+    isNew
     owner {
       id
       username
@@ -863,15 +881,6 @@ export const GetCollabPostDocument = gql`
     isMember
     invitationPending
     requestToJoinPending
-    comments {
-      id
-      content
-      author {
-        id
-        username
-        avatar
-      }
-    }
     createdAt
   }
 }
@@ -902,6 +911,48 @@ export function useGetCollabPostLazyQuery(baseOptions?: ApolloReactHooks.LazyQue
 export type GetCollabPostQueryHookResult = ReturnType<typeof useGetCollabPostQuery>;
 export type GetCollabPostLazyQueryHookResult = ReturnType<typeof useGetCollabPostLazyQuery>;
 export type GetCollabPostQueryResult = ApolloReactCommon.QueryResult<GetCollabPostQuery, GetCollabPostQueryVariables>;
+export const CollabPostCommentsDocument = gql`
+    query CollabPostComments($postId: ID!) {
+  collabPost(postId: $postId) {
+    id
+    comments {
+      id
+      content
+      author {
+        id
+        username
+        avatar
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useCollabPostCommentsQuery__
+ *
+ * To run a query within a React component, call `useCollabPostCommentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCollabPostCommentsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCollabPostCommentsQuery({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useCollabPostCommentsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CollabPostCommentsQuery, CollabPostCommentsQueryVariables>) {
+        return ApolloReactHooks.useQuery<CollabPostCommentsQuery, CollabPostCommentsQueryVariables>(CollabPostCommentsDocument, baseOptions);
+      }
+export function useCollabPostCommentsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CollabPostCommentsQuery, CollabPostCommentsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<CollabPostCommentsQuery, CollabPostCommentsQueryVariables>(CollabPostCommentsDocument, baseOptions);
+        }
+export type CollabPostCommentsQueryHookResult = ReturnType<typeof useCollabPostCommentsQuery>;
+export type CollabPostCommentsLazyQueryHookResult = ReturnType<typeof useCollabPostCommentsLazyQuery>;
+export type CollabPostCommentsQueryResult = ApolloReactCommon.QueryResult<CollabPostCommentsQuery, CollabPostCommentsQueryVariables>;
 export const CollabDocument = gql`
     query Collab($collabId: ID!) {
   collab(collabId: $collabId) {

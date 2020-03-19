@@ -13,7 +13,7 @@ const generageCollabPost = (collab_id, owner_id) => {
     experience: 'JUNIOR',
     has_started: false,
     stack: [...Array(5)].map(faker.lorem.word),
-    description: faker.lorem.words(3),
+    description: faker.lorem.words(60),
     owner_id,
     collab_id,
     updated_at: new Date(),
@@ -32,8 +32,8 @@ const comments = _.flatten(
       content: faker.lorem.words(_.random(5, 14)),
       updated_at: new Date(),
       created_at: new Date(),
-    }))
-  )
+    })),
+  ),
 )
 
 module.exports = {
@@ -43,8 +43,8 @@ module.exports = {
       .then(() =>
         queryInterface.bulkInsert(
           { tableName: 'collab_post_comments' },
-          comments
-        )
+          comments,
+        ),
       )
       .catch(err => {
         console.log(err.message)

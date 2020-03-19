@@ -1,9 +1,9 @@
 import React from 'react'
 import { useCollabPostsQuery, CollabPostsQuery } from '../../graphql/generates'
-import { Link } from 'react-router-dom'
-import { Flex, SimpleGrid, Heading, Button } from '@chakra-ui/core'
+import { Link as RouterLink } from 'react-router-dom'
+import { Flex, SimpleGrid, Heading, Tag, Link } from '@chakra-ui/core'
 import { AvatarWithUsername } from '../AvatarWithUsername/AvatarWithUsername'
-import styled from '@emotion/styled'
+import { Container } from '../global'
 
 export const CollabPosts = () => {
   const { data, loading, error } = useCollabPostsQuery()
@@ -16,11 +16,13 @@ export const CollabPosts = () => {
 
   return (
     <main>
-      <SimpleGrid as="section" columns={2} spacing={10}>
-        {collabPosts.map(post => (
-          <CollabPostCard key={post.id} {...post} />
-        ))}
-      </SimpleGrid>
+      <Container>
+        <SimpleGrid as="section" columns={{ lg: 1, xl: 2 }} spacing={6}>
+          {collabPosts.map(post => (
+            <CollabPostCard key={post.id} {...post} />
+          ))}
+        </SimpleGrid>
+      </Container>
     </main>
   )
 }
@@ -30,6 +32,8 @@ const CollabPostCard = ({
   title,
   stack,
   experience,
+  // createdAt,
+  // isNew,
   // hasStarted,
   owner,
 }: CollabPostsQuery['collabPosts'][0]) => (
@@ -37,38 +41,44 @@ const CollabPostCard = ({
     direction="column"
     align="start"
     as="article"
-    boxShadow="xl"
-    p={4}
+    bg="#FFF"
     h="100%"
+    boxShadow="2px 6px 15px 0 rgba(179, 163, 204, 0.38)"
+    borderRadius={6}
   >
-    <Flex w="100%" align="center" justify="space-between">
+    <Flex p={4} w="100%" align="center" justify="space-between">
       <AvatarWithUsername size="sm" {...owner} />
-      <Button as="span" size="xs" variant="solid" variantColor="pink">
-        {experience}
-      </Button>
+      {/* {Number(createdAt) < (new Date().getTime())} */}
+      <Flex align="center">
+        <Tag boxShadow="sm" mr={2} size="sm" variantColor="pink">
+          {experience}
+        </Tag>
+        <Tag boxShadow="sm" size="sm" variantColor="green">
+          NEW
+        </Tag>
+      </Flex>
     </Flex>
-    <StyledLink key={id} to={`/collabs/posts/${id}`}>
-      <Heading flex={1} size="md" my={2} as="h2">
+    <Link
+      as={RouterLink as any}
+      h="100%"
+      px={4}
+      key={id}
+      w="100%"
+      zIndex={1}
+      //@ts-ignore
+      to={`/collabs/posts/${id}`}
+      _hover={{ textDecoration: 'none' }}
+    >
+      <Heading flex={1} size="md" mt={4} mb={6} as="h2">
         {title}
       </Heading>
-    </StyledLink>
-    <Flex>
+    </Link>
+    <Flex bg="#f2f2ff" p={4} w="100%">
       {stack.map(tech => (
-        <Button
-          key={tech}
-          as="span"
-          size="xs"
-          variant="solid"
-          variantColor="pink"
-          mr={2}
-        >
+        <Tag boxShadow="sm" size="sm" variantColor="purple" key={tech} mr={2}>
           {tech}
-        </Button>
+        </Tag>
       ))}
     </Flex>
   </Flex>
 )
-
-const StyledLink = styled(Link)`
-  height: 100%;
-`

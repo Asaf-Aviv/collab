@@ -1,7 +1,8 @@
 import React from 'react'
-import { Text } from '@chakra-ui/core'
+import { Text, Flex } from '@chakra-ui/core'
 import { AvatarWithUsername } from '../AvatarWithUsername/AvatarWithUsername'
 import { User } from '../../graphql/generates'
+import styled from '@emotion/styled'
 
 type Props = {
   id: string
@@ -10,8 +11,22 @@ type Props = {
 }
 
 export const Comment = ({ /* id ,*/ content, author }: Props) => (
-  <article>
-    <AvatarWithUsername {...author} />
+  <CommentContainer
+    as="article"
+    direction="column"
+    align="start"
+    bg="white"
+    p={5}
+    boxShadow="md"
+    borderRadius={6}
+  >
+    <AvatarWithUsername size="sm" {...author} />
     <Text mt={2}>{content}</Text>
-  </article>
+  </CommentContainer>
 )
+
+const CommentContainer = styled(Flex)`
+  & + & {
+    margin-top: 2rem;
+  }
+`

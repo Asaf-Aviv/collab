@@ -34,6 +34,8 @@ export const GET_COLLAB_POSTS = gql`
       stack
       experience
       hasStarted
+      createdAt
+      isNew
       owner {
         id
         username
@@ -50,6 +52,7 @@ export const GET_COLLAB_POST = gql`
       name
       title
       description
+      isNew
       owner {
         id
         username
@@ -68,6 +71,15 @@ export const GET_COLLAB_POST = gql`
       isMember
       invitationPending
       requestToJoinPending
+      createdAt
+    }
+  }
+`
+
+export const COLLAB_POST_COMMENTS = gql`
+  query CollabPostComments($postId: ID!) {
+    collabPost(postId: $postId) {
+      id
       comments {
         id
         content
@@ -77,7 +89,6 @@ export const GET_COLLAB_POST = gql`
           avatar
         }
       }
-      createdAt
     }
   }
 `

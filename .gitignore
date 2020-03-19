@@ -4,3 +4,9 @@ dist
 
 .env
 .env.development
+
+server/package-lock.json
+client/package-lock.json
+package-lock.json
+
+t.js

@@ -2,6 +2,7 @@ import { isAuthenticated } from './../middleware/isAuthenticated'
 import { and } from 'graphql-shield'
 import { Resolvers } from '../types'
 import { replaceErrorWithNull } from '../helpers/replaceErrorWithNull'
+import { differenceInDays } from 'date-fns'
 
 export const collabPostResolver: Resolvers = {
   Query: {
@@ -66,6 +67,7 @@ export const collabPostResolver: Resolvers = {
       const users = await loaders.userLoader.loadMany(memberIds)
       return users.map(replaceErrorWithNull)
     },
+    isNew: ({ createdAt }) => differenceInDays(createdAt, new Date()) <= 4,
     comments: ({ id }, args, { models }) =>
       models.CollabPostComment.findAll({ where: { postId: id } }),
     pendingInvites: async ({ collabId }, args, { models, loaders }) => {
