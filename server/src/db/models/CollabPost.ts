@@ -51,7 +51,7 @@ export class CollabPost extends Model<CollabPost> {
     max: 500,
   })
   @AllowNull(false)
-  @Column
+  @Column(DataType.STRING(500))
   description!: string
 
   @CreatedAt
@@ -119,7 +119,7 @@ export class CollabPost extends Model<CollabPost> {
     }
 
     throw new Error(
-      'Collab post not found or you are not the author of this post',
+      'Collab post not found or you are not the author of this post'
     )
   }
 }

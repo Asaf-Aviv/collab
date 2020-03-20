@@ -9,6 +9,7 @@ import { CollabTaskComment } from './CollabTaskComment'
 import { CollabMemberRequest } from './CollabMemberRequest'
 import { CollabDiscussionThread } from './CollabDiscussionThread'
 import { CollabDiscussionThreadComment } from './CollabDiscussionThreadComment'
+import { Language } from './Languages'
 
 export const models = {
   User,
@@ -22,6 +23,7 @@ export const models = {
   CollabMemberRequest,
   CollabDiscussionThread,
   CollabDiscussionThreadComment,
+  Language,
 }
 
 export type Models = typeof models
