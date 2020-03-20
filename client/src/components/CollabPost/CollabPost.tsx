@@ -1,5 +1,5 @@
 import React, { FormEvent, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import {
   useGetCollabPostQuery,
   useRequestToJoinMutation,
@@ -51,7 +51,7 @@ export const CollabPost = () => {
   }
 
   const {
-    id,
+    // id,
     name,
     title,
     description,
@@ -61,10 +61,12 @@ export const CollabPost = () => {
     stack,
     hasStarted,
     members,
-    isNew,
-    isOwner,
+    // isNew,
+    // isOwner,
     ...memberRequestsInfo
   } = data.collabPost
+
+  const { collabId } = memberRequestsInfo
 
   return (
     <main>
@@ -94,9 +96,11 @@ export const CollabPost = () => {
                 </Tag>
               </Flex>
               <Stack spacing={4} mb={6}>
-                <Heading as="h2" color="#964cff">
-                  {name}
-                </Heading>
+                <Link to={`/collab/${collabId}`}>
+                  <Heading as="h2" color="#964cff">
+                    {name}
+                  </Heading>
+                </Link>
                 <Heading as="h1">{title}</Heading>
               </Stack>
               <Text fontSize={['lg', 'xl']}>{description}</Text>
