@@ -1,48 +1,59 @@
 import React, { useState, ChangeEvent } from 'react'
 import { Container } from '../global'
 import { useHistory } from 'react-router-dom'
+import ReactSelect from 'react-select'
 import {
   Radio,
-  RadioGroup,
   Button,
   Heading,
   Flex,
   FormControl,
   FormLabel,
   Input,
-  Select,
   RadioButtonGroup,
   Textarea,
   Stack,
+  Tag,
+  TagLabel,
+  TagCloseButton,
 } from '@chakra-ui/core'
 import {
   useCreateCollabPostMutation,
   Experience,
   CollabPostArgs,
+  useCollabPostLanguagesQuery,
 } from '../../graphql/generates'
-import styled from '@emotion/styled'
+import { Option } from 'react-select/src/filters'
 
-// fake autocomplete
-const suggestions = ['JavaScript', 'TypeScript', 'React', 'GraphQL']
+const experienceOptions = [
+  'ALL',
+  'JUNIOR',
+  'JUNIOR_MID',
+  'MID',
+  'MID_SENIOR',
+  'SENIOR',
+].map(value => ({ value, label: value }))
 
 export const CreateCollab = () => {
-  const [postInput, setPostInput] = useState<CollabPostArgs>({
-    name: 'Collabbbb',
-    title: 'React TypeScript next level app',
-    experience: 'ALL' as Experience,
-    stack: ['TypeScript', 'React'],
-    description: 'Our first Collab!',
-    hasStarted: false,
-  })
+  const [postInput, setPostInput] = useState<Omit<CollabPostArgs, 'languages'>>(
+    {
+      name: 'Collabbbb',
+      title: 'React TypeScript next level app',
+      experience: 'ALL' as Experience,
+      stack: ['TypeScript', 'React'],
+      description: 'Our first Collab!',
+      hasStarted: false,
+    },
+  )
   const [stackInput, setStackInput] = useState('')
-  const [sugg, setSuggs] = useState<string[]>([])
+  const [selectedLanguages, setSelectedLanguages] = useState<
+    { label: string; value: string }[]
+  >([])
+  const { data } = useCollabPostLanguagesQuery()
   const history = useHistory()
   const [createCollabPost] = useCreateCollabPostMutation({
-    variables: {
-      post: postInput,
-    },
     onCompleted: ({ createCollabPost }) => {
-      history.push(`/collab/${createCollabPost.id}`)
+      history.push(`/collabs/posts/${createCollabPost.id}`)
     },
   })
 
@@ -62,17 +73,10 @@ export const CreateCollab = () => {
     }))
   }
 
-  const handleDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+  const handleExperienceChange = ({ value }: Option) => {
     setPostInput(prevState => ({
       ...prevState,
-      description: e.target.value,
-    }))
-  }
-
-  const handleExperienceChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setPostInput(prevState => ({
-      ...prevState,
-      experience: e.target.value as Experience,
+      experience: value as Experience,
     }))
   }
 
@@ -108,7 +112,7 @@ export const CreateCollab = () => {
           <FormLabel htmlFor="title">Post Title</FormLabel>
           <Input
             id="title"
-            name="Title"
+            name="title"
             value={title}
             onChange={handleInputChange}
           />
@@ -129,24 +133,106 @@ export const CreateCollab = () => {
               <Radio value="yes">Yes</Radio>
             </RadioButtonGroup>
           </FormControl>
-
-          <FormControl>
+          <FormControl width={200}>
             <FormLabel htmlFor="experience">Experience</FormLabel>
-            <Select
+            <ReactSelect
+              defaultValue={experienceOptions[0]}
               id="experience"
+              placeholder=""
               name="experience"
-              value={experience}
-              onChange={handleExperienceChange}
-            >
-              <option value="ALL">ALL</option>
-              <option value="JUNIOR">JUNIOR</option>
-              <option value="JUNIOR_MID">JUNIOR_MID</option>
-              <option value="MID">MID</option>
-              <option value="MID_SENIOR">MID_SENIOR</option>
-              <option value="SENIOR">SENIOR</option>
-            </Select>
+              options={experienceOptions}
+              onChange={handleExperienceChange as any}
+            />
           </FormControl>
         </Flex>
+        <FormControl>
+          <FormLabel htmlFor="communication-languages">
+            Communication Languages
+          </FormLabel>
+          <ReactSelect
+            id="communication-languages"
+            isMulti
+            placeholder=""
+            isSearchable
+            hideSelectedOptions
+            value={selectedLanguages}
+            onChange={values => setSelectedLanguages(values as any)}
+            options={data?.languages.map(name => ({
+              value: name,
+              label: name,
+            }))}
+            styles={{
+              multiValue: provided => ({
+                ...provided,
+                display: 'none',
+              }),
+            }}
+          />
+          <Stack spacing={2} isInline mt={4} flexWrap="wrap">
+            {selectedLanguages.map(({ label }) => (
+              <Tag
+                size="md"
+                key={label}
+                rounded="full"
+                variant="solid"
+                variantColor="purple"
+                cursor="pointer"
+                mb={2}
+                onClick={() =>
+                  setSelectedLanguages(prevState =>
+                    prevState.filter(language => language.label !== label),
+                  )
+                }
+              >
+                <TagLabel>{label}</TagLabel>
+                <TagCloseButton />
+              </Tag>
+            ))}
+          </Stack>
+        </FormControl>
+        <FormControl>
+          <FormLabel htmlFor="tech-stack">Tech Stack</FormLabel>
+          <ReactSelect
+            id="tech-stack"
+            isMulti
+            placeholder=""
+            isSearchable
+            hideSelectedOptions
+            value={selectedLanguages}
+            onChange={values => setSelectedLanguages(values as any)}
+            options={data?.languages.map(name => ({
+              value: name,
+              label: name,
+            }))}
+            styles={{
+              multiValue: provided => ({
+                ...provided,
+                display: 'none',
+              }),
+            }}
+          />
+          {/* <Stack spacing={2} isInline mt={4} flexWrap="wrap">
+            {selectedLanguages.map(({ label }) => (
+              <Tag
+                size="md"
+                key={label}
+                rounded="full"
+                variant="solid"
+                variantColor="purple"
+                cursor="pointer"
+                mb={2}
+                onClick={() =>
+                  setSelectedLanguages(prevState =>
+                    prevState.filter(language => language.label !== label),
+                  )
+                }
+              >
+                <TagLabel>{label}</TagLabel>
+                <TagCloseButton />
+              </Tag>
+            ))}
+          </Stack> */}
+        </FormControl>
         <FormControl>
           <FormLabel htmlFor="description">Description</FormLabel>
           <Textarea
@@ -157,23 +243,19 @@ export const CreateCollab = () => {
             onChange={handleInputChange}
           />
         </FormControl>
-        <input
-          name="stack"
-          placeholder="Stack"
-          value={stackInput}
-          onChange={e => setStackInput(e.target.value)}
-        />
-        {sugg.map(s => (
-          <span key={s} onClick={toggleStack(s)}>
-            {s}
-          </span>
-        ))}
-        {stack.map(s => (
-          <button type="button" key={s} onClick={toggleStack(s)}>
-            {s}
-          </button>
-        ))}
-        <Button variantColor="purple" onClick={() => createCollabPost()}>
+        <Button
+          variantColor="purple"
+          onClick={() =>
+            createCollabPost({
+              variables: {
+                post: {
+                  ...postInput,
+                  languages: selectedLanguages.map(({ label }) => label),
+                },
+              },
+            })
+          }
+        >
           Create
         </Button>
       </Stack>
