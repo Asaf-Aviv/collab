@@ -61,6 +61,7 @@ export const CollabPost = () => {
     stack,
     hasStarted,
     members,
+    languages,
     // isNew,
     // isOwner,
     ...memberRequestsInfo
@@ -105,6 +106,18 @@ export const CollabPost = () => {
               </Stack>
               <Text fontSize={['lg', 'xl']}>{description}</Text>
               <Flex wrap="wrap" mt={6}>
+                {languages.map(language => (
+                  <Tag
+                    boxShadow="md"
+                    size="md"
+                    variantColor="purple"
+                    key={language}
+                    mr={2}
+                    mb={2}
+                  >
+                    {language}
+                  </Tag>
+                ))}
                 {stack.map(tech => (
                   <Tag
                     boxShadow="md"

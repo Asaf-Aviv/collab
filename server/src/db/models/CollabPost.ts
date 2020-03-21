@@ -20,6 +20,7 @@ import { User } from './User'
 import { Collab } from './Collab'
 import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 import { CollabPostComment } from './CollabPostComment'
+import { CollabPostLanguage } from './CollabPostLanguage'
 
 @Table({ tableName: 'collab_posts' })
 export class CollabPost extends Model<CollabPost> {
@@ -57,6 +58,9 @@ export class CollabPost extends Model<CollabPost> {
   @CreatedAt
   @Column
   createdAt!: Date
+
+  @HasMany(() => CollabPostLanguage)
+  languages!: string[]
 
   @AllowNull(false)
   @Default(false)
@@ -105,6 +109,15 @@ export class CollabPost extends Model<CollabPost> {
         //
         post.save(),
         collabMember.save(),
+        Promise.all(
+          postArgs.languages.map(languageName =>
+            CollabPostLanguage.create({
+              postId: post.id,
+              collabId: collab.id,
+              languageName,
+            }),
+          ),
+        ),
       ])
 
       return post
@@ -119,7 +132,7 @@ export class CollabPost extends Model<CollabPost> {
     }
 
     throw new Error(
-      'Collab post not found or you are not the author of this post'
+      'Collab post not found or you are not the author of this post',
     )
   }
 }
@@ -127,5 +140,5 @@ export class CollabPost extends Model<CollabPost> {
 // type for graphql-codegen resolver
 export type GQLCollabPost = GQLResolverTypes<
   CollabPost,
-  'owner' | 'comments' | 'collab'
+  'owner' | 'comments' | 'collab' | 'languages'
 >

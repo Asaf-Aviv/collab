@@ -1,3 +1,4 @@
+import { CollabPostLanguage } from './CollabPostLanguage'
 import { User } from './User'
 import { Collab } from './Collab'
 import { CollabPost } from './CollabPost'
@@ -24,6 +25,7 @@ export const models = {
   CollabDiscussionThread,
   CollabDiscussionThreadComment,
   Language,
+  CollabPostLanguage,
 }
 
 export type Models = typeof models

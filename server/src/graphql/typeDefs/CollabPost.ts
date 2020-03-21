@@ -4,6 +4,7 @@ export const collabPostTypeDefs = gql`
   type Query {
     collabPosts: [CollabPost!]!
     collabPost(postId: ID!): CollabPost
+    languages: [String!]!
   }
 
   type Mutation {
@@ -24,6 +25,7 @@ export const collabPostTypeDefs = gql`
     acceptsInvites: Boolean!
     members: [User!]!
     isOwner: Boolean!
+    languages: [String!]!
     isMember: Boolean!
     invitationPending: Boolean!
     requestToJoinPending: Boolean!
@@ -39,6 +41,7 @@ export const collabPostTypeDefs = gql`
     name: String!
     title: String!
     experience: Experience!
+    languages: [String!]!
     stack: [String!]!
     description: String!
     hasStarted: Boolean!

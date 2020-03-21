@@ -32,6 +32,7 @@ const CollabPostCard = ({
   title,
   stack,
   experience,
+  languages,
   // createdAt,
   // isNew,
   // hasStarted,
@@ -74,8 +75,19 @@ const CollabPostCard = ({
       </Heading>
     </Link>
     <Flex bg="#f2f2ff" p={4} w="100%">
+      {languages.map(language => (
+        <Tag
+          boxShadow="sm"
+          size="sm"
+          variantColor="purple"
+          key={language}
+          mr={2}
+        >
+          {language}
+        </Tag>
+      ))}
       {stack.map(tech => (
-        <Tag boxShadow="sm" size="sm" variantColor="purple" key={tech} mr={2}>
+        <Tag boxShadow="sm" size="sm" variantColor="pink" key={tech} mr={2}>
           {tech}
         </Tag>
       ))}
