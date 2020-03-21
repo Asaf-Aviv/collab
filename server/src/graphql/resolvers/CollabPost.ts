@@ -9,6 +9,10 @@ export const collabPostResolver: Resolvers = {
     collabPosts: (root, args, { models }) => models.CollabPost.findAll(),
     collabPost: (root, { postId }, { models }) =>
       models.CollabPost.findByPk(postId),
+    languages: (root, args, { models }) =>
+      models.Language.findAll().then(languages =>
+        languages.map(({ name }) => name),
+      ),
   },
   Mutation: {
     createCollabPost: async (root, { post }, { user, models }) =>
@@ -30,6 +34,12 @@ export const collabPostResolver: Resolvers = {
       })
 
       return Boolean(isMember)
+    },
+    languages: async ({ id }, args, { models }) => {
+      const languages = await models.CollabPostLanguage.findAll({
+        where: { postId: id },
+      })
+      return languages.map(({ languageName }) => languageName)
     },
     acceptsInvites: async ({ collabId }, args, { loaders }) => {
       const collab = await loaders.collabLoader.load(collabId)

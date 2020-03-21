@@ -34,6 +34,7 @@ export const GET_COLLAB_POSTS = gql`
       stack
       experience
       hasStarted
+      languages
       createdAt
       isNew
       owner {
@@ -61,6 +62,7 @@ export const GET_COLLAB_POST = gql`
       experience
       stack
       hasStarted
+      languages
       members {
         id
         username
@@ -73,6 +75,12 @@ export const GET_COLLAB_POST = gql`
       requestToJoinPending
       createdAt
     }
+  }
+`
+
+export const COLLAB_POST_LANGUAGES = gql`
+  query CollabPostLanguages {
+    languages
   }
 `
 

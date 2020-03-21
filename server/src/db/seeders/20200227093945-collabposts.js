@@ -36,10 +36,24 @@ const comments = _.flatten(
   ),
 )
 
+const postLanguages = _.flatten(
+  collabPosts.map(({ id, collab_id }) => ({
+    post_id: id,
+    collab_id,
+    language_name: 'English',
+  })),
+)
+
 module.exports = {
   up: queryInterface =>
     queryInterface
       .bulkInsert({ tableName: 'collab_posts' }, collabPosts)
+      .then(() =>
+        queryInterface.bulkInsert(
+          { tableName: 'collab_post_languages' },
+          postLanguages,
+        ),
+      )
       .then(() =>
         queryInterface.bulkInsert(
           { tableName: 'collab_post_comments' },
