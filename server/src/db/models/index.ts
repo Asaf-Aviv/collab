@@ -1,4 +1,3 @@
-import { CollabPostLanguage } from './CollabPostLanguage'
 import { User } from './User'
 import { Collab } from './Collab'
 import { CollabPost } from './CollabPost'
@@ -10,7 +9,10 @@ import { CollabTaskComment } from './CollabTaskComment'
 import { CollabMemberRequest } from './CollabMemberRequest'
 import { CollabDiscussionThread } from './CollabDiscussionThread'
 import { CollabDiscussionThreadComment } from './CollabDiscussionThreadComment'
-import { Language } from './Languages'
+import { Language } from './Language'
+import { Stack } from './Stack'
+import { CollabPostStack } from './CollabPostStack'
+import { CollabPostLanguage } from './CollabPostLanguage'
 
 export const models = {
   User,
@@ -26,6 +28,8 @@ export const models = {
   CollabDiscussionThreadComment,
   Language,
   CollabPostLanguage,
+  Stack,
+  CollabPostStack,
 }
 
 export type Models = typeof models

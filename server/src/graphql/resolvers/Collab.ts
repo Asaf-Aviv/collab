@@ -31,13 +31,13 @@ export const collabResolver: Resolvers = {
     createTaskComment: (
       root,
       { collabId, content, taskId },
-      { user, models },
+      { user, models }
     ) =>
       models.CollabTaskComment.createComment(
         collabId,
         content,
         user.id,
-        taskId,
+        taskId
       ),
     deleteTaskComment: (root, { commentId }, { user, models }) =>
       models.CollabTaskComment.deleteComment(commentId, user.id),

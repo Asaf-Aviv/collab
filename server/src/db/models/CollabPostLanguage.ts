@@ -6,10 +6,9 @@ import {
   Column,
   PrimaryKey,
   BelongsTo,
-  HasOne,
 } from 'sequelize-typescript'
 import { CollabPost } from './CollabPost'
-import { Language } from './Languages'
+import { Language } from './Language'
 import { Collab } from './Collab'
 
 @Table({ tableName: 'collab_post_languages', timestamps: false })
@@ -34,12 +33,9 @@ export class CollabPostLanguage extends Model<CollabPostLanguage> {
   @ForeignKey(() => Language)
   @Column
   languageName!: string
-
-  @HasOne(() => Language, { foreignKey: 'name' })
-  language!: Language
 }
 
 export type GQLCollabPostComment = GQLResolverTypes<
   CollabPostLanguage,
-  'post' | 'language' | 'collab'
+  'post' | 'collab'
 >

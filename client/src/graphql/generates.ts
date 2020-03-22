@@ -66,6 +66,7 @@ export type CollabPost = {
   isMember: Scalars['Boolean'],
   isNew: Scalars['Boolean'],
   isOwner: Scalars['Boolean'],
+  languages: Array<Scalars['String']>,
   members: Array<User>,
   name: Scalars['String'],
   owner: User,
@@ -81,6 +82,7 @@ export type CollabPostArgs = {
   description: Scalars['String'],
   experience: Experience,
   hasStarted: Scalars['Boolean'],
+  languages: Array<Scalars['String']>,
   name: Scalars['String'],
   stack: Array<Scalars['String']>,
   title: Scalars['String'],
@@ -306,6 +308,7 @@ export type Query = {
   collabPosts: Array<CollabPost>,
   collabs: Array<Collab>,
   currentUser?: Maybe<CurrentUser>,
+  languages: Array<Scalars['String']>,
   user?: Maybe<User>,
   users: Array<User>,
 };
@@ -455,7 +458,7 @@ export type CollabPostsQuery = (
   { __typename?: 'Query' }
   & { collabPosts: Array<(
     { __typename?: 'CollabPost' }
-    & Pick<CollabPost, 'id' | 'title' | 'stack' | 'experience' | 'hasStarted' | 'createdAt' | 'isNew'>
+    & Pick<CollabPost, 'id' | 'title' | 'stack' | 'experience' | 'hasStarted' | 'languages' | 'createdAt' | 'isNew'>
     & { owner: (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
@@ -472,7 +475,7 @@ export type GetCollabPostQuery = (
   { __typename?: 'Query' }
   & { collabPost: Maybe<(
     { __typename?: 'CollabPost' }
-    & Pick<CollabPost, 'id' | 'name' | 'title' | 'description' | 'isNew' | 'collabId' | 'experience' | 'stack' | 'hasStarted' | 'acceptsInvites' | 'isOwner' | 'isMember' | 'invitationPending' | 'requestToJoinPending' | 'createdAt'>
+    & Pick<CollabPost, 'id' | 'name' | 'title' | 'description' | 'isNew' | 'collabId' | 'experience' | 'stack' | 'hasStarted' | 'languages' | 'acceptsInvites' | 'isOwner' | 'isMember' | 'invitationPending' | 'requestToJoinPending' | 'createdAt'>
     & { owner: (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username'>
@@ -481,6 +484,14 @@ export type GetCollabPostQuery = (
       & Pick<User, 'id' | 'username' | 'avatar'>
     )> }
   )> }
+);
+
+export type CollabPostLanguagesQueryVariables = {};
+
+
+export type CollabPostLanguagesQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'languages'>
 );
 
 export type CollabPostCommentsQueryVariables = {
@@ -820,6 +831,7 @@ export const CollabPostsDocument = gql`
     stack
     experience
     hasStarted
+    languages
     createdAt
     isNew
     owner {
@@ -871,6 +883,7 @@ export const GetCollabPostDocument = gql`
     experience
     stack
     hasStarted
+    languages
     members {
       id
       username
@@ -911,6 +924,36 @@ export function useGetCollabPostLazyQuery(baseOptions?: ApolloReactHooks.LazyQue
 export type GetCollabPostQueryHookResult = ReturnType<typeof useGetCollabPostQuery>;
 export type GetCollabPostLazyQueryHookResult = ReturnType<typeof useGetCollabPostLazyQuery>;
 export type GetCollabPostQueryResult = ApolloReactCommon.QueryResult<GetCollabPostQuery, GetCollabPostQueryVariables>;
+export const CollabPostLanguagesDocument = gql`
+    query CollabPostLanguages {
+  languages
+}
+    `;
+
+/**
+ * __useCollabPostLanguagesQuery__
+ *
+ * To run a query within a React component, call `useCollabPostLanguagesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCollabPostLanguagesQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCollabPostLanguagesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCollabPostLanguagesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CollabPostLanguagesQuery, CollabPostLanguagesQueryVariables>) {
+        return ApolloReactHooks.useQuery<CollabPostLanguagesQuery, CollabPostLanguagesQueryVariables>(CollabPostLanguagesDocument, baseOptions);
+      }
+export function useCollabPostLanguagesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CollabPostLanguagesQuery, CollabPostLanguagesQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<CollabPostLanguagesQuery, CollabPostLanguagesQueryVariables>(CollabPostLanguagesDocument, baseOptions);
+        }
+export type CollabPostLanguagesQueryHookResult = ReturnType<typeof useCollabPostLanguagesQuery>;
+export type CollabPostLanguagesLazyQueryHookResult = ReturnType<typeof useCollabPostLanguagesLazyQuery>;
+export type CollabPostLanguagesQueryResult = ApolloReactCommon.QueryResult<CollabPostLanguagesQuery, CollabPostLanguagesQueryVariables>;
 export const CollabPostCommentsDocument = gql`
     query CollabPostComments($postId: ID!) {
   collabPost(postId: $postId) {

@@ -2,6 +2,7 @@ import React, { useState, ChangeEvent } from 'react'
 import { Container } from '../global'
 import { useHistory } from 'react-router-dom'
 import ReactSelect from 'react-select'
+import Creatable from 'react-select/creatable'
 import {
   Radio,
   Button,
@@ -35,18 +36,19 @@ const experienceOptions = [
 ].map(value => ({ value, label: value }))
 
 export const CreateCollab = () => {
-  const [postInput, setPostInput] = useState<Omit<CollabPostArgs, 'languages'>>(
-    {
-      name: 'Collabbbb',
-      title: 'React TypeScript next level app',
-      experience: 'ALL' as Experience,
-      stack: ['TypeScript', 'React'],
-      description: 'Our first Collab!',
-      hasStarted: false,
-    },
-  )
-  const [stackInput, setStackInput] = useState('')
+  const [postInput, setPostInput] = useState<
+    Omit<CollabPostArgs, 'languages' | 'stack'>
+  >({
+    name: 'Collabbbb',
+    title: 'React TypeScript next level app',
+    experience: 'ALL' as Experience,
+    description: 'Our first Collab!',
+    hasStarted: false,
+  })
   const [selectedLanguages, setSelectedLanguages] = useState<
+    { label: string; value: string }[]
+  >([])
+  const [selectedStack, setSelectedStack] = useState<
     { label: string; value: string }[]
   >([])
   const { data } = useCollabPostLanguagesQuery()
@@ -80,18 +82,7 @@ export const CreateCollab = () => {
     }))
   }
 
-  const toggleStack = (name: string) => () => {
-    const inStack = postInput.stack.includes(name)
-
-    setPostInput(prevState => ({
-      ...prevState,
-      stack: inStack
-        ? prevState.stack.filter(s => s !== name)
-        : [...prevState.stack, name],
-    }))
-  }
-
-  const { name, title, experience, stack, description, hasStarted } = postInput
+  const { name, title, description, hasStarted } = postInput
 
   return (
     <Container>
@@ -180,7 +171,7 @@ export const CreateCollab = () => {
                 mb={2}
                 onClick={() =>
                   setSelectedLanguages(prevState =>
-                    prevState.filter(language => language.label !== label),
+                    prevState.filter(language => language.label !== label)
                   )
                 }
               >
@@ -192,18 +183,17 @@ export const CreateCollab = () => {
         </FormControl>
         <FormControl>
           <FormLabel htmlFor="tech-stack">Tech Stack</FormLabel>
-          <ReactSelect
+          <Creatable
             id="tech-stack"
             isMulti
             placeholder=""
-            isSearchable
-            hideSelectedOptions
-            value={selectedLanguages}
-            onChange={values => setSelectedLanguages(values as any)}
-            options={data?.languages.map(name => ({
-              value: name,
-              label: name,
-            }))}
+            value={selectedStack}
+            onChange={values => setSelectedStack(values as any)}
+            components={{
+              DropdownIndicator: () => null,
+              IndicatorSeparator: () => null,
+              Menu: () => null,
+            }}
             styles={{
               multiValue: provided => ({
                 ...provided,
@@ -211,8 +201,8 @@ export const CreateCollab = () => {
               }),
             }}
           />
-          {/* <Stack spacing={2} isInline mt={4} flexWrap="wrap">
-            {selectedLanguages.map(({ label }) => (
+          <Stack spacing={2} isInline mt={4} flexWrap="wrap">
+            {selectedStack.map(({ label }) => (
               <Tag
                 size="md"
                 key={label}
@@ -222,8 +212,8 @@ export const CreateCollab = () => {
                 cursor="pointer"
                 mb={2}
                 onClick={() =>
-                  setSelectedLanguages(prevState =>
-                    prevState.filter(language => language.label !== label),
+                  setSelectedStack(prevState =>
+                    prevState.filter(stack => stack.label !== label)
                   )
                 }
               >
@@ -231,7 +221,7 @@ export const CreateCollab = () => {
                 <TagCloseButton />
               </Tag>
             ))}
-          </Stack> */}
+          </Stack>
         </FormControl>
         <FormControl>
           <FormLabel htmlFor="description">Description</FormLabel>
@@ -251,6 +241,7 @@ export const CreateCollab = () => {
                 post: {
                   ...postInput,
                   languages: selectedLanguages.map(({ label }) => label),
+                  stack: selectedStack.map(({ label }) => label),
                 },
               },
             })
