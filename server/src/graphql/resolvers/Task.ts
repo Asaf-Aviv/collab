@@ -15,7 +15,7 @@ export const collabTaskResolver: Resolvers = {
   },
   Task: {
     comments: ({ id }, args, { models }) =>
-      models.CollabTaskComment.findAll({ where: { collabTaskId: id } }),
+      models.CollabTaskComment.findAll({ where: { taskId: id } }),
     author: ({ authorId }, args, { loaders }) =>
       loaders.userLoader.load(authorId),
   },

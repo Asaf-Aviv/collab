@@ -11,7 +11,7 @@ export const collabPostResolver: Resolvers = {
       models.CollabPost.findByPk(postId),
     languages: (root, args, { models }) =>
       models.Language.findAll().then(languages =>
-        languages.map(({ name }) => name),
+        languages.map(({ name }) => name)
       ),
   },
   Mutation: {
@@ -40,6 +40,14 @@ export const collabPostResolver: Resolvers = {
         where: { postId: id },
       })
       return languages.map(({ languageName }) => languageName)
+    },
+    stack: async ({ id }, args, { models }) => {
+      const postStack = await models.CollabPostStack.findAll({
+        where: { postId: id },
+        attributes: [],
+        include: [{ model: models.Stack, attributes: ['name'] }],
+      })
+      return postStack.map(({ stack }) => stack.name)
     },
     acceptsInvites: async ({ collabId }, args, { loaders }) => {
       const collab = await loaders.collabLoader.load(collabId)

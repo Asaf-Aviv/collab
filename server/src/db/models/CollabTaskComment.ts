@@ -27,7 +27,7 @@ export class CollabTaskComment extends Model<CollabTaskComment> {
   taskId!: string
 
   @BelongsTo(() => CollabTask, {
-    foreignKey: 'collabTaskId',
+    foreignKey: 'taskId',
     onDelete: 'CASCADE',
   })
   task!: CollabTask

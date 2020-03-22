@@ -12,6 +12,7 @@ import {
   BelongsTo,
   HasMany,
   AllowNull,
+  BelongsToMany,
 } from 'sequelize-typescript'
 import uuid from 'uuid/v4'
 import { CollabPostArgs } from '../../graphql/types'
@@ -21,6 +22,8 @@ import { Collab } from './Collab'
 import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 import { CollabPostComment } from './CollabPostComment'
 import { CollabPostLanguage } from './CollabPostLanguage'
+import { Stack } from './Stack'
+import { CollabPostStack } from './CollabPostStack'
 
 @Table({ tableName: 'collab_posts' })
 export class CollabPost extends Model<CollabPost> {
@@ -42,10 +45,6 @@ export class CollabPost extends Model<CollabPost> {
   @Column(DataType.ENUM('ALL', 'JUNIOR', 'JUNIOR_MID', 'MID_SENIOR', 'SENIOR'))
   experience!: string
 
-  @AllowNull(false)
-  @Column(DataType.ARRAY(DataType.STRING))
-  stack!: string[]
-
   @Length({
     msg: 'Description must be between 10 characters and 500',
     min: 10,
@@ -58,6 +57,12 @@ export class CollabPost extends Model<CollabPost> {
   @CreatedAt
   @Column
   createdAt!: Date
+
+  @BelongsToMany(
+    () => Stack,
+    () => CollabPostStack
+  )
+  stack!: (Stack & { CollabPostStack: CollabPostStack })[]
 
   @HasMany(() => CollabPostLanguage)
   languages!: string[]
@@ -86,6 +91,7 @@ export class CollabPost extends Model<CollabPost> {
 
   static createPost(postArgs: CollabPostArgs, userId: string) {
     return this.sequelize!.transaction(async () => {
+      console.log(postArgs)
       const collab = new Collab({
         name: postArgs.name,
         ownerId: userId,
@@ -103,20 +109,31 @@ export class CollabPost extends Model<CollabPost> {
         isOwner: true,
       })
 
+      const tagNames = postArgs.stack.map(name => ({ name }))
+
       await collab.save()
 
+      const tags = await Stack.bulkCreate(tagNames, {
+        updateOnDuplicate: ['name'],
+      })
+
+      await post.save()
+
       await Promise.all([
-        //
-        post.save(),
         collabMember.save(),
-        Promise.all(
-          postArgs.languages.map(languageName =>
-            CollabPostLanguage.create({
-              postId: post.id,
-              collabId: collab.id,
-              languageName,
-            }),
-          ),
+        CollabPostLanguage.bulkCreate(
+          postArgs.languages.map(languageName => ({
+            postId: post.id,
+            collabId: collab.id,
+            languageName,
+          }))
+        ),
+        CollabPostStack.bulkCreate(
+          tags.map(tag => ({
+            postId: post.id,
+            collabId: collab.id,
+            stackId: tag.id,
+          }))
         ),
       ])
 
@@ -132,7 +149,7 @@ export class CollabPost extends Model<CollabPost> {
     }
 
     throw new Error(
-      'Collab post not found or you are not the author of this post',
+      'Collab post not found or you are not the author of this post'
     )
   }
 }
@@ -140,5 +157,5 @@ export class CollabPost extends Model<CollabPost> {
 // type for graphql-codegen resolver
 export type GQLCollabPost = GQLResolverTypes<
   CollabPost,
-  'owner' | 'comments' | 'collab' | 'languages'
+  'owner' | 'comments' | 'collab' | 'languages' | 'stack'
 >

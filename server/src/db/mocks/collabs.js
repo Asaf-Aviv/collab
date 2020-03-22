@@ -1,6 +1,6 @@
 const uuid = require('uuid/v4')
 const faker = require('faker')
-const { asaf, seededUsers } = require('../mocks/users')
+const { seededUsers } = require('../mocks/users')
 const _ = require('lodash')
 
 const generageCollab = owner_id => ({
