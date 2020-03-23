@@ -3,6 +3,10 @@ import { and } from 'graphql-shield'
 import { Resolvers } from '../types'
 
 export const collabTaskListResolver: Resolvers = {
+  Query: {
+    taskList: async (root, { collabId }, { models }) =>
+      models.CollabTaskList.findAll({ where: { collabId } }),
+  },
   Mutation: {
     createTaskList: (root, { collabId, name, order }, { user, models }) =>
       models.Collab.createTaskList(collabId, name, order, user.id),
