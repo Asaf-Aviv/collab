@@ -13,7 +13,7 @@ export const collabDiscussionThreadCommentTypeDefs = gql`
   type CollabDiscussionThreadComment {
     id: ID!
     content: String!
-    author: User
+    author: User!
     thread: CollabDiscussionThread
     collab: Collab
   }

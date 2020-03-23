@@ -23,7 +23,7 @@ export const collabTypeDefs = gql`
     owner: User
     collabPostId: ID
     acceptsInvites: Boolean!
-    members: [User]!
+    members: [User!]!
     isOwner: Boolean!
     isMember: Boolean!
     invitationPending: Boolean!

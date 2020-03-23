@@ -60,7 +60,7 @@ export class CollabPost extends Model<CollabPost> {
 
   @BelongsToMany(
     () => Stack,
-    () => CollabPostStack
+    () => CollabPostStack,
   )
   stack!: (Stack & { CollabPostStack: CollabPostStack })[]
 
@@ -109,13 +109,14 @@ export class CollabPost extends Model<CollabPost> {
         isOwner: true,
       })
 
-      const tagNames = postArgs.stack.map(name => ({ name }))
-
       await collab.save()
 
-      const tags = await Stack.bulkCreate(tagNames, {
-        updateOnDuplicate: ['name'],
-      })
+      const tags = await Stack.bulkCreate(
+        postArgs.stack.map(name => ({ name })),
+        {
+          updateOnDuplicate: ['name'],
+        },
+      )
 
       await post.save()
 
@@ -126,14 +127,14 @@ export class CollabPost extends Model<CollabPost> {
             postId: post.id,
             collabId: collab.id,
             languageName,
-          }))
+          })),
         ),
         CollabPostStack.bulkCreate(
           tags.map(tag => ({
             postId: post.id,
             collabId: collab.id,
             stackId: tag.id,
-          }))
+          })),
         ),
       ])
 
@@ -149,7 +150,7 @@ export class CollabPost extends Model<CollabPost> {
     }
 
     throw new Error(
-      'Collab post not found or you are not the author of this post'
+      'Collab post not found or you are not the author of this post',
     )
   }
 }

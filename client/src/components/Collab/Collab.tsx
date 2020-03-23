@@ -1,21 +1,28 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   useParams,
   Link,
-  // useLocation,
   Route,
   useRouteMatch,
+  useLocation,
 } from 'react-router-dom'
-import { Flex } from '@chakra-ui/core'
+import { TabList, Tab, Tabs } from '@chakra-ui/core'
 import { useCollabQuery } from '../../graphql/generates'
 import { TaskBoard } from '../TaskBoard/TaskBoard'
 import { CollabMembers } from '../CollabMembers/CollabMembers'
 import { Discussions } from '../Discussions/Discussions'
+import { Container } from '../global'
+import { DiscussionThread } from '../DiscussionThread/DiscussionThread'
+
+const tabs = ['members', 'task-board', 'discussions']
 
 export const Collab = () => {
   const { collabId } = useParams<{ collabId: string }>()
   const match = useRouteMatch()
-  // const location = useLocation()
+  const { pathname } = useLocation()
+  const [tabIndex, setTabIndex] = useState(
+    tabs.indexOf(tabs.find(name => pathname.includes(name))!),
+  )
   const { data, loading, error } = useCollabQuery({
     variables: { collabId },
   })
@@ -24,18 +31,38 @@ export const Collab = () => {
   if (error) return <h1>Collab not found</h1>
   if (!data?.collab) return null
 
-  // const { name, owner, members } = data.collab
+  const { name, owner, isOwner, pendingInvites, pendingRequests } = data.collab
 
   return (
-    <div>
-      <Flex as="nav" direction="column" position="fixed">
-        <Link to={`${match.url}/members`}>Members</Link>
-        <Link to={`${match.url}/task-board`}>Task Board</Link>
-        <Link to={`${match.url}/discussions`}>Discussions</Link>
-      </Flex>
+    <Container>
+      <Tabs
+        index={tabIndex}
+        onChange={setTabIndex}
+        variantColor="purple"
+        mb={6}
+      >
+        <TabList as="nav">
+          //@ts-ignore
+          <Tab as={Link} to={`${match.url}/members`}>
+            Members
+          </Tab>
+          //@ts-ignore
+          <Tab as={Link} to={`${match.url}/task-board`}>
+            Task Board
+          </Tab>
+          //@ts-ignore
+          <Tab as={Link} to={`${match.url}/discussions`}>
+            Discussions
+          </Tab>
+        </TabList>
+      </Tabs>
       <Route path={`${match.path}/members`} component={CollabMembers} />
       <Route path={`${match.path}/task-board`} component={TaskBoard} />
-      <Route path={`${match.path}/discussions`} component={Discussions} />
-    </div>
+      <Route exact path={`${match.path}/discussions`} component={Discussions} />
+      <Route
+        path={`${match.path}/discussions/:threadId`}
+        component={DiscussionThread}
+      />
+    </Container>
   )
 }

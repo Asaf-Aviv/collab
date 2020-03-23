@@ -27,6 +27,6 @@ export const Comment = ({ /* id ,*/ content, author }: Props) => (
 
 const CommentContainer = styled(Flex)`
   & + & {
-    margin-top: 2rem;
+    margin-top: 1.5rem;
   }
 `
