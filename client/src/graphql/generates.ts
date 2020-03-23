@@ -25,7 +25,7 @@ export type Collab = {
   invitationPending: Scalars['Boolean'],
   isMember: Scalars['Boolean'],
   isOwner: Scalars['Boolean'],
-  members: Array<Maybe<User>>,
+  members: Array<User>,
   name: Scalars['String'],
   owner?: Maybe<User>,
   pendingInvites: Array<Maybe<User>>,
@@ -36,16 +36,18 @@ export type Collab = {
 
 export type CollabDiscussionThread = {
    __typename?: 'CollabDiscussionThread',
-  author?: Maybe<User>,
+  author: User,
   collab?: Maybe<Collab>,
   comments: Array<CollabDiscussionThreadComment>,
+  commentsCount: Scalars['Int'],
+  content: Scalars['String'],
   id: Scalars['ID'],
   title: Scalars['String'],
 };
 
 export type CollabDiscussionThreadComment = {
    __typename?: 'CollabDiscussionThreadComment',
-  author?: Maybe<User>,
+  author: User,
   collab?: Maybe<Collab>,
   content: Scalars['String'],
   id: Scalars['ID'],
@@ -99,6 +101,12 @@ export type CollabRequest = {
    __typename?: 'CollabRequest',
   collab: Collab,
   member: User,
+};
+
+export type CreateThreadArgs = {
+  title: Scalars['String'],
+  content: Scalars['String'],
+  collabId: Scalars['ID'],
 };
 
 export type CurrentUser = {
@@ -176,6 +184,7 @@ export type MutationCancelRequestToJoinArgs = {
 
 export type MutationCreateCollabDiscussionThreadArgs = {
   collabId: Scalars['ID'],
+  thread: CreateThreadArgs,
   title: Scalars['String']
 };
 
@@ -309,6 +318,9 @@ export type Query = {
   collabs: Array<Collab>,
   currentUser?: Maybe<CurrentUser>,
   languages: Array<Scalars['String']>,
+  task?: Maybe<Task>,
+  taskList?: Maybe<Array<TaskList>>,
+  thread?: Maybe<CollabDiscussionThread>,
   user?: Maybe<User>,
   users: Array<User>,
 };
@@ -321,6 +333,21 @@ export type QueryCollabArgs = {
 
 export type QueryCollabPostArgs = {
   postId: Scalars['ID']
+};
+
+
+export type QueryTaskArgs = {
+  taskId: Scalars['ID']
+};
+
+
+export type QueryTaskListArgs = {
+  collabId: Scalars['ID']
+};
+
+
+export type QueryThreadArgs = {
+  threadId: Scalars['ID']
 };
 
 
@@ -528,46 +555,129 @@ export type CollabQuery = (
     & { owner: Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
-    )>, members: Array<Maybe<(
-      { __typename?: 'User' }
-      & Pick<User, 'id' | 'username' | 'avatar'>
-    )>>, pendingInvites: Array<Maybe<(
+    )>, pendingInvites: Array<Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
     )>>, pendingRequests: Array<Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
-    )>>, taskList: Array<(
-      { __typename?: 'TaskList' }
-      & Pick<TaskList, 'id' | 'name' | 'order'>
-      & { tasks: Array<(
-        { __typename?: 'Task' }
-        & Pick<Task, 'id' | 'description'>
-        & { author: (
-          { __typename?: 'User' }
-          & Pick<User, 'id' | 'username' | 'avatar'>
-        ), comments: Array<(
-          { __typename?: 'TaskComment' }
-          & Pick<TaskComment, 'id' | 'content'>
-          & { author: Maybe<(
-            { __typename?: 'User' }
-            & Pick<User, 'id' | 'username' | 'avatar'>
-          )> }
-        )> }
-      )> }
-    )>, discussionThreads: Array<(
+    )>> }
+  )> }
+);
+
+export type CollabMembersQueryVariables = {
+  collabId: Scalars['ID']
+};
+
+
+export type CollabMembersQuery = (
+  { __typename?: 'Query' }
+  & { collab: Maybe<(
+    { __typename?: 'Collab' }
+    & Pick<Collab, 'id'>
+    & { members: Array<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    )> }
+  )> }
+);
+
+export type CollabDiscussionThreadsQueryVariables = {
+  collabId: Scalars['ID']
+};
+
+
+export type CollabDiscussionThreadsQuery = (
+  { __typename?: 'Query' }
+  & { collab: Maybe<(
+    { __typename?: 'Collab' }
+    & Pick<Collab, 'id'>
+    & { discussionThreads: Array<(
       { __typename?: 'CollabDiscussionThread' }
-      & Pick<CollabDiscussionThread, 'id' | 'title'>
+      & Pick<CollabDiscussionThread, 'id' | 'title' | 'commentsCount'>
+      & { author: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'avatar'>
+      ) }
+    )> }
+  )> }
+);
+
+export type CollabThreadQueryVariables = {
+  threadId: Scalars['ID']
+};
+
+
+export type CollabThreadQuery = (
+  { __typename?: 'Query' }
+  & { thread: Maybe<(
+    { __typename?: 'CollabDiscussionThread' }
+    & Pick<CollabDiscussionThread, 'id' | 'title' | 'content'>
+    & { author: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    ) }
+  )> }
+);
+
+export type CollabThreadCommentsQueryVariables = {
+  threadId: Scalars['ID']
+};
+
+
+export type CollabThreadCommentsQuery = (
+  { __typename?: 'Query' }
+  & { thread: Maybe<(
+    { __typename?: 'CollabDiscussionThread' }
+    & Pick<CollabDiscussionThread, 'id'>
+    & { comments: Array<(
+      { __typename?: 'CollabDiscussionThreadComment' }
+      & Pick<CollabDiscussionThreadComment, 'id' | 'content'>
+      & { author: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'avatar'>
+      ) }
+    )> }
+  )> }
+);
+
+export type TaskListQueryVariables = {
+  collabId: Scalars['ID']
+};
+
+
+export type TaskListQuery = (
+  { __typename?: 'Query' }
+  & { taskList: Maybe<Array<(
+    { __typename?: 'TaskList' }
+    & Pick<TaskList, 'id' | 'name' | 'order'>
+    & { tasks: Array<(
+      { __typename?: 'Task' }
+      & Pick<Task, 'id' | 'description'>
+      & { author: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'avatar'>
+      ) }
+    )> }
+  )>> }
+);
+
+export type TaskCommentsQueryVariables = {
+  taskId: Scalars['ID']
+};
+
+
+export type TaskCommentsQuery = (
+  { __typename?: 'Query' }
+  & { task: Maybe<(
+    { __typename?: 'Task' }
+    & Pick<Task, 'id'>
+    & { comments: Array<(
+      { __typename?: 'TaskComment' }
+      & Pick<TaskComment, 'id' | 'content'>
       & { author: Maybe<(
         { __typename?: 'User' }
         & Pick<User, 'id' | 'username' | 'avatar'>
-      )>, comments: Array<(
-        { __typename?: 'CollabDiscussionThreadComment' }
-        & Pick<CollabDiscussionThreadComment, 'id' | 'content'>
-        & { author: Maybe<(
-          { __typename?: 'User' }
-          & Pick<User, 'id' | 'username' | 'avatar'>
-        )> }
       )> }
     )> }
   )> }
@@ -1008,11 +1118,6 @@ export const CollabDocument = gql`
     }
     collabPostId
     acceptsInvites
-    members {
-      id
-      username
-      avatar
-    }
     isOwner
     pendingInvites {
       id
@@ -1023,47 +1128,6 @@ export const CollabDocument = gql`
       id
       username
       avatar
-    }
-    taskList {
-      id
-      name
-      order
-      tasks {
-        id
-        description
-        author {
-          id
-          username
-          avatar
-        }
-        comments {
-          id
-          content
-          author {
-            id
-            username
-            avatar
-          }
-        }
-      }
-    }
-    discussionThreads {
-      id
-      title
-      author {
-        id
-        username
-        avatar
-      }
-      comments {
-        id
-        content
-        author {
-          id
-          username
-          avatar
-        }
-      }
     }
   }
 }
@@ -1094,6 +1158,255 @@ export function useCollabLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookO
 export type CollabQueryHookResult = ReturnType<typeof useCollabQuery>;
 export type CollabLazyQueryHookResult = ReturnType<typeof useCollabLazyQuery>;
 export type CollabQueryResult = ApolloReactCommon.QueryResult<CollabQuery, CollabQueryVariables>;
+export const CollabMembersDocument = gql`
+    query CollabMembers($collabId: ID!) {
+  collab(collabId: $collabId) {
+    id
+    members {
+      id
+      username
+      avatar
+    }
+  }
+}
+    `;
+
+/**
+ * __useCollabMembersQuery__
+ *
+ * To run a query within a React component, call `useCollabMembersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCollabMembersQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCollabMembersQuery({
+ *   variables: {
+ *      collabId: // value for 'collabId'
+ *   },
+ * });
+ */
+export function useCollabMembersQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CollabMembersQuery, CollabMembersQueryVariables>) {
+        return ApolloReactHooks.useQuery<CollabMembersQuery, CollabMembersQueryVariables>(CollabMembersDocument, baseOptions);
+      }
+export function useCollabMembersLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CollabMembersQuery, CollabMembersQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<CollabMembersQuery, CollabMembersQueryVariables>(CollabMembersDocument, baseOptions);
+        }
+export type CollabMembersQueryHookResult = ReturnType<typeof useCollabMembersQuery>;
+export type CollabMembersLazyQueryHookResult = ReturnType<typeof useCollabMembersLazyQuery>;
+export type CollabMembersQueryResult = ApolloReactCommon.QueryResult<CollabMembersQuery, CollabMembersQueryVariables>;
+export const CollabDiscussionThreadsDocument = gql`
+    query CollabDiscussionThreads($collabId: ID!) {
+  collab(collabId: $collabId) {
+    id
+    discussionThreads {
+      id
+      title
+      author {
+        id
+        username
+        avatar
+      }
+      commentsCount
+    }
+  }
+}
+    `;
+
+/**
+ * __useCollabDiscussionThreadsQuery__
+ *
+ * To run a query within a React component, call `useCollabDiscussionThreadsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCollabDiscussionThreadsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCollabDiscussionThreadsQuery({
+ *   variables: {
+ *      collabId: // value for 'collabId'
+ *   },
+ * });
+ */
+export function useCollabDiscussionThreadsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CollabDiscussionThreadsQuery, CollabDiscussionThreadsQueryVariables>) {
+        return ApolloReactHooks.useQuery<CollabDiscussionThreadsQuery, CollabDiscussionThreadsQueryVariables>(CollabDiscussionThreadsDocument, baseOptions);
+      }
+export function useCollabDiscussionThreadsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CollabDiscussionThreadsQuery, CollabDiscussionThreadsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<CollabDiscussionThreadsQuery, CollabDiscussionThreadsQueryVariables>(CollabDiscussionThreadsDocument, baseOptions);
+        }
+export type CollabDiscussionThreadsQueryHookResult = ReturnType<typeof useCollabDiscussionThreadsQuery>;
+export type CollabDiscussionThreadsLazyQueryHookResult = ReturnType<typeof useCollabDiscussionThreadsLazyQuery>;
+export type CollabDiscussionThreadsQueryResult = ApolloReactCommon.QueryResult<CollabDiscussionThreadsQuery, CollabDiscussionThreadsQueryVariables>;
+export const CollabThreadDocument = gql`
+    query CollabThread($threadId: ID!) {
+  thread(threadId: $threadId) {
+    id
+    title
+    content
+    author {
+      id
+      username
+      avatar
+    }
+  }
+}
+    `;
+
+/**
+ * __useCollabThreadQuery__
+ *
+ * To run a query within a React component, call `useCollabThreadQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCollabThreadQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCollabThreadQuery({
+ *   variables: {
+ *      threadId: // value for 'threadId'
+ *   },
+ * });
+ */
+export function useCollabThreadQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CollabThreadQuery, CollabThreadQueryVariables>) {
+        return ApolloReactHooks.useQuery<CollabThreadQuery, CollabThreadQueryVariables>(CollabThreadDocument, baseOptions);
+      }
+export function useCollabThreadLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CollabThreadQuery, CollabThreadQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<CollabThreadQuery, CollabThreadQueryVariables>(CollabThreadDocument, baseOptions);
+        }
+export type CollabThreadQueryHookResult = ReturnType<typeof useCollabThreadQuery>;
+export type CollabThreadLazyQueryHookResult = ReturnType<typeof useCollabThreadLazyQuery>;
+export type CollabThreadQueryResult = ApolloReactCommon.QueryResult<CollabThreadQuery, CollabThreadQueryVariables>;
+export const CollabThreadCommentsDocument = gql`
+    query CollabThreadComments($threadId: ID!) {
+  thread(threadId: $threadId) {
+    id
+    comments {
+      id
+      content
+      author {
+        id
+        username
+        avatar
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useCollabThreadCommentsQuery__
+ *
+ * To run a query within a React component, call `useCollabThreadCommentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCollabThreadCommentsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCollabThreadCommentsQuery({
+ *   variables: {
+ *      threadId: // value for 'threadId'
+ *   },
+ * });
+ */
+export function useCollabThreadCommentsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CollabThreadCommentsQuery, CollabThreadCommentsQueryVariables>) {
+        return ApolloReactHooks.useQuery<CollabThreadCommentsQuery, CollabThreadCommentsQueryVariables>(CollabThreadCommentsDocument, baseOptions);
+      }
+export function useCollabThreadCommentsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CollabThreadCommentsQuery, CollabThreadCommentsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<CollabThreadCommentsQuery, CollabThreadCommentsQueryVariables>(CollabThreadCommentsDocument, baseOptions);
+        }
+export type CollabThreadCommentsQueryHookResult = ReturnType<typeof useCollabThreadCommentsQuery>;
+export type CollabThreadCommentsLazyQueryHookResult = ReturnType<typeof useCollabThreadCommentsLazyQuery>;
+export type CollabThreadCommentsQueryResult = ApolloReactCommon.QueryResult<CollabThreadCommentsQuery, CollabThreadCommentsQueryVariables>;
+export const TaskListDocument = gql`
+    query TaskList($collabId: ID!) {
+  taskList(collabId: $collabId) {
+    id
+    name
+    order
+    tasks {
+      id
+      description
+      author {
+        id
+        username
+        avatar
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useTaskListQuery__
+ *
+ * To run a query within a React component, call `useTaskListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTaskListQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTaskListQuery({
+ *   variables: {
+ *      collabId: // value for 'collabId'
+ *   },
+ * });
+ */
+export function useTaskListQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<TaskListQuery, TaskListQueryVariables>) {
+        return ApolloReactHooks.useQuery<TaskListQuery, TaskListQueryVariables>(TaskListDocument, baseOptions);
+      }
+export function useTaskListLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<TaskListQuery, TaskListQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<TaskListQuery, TaskListQueryVariables>(TaskListDocument, baseOptions);
+        }
+export type TaskListQueryHookResult = ReturnType<typeof useTaskListQuery>;
+export type TaskListLazyQueryHookResult = ReturnType<typeof useTaskListLazyQuery>;
+export type TaskListQueryResult = ApolloReactCommon.QueryResult<TaskListQuery, TaskListQueryVariables>;
+export const TaskCommentsDocument = gql`
+    query TaskComments($taskId: ID!) {
+  task(taskId: $taskId) {
+    id
+    comments {
+      id
+      content
+      author {
+        id
+        username
+        avatar
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useTaskCommentsQuery__
+ *
+ * To run a query within a React component, call `useTaskCommentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTaskCommentsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTaskCommentsQuery({
+ *   variables: {
+ *      taskId: // value for 'taskId'
+ *   },
+ * });
+ */
+export function useTaskCommentsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<TaskCommentsQuery, TaskCommentsQueryVariables>) {
+        return ApolloReactHooks.useQuery<TaskCommentsQuery, TaskCommentsQueryVariables>(TaskCommentsDocument, baseOptions);
+      }
+export function useTaskCommentsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<TaskCommentsQuery, TaskCommentsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<TaskCommentsQuery, TaskCommentsQueryVariables>(TaskCommentsDocument, baseOptions);
+        }
+export type TaskCommentsQueryHookResult = ReturnType<typeof useTaskCommentsQuery>;
+export type TaskCommentsLazyQueryHookResult = ReturnType<typeof useTaskCommentsLazyQuery>;
+export type TaskCommentsQueryResult = ApolloReactCommon.QueryResult<TaskCommentsQuery, TaskCommentsQueryVariables>;
 export const RequestToJoinDocument = gql`
     mutation RequestToJoin($collabId: ID!) {
   requestToJoin(collabId: $collabId)

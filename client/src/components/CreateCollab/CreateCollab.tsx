@@ -68,7 +68,8 @@ export const CreateCollab = () => {
     }))
   }
 
-  const handleHasStaredChange = (value: string | number | undefined) => {
+  const handleHasStaredChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.currentTarget
     setPostInput(prevState => ({
       ...prevState,
       hasStarted: value === 'no',
@@ -117,11 +118,14 @@ export const CreateCollab = () => {
               spacing={4}
               isInline
               id="new-project"
-              onChange={handleHasStaredChange}
               value={hasStarted ? 'no' : 'yes'}
             >
-              <Radio value="no">No</Radio>
-              <Radio value="yes">Yes</Radio>
+              <Radio value="no" onChange={handleHasStaredChange}>
+                No
+              </Radio>
+              <Radio value="yes" onChange={handleHasStaredChange}>
+                Yes
+              </Radio>
             </RadioButtonGroup>
           </FormControl>
           <FormControl width={200}>
@@ -171,7 +175,7 @@ export const CreateCollab = () => {
                 mb={2}
                 onClick={() =>
                   setSelectedLanguages(prevState =>
-                    prevState.filter(language => language.label !== label)
+                    prevState.filter(language => language.label !== label),
                   )
                 }
               >
@@ -213,7 +217,7 @@ export const CreateCollab = () => {
                 mb={2}
                 onClick={() =>
                   setSelectedStack(prevState =>
-                    prevState.filter(stack => stack.label !== label)
+                    prevState.filter(stack => stack.label !== label),
                   )
                 }
               >

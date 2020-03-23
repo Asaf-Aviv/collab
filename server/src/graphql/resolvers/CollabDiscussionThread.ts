@@ -3,12 +3,13 @@ import { and } from 'graphql-shield'
 import { Resolvers } from '../types'
 
 export const collabDiscussionThreadResolver: Resolvers = {
+  Query: {
+    thread: (root, { threadId }, { models }) =>
+      models.CollabDiscussionThread.findByPk(threadId),
+  },
   Mutation: {
-    createCollabDiscussionThread: (
-      root,
-      { title, collabId },
-      { user, models }
-    ) => models.CollabDiscussionThread.createThread(title, user!.id, collabId),
+    createCollabDiscussionThread: (root, { thread }, { user, models }) =>
+      models.CollabDiscussionThread.createThread(thread, user!.id),
     deleteCollabDiscussionThread: (root, { threadId }, { user, models }) =>
       models.CollabDiscussionThread.deleteThread(threadId, user!.id),
   },
@@ -19,6 +20,8 @@ export const collabDiscussionThreadResolver: Resolvers = {
       loaders.collabLoader.load(collabId),
     comments: ({ id }, args, { models }) =>
       models.CollabDiscussionThreadComment.findAll({ where: { threadId: id } }),
+    commentsCount: ({ id }, args, { models }) =>
+      models.CollabDiscussionThreadComment.count({ where: { threadId: id } }),
   },
 }
 

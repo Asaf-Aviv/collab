@@ -26,7 +26,9 @@ export const NavBar = () => {
       align="center"
       height="4rem"
       background="#FFF"
-      pos="relative"
+      pos="fixed"
+      width="100%"
+      zIndex={100}
       boxShadow="0px 4px 5px 0 rgba(231, 216, 255, 0.38)"
     >
       <Container height="100%" d="flex" justifyContent="space-between">

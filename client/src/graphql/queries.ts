@@ -102,7 +102,7 @@ export const COLLAB_POST_COMMENTS = gql`
 `
 
 // Collab
-export const GET_COLLAB_BY_ID = gql`
+export const GET_COLLAB = gql`
   query Collab($collabId: ID!) {
     collab(collabId: $collabId) {
       id
@@ -114,11 +114,6 @@ export const GET_COLLAB_BY_ID = gql`
       }
       collabPostId
       acceptsInvites
-      members {
-        id
-        username
-        avatar
-      }
       isOwner
       pendingInvites {
         id
@@ -130,29 +125,27 @@ export const GET_COLLAB_BY_ID = gql`
         username
         avatar
       }
-      taskList {
+    }
+  }
+`
+
+export const GET_COLLAB_MEMBERS = gql`
+  query CollabMembers($collabId: ID!) {
+    collab(collabId: $collabId) {
+      id
+      members {
         id
-        name
-        order
-        tasks {
-          id
-          description
-          author {
-            id
-            username
-            avatar
-          }
-          comments {
-            id
-            content
-            author {
-              id
-              username
-              avatar
-            }
-          }
-        }
+        username
+        avatar
       }
+    }
+  }
+`
+
+export const GET_COLLAB_DISCUSSIONS = gql`
+  query CollabDiscussionThreads($collabId: ID!) {
+    collab(collabId: $collabId) {
+      id
       discussionThreads {
         id
         title
@@ -161,14 +154,74 @@ export const GET_COLLAB_BY_ID = gql`
           username
           avatar
         }
-        comments {
+        commentsCount
+      }
+    }
+  }
+`
+
+export const GET_COLLAB_DISCUSSION_THREAD = gql`
+  query CollabThread($threadId: ID!) {
+    thread(threadId: $threadId) {
+      id
+      title
+      content
+      author {
+        id
+        username
+        avatar
+      }
+    }
+  }
+`
+
+export const GET_COLLAB_DISCUSSION_THREAD_COMMENTS = gql`
+  query CollabThreadComments($threadId: ID!) {
+    thread(threadId: $threadId) {
+      id
+      comments {
+        id
+        content
+        author {
           id
-          content
-          author {
-            id
-            username
-            avatar
-          }
+          username
+          avatar
+        }
+      }
+    }
+  }
+`
+
+export const GET_COLLAB_TASK_BOARD = gql`
+  query TaskList($collabId: ID!) {
+    taskList(collabId: $collabId) {
+      id
+      name
+      order
+      tasks {
+        id
+        description
+        author {
+          id
+          username
+          avatar
+        }
+      }
+    }
+  }
+`
+
+export const GET_TASK_COMMENTS = gql`
+  query TaskComments($taskId: ID!) {
+    task(taskId: $taskId) {
+      id
+      comments {
+        id
+        content
+        author {
+          id
+          username
+          avatar
         }
       }
     }
