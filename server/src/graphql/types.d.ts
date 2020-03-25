@@ -127,9 +127,9 @@ export type CollabRequest = {
 };
 
 export type CreateThreadArgs = {
-  collabId: Scalars['ID'],
-  content: Scalars['String'],
   title: Scalars['String'],
+  content: Scalars['String'],
+  collabId: Scalars['ID'],
 };
 
 export type CurrentUser = {
@@ -186,7 +186,6 @@ export type Mutation = {
   login: AuthPayload,
   removeCollabPostReaction: Scalars['Boolean'],
   removeMember: Collab,
-  removeReaction: Scalars['Boolean'],
   requestToJoin: Scalars['Boolean'],
   signUp: AuthPayload,
   toggleAcceptInvites: Collab,
@@ -215,7 +214,9 @@ export type MutationCancelRequestToJoinArgs = {
 
 
 export type MutationCreateCollabDiscussionThreadArgs = {
-  thread: CreateThreadArgs
+  collabId: Scalars['ID'],
+  thread: CreateThreadArgs,
+  title: Scalars['String']
 };
 
 
@@ -328,11 +329,6 @@ export type MutationRemoveCollabPostReactionArgs = {
 export type MutationRemoveMemberArgs = {
   collabId: Scalars['ID'],
   memberId: Scalars['ID']
-};
-
-
-export type MutationRemoveReactionArgs = {
-  reactionId: Scalars['ID']
 };
 
 
@@ -681,7 +677,7 @@ export type MutationResolvers<ContextType = CollabContext, ParentType extends Re
   acceptMemberRequest?: Resolver<ResolversTypes['Collab'], ParentType, CollabContextWithUser, RequireFields<MutationAcceptMemberRequestArgs, 'collabId' | 'memberId'>>,
   addCollabPostReaction?: Resolver<ResolversTypes['CollabPostReaction'], ParentType, ContextType, RequireFields<MutationAddCollabPostReactionArgs, 'reaction'>>,
   cancelRequestToJoin?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCancelRequestToJoinArgs, 'collabId'>>,
-  createCollabDiscussionThread?: Resolver<ResolversTypes['CollabDiscussionThread'], ParentType, ContextType, RequireFields<MutationCreateCollabDiscussionThreadArgs, 'thread'>>,
+  createCollabDiscussionThread?: Resolver<ResolversTypes['CollabDiscussionThread'], ParentType, ContextType, RequireFields<MutationCreateCollabDiscussionThreadArgs, 'collabId' | 'thread' | 'title'>>,
   createCollabDiscussionThreadComment?: Resolver<ResolversTypes['CollabDiscussionThreadComment'], ParentType, ContextType, RequireFields<MutationCreateCollabDiscussionThreadCommentArgs, 'collabId' | 'content' | 'threadId'>>,
   createCollabPost?: Resolver<ResolversTypes['CollabPost'], ParentType, ContextType, RequireFields<MutationCreateCollabPostArgs, 'post'>>,
   createComment?: Resolver<ResolversTypes['CollabPostComment'], ParentType, ContextType, RequireFields<MutationCreateCommentArgs, 'content' | 'postId'>>,
@@ -703,7 +699,6 @@ export type MutationResolvers<ContextType = CollabContext, ParentType extends Re
   login?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'credentials'>>,
   removeCollabPostReaction?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemoveCollabPostReactionArgs, 'reactionId'>>,
   removeMember?: Resolver<ResolversTypes['Collab'], ParentType, CollabContextWithUser, RequireFields<MutationRemoveMemberArgs, 'collabId' | 'memberId'>>,
-  removeReaction?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemoveReactionArgs, 'reactionId'>>,
   requestToJoin?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationRequestToJoinArgs, 'collabId'>>,
   signUp?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'credentials'>>,
   toggleAcceptInvites?: Resolver<ResolversTypes['Collab'], ParentType, CollabContextWithUser, RequireFields<MutationToggleAcceptInvitesArgs, 'collabId'>>,

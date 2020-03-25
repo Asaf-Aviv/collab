@@ -23,12 +23,11 @@ import {
 } from '@chakra-ui/core'
 import { AvatarWithUsername } from '../AvatarWithUsername/AvatarWithUsername'
 import styled from '@emotion/styled'
-import { NimblePicker } from 'emoji-mart'
-import twitterEmojiData from 'emoji-mart/data/twitter.json'
 import { Comment } from '../Comment/Comment'
 import { Container } from '../global'
 import { GET_COLLAB_POST } from '../../graphql/queries'
 import { formatDate } from '../../utils'
+import { ReactionPanel } from '../ReactionPanel/ReactionPanel'
 export const CollabPost = () => {
   const { postId } = useParams<{ postId: string }>()
   const { data, loading, error } = useGetCollabPostQuery({
@@ -133,13 +132,7 @@ export const CollabPost = () => {
                 ))}
               </Flex>
             </Box>
-            <NimblePicker
-              set="twitter"
-              data={twitterEmojiData as any}
-              // sheetSize={20}
-              emoji=""
-              onSelect={console.log}
-            />
+            <ReactionPanel />
             <section>
               <form onSubmit={handleCommentSubmit}>
                 <Text

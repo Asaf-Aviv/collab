@@ -6,7 +6,6 @@ import { ApolloProvider } from '@apollo/react-hooks'
 import * as serviceWorker from './serviceWorker'
 import { apolloClient } from './apolloClient'
 import 'normalize.css'
-import 'emoji-mart/css/emoji-mart.css'
 import './index.css'
 
 ReactDOM.render(

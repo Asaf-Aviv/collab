@@ -117,9 +117,9 @@ export type CollabRequest = {
 };
 
 export type CreateThreadArgs = {
-  collabId: Scalars['ID'],
-  content: Scalars['String'],
   title: Scalars['String'],
+  content: Scalars['String'],
+  collabId: Scalars['ID'],
 };
 
 export type CurrentUser = {
@@ -176,7 +176,6 @@ export type Mutation = {
   login: AuthPayload,
   removeCollabPostReaction: Scalars['Boolean'],
   removeMember: Collab,
-  removeReaction: Scalars['Boolean'],
   requestToJoin: Scalars['Boolean'],
   signUp: AuthPayload,
   toggleAcceptInvites: Collab,
@@ -205,7 +204,9 @@ export type MutationCancelRequestToJoinArgs = {
 
 
 export type MutationCreateCollabDiscussionThreadArgs = {
-  thread: CreateThreadArgs
+  collabId: Scalars['ID'],
+  thread: CreateThreadArgs,
+  title: Scalars['String']
 };
 
 
@@ -318,11 +319,6 @@ export type MutationRemoveCollabPostReactionArgs = {
 export type MutationRemoveMemberArgs = {
   collabId: Scalars['ID'],
   memberId: Scalars['ID']
-};
-
-
-export type MutationRemoveReactionArgs = {
-  reactionId: Scalars['ID']
 };
 
 
@@ -487,6 +483,29 @@ export type AddCollabPostCommentMutation = (
       & Pick<User, 'id' | 'username' | 'avatar'>
     ) }
   ) }
+);
+
+export type AddCollabPostReactionMutationVariables = {
+  reaction: AddCollabPostReactionInput
+};
+
+
+export type AddCollabPostReactionMutation = (
+  { __typename?: 'Mutation' }
+  & { addCollabPostReaction: (
+    { __typename?: 'CollabPostReaction' }
+    & Pick<CollabPostReaction, 'id' | 'emojiId' | 'postId'>
+  ) }
+);
+
+export type RemoveCollabPostReactionMutationVariables = {
+  reactionId: Scalars['ID']
+};
+
+
+export type RemoveCollabPostReactionMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'removeCollabPostReaction'>
 );
 
 export type GetCurrentUserQueryVariables = {};
@@ -912,6 +931,70 @@ export function useAddCollabPostCommentMutation(baseOptions?: ApolloReactHooks.M
 export type AddCollabPostCommentMutationHookResult = ReturnType<typeof useAddCollabPostCommentMutation>;
 export type AddCollabPostCommentMutationResult = ApolloReactCommon.MutationResult<AddCollabPostCommentMutation>;
 export type AddCollabPostCommentMutationOptions = ApolloReactCommon.BaseMutationOptions<AddCollabPostCommentMutation, AddCollabPostCommentMutationVariables>;
+export const AddCollabPostReactionDocument = gql`
+    mutation AddCollabPostReaction($reaction: AddCollabPostReactionInput!) {
+  addCollabPostReaction(reaction: $reaction) {
+    id
+    emojiId
+    postId
+  }
+}
+    `;
+export type AddCollabPostReactionMutationFn = ApolloReactCommon.MutationFunction<AddCollabPostReactionMutation, AddCollabPostReactionMutationVariables>;
+
+/**
+ * __useAddCollabPostReactionMutation__
+ *
+ * To run a mutation, you first call `useAddCollabPostReactionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddCollabPostReactionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addCollabPostReactionMutation, { data, loading, error }] = useAddCollabPostReactionMutation({
+ *   variables: {
+ *      reaction: // value for 'reaction'
+ *   },
+ * });
+ */
+export function useAddCollabPostReactionMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AddCollabPostReactionMutation, AddCollabPostReactionMutationVariables>) {
+        return ApolloReactHooks.useMutation<AddCollabPostReactionMutation, AddCollabPostReactionMutationVariables>(AddCollabPostReactionDocument, baseOptions);
+      }
+export type AddCollabPostReactionMutationHookResult = ReturnType<typeof useAddCollabPostReactionMutation>;
+export type AddCollabPostReactionMutationResult = ApolloReactCommon.MutationResult<AddCollabPostReactionMutation>;
+export type AddCollabPostReactionMutationOptions = ApolloReactCommon.BaseMutationOptions<AddCollabPostReactionMutation, AddCollabPostReactionMutationVariables>;
+export const RemoveCollabPostReactionDocument = gql`
+    mutation RemoveCollabPostReaction($reactionId: ID!) {
+  removeCollabPostReaction(reactionId: $reactionId)
+}
+    `;
+export type RemoveCollabPostReactionMutationFn = ApolloReactCommon.MutationFunction<RemoveCollabPostReactionMutation, RemoveCollabPostReactionMutationVariables>;
+
+/**
+ * __useRemoveCollabPostReactionMutation__
+ *
+ * To run a mutation, you first call `useRemoveCollabPostReactionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveCollabPostReactionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeCollabPostReactionMutation, { data, loading, error }] = useRemoveCollabPostReactionMutation({
+ *   variables: {
+ *      reactionId: // value for 'reactionId'
+ *   },
+ * });
+ */
+export function useRemoveCollabPostReactionMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RemoveCollabPostReactionMutation, RemoveCollabPostReactionMutationVariables>) {
+        return ApolloReactHooks.useMutation<RemoveCollabPostReactionMutation, RemoveCollabPostReactionMutationVariables>(RemoveCollabPostReactionDocument, baseOptions);
+      }
+export type RemoveCollabPostReactionMutationHookResult = ReturnType<typeof useRemoveCollabPostReactionMutation>;
+export type RemoveCollabPostReactionMutationResult = ApolloReactCommon.MutationResult<RemoveCollabPostReactionMutation>;
+export type RemoveCollabPostReactionMutationOptions = ApolloReactCommon.BaseMutationOptions<RemoveCollabPostReactionMutation, RemoveCollabPostReactionMutationVariables>;
 export const GetCurrentUserDocument = gql`
     query GetCurrentUser {
   currentUser {
