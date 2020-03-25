@@ -13,12 +13,14 @@ import { Language } from './Language'
 import { Stack } from './Stack'
 import { CollabPostStack } from './CollabPostStack'
 import { CollabPostLanguage } from './CollabPostLanguage'
+import { CollabPostReaction } from './CollabPostReaction'
 
 export const models = {
   User,
   Collab,
   CollabPost,
   CollabPostComment,
+  CollabPostReaction,
   CollabMember,
   CollabTaskList,
   CollabTask,

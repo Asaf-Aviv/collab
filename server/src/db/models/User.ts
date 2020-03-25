@@ -29,6 +29,7 @@ import { Collab } from './Collab'
 import { passwordRegex } from '../../utils'
 import { CollabMemberRequest } from './CollabMemberRequest'
 import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
+import { CollabPostReaction } from './CollabPostReaction'
 
 @DefaultScope(() => ({
   attributes: { exclude: ['password'] },
@@ -58,6 +59,10 @@ export class User extends Model<User> {
   })
   @Column(DataType.CITEXT)
   username!: string
+
+  @Default('')
+  @Column
+  bio!: string
 
   @Validate({
     is: {
@@ -89,6 +94,9 @@ export class User extends Model<User> {
 
   @HasMany(() => CollabMemberRequest)
   collabRequests!: CollabMemberRequest[]
+
+  @HasMany(() => CollabPostReaction)
+  reactions!: CollabPostReaction[]
 
   getCollabs!: HasManyGetAssociationsMixin<Collab>
   addCollab!: HasManyAddAssociationMixin<Collab, string>

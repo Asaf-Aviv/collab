@@ -21,6 +21,11 @@ export type Scalars = {
   Float: number,
 };
 
+export type AddCollabPostReactionInput = {
+  emojiId: Scalars['ID'],
+  postId: Scalars['ID'],
+};
+
 export type AuthPayload = {
    __typename?: 'AuthPayload',
   token: Scalars['String'],
@@ -107,6 +112,14 @@ export type CollabPostComment = {
   id: Scalars['ID'],
 };
 
+export type CollabPostReaction = Reaction & {
+   __typename?: 'CollabPostReaction',
+  emojiId: Scalars['ID'],
+  id: Scalars['ID'],
+  postId: Scalars['ID'],
+  user: User,
+};
+
 export type CollabRequest = {
    __typename?: 'CollabRequest',
   collab: Collab,
@@ -114,14 +127,15 @@ export type CollabRequest = {
 };
 
 export type CreateThreadArgs = {
-  title: Scalars['String'],
-  content: Scalars['String'],
   collabId: Scalars['ID'],
+  content: Scalars['String'],
+  title: Scalars['String'],
 };
 
 export type CurrentUser = {
    __typename?: 'CurrentUser',
   avatar?: Maybe<Scalars['String']>,
+  bio?: Maybe<Scalars['String']>,
   collabInvites: Array<Collab>,
   collabRequests: Array<CollabRequest>,
   collabs: Array<Collab>,
@@ -148,6 +162,7 @@ export type Mutation = {
    __typename?: 'Mutation',
   acceptCollabInvitation: User,
   acceptMemberRequest: Collab,
+  addCollabPostReaction: CollabPostReaction,
   cancelRequestToJoin: Scalars['Boolean'],
   createCollabDiscussionThread: CollabDiscussionThread,
   createCollabDiscussionThreadComment: CollabDiscussionThreadComment,
@@ -169,7 +184,9 @@ export type Mutation = {
   deleteUser: Scalars['Boolean'],
   inviteMember: User,
   login: AuthPayload,
+  removeCollabPostReaction: Scalars['Boolean'],
   removeMember: Collab,
+  removeReaction: Scalars['Boolean'],
   requestToJoin: Scalars['Boolean'],
   signUp: AuthPayload,
   toggleAcceptInvites: Collab,
@@ -187,15 +204,18 @@ export type MutationAcceptMemberRequestArgs = {
 };
 
 
+export type MutationAddCollabPostReactionArgs = {
+  reaction: AddCollabPostReactionInput
+};
+
+
 export type MutationCancelRequestToJoinArgs = {
   collabId: Scalars['ID']
 };
 
 
 export type MutationCreateCollabDiscussionThreadArgs = {
-  collabId: Scalars['ID'],
-  thread: CreateThreadArgs,
-  title: Scalars['String']
+  thread: CreateThreadArgs
 };
 
 
@@ -300,9 +320,19 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationRemoveCollabPostReactionArgs = {
+  reactionId: Scalars['ID']
+};
+
+
 export type MutationRemoveMemberArgs = {
   collabId: Scalars['ID'],
   memberId: Scalars['ID']
+};
+
+
+export type MutationRemoveReactionArgs = {
+  reactionId: Scalars['ID']
 };
 
 
@@ -365,6 +395,12 @@ export type QueryUserArgs = {
   id: Scalars['ID']
 };
 
+export type Reaction = {
+  emojiId: Scalars['ID'],
+  id: Scalars['ID'],
+  user: User,
+};
+
 export type SignUpArgs = {
   email: Scalars['String'],
   password: Scalars['String'],
@@ -400,6 +436,7 @@ export type TaskList = {
 export type User = {
    __typename?: 'User',
   avatar?: Maybe<Scalars['String']>,
+  bio?: Maybe<Scalars['String']>,
   collabs: Array<Collab>,
   id: Scalars['ID'],
   username: Scalars['String'],
@@ -496,6 +533,9 @@ export type ResolversTypes = ResolversObject<{
   CurrentUser: ResolverTypeWrapper<Omit<CurrentUser, 'collabInvites' | 'collabRequests' | 'collabs'> & { collabInvites: Array<ResolversTypes['Collab']>, collabRequests: Array<ResolversTypes['CollabRequest']>, collabs: Array<ResolversTypes['Collab']> }>,
   CollabRequest: ResolverTypeWrapper<Omit<CollabRequest, 'collab' | 'member'> & { collab: ResolversTypes['Collab'], member: ResolversTypes['User'] }>,
   Mutation: ResolverTypeWrapper<{}>,
+  AddCollabPostReactionInput: AddCollabPostReactionInput,
+  CollabPostReaction: ResolverTypeWrapper<Omit<CollabPostReaction, 'user'> & { user: ResolversTypes['User'] }>,
+  Reaction: ResolverTypeWrapper<Omit<Reaction, 'user'> & { user: ResolversTypes['User'] }>,
   CreateThreadArgs: CreateThreadArgs,
   CollabPostArgs: CollabPostArgs,
   Experience: Experience,
@@ -523,6 +563,9 @@ export type ResolversParentTypes = ResolversObject<{
   CurrentUser: Omit<CurrentUser, 'collabInvites' | 'collabRequests' | 'collabs'> & { collabInvites: Array<ResolversParentTypes['Collab']>, collabRequests: Array<ResolversParentTypes['CollabRequest']>, collabs: Array<ResolversParentTypes['Collab']> },
   CollabRequest: Omit<CollabRequest, 'collab' | 'member'> & { collab: ResolversParentTypes['Collab'], member: ResolversParentTypes['User'] },
   Mutation: {},
+  AddCollabPostReactionInput: AddCollabPostReactionInput,
+  CollabPostReaction: Omit<CollabPostReaction, 'user'> & { user: ResolversParentTypes['User'] },
+  Reaction: Omit<Reaction, 'user'> & { user: ResolversParentTypes['User'] },
   CreateThreadArgs: CreateThreadArgs,
   CollabPostArgs: CollabPostArgs,
   Experience: Experience,
@@ -607,6 +650,14 @@ export type CollabPostCommentResolvers<ContextType = CollabContext, ParentType e
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
+export type CollabPostReactionResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['CollabPostReaction'] = ResolversParentTypes['CollabPostReaction']> = ResolversObject<{
+  emojiId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  postId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+}>;
+
 export type CollabRequestResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['CollabRequest'] = ResolversParentTypes['CollabRequest']> = ResolversObject<{
   collab?: Resolver<ResolversTypes['Collab'], ParentType, ContextType>,
   member?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
@@ -615,6 +666,7 @@ export type CollabRequestResolvers<ContextType = CollabContext, ParentType exten
 
 export type CurrentUserResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['CurrentUser'] = ResolversParentTypes['CurrentUser']> = ResolversObject<{
   avatar?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  bio?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   collabInvites?: Resolver<Array<ResolversTypes['Collab']>, ParentType, ContextType>,
   collabRequests?: Resolver<Array<ResolversTypes['CollabRequest']>, ParentType, ContextType>,
   collabs?: Resolver<Array<ResolversTypes['Collab']>, ParentType, ContextType>,
@@ -627,8 +679,9 @@ export type CurrentUserResolvers<ContextType = CollabContext, ParentType extends
 export type MutationResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   acceptCollabInvitation?: Resolver<ResolversTypes['User'], ParentType, CollabContextWithUser, RequireFields<MutationAcceptCollabInvitationArgs, 'collabId'>>,
   acceptMemberRequest?: Resolver<ResolversTypes['Collab'], ParentType, CollabContextWithUser, RequireFields<MutationAcceptMemberRequestArgs, 'collabId' | 'memberId'>>,
+  addCollabPostReaction?: Resolver<ResolversTypes['CollabPostReaction'], ParentType, ContextType, RequireFields<MutationAddCollabPostReactionArgs, 'reaction'>>,
   cancelRequestToJoin?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCancelRequestToJoinArgs, 'collabId'>>,
-  createCollabDiscussionThread?: Resolver<ResolversTypes['CollabDiscussionThread'], ParentType, ContextType, RequireFields<MutationCreateCollabDiscussionThreadArgs, 'collabId' | 'thread' | 'title'>>,
+  createCollabDiscussionThread?: Resolver<ResolversTypes['CollabDiscussionThread'], ParentType, ContextType, RequireFields<MutationCreateCollabDiscussionThreadArgs, 'thread'>>,
   createCollabDiscussionThreadComment?: Resolver<ResolversTypes['CollabDiscussionThreadComment'], ParentType, ContextType, RequireFields<MutationCreateCollabDiscussionThreadCommentArgs, 'collabId' | 'content' | 'threadId'>>,
   createCollabPost?: Resolver<ResolversTypes['CollabPost'], ParentType, ContextType, RequireFields<MutationCreateCollabPostArgs, 'post'>>,
   createComment?: Resolver<ResolversTypes['CollabPostComment'], ParentType, ContextType, RequireFields<MutationCreateCommentArgs, 'content' | 'postId'>>,
@@ -648,7 +701,9 @@ export type MutationResolvers<ContextType = CollabContext, ParentType extends Re
   deleteUser?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser>,
   inviteMember?: Resolver<ResolversTypes['User'], ParentType, CollabContextWithUser, RequireFields<MutationInviteMemberArgs, 'collabId' | 'memberId'>>,
   login?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'credentials'>>,
+  removeCollabPostReaction?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemoveCollabPostReactionArgs, 'reactionId'>>,
   removeMember?: Resolver<ResolversTypes['Collab'], ParentType, CollabContextWithUser, RequireFields<MutationRemoveMemberArgs, 'collabId' | 'memberId'>>,
+  removeReaction?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemoveReactionArgs, 'reactionId'>>,
   requestToJoin?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationRequestToJoinArgs, 'collabId'>>,
   signUp?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'credentials'>>,
   toggleAcceptInvites?: Resolver<ResolversTypes['Collab'], ParentType, CollabContextWithUser, RequireFields<MutationToggleAcceptInvitesArgs, 'collabId'>>,
@@ -666,6 +721,13 @@ export type QueryResolvers<ContextType = CollabContext, ParentType extends Resol
   thread?: Resolver<Maybe<ResolversTypes['CollabDiscussionThread']>, ParentType, ContextType, RequireFields<QueryThreadArgs, 'threadId'>>,
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>,
   users?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>,
+}>;
+
+export type ReactionResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Reaction'] = ResolversParentTypes['Reaction']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'CollabPostReaction', ParentType, ContextType>,
+  emojiId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
 }>;
 
 export type TaskResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Task'] = ResolversParentTypes['Task']> = ResolversObject<{
@@ -696,6 +758,7 @@ export type TaskListResolvers<ContextType = CollabContext, ParentType extends Re
 
 export type UserResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   avatar?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  bio?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   collabs?: Resolver<Array<ResolversTypes['Collab']>, ParentType, ContextType>,
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
@@ -709,10 +772,12 @@ export type Resolvers<ContextType = CollabContext> = ResolversObject<{
   CollabDiscussionThreadComment?: CollabDiscussionThreadCommentResolvers<ContextType>,
   CollabPost?: CollabPostResolvers<ContextType>,
   CollabPostComment?: CollabPostCommentResolvers<ContextType>,
+  CollabPostReaction?: CollabPostReactionResolvers<ContextType>,
   CollabRequest?: CollabRequestResolvers<ContextType>,
   CurrentUser?: CurrentUserResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
+  Reaction?: ReactionResolvers,
   Task?: TaskResolvers<ContextType>,
   TaskComment?: TaskCommentResolvers<ContextType>,
   TaskList?: TaskListResolvers<ContextType>,
