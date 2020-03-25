@@ -25,6 +25,17 @@ export const GET_MY_COLLABS = gql`
   }
 `
 
+// user
+export const GET_USER = gql`
+  query User($id: ID!) {
+    user(id: $id) {
+      id
+      username
+      avatar
+    }
+  }
+`
+
 // Collab Post
 export const GET_COLLAB_POSTS = gql`
   query CollabPosts {

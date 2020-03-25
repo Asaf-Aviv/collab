@@ -20,6 +20,7 @@ export const userTypeDefs = gql`
     username: String!
     email: String!
     avatar: String
+    bio: String
     collabs: [Collab!]!
     collabInvites: [Collab!]!
     collabRequests: [CollabRequest!]!
@@ -29,6 +30,7 @@ export const userTypeDefs = gql`
     id: ID!
     username: String!
     avatar: String
+    bio: String
     collabs: [Collab!]!
   }
 

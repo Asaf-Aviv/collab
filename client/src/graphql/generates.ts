@@ -11,6 +11,11 @@ export type Scalars = {
   Float: number,
 };
 
+export type AddCollabPostReactionInput = {
+  emojiId: Scalars['ID'],
+  postId: Scalars['ID'],
+};
+
 export type AuthPayload = {
    __typename?: 'AuthPayload',
   token: Scalars['String'],
@@ -97,6 +102,14 @@ export type CollabPostComment = {
   id: Scalars['ID'],
 };
 
+export type CollabPostReaction = Reaction & {
+   __typename?: 'CollabPostReaction',
+  emojiId: Scalars['ID'],
+  id: Scalars['ID'],
+  postId: Scalars['ID'],
+  user: User,
+};
+
 export type CollabRequest = {
    __typename?: 'CollabRequest',
   collab: Collab,
@@ -104,14 +117,15 @@ export type CollabRequest = {
 };
 
 export type CreateThreadArgs = {
-  title: Scalars['String'],
-  content: Scalars['String'],
   collabId: Scalars['ID'],
+  content: Scalars['String'],
+  title: Scalars['String'],
 };
 
 export type CurrentUser = {
    __typename?: 'CurrentUser',
   avatar?: Maybe<Scalars['String']>,
+  bio?: Maybe<Scalars['String']>,
   collabInvites: Array<Collab>,
   collabRequests: Array<CollabRequest>,
   collabs: Array<Collab>,
@@ -138,6 +152,7 @@ export type Mutation = {
    __typename?: 'Mutation',
   acceptCollabInvitation: User,
   acceptMemberRequest: Collab,
+  addCollabPostReaction: CollabPostReaction,
   cancelRequestToJoin: Scalars['Boolean'],
   createCollabDiscussionThread: CollabDiscussionThread,
   createCollabDiscussionThreadComment: CollabDiscussionThreadComment,
@@ -159,7 +174,9 @@ export type Mutation = {
   deleteUser: Scalars['Boolean'],
   inviteMember: User,
   login: AuthPayload,
+  removeCollabPostReaction: Scalars['Boolean'],
   removeMember: Collab,
+  removeReaction: Scalars['Boolean'],
   requestToJoin: Scalars['Boolean'],
   signUp: AuthPayload,
   toggleAcceptInvites: Collab,
@@ -177,15 +194,18 @@ export type MutationAcceptMemberRequestArgs = {
 };
 
 
+export type MutationAddCollabPostReactionArgs = {
+  reaction: AddCollabPostReactionInput
+};
+
+
 export type MutationCancelRequestToJoinArgs = {
   collabId: Scalars['ID']
 };
 
 
 export type MutationCreateCollabDiscussionThreadArgs = {
-  collabId: Scalars['ID'],
-  thread: CreateThreadArgs,
-  title: Scalars['String']
+  thread: CreateThreadArgs
 };
 
 
@@ -290,9 +310,19 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationRemoveCollabPostReactionArgs = {
+  reactionId: Scalars['ID']
+};
+
+
 export type MutationRemoveMemberArgs = {
   collabId: Scalars['ID'],
   memberId: Scalars['ID']
+};
+
+
+export type MutationRemoveReactionArgs = {
+  reactionId: Scalars['ID']
 };
 
 
@@ -355,6 +385,12 @@ export type QueryUserArgs = {
   id: Scalars['ID']
 };
 
+export type Reaction = {
+  emojiId: Scalars['ID'],
+  id: Scalars['ID'],
+  user: User,
+};
+
 export type SignUpArgs = {
   email: Scalars['String'],
   password: Scalars['String'],
@@ -390,6 +426,7 @@ export type TaskList = {
 export type User = {
    __typename?: 'User',
   avatar?: Maybe<Scalars['String']>,
+  bio?: Maybe<Scalars['String']>,
   collabs: Array<Collab>,
   id: Scalars['ID'],
   username: Scalars['String'],
@@ -475,6 +512,19 @@ export type GetMyCollabsQuery = (
       { __typename?: 'Collab' }
       & Pick<Collab, 'id' | 'name'>
     )> }
+  )> }
+);
+
+export type UserQueryVariables = {
+  id: Scalars['ID']
+};
+
+
+export type UserQuery = (
+  { __typename?: 'Query' }
+  & { user: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username' | 'avatar'>
   )> }
 );
 
@@ -933,6 +983,41 @@ export function useGetMyCollabsLazyQuery(baseOptions?: ApolloReactHooks.LazyQuer
 export type GetMyCollabsQueryHookResult = ReturnType<typeof useGetMyCollabsQuery>;
 export type GetMyCollabsLazyQueryHookResult = ReturnType<typeof useGetMyCollabsLazyQuery>;
 export type GetMyCollabsQueryResult = ApolloReactCommon.QueryResult<GetMyCollabsQuery, GetMyCollabsQueryVariables>;
+export const UserDocument = gql`
+    query User($id: ID!) {
+  user(id: $id) {
+    id
+    username
+    avatar
+  }
+}
+    `;
+
+/**
+ * __useUserQuery__
+ *
+ * To run a query within a React component, call `useUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useUserQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<UserQuery, UserQueryVariables>) {
+        return ApolloReactHooks.useQuery<UserQuery, UserQueryVariables>(UserDocument, baseOptions);
+      }
+export function useUserLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<UserQuery, UserQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<UserQuery, UserQueryVariables>(UserDocument, baseOptions);
+        }
+export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
+export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
+export type UserQueryResult = ApolloReactCommon.QueryResult<UserQuery, UserQueryVariables>;
 export const CollabPostsDocument = gql`
     query CollabPosts {
   collabPosts {

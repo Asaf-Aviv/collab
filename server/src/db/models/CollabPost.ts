@@ -24,6 +24,7 @@ import { CollabPostComment } from './CollabPostComment'
 import { CollabPostLanguage } from './CollabPostLanguage'
 import { Stack } from './Stack'
 import { CollabPostStack } from './CollabPostStack'
+import { CollabPostReaction } from './CollabPostReaction'
 
 @Table({ tableName: 'collab_posts' })
 export class CollabPost extends Model<CollabPost> {
@@ -88,6 +89,9 @@ export class CollabPost extends Model<CollabPost> {
 
   @HasMany(() => CollabPostComment)
   comments!: CollabPostComment[]
+
+  @HasMany(() => CollabPostReaction)
+  reactions!: CollabPostReaction[]
 
   static createPost(postArgs: CollabPostArgs, userId: string) {
     return this.sequelize!.transaction(async () => {
