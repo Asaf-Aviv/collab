@@ -1,0 +1,32 @@
+.emoji-mart .emoji-mart-emoji {
+  cursor: pointer;
+  outline: none;
+  padding: 3px;
+}
+
+.emoji-mart-anchor {
+  display: flex;
+  justify-content: center;
+}
+
+.emoji-mart-category-label {
+  position: relative;
+}
+
+.emoji-mart-category-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.emoji-mart-category-list li {
+  flex: 1;
+}
+
+.emoji-mart-category .emoji-mart-emoji span {
+  cursor: pointer;
+}
+
+.emoji-mart-category .emoji-mart-emoji:hover::before {
+  border-radius: 3px;
+  background-color: #d39eff;
+}

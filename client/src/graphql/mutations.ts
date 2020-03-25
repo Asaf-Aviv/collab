@@ -39,3 +39,19 @@ export const ADD_COLLAB_POST_COMMENT = gql`
     }
   }
 `
+
+export const ADD_COLLAB_POST_REACTION = gql`
+  mutation AddCollabPostReaction($reaction: AddCollabPostReactionInput!) {
+    addCollabPostReaction(reaction: $reaction) {
+      id
+      emojiId
+      postId
+    }
+  }
+`
+
+export const REMOVE_COLLAB_POST_REACTION = gql`
+  mutation RemoveCollabPostReaction($reactionId: ID!) {
+    removeCollabPostReaction(reactionId: $reactionId)
+  }
+`
