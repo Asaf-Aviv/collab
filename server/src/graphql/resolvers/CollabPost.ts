@@ -1,8 +1,9 @@
 import { isAuthenticated } from './../middleware/isAuthenticated'
 import { and } from 'graphql-shield'
-import { Resolvers } from '../types'
+import { Resolvers, Reaction } from '../types'
 import { replaceErrorWithNull } from '../helpers/replaceErrorWithNull'
 import { differenceInDays } from 'date-fns'
+import { Sequelize } from 'sequelize-typescript'
 
 export const collabPostResolver: Resolvers = {
   Query: {
@@ -11,7 +12,7 @@ export const collabPostResolver: Resolvers = {
       models.CollabPost.findByPk(postId),
     languages: (root, args, { models }) =>
       models.Language.findAll().then(languages =>
-        languages.map(({ name }) => name)
+        languages.map(({ name }) => name),
       ),
   },
   Mutation: {
@@ -49,10 +50,28 @@ export const collabPostResolver: Resolvers = {
       })
       return postStack.map(({ stack }) => stack.name)
     },
+    reactions: ({ id }, args, { models, user }) =>
+      (models.CollabPostReaction.findAll({
+        where: { postId: id },
+        group: ['emojiId'],
+        attributes: [
+          'emojiId',
+          [Sequelize.fn('COUNT', '*'), 'count'],
+          Sequelize.literal(
+            `'${user?.id}' = ANY(array_agg(user_id)) as "isLiked"`,
+          ) as any,
+        ],
+        order: [['count', 'DESC']],
+        raw: true,
+      }) as unknown) as Reaction[],
+    reactionsCount: ({ id }, args, { models }) =>
+      models.CollabPostReaction.count({ where: { postId: id } }),
     acceptsInvites: async ({ collabId }, args, { loaders }) => {
       const collab = await loaders.collabLoader.load(collabId)
       return collab!.acceptsInvites
     },
+    commentsCount: ({ id }, args, { models }) =>
+      models.CollabPostComment.count({ where: { postId: id } }),
     invitationPending: async ({ collabId }, args, { user, models }) => {
       if (!user?.id) {
         return false
@@ -121,6 +140,5 @@ export const collabMiddleware = {
     toggleAcceptInvites: and(isAuthenticated),
     declineMemberRequest: and(isAuthenticated),
     createTaskList: and(isAuthenticated),
-    deleteTaskList: and(isAuthenticated),
   },
 }

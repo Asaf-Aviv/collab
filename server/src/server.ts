@@ -7,14 +7,19 @@ import { Collab } from './db/models/Collab'
 import { CollabMember } from './db/models/CollabMember'
 import { createLoaders } from './graphql/loaders/loaders'
 import { Stack } from './db/models/Stack'
+import { CollabPostReaction } from './db/models/CollabPostReaction'
+import { CollabPost } from './db/models/CollabPost'
 
 const PORT = 5555
 
 sequelize
-  // .sync({ force: true })
   .authenticate()
   .then(async () => {
+    // await sequelize.sync({ force: true })
     console.log('Connected to postgres')
+    // CollabPostReaction.findAll({ include: [CollabPost], raw: true }).then(
+    // console.log,
+    // )
     // const s = await Stack.create({ name: 'react' })
     // const s1 = await Stack.bulkCreate(
     //   [{ name: 'React' }, { name: 'JavaScript' }],

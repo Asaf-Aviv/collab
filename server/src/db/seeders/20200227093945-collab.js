@@ -13,34 +13,35 @@ const createTaskList = (index, collabId) => ({
   id: uuid(),
   collab_id: collabId,
   name: faker.random.words(_.random(1, 3)),
-  order: index + 1,
+  order: index,
 })
 
 const createRandomTaskListLength = collabId =>
   [...Array(_.random(1, 6)).keys()].map(index =>
-    createTaskList(index, collabId)
+    createTaskList(index, collabId),
   )
 
 const collabTaskLists = _.flatten(
-  seededCollabs.map(({ id }) => createRandomTaskListLength(id))
+  seededCollabs.map(({ id }) => createRandomTaskListLength(id)),
 )
 
-const createCollabTask = listId => ({
+const createCollabTask = (listId, index) => ({
   id: uuid(),
   task_list_id: listId,
   author_id: seededCollabs.find(
-    x => x.id === collabTaskLists.find(x => x.id === listId).collab_id
+    x => x.id === collabTaskLists.find(x => x.id === listId).collab_id,
   ).owner_id,
   description: faker.random.words(_.random(5, 15)),
   updated_at: new Date(),
   created_at: new Date(),
+  order: index,
 })
 
 const createRandomTaskLength = listId =>
-  [...Array(_.random(3, 12))].map(() => createCollabTask(listId))
+  [...Array(_.random(3, 12))].map((_, i) => createCollabTask(listId, i))
 
 const collabTasks = _.flatten(
-  collabTaskLists.map(({ id }) => createRandomTaskLength(id))
+  collabTaskLists.map(({ id }) => createRandomTaskLength(id)),
 )
 
 const createTaskComment = (task_id, author_id) => ({
@@ -57,8 +58,8 @@ const createRandomTaskCommentLength = (task_id, author_id) =>
 
 const collabTaskComments = _.flatten(
   collabTasks.map(({ id, author_id }) =>
-    createRandomTaskCommentLength(id, author_id)
-  )
+    createRandomTaskCommentLength(id, author_id),
+  ),
 )
 
 module.exports = {
@@ -66,40 +67,43 @@ module.exports = {
     queryInterface
       .bulkInsert({ tableName: 'collabs' }, seededCollabs)
       .then(() =>
-        queryInterface.bulkInsert({ tableName: 'collab_members' }, collabOwners)
+        queryInterface.bulkInsert(
+          { tableName: 'collab_members' },
+          collabOwners,
+        ),
       )
       .then(() =>
         queryInterface.bulkInsert(
           { tableName: 'collab_member_requests' },
-          allInvites
-        )
+          allInvites,
+        ),
       )
       .then(() =>
         queryInterface.bulkInsert(
           { tableName: 'collab_task_list' },
-          collabTaskLists
-        )
+          collabTaskLists,
+        ),
       )
       .then(() =>
-        queryInterface.bulkInsert({ tableName: 'collab_tasks' }, collabTasks)
+        queryInterface.bulkInsert({ tableName: 'collab_tasks' }, collabTasks),
       )
       .then(() =>
         queryInterface.bulkInsert(
           { tableName: 'collab_task_comments' },
-          collabTaskComments
-        )
+          collabTaskComments,
+        ),
       )
       .then(() =>
         queryInterface.bulkInsert(
           { tableName: 'collab_discussion_threads' },
-          collabThreads
-        )
+          collabThreads,
+        ),
       )
       .then(() =>
         queryInterface.bulkInsert(
           { tableName: 'collab_discussion_thread_comments' },
-          threadComments
-        )
+          threadComments,
+        ),
       )
       .catch(err => {
         console.log(err.message)

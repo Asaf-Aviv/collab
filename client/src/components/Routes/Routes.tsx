@@ -4,16 +4,16 @@ import { CreateCollab } from '../CreateCollab'
 import { Collab } from '../Collab'
 import { Login } from '../Login/Login'
 import { SignUp } from '../SignUp/SignUp'
-import { useGetCurrentUserQuery } from '../../graphql/generates'
 import { CollabPosts } from '../CollabPosts/CollabPosts'
 import { MyCollabs } from '../MyCollabs/MyCollabs'
 import { CollabPost } from '../CollabPost/CollabPost'
 import { Home } from '../Home/Home'
 import { UserProfile } from '../UserProfile/UserProfile'
+// import { useGetCurrentUserQuery } from '../../graphql/generates'
 
 export const Routes = () => {
-  const { data } = useGetCurrentUserQuery()
-  const currentUser = data?.currentUser
+  // const { data } = useGetCurrentUserQuery()
+  // const currentUser = data?.currentUser
 
   return (
     <Switch>

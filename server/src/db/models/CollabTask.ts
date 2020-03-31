@@ -1,4 +1,3 @@
-import { GQLResolverTypes } from './../../graphql/helpers/GQLResolverTypes'
 import {
   Model,
   Table,
@@ -10,10 +9,17 @@ import {
   IsUUID,
   HasMany,
 } from 'sequelize-typescript'
+import { Op } from 'sequelize'
 import uuid from 'uuid/v4'
 import { CollabTaskList } from './CollabTaskList'
 import { CollabTaskComment } from './CollabTaskComment'
 import { User } from './User'
+import {
+  UpdateTaskPositionInput,
+  MoveTaskToListInput,
+  CreateTaskInput,
+} from '../../graphql/types.d'
+import { GQLResolverTypes } from './../../graphql/helpers/GQLResolverTypes'
 import { CollabMember } from './CollabMember'
 
 @Table({ tableName: 'collab_tasks' })
@@ -21,11 +27,15 @@ export class CollabTask extends Model<CollabTask> {
   @IsUUID(4)
   @Default(uuid)
   @PrimaryKey
-  @Column
+  @Column({ unique: 'unique_index' })
   id!: string
 
   @Column
   description!: string
+
+  // the order of the task
+  @Column({ unique: 'unique_index' })
+  order!: number
 
   @ForeignKey(() => User)
   @Column
@@ -47,36 +57,140 @@ export class CollabTask extends Model<CollabTask> {
   @HasMany(() => CollabTaskComment)
   comments!: CollabTaskComment[]
 
-  static async createTask(
-    collabId: string,
-    taskListId: string,
-    description: string,
-    authorId: string,
-  ) {
+  static async createTask(input: CreateTaskInput, userId: string) {
+    const { collabId, taskListId, description } = input
+
     const isMember = await CollabMember.findOne({
-      where: { collabId, memberId: authorId },
+      where: { collabId, memberId: userId },
     })
 
-    if (!isMember) {
-      throw new Error('You are not a member of this Collab')
-    }
+    //@FIXME:
+    // if (!isMember) {
+    //   throw new Error('You are not a member of this Collab')
+    // }
 
-    return this.create({ description, authorId, taskListId })
+    const taskPosition = await this.count({ where: { taskListId } })
+
+    return this.create({
+      description,
+      authorId: userId,
+      taskListId,
+      order: taskPosition,
+    })
   }
 
-  static async deleteTask(taskId: string, authorId: string) {
+  static async updateTaskPosition(
+    input: UpdateTaskPositionInput,
+    userId: string,
+  ) {
+    const { taskListId, oldTaskPosition, newTaskPosition } = input
+
+    const task = await this.findOne({
+      where: { taskListId, order: oldTaskPosition },
+    })
+
+    if (!task) {
+      throw new Error('Task not found')
+    }
+
+    return this.sequelize!.transaction(async () => {
+      if (oldTaskPosition < newTaskPosition) {
+        // @ts-ignore types are missing
+        await this.decrement('order', {
+          where: {
+            taskListId,
+            order: {
+              [Op.and]: {
+                [Op.lte]: newTaskPosition,
+                [Op.gt]: oldTaskPosition,
+              },
+            },
+          },
+        })
+      } else {
+        await this.increment('order', {
+          where: {
+            taskListId,
+            order: {
+              [Op.and]: {
+                [Op.gte]: newTaskPosition,
+                [Op.lt]: oldTaskPosition,
+              },
+            },
+          },
+        })
+      }
+
+      return task.update({ order: newTaskPosition })
+    })
+  }
+
+  static async moveTaskToList(input: MoveTaskToListInput, userId: string) {
+    const {
+      oldTaskListId,
+      newTaskListId,
+      oldTaskPosition,
+      newTaskPosition,
+    } = input
+
+    const task = await this.findOne({
+      where: { taskListId: oldTaskListId, order: oldTaskPosition },
+    })
+
+    if (!task) {
+      throw new Error('Task not found')
+    }
+
+    return this.sequelize!.transaction(async () => {
+      await Promise.all([
+        // @ts-ignore types are missing
+        this.decrement('order', {
+          where: {
+            taskListId: oldTaskListId,
+            order: {
+              [Op.gt]: oldTaskPosition,
+            },
+          },
+        }),
+        this.increment('order', {
+          where: {
+            taskListId: newTaskListId,
+            order: {
+              [Op.gte]: newTaskPosition,
+            },
+          },
+        }),
+      ])
+
+      return task.update({ taskListId: newTaskListId, order: newTaskPosition })
+    })
+  }
+
+  static async deleteTask(taskId: string, userId: string) {
     const task = await this.findByPk(taskId)
 
     if (!task) {
       throw new Error('Task not found')
     }
-    if (task.authorId !== authorId) {
-      throw new Error('You are not the author of this Task')
-    }
 
-    await task.destroy()
+    //FIXME:
+    // if (task.authorId !== userId) {
+    //   throw new Error('You are not the author of this Task')
+    // }
 
-    return true
+    return this.sequelize!.transaction(async () => {
+      await task.destroy()
+      //@ts-ignore types are missing
+      await this.decrement('order', {
+        where: {
+          taskListId: task.taskListId,
+          order: {
+            [Op.gt]: task.order,
+          },
+        },
+      })
+      return true
+    })
   }
 }
 

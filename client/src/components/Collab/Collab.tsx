@@ -10,7 +10,7 @@ import { TabList, Tab, Tabs } from '@chakra-ui/core'
 import { useCollabQuery } from '../../graphql/generates'
 import { TaskBoard } from '../TaskBoard/TaskBoard'
 import { CollabMembers } from '../CollabMembers/CollabMembers'
-import { Discussions } from '../Discussions/Discussions'
+import { CollabDiscussions } from '../CollabDiscussions/CollabDiscussions'
 import { Container } from '../global'
 import { DiscussionThread } from '../DiscussionThread/DiscussionThread'
 
@@ -31,7 +31,7 @@ export const Collab = () => {
   if (error) return <h1>Collab not found</h1>
   if (!data?.collab) return null
 
-  const { name, owner, isOwner, pendingInvites, pendingRequests } = data.collab
+  // const { name, owner, isOwner, pendingInvites, pendingRequests, acceptsInvites, id, collabPostId } = data.collab
 
   return (
     <Container>
@@ -58,7 +58,11 @@ export const Collab = () => {
       </Tabs>
       <Route path={`${match.path}/members`} component={CollabMembers} />
       <Route path={`${match.path}/task-board`} component={TaskBoard} />
-      <Route exact path={`${match.path}/discussions`} component={Discussions} />
+      <Route
+        exact
+        path={`${match.path}/discussions`}
+        component={CollabDiscussions}
+      />
       <Route
         path={`${match.path}/discussions/:threadId`}
         component={DiscussionThread}

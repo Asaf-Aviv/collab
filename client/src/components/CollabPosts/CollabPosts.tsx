@@ -3,7 +3,8 @@ import { useCollabPostsQuery, CollabPostsQuery } from '../../graphql/generates'
 import { Link as RouterLink } from 'react-router-dom'
 import { Flex, SimpleGrid, Heading, Tag, Link } from '@chakra-ui/core'
 import { AvatarWithUsername } from '../AvatarWithUsername/AvatarWithUsername'
-import { Container } from '../global'
+import { Container, Paper } from '../global'
+import { CommentsAndReactionsCount } from '../CommentsAndReactionsCount/CommentsAndReactionsCount'
 
 export const CollabPosts = () => {
   const { data, loading, error } = useCollabPostsQuery()
@@ -33,23 +34,16 @@ const CollabPostCard = ({
   stack,
   experience,
   languages,
+  reactionsCount,
+  commentsCount,
   // createdAt,
   // isNew,
   // hasStarted,
   owner,
 }: CollabPostsQuery['collabPosts'][0]) => (
-  <Flex
-    direction="column"
-    align="start"
-    as="article"
-    bg="#FFF"
-    h="100%"
-    boxShadow="2px 6px 15px 0 rgba(179, 163, 204, 0.38)"
-    borderRadius={6}
-  >
+  <Paper h="100%" direction="column" align="start" as="article">
     <Flex p={4} w="100%" align="center" justify="space-between">
       <AvatarWithUsername size="sm" {...owner} />
-      {/* {Number(createdAt) < (new Date().getTime())} */}
       <Flex align="center">
         <Tag boxShadow="sm" mr={2} size="sm" variantColor="pink">
           {experience}
@@ -61,16 +55,17 @@ const CollabPostCard = ({
     </Flex>
     <Link
       as={RouterLink as any}
+      // @ts-ignore
+      to={`/collabs/posts/${id}`}
       h="100%"
       px={4}
       key={id}
       w="100%"
+      flex={1}
       zIndex={1}
-      //@ts-ignore
-      to={`/collabs/posts/${id}`}
       _hover={{ textDecoration: 'none' }}
     >
-      <Heading flex={1} size="md" mt={4} mb={6} as="h2">
+      <Heading size="md" fontWeight={500} pb={6} as="h2">
         {title}
       </Heading>
     </Link>
@@ -91,6 +86,11 @@ const CollabPostCard = ({
           {tech}
         </Tag>
       ))}
+      <CommentsAndReactionsCount
+        ml="auto"
+        reactionsCount={reactionsCount}
+        commentsCount={commentsCount}
+      />
     </Flex>
-  </Flex>
+  </Paper>
 )

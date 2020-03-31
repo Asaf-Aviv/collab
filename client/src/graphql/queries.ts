@@ -48,6 +48,8 @@ export const GET_COLLAB_POSTS = gql`
       languages
       createdAt
       isNew
+      reactionsCount
+      commentsCount
       owner {
         id
         username
@@ -85,6 +87,11 @@ export const GET_COLLAB_POST = gql`
       invitationPending
       requestToJoinPending
       createdAt
+      reactions {
+        emojiId
+        count
+        isLiked
+      }
     }
   }
 `
@@ -106,6 +113,11 @@ export const COLLAB_POST_COMMENTS = gql`
           id
           username
           avatar
+        }
+        reactions {
+          emojiId
+          count
+          isLiked
         }
       }
     }
@@ -147,6 +159,7 @@ export const GET_COLLAB_MEMBERS = gql`
       members {
         id
         username
+        bio
         avatar
       }
     }
@@ -166,6 +179,7 @@ export const GET_COLLAB_DISCUSSIONS = gql`
           avatar
         }
         commentsCount
+        reactionsCount
       }
     }
   }
@@ -181,6 +195,11 @@ export const GET_COLLAB_DISCUSSION_THREAD = gql`
         id
         username
         avatar
+      }
+      reactions {
+        emojiId
+        count
+        isLiked
       }
     }
   }
@@ -198,6 +217,11 @@ export const GET_COLLAB_DISCUSSION_THREAD_COMMENTS = gql`
           username
           avatar
         }
+        reactions {
+          emojiId
+          count
+          isLiked
+        }
       }
     }
   }
@@ -212,6 +236,8 @@ export const GET_COLLAB_TASK_BOARD = gql`
       tasks {
         id
         description
+        order
+        commentsCount
         author {
           id
           username
@@ -236,32 +262,5 @@ export const GET_TASK_COMMENTS = gql`
         }
       }
     }
-  }
-`
-
-// Collab Member Actions
-export const REQUEST_TO_JOIN_COLLAB = gql`
-  mutation RequestToJoin($collabId: ID!) {
-    requestToJoin(collabId: $collabId)
-  }
-`
-
-export const CANCEL_COLLAB_REQUEST_TO_JOIN = gql`
-  mutation CancelCollabRequestToJoin($collabId: ID!) {
-    cancelRequestToJoin(collabId: $collabId)
-  }
-`
-
-export const ACCEPT_COLLAB_INVITATION = gql`
-  mutation AcceptCollabInvitation($collabId: ID!) {
-    acceptCollabInvitation(collabId: $collabId) {
-      id
-    }
-  }
-`
-
-export const DECLINE_COLLAB_INVITATION = gql`
-  mutation DeclineCollabInvitation($collabId: ID!) {
-    declineCollabInvitation(collabId: $collabId)
   }
 `

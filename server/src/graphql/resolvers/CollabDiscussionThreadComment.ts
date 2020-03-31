@@ -1,24 +1,16 @@
 import { isAuthenticated } from '../middleware/isAuthenticated'
 import { and } from 'graphql-shield'
-import { Resolvers } from '../types'
+import { Resolvers, Reaction } from '../types'
+import { Sequelize } from 'sequelize-typescript'
 
 export const collabDiscussionThreadCommentResolver: Resolvers = {
   Mutation: {
-    createCollabDiscussionThreadComment: (
-      root,
-      { content, threadId, collabId },
-      { user, models }
-    ) =>
-      models.CollabDiscussionThreadComment.createComment(
-        content,
-        user!.id,
-        collabId,
-        threadId
-      ),
+    createCollabDiscussionThreadComment: (root, { input }, { user, models }) =>
+      models.CollabDiscussionThreadComment.createComment(input, user!.id),
     deleteCollabDiscussionThreadComment: (
       root,
       { commentId },
-      { user, models }
+      { user, models },
     ) =>
       models.CollabDiscussionThreadComment.deleteComment(commentId, user!.id),
   },
@@ -29,6 +21,20 @@ export const collabDiscussionThreadCommentResolver: Resolvers = {
       models.CollabDiscussionThread.findByPk(threadId),
     collab: ({ collabId }, args, { loaders }) =>
       loaders.collabLoader.load(collabId),
+    reactions: ({ id }, args, { models, user }) =>
+      (models.CollabDiscussionThreadCommentReaction.findAll({
+        where: { commentId: id },
+        group: ['emojiId'],
+        attributes: [
+          'emojiId',
+          [Sequelize.fn('COUNT', '*'), 'count'],
+          Sequelize.literal(
+            `'${user?.id}' = ANY(array_agg(user_id)) as "isLiked"`,
+          ) as any,
+        ],
+        order: [['count', 'DESC']],
+        raw: true,
+      }) as unknown) as Reaction[],
   },
 }
 

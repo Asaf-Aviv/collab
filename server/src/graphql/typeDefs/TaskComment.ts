@@ -15,5 +15,6 @@ export const taskCommentTypeDefs = gql`
     content: String!
     author: User
     task: Task
+    reactions: [Reaction!]!
   }
 `

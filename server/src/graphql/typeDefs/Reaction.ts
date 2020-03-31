@@ -1,9 +1,9 @@
 import { gql } from 'apollo-server-express'
 
 export const ReactionTypeDefs = gql`
-  interface Reaction {
-    id: ID!
+  type Reaction {
     emojiId: ID!
-    user: User!
+    count: Int!
+    isLiked: Boolean!
   }
 `

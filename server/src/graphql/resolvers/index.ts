@@ -9,6 +9,10 @@ import { collabDiscussionThreadResolver } from './CollabDiscussionThread'
 import { collabDiscussionThreadCommentResolver } from './CollabDiscussionThreadComment'
 import { collabPostResolver } from './CollabPost'
 import { collabPostReactionResolver } from './CollabPostReaction'
+import { collabPostCommentReactionResolver } from './CollabPostCommentReaction'
+import { collabTaskCommentReactionResolver } from './CollabTaskCommentReaction'
+import { collabDiscussionThreadCommentReactionResolver } from './CollabDiscussionThreadCommentReaction'
+import { collabDiscussionThreadReactionResolver } from './CollabDiscussionThreadReaction'
 
 export const resolvers = mergeResolvers([
   userResolver,
@@ -21,4 +25,8 @@ export const resolvers = mergeResolvers([
   collabDiscussionThreadResolver,
   collabDiscussionThreadCommentResolver,
   collabPostReactionResolver,
+  collabPostCommentReactionResolver,
+  collabTaskCommentReactionResolver,
+  collabDiscussionThreadReactionResolver,
+  collabDiscussionThreadCommentReactionResolver,
 ])

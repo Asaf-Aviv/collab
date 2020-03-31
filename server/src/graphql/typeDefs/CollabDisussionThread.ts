@@ -17,9 +17,11 @@ export const collabDiscussionThreadTypeDefs = gql`
     title: String!
     content: String!
     author: User!
-    comments: [CollabDiscussionThreadComment!]!
     collab: Collab
+    comments: [CollabDiscussionThreadComment!]!
     commentsCount: Int!
+    reactions: [Reaction!]!
+    reactionsCount: Int!
   }
 
   input CreateThreadArgs {
