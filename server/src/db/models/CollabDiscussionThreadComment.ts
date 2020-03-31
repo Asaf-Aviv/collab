@@ -14,6 +14,7 @@ import { Collab } from './Collab'
 import { User } from './User'
 import { CollabMember } from './CollabMember'
 import { CollabDiscussionThread } from './CollabDiscussionThread'
+import { AddDiscussionThreadCommentInput } from '../../graphql/types'
 
 @Table({ tableName: 'collab_discussion_thread_comments' })
 export class CollabDiscussionThreadComment extends Model<
@@ -53,24 +54,23 @@ export class CollabDiscussionThreadComment extends Model<
   author!: User
 
   static async createComment(
-    content: string,
+    input: AddDiscussionThreadCommentInput,
     authorId: string,
-    collabId: string,
-    threadId: string
   ) {
+    const { collabId } = input
+
     const isMember = await CollabMember.findOne({
       where: { collabId, memberId: authorId },
     })
 
-    if (!isMember) {
-      throw new Error('You are not a member of this Collab')
-    }
+    //FIXME:
+    // if (!isMember) {
+    //   throw new Error('You are not a member of this Collab')
+    // }
 
     return this.create({
-      content,
+      ...input,
       authorId,
-      threadId,
-      collabId,
     })
   }
 

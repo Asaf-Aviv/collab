@@ -9,6 +9,10 @@ import {
   User,
   useAddCollabPostCommentMutation,
   useCollabPostCommentsQuery,
+  useRemoveCollabPostReactionMutation,
+  useAddCollabPostReactionMutation,
+  useAddCollabPostCommentReactionMutation,
+  useRemoveCollabPostCommentReactionMutation,
 } from '../../graphql/generates'
 import {
   Text,
@@ -17,7 +21,6 @@ import {
   Flex,
   Button,
   Box,
-  Textarea,
   Tag,
   Divider,
 } from '@chakra-ui/core'
@@ -25,16 +28,23 @@ import { AvatarWithUsername } from '../AvatarWithUsername/AvatarWithUsername'
 import styled from '@emotion/styled'
 import { Comment } from '../Comment/Comment'
 import { Container } from '../global'
-import { GET_COLLAB_POST } from '../../graphql/queries'
-import { formatDate } from '../../utils'
+import { GET_COLLAB_POST, COLLAB_POST_COMMENTS } from '../../graphql/queries'
 import { ReactionPanel } from '../ReactionPanel/ReactionPanel'
+import { PostAuthorHeader } from '../PostAuthorHeader/PostAuthorHeader'
+import { CommentForm } from '../CommentForm/CommentForm'
+
 export const CollabPost = () => {
   const { postId } = useParams<{ postId: string }>()
   const { data, loading, error } = useGetCollabPostQuery({
     variables: { postId },
   })
   const [commentInput, setCommentInput] = useState('')
-  const [addComment] = useAddCollabPostCommentMutation()
+  const [addComment] = useAddCollabPostCommentMutation({
+    refetchQueries: [{ query: COLLAB_POST_COMMENTS, variables: { postId } }],
+    onCompleted: () => setCommentInput(''),
+  })
+  const [addReaction] = useAddCollabPostReactionMutation()
+  const [removeReaction] = useRemoveCollabPostReactionMutation()
 
   if (loading) return <h1>loading</h1>
   if (error) return <h1>Could not fetch post</h1>
@@ -46,6 +56,28 @@ export const CollabPost = () => {
       variables: {
         postId: data.collabPost!.id,
         content: commentInput,
+      },
+    })
+  }
+
+  const handleAddReaction = (emojiId: string) => {
+    addReaction({
+      variables: {
+        reaction: {
+          emojiId,
+          postId,
+        },
+      },
+    })
+  }
+
+  const handleRemoveReaction = (emojiId: string) => {
+    removeReaction({
+      variables: {
+        reaction: {
+          emojiId,
+          postId,
+        },
       },
     })
   }
@@ -64,6 +96,7 @@ export const CollabPost = () => {
     languages,
     // isNew,
     // isOwner,
+    reactions,
     ...memberRequestsInfo
   } = data.collabPost
 
@@ -80,10 +113,7 @@ export const CollabPost = () => {
           <Box flex={1}>
             <Box bg="white" p={8} boxShadow="md" borderRadius={6} mb={10}>
               <Flex as="header" align="center" mb={6}>
-                <AvatarWithUsername {...owner} />
-                <Box lineHeight={1.2} as="time" ml={2} fontSize="0.8rem">
-                  {formatDate(createdAt)}
-                </Box>
+                <PostAuthorHeader author={owner} date={createdAt} />
                 <Tag boxShadow="md" ml="auto" size="md" variantColor="pink">
                   {experience}
                 </Tag>
@@ -105,7 +135,7 @@ export const CollabPost = () => {
                 <Heading as="h1">{title}</Heading>
               </Stack>
               <Text fontSize={['lg', 'xl']}>{description}</Text>
-              <Flex wrap="wrap" mt={6}>
+              <Flex wrap="wrap" mt={6} mb={4}>
                 {languages.map(language => (
                   <Tag
                     boxShadow="md"
@@ -131,43 +161,18 @@ export const CollabPost = () => {
                   </Tag>
                 ))}
               </Flex>
+              <ReactionPanel
+                reactions={reactions}
+                addReaction={handleRemoveReaction}
+                removeReaction={handleAddReaction}
+              />
             </Box>
-            <ReactionPanel />
             <section>
-              <form onSubmit={handleCommentSubmit}>
-                <Text
-                  as="span"
-                  display="inline-block"
-                  borderBottom="2px solid #964cff"
-                  mb="-2px"
-                  position="relative"
-                  zIndex={2}
-                >
-                  <Heading as="h3" mb={2} size="sm" mr={2}>
-                    Add a Comment
-                  </Heading>
-                </Text>
-                <Divider mt={0} mb={6} />
-                <Textarea
-                  placeholder="Add a comment"
-                  boxShadow="md"
-                  value={commentInput}
-                  onChange={(e: any) => setCommentInput(e.target.value)}
-                  minHeight={120}
-                  border="none"
-                  mb={6}
-                />
-                <Button
-                  display="block"
-                  ml="auto"
-                  type="submit"
-                  variantColor="purple"
-                  mb={6}
-                  boxShadow="md"
-                >
-                  Comment
-                </Button>
-              </form>
+              <CommentForm
+                onSubmit={handleCommentSubmit}
+                value={commentInput}
+                onChange={setCommentInput}
+              />
               <header>
                 <Text
                   as="span"
@@ -229,17 +234,51 @@ const PostComments = () => {
   const { data, loading, error } = useCollabPostCommentsQuery({
     variables: { postId },
   })
+  const [addReaction] = useAddCollabPostCommentReactionMutation({
+    refetchQueries: [{ query: COLLAB_POST_COMMENTS, variables: { postId } }],
+  })
+  const [removeReaction] = useRemoveCollabPostCommentReactionMutation({
+    refetchQueries: [{ query: COLLAB_POST_COMMENTS, variables: { postId } }],
+  })
 
   if (loading) return <h1>loading</h1>
   if (error) return <h1>Could not fetch comments</h1>
   if (!data?.collabPost) return null
+
+  const handleAddReaction = (commentId: string) => (emojiId: string) => {
+    addReaction({
+      variables: {
+        reaction: {
+          emojiId,
+          commentId,
+        },
+      },
+    })
+  }
+
+  const handleRemoveReaction = (commentId: string) => (emojiId: string) => {
+    removeReaction({
+      variables: {
+        reaction: {
+          emojiId,
+          commentId,
+        },
+      },
+    })
+  }
 
   const { comments } = data.collabPost
 
   return (
     <div>
       {comments.map(comment => (
-        <Comment key={comment.id} {...comment} />
+        <Comment key={comment.id} {...comment}>
+          <ReactionPanel
+            reactions={comment.reactions}
+            addReaction={handleAddReaction(comment.id)}
+            removeReaction={handleRemoveReaction(comment.id)}
+          />
+        </Comment>
       ))}
     </div>
   )
@@ -261,12 +300,18 @@ const MemberInvitationActions = ({
   collabId,
 }: InvitationProps) => {
   const { postId } = useParams<{ postId: string }>()
-  const [requestToJoin] = useRequestToJoinMutation()
-  const [declineCollabInvitation] = useDeclineCollabInvitationMutation()
+  const [requestToJoin] = useRequestToJoinMutation({
+    refetchQueries: [{ query: GET_COLLAB_POST, variables: { postId } }],
+  })
+  const [declineCollabInvitation] = useDeclineCollabInvitationMutation({
+    refetchQueries: [{ query: GET_COLLAB_POST, variables: { postId } }],
+  })
   const [acceptCollabInvitation] = useAcceptCollabInvitationMutation({
     refetchQueries: [{ query: GET_COLLAB_POST, variables: { postId } }],
   })
-  const [cancelRequestToJoin] = useCancelCollabRequestToJoinMutation()
+  const [cancelRequestToJoin] = useCancelCollabRequestToJoinMutation({
+    refetchQueries: [{ query: GET_COLLAB_POST, variables: { postId } }],
+  })
 
   return (
     <ButtonsContainer>

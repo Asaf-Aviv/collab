@@ -10,6 +10,7 @@ const baseConfig: SequelizeOptions = {
     acquire: 30000,
     idle: 10000,
   },
+  logging: false,
   define: {
     underscored: true,
   },
@@ -25,5 +26,5 @@ export default new Sequelize(
   dbByEnv[process.env.NODE_ENV as keyof typeof dbByEnv],
   'yojimbozx',
   'omgwtfbbq89',
-  baseConfig
+  baseConfig,
 )

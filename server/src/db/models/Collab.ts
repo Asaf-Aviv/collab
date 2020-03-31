@@ -105,7 +105,7 @@ export class Collab extends Model<Collab> {
   static async acceptMemberRequest(
     collabId: string,
     ownerId: string,
-    memberId: string
+    memberId: string,
   ) {
     return this.sequelize!.transaction(async () => {
       const [collab, isMember, memberRequest] = await Promise.all([
@@ -144,7 +144,7 @@ export class Collab extends Model<Collab> {
   static async removeMember(
     collabId: string,
     ownerId: string,
-    memberId: string
+    memberId: string,
   ) {
     return this.sequelize!.transaction(async () => {
       const collab = await Collab.findByPk(collabId, { raw: false })
@@ -187,7 +187,7 @@ export class Collab extends Model<Collab> {
   static async inviteMember(
     ownerId: string,
     memberId: string,
-    collabId: string
+    collabId: string,
   ) {
     const collab = await this.findByPk(collabId)
 
@@ -231,7 +231,7 @@ export class Collab extends Model<Collab> {
 
     if (invitation && invitation.type === 'invitation') {
       throw new Error(
-        'The owner of this collab already invited you to join, please check your invitations'
+        'The owner of this collab already invited you to join, please check your invitations',
       )
     }
 
@@ -274,7 +274,7 @@ export class Collab extends Model<Collab> {
   static async declineMemberRequest(
     collabId: string,
     memberId: string,
-    ownerId: string
+    ownerId: string,
   ) {
     return this.sequelize!.transaction(async () => {
       const [collab, requestExist] = await Promise.all([
@@ -304,47 +304,6 @@ export class Collab extends Model<Collab> {
 
       return true
     })
-  }
-
-  static async createTaskList(
-    collabId: string,
-    name: string,
-    order: number,
-    ownerId: string
-  ) {
-    const collab = await this.findByPk(collabId)
-
-    if (!collab) {
-      throw new Error('Collab not found')
-    }
-    if (ownerId !== collab.ownerId) {
-      throw new Error('You have no permissions to create a task list')
-    }
-
-    return CollabTaskList.create({
-      collabId,
-      name,
-      order,
-    })
-  }
-
-  static async deleteTaskList(taskListId: string, ownerId: string) {
-    const taskList = await CollabTaskList.findByPk(taskListId, {
-      include: [
-        {
-          model: Collab,
-          where: { ownerId },
-        },
-      ],
-    })
-
-    if (!taskList) {
-      throw new Error('Task list not found')
-    }
-
-    await taskList.destroy()
-
-    return true
   }
 }
 

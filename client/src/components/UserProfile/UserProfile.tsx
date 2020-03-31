@@ -11,7 +11,7 @@ export const UserProfile = () => {
   if (!data?.user) return null
 
   console.log(data)
-  const { id, username, avatar } = data.user
+  const { username, avatar } = data.user
 
   return (
     <Container>

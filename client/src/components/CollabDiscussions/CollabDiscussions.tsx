@@ -1,9 +1,10 @@
 import React from 'react'
 import { useCollabDiscussionThreadsQuery } from '../../graphql/generates'
 import { useParams, Link, useRouteMatch } from 'react-router-dom'
-import { Heading, Flex, Box, Text, Icon } from '@chakra-ui/core'
+import { Heading, Flex, Box, Text } from '@chakra-ui/core'
+import { CommentsAndReactionsCount } from '../CommentsAndReactionsCount/CommentsAndReactionsCount'
 
-export const Discussions = () => {
+export const CollabDiscussions = () => {
   const { collabId } = useParams<{ collabId: string }>()
   const match = useRouteMatch()
   const { data, loading, error, variables } = useCollabDiscussionThreadsQuery({
@@ -15,7 +16,7 @@ export const Discussions = () => {
   return (
     <Box>
       {data?.collab?.discussionThreads.map(
-        ({ id, title, author, commentsCount }) => (
+        ({ id, title, author, commentsCount, reactionsCount }) => (
           <Flex
             key={id}
             py={4}
@@ -30,7 +31,7 @@ export const Discussions = () => {
                 <Link to={`${match.url}/${id}`}>{title}</Link>
               </Heading>
               <Flex>
-                <Text color="gray.400">
+                <Text color="gray.400" mr={2}>
                   Opened by{' '}
                   {author ? (
                     <Link to={`/user/${id}/${author.id}`}>
@@ -41,15 +42,12 @@ export const Discussions = () => {
                   )}{' '}
                   on put date here
                 </Text>
-                <Flex align="center" ml={4}>
-                  <Icon name="chat" />
-                  <Text as="span" fontWeight={700} ml={1}>
-                    {commentsCount}
-                  </Text>
-                </Flex>
+                <CommentsAndReactionsCount
+                  reactionsCount={reactionsCount}
+                  commentsCount={commentsCount}
+                />
               </Flex>
             </Box>
-            <Box ml={2}></Box>
           </Flex>
         ),
       )}

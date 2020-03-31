@@ -1,19 +1,11 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  RefObject,
-  useCallback,
-} from 'react'
-import { NimblePicker, EmojiData } from 'emoji-mart'
+import React, { useState, useRef, useCallback } from 'react'
+import { NimblePicker, EmojiData, Emoji } from 'emoji-mart'
 import twitterEmojiData from 'emoji-mart/data/twitter.json'
 import 'emoji-mart/css/emoji-mart.css'
-import { Button, Flex, Box } from '@chakra-ui/core'
+import { Button, Flex, Box, Text } from '@chakra-ui/core'
 import './emoji-picker.css'
-import { useAddCollabPostReactionMutation } from '../../graphql/generates'
-import { useParams } from 'react-router-dom'
-
-type Props = {}
+import { Reaction } from '../../graphql/generates'
+import { useOnOutsideClick } from '../../hooks/useOnOutsideClick'
 
 const emojiContainerStyle: React.CSSProperties = {
   position: 'absolute',
@@ -22,25 +14,6 @@ const emojiContainerStyle: React.CSSProperties = {
   zIndex: 10,
   transform: 'translateY(-50%)',
   boxShadow: '4px 8px 20px #b9b9b9',
-}
-
-const useOnOutsideClick = (
-  ref: RefObject<HTMLElement>,
-  callback: () => void,
-) => {
-  useEffect(() => {
-    const handleOutsideClick = (e: MouseEvent) => {
-      if (ref.current?.contains(e.target as Node)) return
-      callback()
-    }
-
-    document.addEventListener('click', handleOutsideClick)
-    document.addEventListener('touchstart', handleOutsideClick as any)
-    return () => {
-      document.removeEventListener('click', handleOutsideClick)
-      document.removeEventListener('touchstart', handleOutsideClick as any)
-    }
-  }, [ref, callback])
 }
 
 const EmojiPicker = ({
@@ -61,7 +34,7 @@ const EmojiPicker = ({
         set="twitter"
         data={twitterEmojiData as any}
         showPreview={false}
-        sheetSize={64}
+        sheetSize={32}
         showSkinTones={false}
         exclude={['symbols']}
         onSelect={onSelect}
@@ -70,38 +43,74 @@ const EmojiPicker = ({
   )
 }
 
-export const ReactionPanel = (props: Props) => {
+type Props = {
+  reactions: Reaction[]
+  addReaction: (emojiId: string) => void
+  removeReaction: (emojiId: string) => void
+}
+
+export const ReactionPanel = ({
+  reactions,
+  addReaction,
+  removeReaction,
+}: Props) => {
   const [isPickerOpen, setIsPickerOpen] = useState(false)
-  const [addReaction] = useAddCollabPostReactionMutation()
-  const { postId } = useParams<{ postId: string }>()
+
+  const togglePicker = () => setIsPickerOpen(prevState => !prevState)
 
   const handleEmojiSelect = (emoji: EmojiData) => {
     if (!emoji.id) return
 
-    console.log(emoji)
-    addReaction({
-      variables: {
-        reaction: {
-          emojiId: emoji.id,
-          postId,
-        },
-      },
-    })
+    const reaction = reactions.find(({ emojiId }) => emojiId === emoji.id)
+    if (reaction?.isLiked) return
+
+    addReaction(emoji.id)
+    togglePicker()
   }
 
-  const togglePicker = () => setIsPickerOpen(prevState => !prevState)
+  const handleReactionRemoval = (emojiId: string) => {
+    removeReaction(emojiId)
+  }
+
+  const handleEmojiReactionClick = (emojiId: string, isLiked: boolean) => {
+    if (isLiked) {
+      handleReactionRemoval(emojiId)
+      return
+    }
+    addReaction(emojiId)
+  }
 
   return (
-    <div>
+    <Flex>
       <Flex>
-        <Button onClick={togglePicker}>React</Button>
-        {isPickerOpen && (
-          <EmojiPicker
-            closePicker={togglePicker}
-            onSelect={handleEmojiSelect}
-          />
-        )}
+        {reactions.map(({ isLiked, emojiId, count }) => (
+          <Button
+            mr="px"
+            as={Flex}
+            // @ts-ignore
+            align="center"
+            onClick={() => handleEmojiReactionClick(emojiId, isLiked)}
+            variantColor={isLiked ? 'purple' : 'gray'}
+            key={emojiId}
+            cursor="pointer"
+            borderRadius={0}
+            _hover={{
+              backgroundColor: 'purple',
+            }}
+          >
+            <Emoji emoji={emojiId} size={32} />
+            <Text ml={1} fontWeight={700} fontSize="md">
+              {count}
+            </Text>
+          </Button>
+        ))}
       </Flex>
-    </div>
+      <Button variantColor="blue" borderRadius={0} onClick={togglePicker}>
+        React
+      </Button>
+      {isPickerOpen && (
+        <EmojiPicker closePicker={togglePicker} onSelect={handleEmojiSelect} />
+      )}
+    </Flex>
   )
 }

@@ -30,11 +30,14 @@ export const collabPostTypeDefs = gql`
     invitationPending: Boolean!
     requestToJoinPending: Boolean!
     comments: [CollabPostComment!]!
+    commentsCount: Int!
     pendingInvites: [User!]!
     pendingRequests: [User!]!
     createdAt: String!
     updatedAt: String!
     isNew: Boolean!
+    reactions: [Reaction!]!
+    reactionsCount: Int!
   }
 
   input CollabPostArgs {

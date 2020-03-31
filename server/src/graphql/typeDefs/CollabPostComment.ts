@@ -10,5 +10,6 @@ export const collabPostCommentTypeDefs = gql`
     id: ID!
     content: String!
     author: User!
+    reactions: [Reaction!]!
   }
 `

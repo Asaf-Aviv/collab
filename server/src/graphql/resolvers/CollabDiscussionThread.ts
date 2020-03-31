@@ -1,6 +1,7 @@
 import { isAuthenticated } from '../middleware/isAuthenticated'
 import { and } from 'graphql-shield'
-import { Resolvers } from '../types'
+import { Resolvers, Reaction } from '../types'
+import { Sequelize } from 'sequelize-typescript'
 
 export const collabDiscussionThreadResolver: Resolvers = {
   Query: {
@@ -22,6 +23,22 @@ export const collabDiscussionThreadResolver: Resolvers = {
       models.CollabDiscussionThreadComment.findAll({ where: { threadId: id } }),
     commentsCount: ({ id }, args, { models }) =>
       models.CollabDiscussionThreadComment.count({ where: { threadId: id } }),
+    reactions: ({ id }, args, { models, user }) =>
+      (models.CollabDiscussionThreadReaction.findAll({
+        where: { threadId: id },
+        group: ['emojiId'],
+        attributes: [
+          'emojiId',
+          [Sequelize.fn('COUNT', '*'), 'count'],
+          Sequelize.literal(
+            `'${user?.id}' = ANY(array_agg(user_id)) as "isLiked"`,
+          ) as any,
+        ],
+        order: [['count', 'DESC']],
+        raw: true,
+      }) as unknown) as Reaction[],
+    reactionsCount: ({ id }, args, { models }) =>
+      models.CollabDiscussionThreadReaction.count({ where: { threadId: id } }),
   },
 }
 

@@ -10,6 +10,10 @@ import { collabDiscussionThreadTypeDefs } from './CollabDisussionThread'
 import { collabDiscussionThreadCommentTypeDefs } from './CollabDiscussionThreadComment'
 import { ReactionTypeDefs } from './Reaction'
 import { collabPostReactionTypeDefs } from './CollabPostReaction'
+import { collabPostCommentReactionTypeDefs } from './CollabPostCommentReaction'
+import { collabDiscussionThreadReactionTypeDefs } from './CollabDiscussionThreadReaction'
+import { collabDiscussionThreadCommentReactionTypeDefs } from './CollabDiscussionThreadCommentReaction'
+import { collabTaskCommentReactionTypeDefs } from './CollabTaskCommentReaction'
 
 const types = [
   userTypeDefs,
@@ -23,6 +27,10 @@ const types = [
   collabDiscussionThreadCommentTypeDefs,
   ReactionTypeDefs,
   collabPostReactionTypeDefs,
+  collabPostCommentReactionTypeDefs,
+  collabDiscussionThreadReactionTypeDefs,
+  collabDiscussionThreadCommentReactionTypeDefs,
+  collabTaskCommentReactionTypeDefs,
 ]
 
 export const typeDefs = mergeTypes(types, { all: true })

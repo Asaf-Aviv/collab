@@ -4,20 +4,23 @@
     "password": "omgwtfbbq89",
     "database": "collab_dev",
     "host": "127.0.0.1",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "logging": false
   },
   "test": {
     "username": "yojimbozx",
     "password": "omgwtfbbq89",
     "database": "collab_test",
     "host": "127.0.0.1",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "logging": false
   },
   "production": {
     "username": "yojimbozx",
     "password": "omgwtfbbq89",
     "database": "collab",
     "host": "127.0.0.1",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "logging": false
   }
 }

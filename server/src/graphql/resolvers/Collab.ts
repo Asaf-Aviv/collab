@@ -24,20 +24,16 @@ export const collabResolver: Resolvers = {
       models.Collab.toggleAcceptInvites(collabId, user.id),
     declineMemberRequest: (root, { collabId, memberId }, { user, models }) =>
       models.Collab.declineMemberRequest(collabId, memberId, user.id),
-    createTaskList: (root, { collabId, name, order }, { user, models }) =>
-      models.Collab.createTaskList(collabId, name, order, user.id),
-    deleteTaskList: (root, { taskListId }, { user, models }) =>
-      models.Collab.deleteTaskList(taskListId, user.id),
     createTaskComment: (
       root,
       { collabId, content, taskId },
-      { user, models }
+      { user, models },
     ) =>
       models.CollabTaskComment.createComment(
         collabId,
         content,
         user.id,
-        taskId
+        taskId,
       ),
     deleteTaskComment: (root, { commentId }, { user, models }) =>
       models.CollabTaskComment.deleteComment(commentId, user.id),
@@ -127,7 +123,5 @@ export const collabMiddleware = {
     requestToJoin: and(isAuthenticated),
     toggleAcceptInvites: and(isAuthenticated),
     declineMemberRequest: and(isAuthenticated),
-    createTaskList: and(isAuthenticated),
-    deleteTaskList: and(isAuthenticated),
   },
 }
