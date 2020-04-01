@@ -38,46 +38,52 @@ export const GET_USER = gql`
 
 // Collab Post
 export const GET_COLLAB_POSTS = gql`
-  query CollabPosts {
-    collabPosts {
-      id
-      title
-      stack
-      experience
-      hasStarted
-      languages
-      createdAt
-      isNew
-      membersCount
-      reactionsCount
-      commentsCount
-      owner {
+  query CollabPosts($offset: Int!, $limit: Int!) {
+    collabPosts(offset: $offset, limit: $limit) {
+      hasNextPage
+      posts {
         id
-        username
-        avatar
+        title
+        stack
+        experience
+        hasStarted
+        languages
+        createdAt
+        isNew
+        membersCount
+        reactionsCount
+        commentsCount
+        owner {
+          id
+          username
+          avatar
+        }
       }
     }
   }
 `
-// Collab Post
+
 export const GET_COLLAB_POSTS_BY_STACK = gql`
-  query CollabPostsByStack($stack: String!) {
-    collabPostsByStack(stack: $stack) {
-      id
-      title
-      stack
-      experience
-      hasStarted
-      languages
-      createdAt
-      isNew
-      membersCount
-      reactionsCount
-      commentsCount
-      owner {
+  query CollabPostsByStack($stack: String!, $offset: Int!, $limit: Int!) {
+    collabPostsByStack(stack: $stack, offset: $offset, limit: $limit) {
+      hasNextPage
+      posts {
         id
-        username
-        avatar
+        title
+        stack
+        experience
+        hasStarted
+        languages
+        createdAt
+        isNew
+        membersCount
+        reactionsCount
+        commentsCount
+        owner {
+          id
+          username
+          avatar
+        }
       }
     }
   }

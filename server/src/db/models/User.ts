@@ -121,10 +121,10 @@ export class User extends Model<User> {
   }
 
   static async login({ email, password }: LoginArgs) {
-    const user = await this.findOne({
+    const user = (await this.findOne({
       where: { email: email.toLowerCase() },
       attributes: { include: ['password'] },
-    })
+    })) as User & { password: string }
 
     if (!user) {
       throw new Error('User not found')
@@ -136,7 +136,9 @@ export class User extends Model<User> {
       throw new Error('Incorrect Credentials')
     }
 
-    return user
+    const { password: matchedUserPassword, ...userWithoutPass } = user
+
+    return userWithoutPass
   }
 
   static async deleteUser(id: string) {

@@ -2,10 +2,14 @@ import { gql } from 'apollo-server-express'
 
 export const collabPostTypeDefs = gql`
   type Query {
-    collabPosts: [CollabPost!]!
+    collabPosts(offset: Int!, limit: Int!): CollabPostsPayload!
     collabPost(postId: ID!): CollabPost
     languages: [String!]!
-    collabPostsByStack(stack: String!): [CollabPost!]!
+    collabPostsByStack(
+      stack: String!
+      offset: Int!
+      limit: Int!
+    ): CollabPostsPayload!
   }
 
   type Mutation {
@@ -40,6 +44,11 @@ export const collabPostTypeDefs = gql`
     isNew: Boolean!
     reactions: [Reaction!]!
     reactionsCount: Int!
+  }
+
+  type CollabPostsPayload {
+    hasNextPage: Boolean!
+    posts: [CollabPost!]!
   }
 
   input CollabPostArgs {
