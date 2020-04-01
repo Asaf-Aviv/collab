@@ -45,7 +45,7 @@ export const TaskBoard = () => {
   if (!data?.taskList) return null
 
   const handleDragEnd = (result: DropResult) => {
-    const { source, destination, draggableId, type } = result
+    const { source, destination, type /* draggableId */ } = result
 
     if (!destination) {
       return

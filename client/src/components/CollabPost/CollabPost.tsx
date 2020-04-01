@@ -21,7 +21,6 @@ import {
   Flex,
   Button,
   Box,
-  Tag,
   Divider,
 } from '@chakra-ui/core'
 import { AvatarWithUsername } from '../AvatarWithUsername/AvatarWithUsername'

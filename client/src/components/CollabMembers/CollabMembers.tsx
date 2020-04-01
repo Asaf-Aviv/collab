@@ -2,7 +2,7 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 import { useCollabMembersQuery } from '../../graphql/generates'
 import { UserCard } from '../UserCard/UserCard'
-import { Flex, Box, Grid } from '@chakra-ui/core'
+import { Grid } from '@chakra-ui/core'
 
 export const CollabMembers = () => {
   const { collabId } = useParams<{ collabId: string }>()
