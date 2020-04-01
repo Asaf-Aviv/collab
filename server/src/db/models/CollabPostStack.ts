@@ -4,9 +4,7 @@ import {
   Table,
   ForeignKey,
   Column,
-  PrimaryKey,
   BelongsTo,
-  HasOne,
 } from 'sequelize-typescript'
 import { CollabPost } from './CollabPost'
 import { Collab } from './Collab'

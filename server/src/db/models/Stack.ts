@@ -8,8 +8,10 @@ import {
   Unique,
   DataType,
   BeforeValidate,
+  HasMany,
 } from 'sequelize-typescript'
 import uuid from 'uuid/v4'
+import { CollabPostStack } from './CollabPostStack'
 
 @Table({ tableName: 'stacks', timestamps: false })
 export class Stack extends Model<Stack> {
@@ -22,6 +24,9 @@ export class Stack extends Model<Stack> {
   @Unique
   @Column(DataType.CITEXT)
   name!: string
+
+  @HasMany(() => CollabPostStack)
+  collabPost!: CollabPostStack[]
 
   @BeforeValidate
   static trimName(instance: Stack) {

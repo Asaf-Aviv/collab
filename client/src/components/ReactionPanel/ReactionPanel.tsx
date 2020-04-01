@@ -59,9 +59,11 @@ export const ReactionPanel = ({
   const togglePicker = () => setIsPickerOpen(prevState => !prevState)
 
   const handleEmojiSelect = (emoji: EmojiData) => {
+    console.log(emoji)
     if (!emoji.id) return
 
     const reaction = reactions.find(({ emojiId }) => emojiId === emoji.id)
+    console.log(reaction)
     if (reaction?.isLiked) return
 
     addReaction(emoji.id)

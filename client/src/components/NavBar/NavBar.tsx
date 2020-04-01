@@ -61,6 +61,7 @@ const StyledFlex = styled(Flex)`
   display: flex;
   align-items: center;
   font-weight: 600;
+  letter-spacing: 1.3px;
 `
 
 const StyledLink = styled(NavLink)`
