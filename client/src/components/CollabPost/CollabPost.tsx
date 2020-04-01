@@ -32,6 +32,7 @@ import { GET_COLLAB_POST, COLLAB_POST_COMMENTS } from '../../graphql/queries'
 import { ReactionPanel } from '../ReactionPanel/ReactionPanel'
 import { PostAuthorHeader } from '../PostAuthorHeader/PostAuthorHeader'
 import { CommentForm } from '../CommentForm/CommentForm'
+import { PostStackTag } from '../PostStackTag/PostStackTag'
 
 export const CollabPost = () => {
   const { postId } = useParams<{ postId: string }>()
@@ -94,7 +95,7 @@ export const CollabPost = () => {
     hasStarted,
     members,
     languages,
-    // isNew,
+    isNew,
     // isOwner,
     reactions,
     ...memberRequestsInfo
@@ -114,17 +115,19 @@ export const CollabPost = () => {
             <Box bg="white" p={8} boxShadow="md" borderRadius={6} mb={10}>
               <Flex as="header" align="center" mb={6}>
                 <PostAuthorHeader author={owner} date={createdAt} />
-                <Tag boxShadow="md" ml="auto" size="md" variantColor="pink">
+                <PostStackTag ml="auto" variantColor="blue">
                   {experience}
-                </Tag>
+                </PostStackTag>
                 {!hasStarted && (
-                  <Tag variantColor="green" size="md" boxShadow="md" ml={2}>
+                  <PostStackTag variantColor="green" ml={2}>
                     FRESH PROJECT
-                  </Tag>
+                  </PostStackTag>
                 )}
-                <Tag variantColor="green" size="md" boxShadow="md" ml={2}>
-                  NEW
-                </Tag>
+                {isNew && (
+                  <PostStackTag variantColor="green" ml={2}>
+                    NEW
+                  </PostStackTag>
+                )}
               </Flex>
               <Stack spacing={4} mb={6}>
                 <Link to={`/collab/${collabId}`}>
@@ -137,34 +140,25 @@ export const CollabPost = () => {
               <Text fontSize={['lg', 'xl']}>{description}</Text>
               <Flex wrap="wrap" mt={6} mb={4}>
                 {languages.map(language => (
-                  <Tag
-                    boxShadow="md"
-                    size="md"
-                    variantColor="purple"
+                  <PostStackTag
                     key={language}
+                    variantColor="blue"
                     mr={2}
                     mb={2}
                   >
                     {language}
-                  </Tag>
+                  </PostStackTag>
                 ))}
                 {stack.map(tech => (
-                  <Tag
-                    boxShadow="md"
-                    size="md"
-                    variantColor="pink"
-                    key={tech}
-                    mr={2}
-                    mb={2}
-                  >
+                  <PostStackTag key={tech} mr={2} mb={2}>
                     {tech}
-                  </Tag>
+                  </PostStackTag>
                 ))}
               </Flex>
               <ReactionPanel
                 reactions={reactions}
-                addReaction={handleRemoveReaction}
-                removeReaction={handleAddReaction}
+                addReaction={handleAddReaction}
+                removeReaction={handleRemoveReaction}
               />
             </Box>
             <section>

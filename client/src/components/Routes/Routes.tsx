@@ -7,6 +7,7 @@ import { SignUp } from '../SignUp/SignUp'
 import { CollabPosts } from '../CollabPosts/CollabPosts'
 import { MyCollabs } from '../MyCollabs/MyCollabs'
 import { CollabPost } from '../CollabPost/CollabPost'
+import { CollabPostsByStack } from '../CollabPostsByStack/CollabPostsByStack'
 import { Home } from '../Home/Home'
 import { UserProfile } from '../UserProfile/UserProfile'
 // import { useGetCurrentUserQuery } from '../../graphql/generates'
@@ -20,7 +21,11 @@ export const Routes = () => {
       <Route exact path="/" component={Home} />
       <Route path="/create" component={CreateCollab} />
       <Route exact path="/collabs/posts" component={CollabPosts} />
-      <Route path="/collabs/posts/:postId" component={CollabPost} />
+      <Route exact path="/collabs/posts/:postId" component={CollabPost} />
+      <Route
+        path="/collabs/posts/stack/:stack"
+        component={CollabPostsByStack}
+      />
       <Route path="/collab/:collabId" component={Collab} />
       <Route path="/user/:userId" component={UserProfile} />
       <Route path="/profile/my-collabs" component={MyCollabs} />

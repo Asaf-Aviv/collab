@@ -48,6 +48,30 @@ export const GET_COLLAB_POSTS = gql`
       languages
       createdAt
       isNew
+      membersCount
+      reactionsCount
+      commentsCount
+      owner {
+        id
+        username
+        avatar
+      }
+    }
+  }
+`
+// Collab Post
+export const GET_COLLAB_POSTS_BY_STACK = gql`
+  query CollabPostsByStack($stack: String!) {
+    collabPostsByStack(stack: $stack) {
+      id
+      title
+      stack
+      experience
+      hasStarted
+      languages
+      createdAt
+      isNew
+      membersCount
       reactionsCount
       commentsCount
       owner {

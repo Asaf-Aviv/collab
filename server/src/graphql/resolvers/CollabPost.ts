@@ -4,16 +4,36 @@ import { Resolvers, Reaction } from '../types'
 import { replaceErrorWithNull } from '../helpers/replaceErrorWithNull'
 import { differenceInDays } from 'date-fns'
 import { Sequelize } from 'sequelize-typescript'
+import { GQLCollabPost } from '../../db/models/CollabPost'
 
 export const collabPostResolver: Resolvers = {
   Query: {
-    collabPosts: (root, args, { models }) => models.CollabPost.findAll(),
+    collabPosts: (root, args, { models }) =>
+      models.CollabPost.findAll({ order: [['createdAt', 'DESC']] }),
     collabPost: (root, { postId }, { models }) =>
       models.CollabPost.findByPk(postId),
     languages: (root, args, { models }) =>
       models.Language.findAll().then(languages =>
         languages.map(({ name }) => name),
       ),
+    collabPostsByStack: async (root, args, { models }) => {
+      const stack = await models.Stack.findOne({ where: { name: args.stack } })
+
+      if (!stack) {
+        throw new Error('Stack not found')
+      }
+
+      const row = await models.CollabPostStack.findAll({
+        where: { stackId: stack.id },
+        attributes: ['postId'],
+        include: [{ model: models.CollabPost }],
+        order: [
+          [{ model: models.CollabPost, as: 'post' }, 'createdAt', 'DESC'],
+        ],
+      })
+
+      return row.map(x => x.post) as GQLCollabPost[]
+    },
   },
   Mutation: {
     createCollabPost: async (root, { post }, { user, models }) =>
@@ -42,6 +62,8 @@ export const collabPostResolver: Resolvers = {
       })
       return languages.map(({ languageName }) => languageName)
     },
+    membersCount: ({ collabId }, args, { models }) =>
+      models.CollabMember.count({ where: { collabId } }),
     stack: async ({ id }, args, { models }) => {
       const postStack = await models.CollabPostStack.findAll({
         where: { postId: id },
@@ -104,7 +126,7 @@ export const collabPostResolver: Resolvers = {
       const users = await loaders.userLoader.loadMany(memberIds)
       return users.map(replaceErrorWithNull)
     },
-    isNew: ({ createdAt }) => differenceInDays(createdAt, new Date()) <= 4,
+    isNew: ({ createdAt }) => differenceInDays(createdAt, new Date()) <= 7,
     comments: ({ id }, args, { models }) =>
       models.CollabPostComment.findAll({ where: { postId: id } }),
     pendingInvites: async ({ collabId }, args, { models, loaders }) => {

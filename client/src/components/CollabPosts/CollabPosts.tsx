@@ -1,10 +1,11 @@
 import React from 'react'
 import { useCollabPostsQuery, CollabPostsQuery } from '../../graphql/generates'
 import { Link as RouterLink } from 'react-router-dom'
-import { Flex, SimpleGrid, Heading, Tag, Link } from '@chakra-ui/core'
+import { Flex, SimpleGrid, Heading, Tag, Link, Text } from '@chakra-ui/core'
 import { AvatarWithUsername } from '../AvatarWithUsername/AvatarWithUsername'
 import { Container, Paper } from '../global'
 import { CommentsAndReactionsCount } from '../CommentsAndReactionsCount/CommentsAndReactionsCount'
+import { formatDate } from '../../utils'
 
 export const CollabPosts = () => {
   const { data, loading, error } = useCollabPostsQuery()
@@ -36,21 +37,32 @@ const CollabPostCard = ({
   languages,
   reactionsCount,
   commentsCount,
-  // createdAt,
-  // isNew,
+  createdAt,
+  isNew,
+  membersCount,
   // hasStarted,
   owner,
 }: CollabPostsQuery['collabPosts'][0]) => (
   <Paper h="100%" direction="column" align="start" as="article">
     <Flex p={4} w="100%" align="center" justify="space-between">
-      <AvatarWithUsername size="sm" {...owner} />
+      <Flex align="center">
+        <AvatarWithUsername size="sm" {...owner} />
+        <Text ml={2} as="time" fontSize="0.9rem">
+          {formatDate(createdAt)}
+        </Text>
+        <Text ml={2} fontSize="0.9rem">
+          {`${membersCount} ${membersCount > 1 ? 'members' : 'member'}`}
+        </Text>
+      </Flex>
       <Flex align="center">
         <Tag boxShadow="sm" mr={2} size="sm" variantColor="pink">
           {experience}
         </Tag>
-        <Tag boxShadow="sm" size="sm" variantColor="green">
-          NEW
-        </Tag>
+        {isNew && (
+          <Tag boxShadow="sm" size="sm" variantColor="green">
+            NEW
+          </Tag>
+        )}
       </Flex>
     </Flex>
     <Link

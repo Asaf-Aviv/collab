@@ -5,6 +5,7 @@ export const collabPostTypeDefs = gql`
     collabPosts: [CollabPost!]!
     collabPost(postId: ID!): CollabPost
     languages: [String!]!
+    collabPostsByStack(stack: String!): [CollabPost!]!
   }
 
   type Mutation {
@@ -23,6 +24,7 @@ export const collabPostTypeDefs = gql`
     stack: [String!]!
     hasStarted: Boolean!
     acceptsInvites: Boolean!
+    membersCount: Int!
     members: [User!]!
     isOwner: Boolean!
     languages: [String!]!
