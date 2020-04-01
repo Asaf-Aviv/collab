@@ -9,6 +9,8 @@ export const CollabPostsByStack = (props: Props) => {
   const { data } = useCollabPostsByStackQuery({
     variables: {
       stack,
+      offset: 0,
+      limit: 10,
     },
   })
 

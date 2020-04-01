@@ -8,31 +8,57 @@ import { GQLCollabPost } from '../../db/models/CollabPost'
 
 export const collabPostResolver: Resolvers = {
   Query: {
-    collabPosts: (root, args, { models }) =>
-      models.CollabPost.findAll({ order: [['createdAt', 'DESC']] }),
+    collabPosts: async (root, { offset, limit }, { models }) => {
+      const { count, rows: posts } = await models.CollabPost.findAndCountAll({
+        order: [['createdAt', 'DESC']],
+        offset,
+        limit,
+      })
+
+      return {
+        hasNextPage: count > offset + limit,
+        posts: posts as GQLCollabPost[],
+      }
+    },
     collabPost: (root, { postId }, { models }) =>
       models.CollabPost.findByPk(postId),
     languages: (root, args, { models }) =>
       models.Language.findAll().then(languages =>
         languages.map(({ name }) => name),
       ),
-    collabPostsByStack: async (root, args, { models }) => {
-      const stack = await models.Stack.findOne({ where: { name: args.stack } })
+    collabPostsByStack: async (
+      root,
+      { stack: requestedStack, offset, limit },
+      { models },
+    ) => {
+      const stack = await models.Stack.findOne({
+        where: { name: requestedStack },
+      })
 
       if (!stack) {
         throw new Error('Stack not found')
       }
 
-      const row = await models.CollabPostStack.findAll({
+      const {
+        count,
+        rows: postsByStack,
+      } = await models.CollabPostStack.findAndCountAll({
         where: { stackId: stack.id },
         attributes: ['postId'],
         include: [{ model: models.CollabPost }],
         order: [
           [{ model: models.CollabPost, as: 'post' }, 'createdAt', 'DESC'],
         ],
+        offset,
+        limit,
       })
 
-      return row.map(x => x.post) as GQLCollabPost[]
+      const posts = postsByStack.map(stack => stack.post) as GQLCollabPost[]
+
+      return {
+        hasNextPage: count > offset + limit,
+        posts,
+      }
     },
   },
   Mutation: {

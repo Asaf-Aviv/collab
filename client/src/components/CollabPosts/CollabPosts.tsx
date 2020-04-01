@@ -8,21 +8,54 @@ import { CommentsAndReactionsCount } from '../CommentsAndReactionsCount/Comments
 import { formatDate } from '../../utils'
 
 export const CollabPosts = () => {
-  const { data, loading, error } = useCollabPostsQuery()
+  const { data, loading, error, fetchMore } = useCollabPostsQuery({
+    variables: {
+      offset: 0,
+      limit: 10,
+    },
+    notifyOnNetworkStatusChange: true,
+  })
 
   if (loading) return <h1>loading</h1>
   if (error) return <h1>Could not fetch Collabs</h1>
-  if (!data) return null
+  if (!data?.collabPosts) return null
 
-  const { collabPosts } = data
+  const { posts, hasNextPage } = data.collabPosts
 
   return (
     <main>
       <Container>
         <SimpleGrid as="section" columns={{ lg: 1, xl: 2 }} spacing={6}>
-          {collabPosts.map(post => (
+          {posts.map(post => (
             <CollabPostCard key={post.id} {...post} />
           ))}
+          {hasNextPage && (
+            <button
+              onClick={() =>
+                fetchMore({
+                  variables: {
+                    offset: posts.length,
+                    limit: 10,
+                  },
+                  updateQuery: (prev, { fetchMoreResult }) => {
+                    if (!fetchMoreResult) return prev
+                    return {
+                      collabPosts: {
+                        ...prev.collabPosts,
+                        hasNextPage: fetchMoreResult.collabPosts.hasNextPage,
+                        posts: [
+                          ...prev.collabPosts.posts,
+                          ...fetchMoreResult.collabPosts.posts,
+                        ],
+                      },
+                    }
+                  },
+                })
+              }
+            >
+              fetch more
+            </button>
+          )}
         </SimpleGrid>
       </Container>
     </main>
@@ -42,7 +75,7 @@ const CollabPostCard = ({
   membersCount,
   // hasStarted,
   owner,
-}: CollabPostsQuery['collabPosts'][0]) => (
+}: NonNullable<CollabPostsQuery['collabPosts']>['posts'][0]) => (
   <Paper h="100%" direction="column" align="start" as="article">
     <Flex p={4} w="100%" align="center" justify="space-between">
       <Flex align="center">
