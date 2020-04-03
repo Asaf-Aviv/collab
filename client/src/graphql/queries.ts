@@ -268,6 +268,16 @@ export const GET_COLLAB_TASK_BOARD = gql`
         description
         order
         commentsCount
+        assignee {
+          id
+          username
+          avatar
+        }
+        assignedBy {
+          id
+          username
+          avatar
+        }
         author {
           id
           username
