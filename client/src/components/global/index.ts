@@ -11,6 +11,5 @@ export const Paper = styled(Flex)<FlexProps>`
   height: 100%;
   border-radius: 6px;
   box-shadow: 2px 6px 15px 0 rgba(179, 163, 204, 0.38);
-  overflow: hidden;
   background-color: ${props => props.bg || 'white'};
 `
