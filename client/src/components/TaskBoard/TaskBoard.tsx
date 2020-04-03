@@ -12,7 +12,18 @@ import {
   useCreateTaskMutation,
   useDeleteTaskMutation,
 } from '../../graphql/generates'
-import { Flex, Heading, Box, Text, IconButton } from '@chakra-ui/core'
+import {
+  Flex,
+  Heading,
+  Box,
+  Text,
+  IconButton,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverCloseButton,
+  PopoverBody,
+} from '@chakra-ui/core'
 import {
   DragDropContext,
   Droppable,
@@ -88,14 +99,6 @@ export const TaskBoard = () => {
     }
 
     // task has been moved to another task list
-
-    console.log('task moved to a new list', {
-      oldTaskListId: source.droppableId,
-      newTaskListId: destination.droppableId,
-      oldTaskPosition: source.index,
-      newTaskPosition: destination.index,
-    })
-
     moveTaskToList({
       variables: {
         input: {
@@ -106,8 +109,6 @@ export const TaskBoard = () => {
         },
       },
     })
-
-    console.log(result)
   }
 
   const { taskList } = data
@@ -266,62 +267,75 @@ const Task = ({
   deleteTask: () => void
   showComments: boolean
   toggleComments: () => void
-}) => (
-  <Draggable draggableId={task.id} index={index}>
-    {provided => (
-      <Box
-        {...provided.draggableProps}
-        {...provided.dragHandleProps}
-        ref={provided.innerRef}
-        mb={2}
-        borderRadius={3}
-        border="1px solid"
-        p={2}
-        bg="white"
-      >
-        <IconButton
-          aria-label="delete task list"
-          onClick={() => deleteTask()}
-          icon="delete"
+}) => {
+  return (
+    <Draggable draggableId={task.id} index={index}>
+      {provided => (
+        <Box
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          ref={provided.innerRef}
+          mb={2}
+          borderRadius={3}
+          border="1px solid"
+          p={2}
+          bg="white"
         >
-          Delete
-        </IconButton>
-        <Text>{task.description}</Text>
-        <IconButton
-          aria-label="show or hide comments"
-          size="sm"
-          icon="chat"
-          variantColor="purple"
-          onClick={() => toggleComments()}
-        >
-          Show Comments
-        </IconButton>
-        {showComments && <TaskComments taskId={task.id} />}
-      </Box>
-    )}
-  </Draggable>
-)
-
-/* {data?.taskList?.map(list => (
-        <div key={list.id}>
-          {list.tasks.map(task => (
-            <div key={task.id}>
-              {task.description}
-              <Button onClick={() => setSelectedTaskId(task.id)}>
-                Show Comments
-              </Button>
-              {selectedTaskId === task.id && (
-                <TaskComments taskId={selectedTaskId} />
-              )}
-            </div>
-          ))}
-        </div>
-      ))}*/
+          <Popover placement="right-start" isOpen={showComments}>
+            <PopoverTrigger>
+              <Box>
+                <Box onClick={e => e.stopPropagation()}>
+                  <IconButton
+                    aria-label="show or hide comments"
+                    size="sm"
+                    icon="chat"
+                    variantColor="purple"
+                    onClick={() => toggleComments()}
+                  />
+                </Box>
+                <Box>
+                  <PopoverContent zIndex={4}>
+                    <PopoverCloseButton onClick={() => toggleComments()} />
+                    {showComments && (
+                      <PopoverBody>
+                        <TaskComments taskId={task.id} />
+                      </PopoverBody>
+                    )}
+                  </PopoverContent>
+                  <IconButton
+                    aria-label="delete task list"
+                    onClick={() => deleteTask()}
+                    icon="delete"
+                  >
+                    Delete
+                  </IconButton>
+                  <Text>{task.description}</Text>
+                </Box>
+              </Box>
+            </PopoverTrigger>
+          </Popover>
+        </Box>
+      )}
+    </Draggable>
+  )
+}
 
 const TaskComments = ({ taskId }: { taskId: string }) => {
-  const { data } = useTaskCommentsQuery({ variables: { taskId } })
+  const { data, loading, error } = useTaskCommentsQuery({
+    variables: { taskId },
+  })
 
-  console.log(data)
+  if (loading) return <h1>loading</h1>
+  if (error) return <h1>Collab not found</h1>
+  if (!data?.task?.comments) return null
 
-  return <div>hello</div>
+  const { comments } = data.task
+
+  return (
+    <div>
+      {comments.map(comment => (
+        <Box key={comment.id}>{comment.content}</Box>
+      ))}
+    </div>
+  )
 }
