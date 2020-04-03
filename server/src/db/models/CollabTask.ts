@@ -18,6 +18,7 @@ import {
   UpdateTaskPositionInput,
   MoveTaskToListInput,
   CreateTaskInput,
+  UpdateTaskAssigneeInput,
 } from '../../graphql/types.d'
 import { GQLResolverTypes } from './../../graphql/helpers/GQLResolverTypes'
 import { CollabMember } from './CollabMember'
@@ -44,6 +45,20 @@ export class CollabTask extends Model<CollabTask> {
   @BelongsTo(() => User, { foreignKey: 'authorId', onDelete: 'CASCADE' })
   author!: User
 
+  @ForeignKey(() => User)
+  @Column
+  assigneeId!: string
+
+  @BelongsTo(() => User, { foreignKey: 'assigneeId' })
+  assignee!: User
+
+  @ForeignKey(() => User)
+  @Column
+  assignedById!: string
+
+  @BelongsTo(() => User, { foreignKey: 'assignedById' })
+  assignedBy!: User
+
   @ForeignKey(() => CollabTaskList)
   @Column
   taskListId!: string
@@ -58,7 +73,7 @@ export class CollabTask extends Model<CollabTask> {
   comments!: CollabTaskComment[]
 
   static async createTask(input: CreateTaskInput, userId: string) {
-    const { collabId, taskListId, description } = input
+    const { collabId, taskListId, description, assigneeId } = input
 
     const isMember = await CollabMember.findOne({
       where: { collabId, memberId: userId },
@@ -76,7 +91,25 @@ export class CollabTask extends Model<CollabTask> {
       authorId: userId,
       taskListId,
       order: taskPosition,
+      assigneeId,
+      assignedBy: assigneeId ? userId : null,
     })
+  }
+
+  static async updateTaskAssignee(
+    input: UpdateTaskAssigneeInput,
+    userId: string,
+  ) {
+    const { taskId, assigneeId } = input
+
+    const task = await this.findByPk(taskId)
+
+    if (!task) {
+      throw new Error('Task not found')
+    }
+
+    //FIXME: add validation
+    return task.update({ assignedById: userId, assigneeId })
   }
 
   static async updateTaskPosition(
@@ -196,5 +229,5 @@ export class CollabTask extends Model<CollabTask> {
 
 export type GQLCollabTask = GQLResolverTypes<
   CollabTask,
-  'author' | 'comments' | 'taskList'
+  'author' | 'comments' | 'taskList' | 'assignedBy' | 'assignee'
 >

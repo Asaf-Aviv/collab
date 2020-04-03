@@ -8,6 +8,10 @@ export const taskTypeDefs = gql`
   type Mutation {
     createTask(input: CreateTaskInput!): Task!
     updateTaskPosition(input: UpdateTaskPositionInput!): Task!
+    """
+    returns the ID of the assignee
+    """
+    updateTaskAssignee(input: UpdateTaskAssigneeInput!): Task!
     moveTaskToList(input: MoveTaskToListInput!): Task!
     deleteTask(taskId: ID!): Boolean!
   }
@@ -19,6 +23,8 @@ export const taskTypeDefs = gql`
     taskListId: ID!
     authorId: ID!
     author: User!
+    assignee: User
+    assignedBy: User
     comments: [TaskComment!]!
     commentsCount: Int!
   }
@@ -27,6 +33,12 @@ export const taskTypeDefs = gql`
     collabId: ID!
     taskListId: ID!
     description: String!
+    assigneeId: ID
+  }
+
+  input UpdateTaskAssigneeInput {
+    taskId: ID!
+    assigneeId: ID!
   }
 
   input UpdateTaskPositionInput {

@@ -205,6 +205,7 @@ const Column = ({ taskList, tasks, refetch, index }: ColumnProps) => {
                     collabId,
                     taskListId: taskList.id,
                     description: 'new task',
+                    assigneeId: null,
                   },
                 },
               })
