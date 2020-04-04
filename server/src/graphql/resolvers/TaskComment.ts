@@ -5,17 +5,8 @@ import { Sequelize } from 'sequelize-typescript'
 
 export const taskCommentResolver: Resolvers = {
   Mutation: {
-    createTaskComment: (
-      root,
-      { collabId, content, taskId },
-      { user, models },
-    ) =>
-      models.CollabTaskComment.createComment(
-        collabId,
-        content,
-        user.id,
-        taskId,
-      ),
+    createTaskComment: (root, { input }, { user, models }) =>
+      models.CollabTaskComment.createComment(input, user.id),
     deleteTaskComment: (root, { commentId }, { user, models }) =>
       models.CollabTaskComment.deleteComment(commentId, user.id),
   },

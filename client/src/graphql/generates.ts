@@ -148,7 +148,14 @@ export type CreateCollabDiscussionThreadCommentInput = {
   threadId: Scalars['ID'],
 };
 
+export type CreateTaskCommentInput = {
+  collabId: Scalars['ID'],
+  content: Scalars['String'],
+  taskId: Scalars['ID'],
+};
+
 export type CreateTaskInput = {
+  assigneeId?: Maybe<Scalars['ID']>,
   collabId: Scalars['ID'],
   description: Scalars['String'],
   taskListId: Scalars['ID'],
@@ -238,6 +245,7 @@ export type Mutation = {
   requestToJoin: Scalars['Boolean'],
   signUp: AuthPayload,
   toggleAcceptInvites: Collab,
+  updateTaskAssignee: Task,
   updateTaskListPosition: TaskList,
   updateTaskPosition: Task,
 };
@@ -311,9 +319,7 @@ export type MutationCreateTaskArgs = {
 
 
 export type MutationCreateTaskCommentArgs = {
-  collabId: Scalars['ID'],
-  content: Scalars['String'],
-  taskId: Scalars['ID']
+  input: CreateTaskCommentInput
 };
 
 
@@ -435,6 +441,11 @@ export type MutationToggleAcceptInvitesArgs = {
 };
 
 
+export type MutationUpdateTaskAssigneeArgs = {
+  input: UpdateTaskAssigneeInput
+};
+
+
 export type MutationUpdateTaskListPositionArgs = {
   input: UpdateTaskListPositionInput
 };
@@ -543,6 +554,8 @@ export type SignUpArgs = {
 
 export type Task = {
    __typename?: 'Task',
+  assignedBy?: Maybe<User>,
+  assignee?: Maybe<User>,
   author: User,
   authorId: Scalars['ID'],
   comments: Array<TaskComment>,
@@ -569,6 +582,11 @@ export type TaskList = {
   name: Scalars['String'],
   order: Scalars['Int'],
   tasks: Array<Task>,
+};
+
+export type UpdateTaskAssigneeInput = {
+  assigneeId: Scalars['ID'],
+  taskId: Scalars['ID'],
 };
 
 export type UpdateTaskListPositionInput = {
@@ -875,6 +893,66 @@ export type UpdateTaskPositionMutation = (
   ) }
 );
 
+export type UpdateTaskAssigneeMutationVariables = {
+  input: UpdateTaskAssigneeInput
+};
+
+
+export type UpdateTaskAssigneeMutation = (
+  { __typename?: 'Mutation' }
+  & { updateTaskAssignee: (
+    { __typename?: 'Task' }
+    & Pick<Task, 'id'>
+    & { assignee: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    )>, assignedBy: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    )> }
+  ) }
+);
+
+export type CreateTaskCommentMutationVariables = {
+  input: CreateTaskCommentInput
+};
+
+
+export type CreateTaskCommentMutation = (
+  { __typename?: 'Mutation' }
+  & { createTaskComment: (
+    { __typename?: 'TaskComment' }
+    & Pick<TaskComment, 'id' | 'content'>
+    & { author: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    )>, reactions: Array<(
+      { __typename?: 'Reaction' }
+      & Pick<Reaction, 'emojiId' | 'count'>
+    )> }
+  ) }
+);
+
+export type AddTaskCommentReactionMutationVariables = {
+  reaction: AddCollabTaskCommentReactionInput
+};
+
+
+export type AddTaskCommentReactionMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'addCollabTaskCommentReaction'>
+);
+
+export type RemoveTaskCommentReactionMutationVariables = {
+  reaction: RemoveCollabTaskCommentReactionInput
+};
+
+
+export type RemoveTaskCommentReactionMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'removeCollabTaskCommentReaction'>
+);
+
 export type CreateDiscussionThreadCommentMutationVariables = {
   input: CreateCollabDiscussionThreadCommentInput
 };
@@ -1152,7 +1230,13 @@ export type TaskListQuery = (
     & { tasks: Array<(
       { __typename?: 'Task' }
       & Pick<Task, 'id' | 'description' | 'order' | 'commentsCount'>
-      & { author: (
+      & { assignee: Maybe<(
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'avatar'>
+      )>, assignedBy: Maybe<(
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'avatar'>
+      )>, author: (
         { __typename?: 'User' }
         & Pick<User, 'id' | 'username' | 'avatar'>
       ) }
@@ -1176,6 +1260,9 @@ export type TaskCommentsQuery = (
       & { author: Maybe<(
         { __typename?: 'User' }
         & Pick<User, 'id' | 'username' | 'avatar'>
+      )>, reactions: Array<(
+        { __typename?: 'Reaction' }
+        & Pick<Reaction, 'emojiId' | 'count' | 'isLiked'>
       )> }
     )> }
   )> }
@@ -1924,6 +2011,150 @@ export function useUpdateTaskPositionMutation(baseOptions?: ApolloReactHooks.Mut
 export type UpdateTaskPositionMutationHookResult = ReturnType<typeof useUpdateTaskPositionMutation>;
 export type UpdateTaskPositionMutationResult = ApolloReactCommon.MutationResult<UpdateTaskPositionMutation>;
 export type UpdateTaskPositionMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateTaskPositionMutation, UpdateTaskPositionMutationVariables>;
+export const UpdateTaskAssigneeDocument = gql`
+    mutation UpdateTaskAssignee($input: UpdateTaskAssigneeInput!) {
+  updateTaskAssignee(input: $input) {
+    id
+    assignee {
+      id
+      username
+      avatar
+    }
+    assignedBy {
+      id
+      username
+      avatar
+    }
+  }
+}
+    `;
+export type UpdateTaskAssigneeMutationFn = ApolloReactCommon.MutationFunction<UpdateTaskAssigneeMutation, UpdateTaskAssigneeMutationVariables>;
+
+/**
+ * __useUpdateTaskAssigneeMutation__
+ *
+ * To run a mutation, you first call `useUpdateTaskAssigneeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateTaskAssigneeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateTaskAssigneeMutation, { data, loading, error }] = useUpdateTaskAssigneeMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateTaskAssigneeMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateTaskAssigneeMutation, UpdateTaskAssigneeMutationVariables>) {
+        return ApolloReactHooks.useMutation<UpdateTaskAssigneeMutation, UpdateTaskAssigneeMutationVariables>(UpdateTaskAssigneeDocument, baseOptions);
+      }
+export type UpdateTaskAssigneeMutationHookResult = ReturnType<typeof useUpdateTaskAssigneeMutation>;
+export type UpdateTaskAssigneeMutationResult = ApolloReactCommon.MutationResult<UpdateTaskAssigneeMutation>;
+export type UpdateTaskAssigneeMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateTaskAssigneeMutation, UpdateTaskAssigneeMutationVariables>;
+export const CreateTaskCommentDocument = gql`
+    mutation CreateTaskComment($input: CreateTaskCommentInput!) {
+  createTaskComment(input: $input) {
+    id
+    content
+    author {
+      id
+      username
+      avatar
+    }
+    reactions {
+      emojiId
+      count
+    }
+  }
+}
+    `;
+export type CreateTaskCommentMutationFn = ApolloReactCommon.MutationFunction<CreateTaskCommentMutation, CreateTaskCommentMutationVariables>;
+
+/**
+ * __useCreateTaskCommentMutation__
+ *
+ * To run a mutation, you first call `useCreateTaskCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTaskCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTaskCommentMutation, { data, loading, error }] = useCreateTaskCommentMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateTaskCommentMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateTaskCommentMutation, CreateTaskCommentMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateTaskCommentMutation, CreateTaskCommentMutationVariables>(CreateTaskCommentDocument, baseOptions);
+      }
+export type CreateTaskCommentMutationHookResult = ReturnType<typeof useCreateTaskCommentMutation>;
+export type CreateTaskCommentMutationResult = ApolloReactCommon.MutationResult<CreateTaskCommentMutation>;
+export type CreateTaskCommentMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateTaskCommentMutation, CreateTaskCommentMutationVariables>;
+export const AddTaskCommentReactionDocument = gql`
+    mutation AddTaskCommentReaction($reaction: AddCollabTaskCommentReactionInput!) {
+  addCollabTaskCommentReaction(reaction: $reaction)
+}
+    `;
+export type AddTaskCommentReactionMutationFn = ApolloReactCommon.MutationFunction<AddTaskCommentReactionMutation, AddTaskCommentReactionMutationVariables>;
+
+/**
+ * __useAddTaskCommentReactionMutation__
+ *
+ * To run a mutation, you first call `useAddTaskCommentReactionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddTaskCommentReactionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addTaskCommentReactionMutation, { data, loading, error }] = useAddTaskCommentReactionMutation({
+ *   variables: {
+ *      reaction: // value for 'reaction'
+ *   },
+ * });
+ */
+export function useAddTaskCommentReactionMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AddTaskCommentReactionMutation, AddTaskCommentReactionMutationVariables>) {
+        return ApolloReactHooks.useMutation<AddTaskCommentReactionMutation, AddTaskCommentReactionMutationVariables>(AddTaskCommentReactionDocument, baseOptions);
+      }
+export type AddTaskCommentReactionMutationHookResult = ReturnType<typeof useAddTaskCommentReactionMutation>;
+export type AddTaskCommentReactionMutationResult = ApolloReactCommon.MutationResult<AddTaskCommentReactionMutation>;
+export type AddTaskCommentReactionMutationOptions = ApolloReactCommon.BaseMutationOptions<AddTaskCommentReactionMutation, AddTaskCommentReactionMutationVariables>;
+export const RemoveTaskCommentReactionDocument = gql`
+    mutation RemoveTaskCommentReaction($reaction: RemoveCollabTaskCommentReactionInput!) {
+  removeCollabTaskCommentReaction(reaction: $reaction)
+}
+    `;
+export type RemoveTaskCommentReactionMutationFn = ApolloReactCommon.MutationFunction<RemoveTaskCommentReactionMutation, RemoveTaskCommentReactionMutationVariables>;
+
+/**
+ * __useRemoveTaskCommentReactionMutation__
+ *
+ * To run a mutation, you first call `useRemoveTaskCommentReactionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveTaskCommentReactionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeTaskCommentReactionMutation, { data, loading, error }] = useRemoveTaskCommentReactionMutation({
+ *   variables: {
+ *      reaction: // value for 'reaction'
+ *   },
+ * });
+ */
+export function useRemoveTaskCommentReactionMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RemoveTaskCommentReactionMutation, RemoveTaskCommentReactionMutationVariables>) {
+        return ApolloReactHooks.useMutation<RemoveTaskCommentReactionMutation, RemoveTaskCommentReactionMutationVariables>(RemoveTaskCommentReactionDocument, baseOptions);
+      }
+export type RemoveTaskCommentReactionMutationHookResult = ReturnType<typeof useRemoveTaskCommentReactionMutation>;
+export type RemoveTaskCommentReactionMutationResult = ApolloReactCommon.MutationResult<RemoveTaskCommentReactionMutation>;
+export type RemoveTaskCommentReactionMutationOptions = ApolloReactCommon.BaseMutationOptions<RemoveTaskCommentReactionMutation, RemoveTaskCommentReactionMutationVariables>;
 export const CreateDiscussionThreadCommentDocument = gql`
     mutation CreateDiscussionThreadComment($input: CreateCollabDiscussionThreadCommentInput!) {
   createCollabDiscussionThreadComment(input: $input) {
@@ -2555,6 +2786,16 @@ export const TaskListDocument = gql`
       description
       order
       commentsCount
+      assignee {
+        id
+        username
+        avatar
+      }
+      assignedBy {
+        id
+        username
+        avatar
+      }
       author {
         id
         username
@@ -2601,6 +2842,11 @@ export const TaskCommentsDocument = gql`
         id
         username
         avatar
+      }
+      reactions {
+        emojiId
+        count
+        isLiked
       }
     }
   }

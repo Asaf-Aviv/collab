@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, FormEvent } from 'react'
 import { useParams } from 'react-router-dom'
 import {
   useTaskListQuery,
@@ -11,6 +11,11 @@ import {
   useMoveTaskToListMutation,
   useCreateTaskMutation,
   useDeleteTaskMutation,
+  useUpdateTaskAssigneeMutation,
+  useCollabMembersQuery,
+  useCreateTaskCommentMutation,
+  useAddTaskCommentReactionMutation,
+  useRemoveTaskCommentReactionMutation,
 } from '../../graphql/generates'
 import {
   Flex,
@@ -23,6 +28,8 @@ import {
   PopoverContent,
   PopoverCloseButton,
   PopoverBody,
+  Textarea,
+  Button,
 } from '@chakra-ui/core'
 import {
   DragDropContext,
@@ -30,6 +37,7 @@ import {
   Draggable,
   DropResult,
 } from 'react-beautiful-dnd'
+import { ReactionPanel } from '../ReactionPanel/ReactionPanel'
 
 export const TaskBoard = () => {
   const { collabId } = useParams<{ collabId: string }>()
@@ -159,8 +167,13 @@ type ColumnProps = {
 }
 
 const Column = ({ taskList, tasks, refetch, index }: ColumnProps) => {
-  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null)
   const { collabId } = useParams<{ collabId: string }>()
+  const { data: membersData } = useCollabMembersQuery({
+    variables: {
+      collabId,
+    },
+  })
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null)
   const [createTask] = useCreateTaskMutation({
     onCompleted: () => refetch(),
   })
@@ -171,6 +184,9 @@ const Column = ({ taskList, tasks, refetch, index }: ColumnProps) => {
     onCompleted: () => refetch(),
   })
   const [deleteTask] = useDeleteTaskMutation({
+    onCompleted: () => refetch(),
+  })
+  const [updateTaskAssignee] = useUpdateTaskAssigneeMutation({
     onCompleted: () => refetch(),
   })
 
@@ -268,63 +284,109 @@ const Task = ({
   deleteTask: () => void
   showComments: boolean
   toggleComments: () => void
-}) => {
-  return (
-    <Draggable draggableId={task.id} index={index}>
-      {provided => (
-        <Box
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-          ref={provided.innerRef}
-          mb={2}
-          borderRadius={3}
-          border="1px solid"
-          p={2}
-          bg="white"
-        >
-          <Popover placement="right-start" isOpen={showComments}>
-            <PopoverTrigger>
-              <Box>
-                <Box onClick={e => e.stopPropagation()}>
-                  <IconButton
-                    aria-label="show or hide comments"
-                    size="sm"
-                    icon="chat"
-                    variantColor="purple"
-                    onClick={() => toggleComments()}
-                  />
-                </Box>
-                <Box>
-                  <PopoverContent zIndex={4}>
-                    <PopoverCloseButton onClick={() => toggleComments()} />
-                    {showComments && (
-                      <PopoverBody>
-                        <TaskComments taskId={task.id} />
-                      </PopoverBody>
-                    )}
-                  </PopoverContent>
-                  <IconButton
-                    aria-label="delete task list"
-                    onClick={() => deleteTask()}
-                    icon="delete"
-                  >
-                    Delete
-                  </IconButton>
-                  <Text>{task.description}</Text>
-                </Box>
+}) => (
+  <Draggable draggableId={task.id} index={index}>
+    {provided => (
+      <Box
+        {...provided.draggableProps}
+        {...provided.dragHandleProps}
+        ref={provided.innerRef}
+        mb={2}
+        borderRadius={3}
+        border="1px solid"
+        p={2}
+        bg="white"
+      >
+        <Popover placement="right-start" isOpen={showComments}>
+          <PopoverTrigger>
+            <Box>
+              <Box onClick={e => e.stopPropagation()}>
+                <IconButton
+                  aria-label="show or hide comments"
+                  size="sm"
+                  icon="chat"
+                  variantColor="purple"
+                  onClick={() => toggleComments()}
+                />
               </Box>
-            </PopoverTrigger>
-          </Popover>
-        </Box>
-      )}
-    </Draggable>
-  )
-}
+              <Box>
+                <PopoverContent zIndex={4}>
+                  <PopoverCloseButton onClick={() => toggleComments()} />
+                  {showComments && (
+                    <PopoverBody>
+                      <TaskComments taskId={task.id} />
+                    </PopoverBody>
+                  )}
+                </PopoverContent>
+                <IconButton
+                  aria-label="delete task list"
+                  onClick={() => deleteTask()}
+                  icon="delete"
+                >
+                  Delete
+                </IconButton>
+                <Text>{task.description}</Text>
+              </Box>
+            </Box>
+          </PopoverTrigger>
+        </Popover>
+      </Box>
+    )}
+  </Draggable>
+)
 
 const TaskComments = ({ taskId }: { taskId: string }) => {
-  const { data, loading, error } = useTaskCommentsQuery({
+  const { collabId } = useParams<{ collabId: string }>()
+  const [commentInput, setCommentInput] = useState('')
+  const { data, loading, error, refetch } = useTaskCommentsQuery({
     variables: { taskId },
   })
+  const [addReaction] = useAddTaskCommentReactionMutation({
+    onCompleted: () => refetch(),
+  })
+  const [removeReaction] = useRemoveTaskCommentReactionMutation({
+    onCompleted: () => refetch(),
+  })
+  const [addComment] = useCreateTaskCommentMutation({
+    variables: {
+      input: {
+        collabId,
+        content: commentInput,
+        taskId,
+      },
+    },
+    onCompleted: () => {
+      refetch()
+      setCommentInput('')
+    },
+  })
+
+  const handleCommentSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    addComment()
+  }
+
+  const handleAddReaction = (commentId: string) => (emojiId: string) => {
+    addReaction({
+      variables: {
+        reaction: {
+          emojiId,
+          commentId,
+        },
+      },
+    })
+  }
+
+  const handleRemoveReaction = (commentId: string) => (emojiId: string) => {
+    removeReaction({
+      variables: {
+        reaction: {
+          emojiId,
+          commentId,
+        },
+      },
+    })
+  }
 
   if (loading) return <h1>loading</h1>
   if (error) return <h1>Collab not found</h1>
@@ -335,8 +397,37 @@ const TaskComments = ({ taskId }: { taskId: string }) => {
   return (
     <div>
       {comments.map(comment => (
-        <Box key={comment.id}>{comment.content}</Box>
+        <Box key={comment.id}>
+          {comment.content}
+          <ReactionPanel
+            reactions={comment.reactions}
+            addReaction={handleAddReaction(comment.id)}
+            removeReaction={handleRemoveReaction(comment.id)}
+          />
+        </Box>
       ))}
+      <form onSubmit={handleCommentSubmit}>
+        <Flex direction="column" justify="end">
+          <Textarea
+            p={1}
+            value={commentInput}
+            onChange={(e: any) => setCommentInput(e.target.value)}
+            resize="none"
+            mb={2}
+            lineHeight={1.1}
+            minHeight={120}
+            fontSize="0.9rem"
+          />
+          <Button
+            boxShadow="md"
+            size="sm"
+            variantColor="purple"
+            onClick={() => addComment()}
+          >
+            Comment
+          </Button>
+        </Flex>
+      </form>
     </div>
   )
 }
