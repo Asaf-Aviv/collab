@@ -2,11 +2,7 @@ import { gql } from 'apollo-server-express'
 
 export const taskCommentTypeDefs = gql`
   type Mutation {
-    createTaskComment(
-      collabId: ID!
-      taskId: ID!
-      content: String!
-    ): TaskComment!
+    createTaskComment(input: CreateTaskCommentInput!): TaskComment!
     deleteTaskComment(commentId: ID!): Boolean!
   }
 
@@ -16,5 +12,11 @@ export const taskCommentTypeDefs = gql`
     author: User
     task: Task
     reactions: [Reaction!]!
+  }
+
+  input CreateTaskCommentInput {
+    collabId: ID!
+    taskId: ID!
+    content: String!
   }
 `

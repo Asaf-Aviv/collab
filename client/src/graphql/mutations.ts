@@ -206,6 +206,58 @@ export const UPDATE_TASK_POSITION = gql`
   }
 `
 
+export const UPDATE_TASK_ASSIGNEE = gql`
+  mutation UpdateTaskAssignee($input: UpdateTaskAssigneeInput!) {
+    updateTaskAssignee(input: $input) {
+      id
+      assignee {
+        id
+        username
+        avatar
+      }
+      assignedBy {
+        id
+        username
+        avatar
+      }
+    }
+  }
+`
+
+export const CREATE_TASK_COMMENT = gql`
+  mutation CreateTaskComment($input: CreateTaskCommentInput!) {
+    createTaskComment(input: $input) {
+      id
+      content
+      author {
+        id
+        username
+        avatar
+      }
+      reactions {
+        emojiId
+        count
+      }
+    }
+  }
+`
+
+export const ADD_TASK_COMMENT_REACTION = gql`
+  mutation AddTaskCommentReaction(
+    $reaction: AddCollabTaskCommentReactionInput!
+  ) {
+    addCollabTaskCommentReaction(reaction: $reaction)
+  }
+`
+
+export const REMOVE_TASK_COMMENT_REACTION = gql`
+  mutation RemoveTaskCommentReaction(
+    $reaction: RemoveCollabTaskCommentReactionInput!
+  ) {
+    removeCollabTaskCommentReaction(reaction: $reaction)
+  }
+`
+
 // Thread
 export const ADD_DISCUSSION_THREAD_COMMENT = gql`
   mutation CreateDiscussionThreadComment(

@@ -300,6 +300,11 @@ export const GET_TASK_COMMENTS = gql`
           username
           avatar
         }
+        reactions {
+          emojiId
+          count
+          isLiked
+        }
       }
     }
   }

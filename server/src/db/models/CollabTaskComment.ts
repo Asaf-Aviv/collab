@@ -13,6 +13,7 @@ import uuid from 'uuid/v4'
 import { User } from './User'
 import { CollabTask } from './CollabTask'
 import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
+import { CreateTaskCommentInput } from '../../graphql/types'
 
 @Table({ tableName: 'collab_task_comments' })
 export class CollabTaskComment extends Model<CollabTaskComment> {
@@ -42,28 +43,26 @@ export class CollabTaskComment extends Model<CollabTaskComment> {
   @Column
   content!: string
 
-  static async createComment(
-    collabId: string,
-    content: string,
-    authorId: string,
-    taskId: string
-  ) {
+  static async createComment(input: CreateTaskCommentInput, userId: string) {
+    const { collabId, taskId, content } = input
+
     const [task, isMemberOfCollab] = await Promise.all([
       CollabTask.findByPk(taskId),
-      CollabMember.findOne({ where: { collabId, memberId: authorId } }),
+      CollabMember.findOne({ where: { collabId, memberId: userId } }),
     ])
 
-    if (!task) {
-      throw new Error('Task not found')
-    }
-    if (!isMemberOfCollab) {
-      throw new Error('You are not a member of this Collab')
-    }
+    // if (!task) {
+    //   throw new Error('Task not found')
+    // }
+
+    // if (!isMemberOfCollab) {
+    //   throw new Error('You are not a member of this Collab')
+    // }
 
     return this.create({
       taskId,
       content,
-      authorId,
+      authorId: userId,
     })
   }
 

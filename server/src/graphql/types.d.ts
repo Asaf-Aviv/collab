@@ -158,7 +158,14 @@ export type CreateCollabDiscussionThreadCommentInput = {
   threadId: Scalars['ID'],
 };
 
+export type CreateTaskCommentInput = {
+  collabId: Scalars['ID'],
+  content: Scalars['String'],
+  taskId: Scalars['ID'],
+};
+
 export type CreateTaskInput = {
+  assigneeId?: Maybe<Scalars['ID']>,
   collabId: Scalars['ID'],
   description: Scalars['String'],
   taskListId: Scalars['ID'],
@@ -248,6 +255,7 @@ export type Mutation = {
   requestToJoin: Scalars['Boolean'],
   signUp: AuthPayload,
   toggleAcceptInvites: Collab,
+  updateTaskAssignee: Task,
   updateTaskListPosition: TaskList,
   updateTaskPosition: Task,
 };
@@ -321,9 +329,7 @@ export type MutationCreateTaskArgs = {
 
 
 export type MutationCreateTaskCommentArgs = {
-  collabId: Scalars['ID'],
-  content: Scalars['String'],
-  taskId: Scalars['ID']
+  input: CreateTaskCommentInput
 };
 
 
@@ -445,6 +451,11 @@ export type MutationToggleAcceptInvitesArgs = {
 };
 
 
+export type MutationUpdateTaskAssigneeArgs = {
+  input: UpdateTaskAssigneeInput
+};
+
+
 export type MutationUpdateTaskListPositionArgs = {
   input: UpdateTaskListPositionInput
 };
@@ -553,6 +564,8 @@ export type SignUpArgs = {
 
 export type Task = {
    __typename?: 'Task',
+  assignedBy?: Maybe<User>,
+  assignee?: Maybe<User>,
   author: User,
   authorId: Scalars['ID'],
   comments: Array<TaskComment>,
@@ -579,6 +592,11 @@ export type TaskList = {
   name: Scalars['String'],
   order: Scalars['Int'],
   tasks: Array<Task>,
+};
+
+export type UpdateTaskAssigneeInput = {
+  assigneeId: Scalars['ID'],
+  taskId: Scalars['ID'],
 };
 
 export type UpdateTaskListPositionInput = {
@@ -705,6 +723,7 @@ export type ResolversTypes = ResolversObject<{
   CollabPostArgs: CollabPostArgs,
   Experience: Experience,
   CreateTaskInput: CreateTaskInput,
+  CreateTaskCommentInput: CreateTaskCommentInput,
   CreateTaskListInput: CreateTaskListInput,
   LoginArgs: LoginArgs,
   AuthPayload: ResolverTypeWrapper<AuthPayload>,
@@ -715,6 +734,7 @@ export type ResolversTypes = ResolversObject<{
   RemoveCollabPostReactionInput: RemoveCollabPostReactionInput,
   RemoveCollabTaskCommentReactionInput: RemoveCollabTaskCommentReactionInput,
   SignUpArgs: SignUpArgs,
+  UpdateTaskAssigneeInput: UpdateTaskAssigneeInput,
   UpdateTaskListPositionInput: UpdateTaskListPositionInput,
   UpdateTaskPositionInput: UpdateTaskPositionInput,
 }>;
@@ -750,6 +770,7 @@ export type ResolversParentTypes = ResolversObject<{
   CollabPostArgs: CollabPostArgs,
   Experience: Experience,
   CreateTaskInput: CreateTaskInput,
+  CreateTaskCommentInput: CreateTaskCommentInput,
   CreateTaskListInput: CreateTaskListInput,
   LoginArgs: LoginArgs,
   AuthPayload: AuthPayload,
@@ -760,6 +781,7 @@ export type ResolversParentTypes = ResolversObject<{
   RemoveCollabPostReactionInput: RemoveCollabPostReactionInput,
   RemoveCollabTaskCommentReactionInput: RemoveCollabTaskCommentReactionInput,
   SignUpArgs: SignUpArgs,
+  UpdateTaskAssigneeInput: UpdateTaskAssigneeInput,
   UpdateTaskListPositionInput: UpdateTaskListPositionInput,
   UpdateTaskPositionInput: UpdateTaskPositionInput,
 }>;
@@ -886,7 +908,7 @@ export type MutationResolvers<ContextType = CollabContext, ParentType extends Re
   createCollabPost?: Resolver<ResolversTypes['CollabPost'], ParentType, ContextType, RequireFields<MutationCreateCollabPostArgs, 'post'>>,
   createComment?: Resolver<ResolversTypes['CollabPostComment'], ParentType, ContextType, RequireFields<MutationCreateCommentArgs, 'content' | 'postId'>>,
   createTask?: Resolver<ResolversTypes['Task'], ParentType, CollabContextWithUser, RequireFields<MutationCreateTaskArgs, 'input'>>,
-  createTaskComment?: Resolver<ResolversTypes['TaskComment'], ParentType, CollabContextWithUser, RequireFields<MutationCreateTaskCommentArgs, 'collabId' | 'content' | 'taskId'>>,
+  createTaskComment?: Resolver<ResolversTypes['TaskComment'], ParentType, CollabContextWithUser, RequireFields<MutationCreateTaskCommentArgs, 'input'>>,
   createTaskList?: Resolver<ResolversTypes['TaskList'], ParentType, CollabContextWithUser, RequireFields<MutationCreateTaskListArgs, 'input'>>,
   declineCollabInvitation?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeclineCollabInvitationArgs, 'collabId'>>,
   declineMemberRequest?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeclineMemberRequestArgs, 'collabId' | 'memberId'>>,
@@ -911,6 +933,7 @@ export type MutationResolvers<ContextType = CollabContext, ParentType extends Re
   requestToJoin?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationRequestToJoinArgs, 'collabId'>>,
   signUp?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'credentials'>>,
   toggleAcceptInvites?: Resolver<ResolversTypes['Collab'], ParentType, CollabContextWithUser, RequireFields<MutationToggleAcceptInvitesArgs, 'collabId'>>,
+  updateTaskAssignee?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationUpdateTaskAssigneeArgs, 'input'>>,
   updateTaskListPosition?: Resolver<ResolversTypes['TaskList'], ParentType, ContextType, RequireFields<MutationUpdateTaskListPositionArgs, 'input'>>,
   updateTaskPosition?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationUpdateTaskPositionArgs, 'input'>>,
 }>;
@@ -938,6 +961,8 @@ export type ReactionResolvers<ContextType = CollabContext, ParentType extends Re
 }>;
 
 export type TaskResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Task'] = ResolversParentTypes['Task']> = ResolversObject<{
+  assignedBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
+  assignee?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
   author?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
   authorId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   comments?: Resolver<Array<ResolversTypes['TaskComment']>, ParentType, ContextType>,
