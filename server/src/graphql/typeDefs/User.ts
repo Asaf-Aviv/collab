@@ -13,6 +13,7 @@ export const userTypeDefs = gql`
     deleteUser: Boolean!
     acceptCollabInvitation(collabId: ID!): User!
     declineCollabInvitation(collabId: ID!): Boolean!
+    updateUserInfo(input: UpdateUserInfoInput): CurrentUser!
   }
 
   type CurrentUser {
@@ -20,18 +21,40 @@ export const userTypeDefs = gql`
     username: String!
     email: String!
     avatar: String
+    firstName: String
+    lastName: String
+    """
+    the user's engineering title
+    """
+    title: String
+    country: String
     bio: String
     collabs: [Collab!]!
     collabInvites: [Collab!]!
     collabRequests: [CollabRequest!]!
+    tasks: [Task!]!
   }
 
   type User {
     id: ID!
     username: String!
+    firstName: String
+    lastName: String
+    """
+    the user's engineering title
+    """
+    title: String
     avatar: String
     bio: String
     collabs: [Collab!]!
+  }
+
+  input UpdateUserInfoInput {
+    firstName: String
+    lastName: String
+    title: String
+    country: String
+    bio: String
   }
 
   type CollabRequest {

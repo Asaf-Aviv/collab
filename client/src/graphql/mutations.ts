@@ -17,6 +17,20 @@ export const LOGIN = gql`
   }
 `
 
+// CurrentUser
+export const UPDATE_CURRENT_USER_INFO = gql`
+  mutation UpdateUserInfo($input: UpdateUserInfoInput!) {
+    updateUserInfo(input: $input) {
+      id
+      firstName
+      lastName
+      title
+      country
+      bio
+    }
+  }
+`
+
 // Collab Post
 export const CREATE_COLLAB_POST = gql`
   mutation CreateCollabPost($post: CollabPostArgs!) {
@@ -148,6 +162,8 @@ export const CREATE_TASK_LIST = gql`
   mutation CreateTaskList($input: CreateTaskListInput!) {
     createTaskList(input: $input) {
       id
+      name
+      order
     }
   }
 `
@@ -171,7 +187,6 @@ export const CREATE_TASK = gql`
   mutation CreateTask($input: CreateTaskInput!) {
     createTask(input: $input) {
       id
-      taskListId
       description
       order
       author {
@@ -180,6 +195,16 @@ export const CREATE_TASK = gql`
         avatar
       }
       commentsCount
+      assignee {
+        id
+        username
+        avatar
+      }
+      assignedBy {
+        id
+        username
+        avatar
+      }
     }
   }
 `

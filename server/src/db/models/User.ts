@@ -30,6 +30,7 @@ import { passwordRegex } from '../../utils'
 import { CollabMemberRequest } from './CollabMemberRequest'
 import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 import { CollabPostReaction } from './CollabPostReaction'
+import { CollabTask } from './CollabTask'
 
 @DefaultScope(() => ({
   attributes: { exclude: ['password'] },
@@ -78,6 +79,19 @@ export class User extends Model<User> {
   @Column
   avatar!: string
 
+  @Column
+  firstName!: string
+
+  @Column
+  lastName!: string
+
+  // the users engineering title
+  @Column
+  title!: string
+
+  @Column
+  country!: string
+
   @Unique({
     msg: 'Email is already taken',
     name: 'unique_email',
@@ -88,6 +102,9 @@ export class User extends Model<User> {
 
   @HasMany(() => Collab)
   collabs!: Collab[]
+
+  @HasMany(() => CollabTask, { foreignKey: 'assigneeId' })
+  tasks!: CollabTask[]
 
   @HasMany(() => CollabMemberRequest)
   collabInvites!: Collab[]

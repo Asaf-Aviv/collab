@@ -17,13 +17,13 @@ export class CollabMemberRequest extends Model<CollabMemberRequest> {
   @Column
   collabId!: string
 
+  @BelongsTo(() => Collab, { foreignKey: 'collabId', onDelete: 'CASCADE' })
+  collab!: Collab
+
   @PrimaryKey
   @ForeignKey(() => User)
   @Column
   memberId!: string
-
-  @BelongsTo(() => Collab, { foreignKey: 'collabId', onDelete: 'CASCADE' })
-  collab!: Collab
 
   @BelongsTo(() => User, { foreignKey: 'memberId', onDelete: 'CASCADE' })
   member!: User
