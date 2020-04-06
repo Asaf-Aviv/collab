@@ -12,14 +12,66 @@ export const GET_CURRENT_USER = gql`
   }
 `
 
-// Current User Collabs
-export const GET_MY_COLLABS = gql`
-  query GetMyCollabs {
+export const GET_CURRENT_USER_INFO = gql`
+  query GetCurrentUserInfo {
+    currentUser {
+      id
+      firstName
+      lastName
+      title
+      country
+      bio
+    }
+  }
+`
+
+export const GET_CURRENT_USER_COLLABS = gql`
+  query GetCurrentUserCollabs {
     currentUser {
       id
       collabs {
         id
         name
+      }
+    }
+  }
+`
+
+export const GET_CURRENT_USER_COLLAB_INVITATIONS = gql`
+  query GetCurrentUserCollabInvitations {
+    currentUser {
+      id
+      collabInvites {
+        id
+        name
+      }
+    }
+  }
+`
+
+export const GET_CURRENT_USER_COLLAB_REQUESTS = gql`
+  query GetCurrentUserCollabRequests {
+    currentUser {
+      id
+      collabRequests {
+        collab {
+          name
+        }
+        member {
+          username
+        }
+      }
+    }
+  }
+`
+
+export const GET_CURRENT_USER_TASKS = gql`
+  query GetCurrentUserTasks {
+    currentUser {
+      id
+      tasks {
+        id
+        description
       }
     }
   }

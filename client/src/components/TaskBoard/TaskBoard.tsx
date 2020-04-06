@@ -1,11 +1,10 @@
-import React, { useState, FormEvent } from 'react'
+import React, { useState, FormEvent, memo } from 'react'
 import { useParams } from 'react-router-dom'
 import {
   useTaskListQuery,
   useTaskCommentsQuery,
   TaskListQuery,
   useDeleteTaskListMutation,
-  useCreateTaskListMutation,
   useUpdateTaskPositionMutation,
   useUpdateTaskListPositionMutation,
   useMoveTaskToListMutation,
@@ -38,20 +37,16 @@ import {
   DropResult,
 } from 'react-beautiful-dnd'
 import { ReactionPanel } from '../ReactionPanel/ReactionPanel'
+import { NewTaskListModal } from '../NewTaskListModal/NewTaskListModal'
+import { NewTaskModal } from '../NewTaskModal/NewTaskModal'
 
 export const TaskBoard = () => {
   const { collabId } = useParams<{ collabId: string }>()
   const { data, refetch } = useTaskListQuery({ variables: { collabId } })
+  const [isCreateTaskListModalOpen, setIsCreateTaskListModalOpen] = useState(
+    false,
+  )
   const [updateTaskPosition] = useUpdateTaskPositionMutation({
-    onCompleted: () => refetch(),
-  })
-  const [createTaskList] = useCreateTaskListMutation({
-    variables: {
-      input: {
-        collabId,
-        name: 'new list',
-      },
-    },
     onCompleted: () => refetch(),
   })
   const [updateTaskListPosition] = useUpdateTaskListPositionMutation({
@@ -121,11 +116,18 @@ export const TaskBoard = () => {
 
   const { taskList } = data
 
+  console.log(isCreateTaskListModalOpen)
+
   return (
     <Flex>
+      {isCreateTaskListModalOpen && (
+        <NewTaskListModal
+          closeModal={() => setIsCreateTaskListModalOpen(false)}
+        />
+      )}
       <IconButton
         aria-label="create task list"
-        onClick={() => createTaskList()}
+        onClick={() => setIsCreateTaskListModalOpen(true)}
         icon="add"
       ></IconButton>
       <DragDropContext
@@ -140,15 +142,7 @@ export const TaskBoard = () => {
         >
           {provided => (
             <Flex {...provided.droppableProps} ref={provided.innerRef} flex={1}>
-              {taskList.map(({ tasks, ...list }, index) => (
-                <Column
-                  key={list.id}
-                  taskList={list}
-                  tasks={tasks}
-                  refetch={refetch}
-                  index={index}
-                />
-              ))}
+              <TaskListWrapper taskList={taskList} refetch={refetch} />
               {provided.placeholder}
             </Flex>
           )}
@@ -157,6 +151,22 @@ export const TaskBoard = () => {
     </Flex>
   )
 }
+
+const TaskListWrapper = memo(({ taskList, refetch }: any) => (
+  <>
+    {(taskList as any[]).map(({ tasks, ...list }: any, index) => (
+      <Column
+        key={list.id}
+        taskList={list}
+        tasks={tasks}
+        refetch={refetch}
+        index={index}
+      />
+    ))}
+  </>
+))
+
+TaskListWrapper.displayName = 'TaskListWrapper'
 
 type TaskListResult = NonNullable<TaskListQuery['taskList']>
 type ColumnProps = {
@@ -173,6 +183,7 @@ const Column = ({ taskList, tasks, refetch, index }: ColumnProps) => {
       collabId,
     },
   })
+  const [isNewTaskModalOpen, setIsNewTaskModalOpen] = useState(false)
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null)
   const [createTask] = useCreateTaskMutation({
     onCompleted: () => refetch(),
@@ -212,20 +223,15 @@ const Column = ({ taskList, tasks, refetch, index }: ColumnProps) => {
           >
             Delete
           </IconButton>
+          {isNewTaskModalOpen && (
+            <NewTaskModal
+              closeModal={() => setIsNewTaskModalOpen(false)}
+              taskListId={taskList.id}
+            />
+          )}
           <IconButton
-            aria-label="delete task list"
-            onClick={() =>
-              createTask({
-                variables: {
-                  input: {
-                    collabId,
-                    taskListId: taskList.id,
-                    description: 'new task',
-                    assigneeId: null,
-                  },
-                },
-              })
-            }
+            aria-label="create new task"
+            onClick={() => setIsNewTaskModalOpen(true)}
             icon="add"
           >
             ADD

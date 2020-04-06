@@ -17,6 +17,18 @@ sequelize
   .then(async () => {
     // await sequelize.sync({ force: true })
     console.log('Connected to postgres')
+    // Collab.findAll({
+    //   include: [
+    //     {
+    //       attributes: [],
+    //       model: CollabMember,
+    //       where: { memberId: '6d480813-c854-40fc-a3cf-cea0944854ab' },
+    //     },
+    //   ],
+    //   raw: true,
+    // })
+    //   .then(console.log)
+    //   .catch(x => x.message)
     // CollabPostReaction.findAll({ include: [CollabPost], raw: true }).then(
     // console.log,
     // )

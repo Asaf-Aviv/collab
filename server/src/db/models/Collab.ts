@@ -21,6 +21,7 @@ import { CollabTaskList } from './CollabTaskList'
 import { CollabDiscussionThreadComment } from './CollabDiscussionThreadComment'
 import { CollabPost } from './CollabPost'
 import { CollabPostStack } from './CollabPostStack'
+import { CollabTask } from './CollabTask'
 
 @Table({ tableName: 'collabs' })
 export class Collab extends Model<Collab> {
@@ -56,6 +57,9 @@ export class Collab extends Model<Collab> {
   @UpdatedAt
   @Column
   updatedAt!: Date
+
+  @Column
+  frontPagePost!: string
 
   @BelongsTo(() => User, { foreignKey: 'ownerId', onDelete: 'cascade' })
   owner!: User

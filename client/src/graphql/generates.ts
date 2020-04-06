@@ -4,184 +4,191 @@ import * as ApolloReactHooks from '@apollo/react-hooks';
 export type Maybe<T> = T | null;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string,
-  String: string,
-  Boolean: boolean,
-  Int: number,
-  Float: number,
+  ID: string;
+  String: string;
+  Boolean: boolean;
+  Int: number;
+  Float: number;
 };
 
 export type AddCollabDiscussionThreadReactionInput = {
-  emojiId: Scalars['ID'],
-  threadId: Scalars['ID'],
+  emojiId: Scalars['ID'];
+  threadId: Scalars['ID'];
 };
 
 export type AddCollabPostCommentReactionInput = {
-  commentId: Scalars['ID'],
-  emojiId: Scalars['ID'],
+  commentId: Scalars['ID'];
+  emojiId: Scalars['ID'];
 };
 
 export type AddCollabPostReactionInput = {
-  emojiId: Scalars['ID'],
-  postId: Scalars['ID'],
+  emojiId: Scalars['ID'];
+  postId: Scalars['ID'];
 };
 
 export type AddCollabTaskCommentReactionInput = {
-  commentId: Scalars['ID'],
-  emojiId: Scalars['ID'],
+  commentId: Scalars['ID'];
+  emojiId: Scalars['ID'];
 };
 
 export type AddDiscussionThreadCommentReactionInput = {
-  commentId: Scalars['ID'],
-  emojiId: Scalars['ID'],
+  commentId: Scalars['ID'];
+  emojiId: Scalars['ID'];
 };
 
 export type AuthPayload = {
-   __typename?: 'AuthPayload',
-  token: Scalars['String'],
+   __typename?: 'AuthPayload';
+  token: Scalars['String'];
 };
 
 export type Collab = {
-   __typename?: 'Collab',
-  acceptsInvites: Scalars['Boolean'],
-  collabPostId?: Maybe<Scalars['ID']>,
-  discussionThreads: Array<CollabDiscussionThread>,
-  id: Scalars['ID'],
-  invitationPending: Scalars['Boolean'],
-  isMember: Scalars['Boolean'],
-  isOwner: Scalars['Boolean'],
-  members: Array<User>,
-  name: Scalars['String'],
-  owner?: Maybe<User>,
-  pendingInvites: Array<Maybe<User>>,
-  pendingRequests: Array<Maybe<User>>,
-  requestToJoinPending: Scalars['Boolean'],
-  taskList: Array<TaskList>,
+   __typename?: 'Collab';
+  acceptsInvites: Scalars['Boolean'];
+  collabPostId?: Maybe<Scalars['ID']>;
+  discussionThreads: Array<CollabDiscussionThread>;
+  frontPagePost?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  invitationPending: Scalars['Boolean'];
+  isMember: Scalars['Boolean'];
+  isOwner: Scalars['Boolean'];
+  members: Array<User>;
+  name: Scalars['String'];
+  owner?: Maybe<User>;
+  pendingInvites: Array<Maybe<User>>;
+  pendingRequests: Array<Maybe<User>>;
+  requestToJoinPending: Scalars['Boolean'];
+  taskList: Array<TaskList>;
 };
 
 export type CollabDiscussionThread = {
-   __typename?: 'CollabDiscussionThread',
-  author: User,
-  collab?: Maybe<Collab>,
-  comments: Array<CollabDiscussionThreadComment>,
-  commentsCount: Scalars['Int'],
-  content: Scalars['String'],
-  id: Scalars['ID'],
-  reactions: Array<Reaction>,
-  reactionsCount: Scalars['Int'],
-  title: Scalars['String'],
+   __typename?: 'CollabDiscussionThread';
+  author: User;
+  collab?: Maybe<Collab>;
+  comments: Array<CollabDiscussionThreadComment>;
+  commentsCount: Scalars['Int'];
+  content: Scalars['String'];
+  id: Scalars['ID'];
+  reactions: Array<Reaction>;
+  reactionsCount: Scalars['Int'];
+  title: Scalars['String'];
 };
 
 export type CollabDiscussionThreadComment = {
-   __typename?: 'CollabDiscussionThreadComment',
-  author: User,
-  collab?: Maybe<Collab>,
-  content: Scalars['String'],
-  id: Scalars['ID'],
-  reactions: Array<Reaction>,
-  thread?: Maybe<CollabDiscussionThread>,
+   __typename?: 'CollabDiscussionThreadComment';
+  author: User;
+  collab?: Maybe<Collab>;
+  content: Scalars['String'];
+  id: Scalars['ID'];
+  reactions: Array<Reaction>;
+  thread?: Maybe<CollabDiscussionThread>;
 };
 
 export type CollabPost = {
-   __typename?: 'CollabPost',
-  acceptsInvites: Scalars['Boolean'],
-  collabId: Scalars['ID'],
-  comments: Array<CollabPostComment>,
-  commentsCount: Scalars['Int'],
-  createdAt: Scalars['String'],
-  description: Scalars['String'],
-  experience: Scalars['String'],
-  hasStarted: Scalars['Boolean'],
-  id: Scalars['ID'],
-  invitationPending: Scalars['Boolean'],
-  isMember: Scalars['Boolean'],
-  isNew: Scalars['Boolean'],
-  isOwner: Scalars['Boolean'],
-  languages: Array<Scalars['String']>,
-  members: Array<User>,
-  membersCount: Scalars['Int'],
-  name: Scalars['String'],
-  owner: User,
-  pendingInvites: Array<User>,
-  pendingRequests: Array<User>,
-  reactions: Array<Reaction>,
-  reactionsCount: Scalars['Int'],
-  requestToJoinPending: Scalars['Boolean'],
-  stack: Array<Scalars['String']>,
-  title: Scalars['String'],
-  updatedAt: Scalars['String'],
+   __typename?: 'CollabPost';
+  acceptsInvites: Scalars['Boolean'];
+  collabId: Scalars['ID'];
+  comments: Array<CollabPostComment>;
+  commentsCount: Scalars['Int'];
+  createdAt: Scalars['String'];
+  description: Scalars['String'];
+  experience: Scalars['String'];
+  hasStarted: Scalars['Boolean'];
+  id: Scalars['ID'];
+  invitationPending: Scalars['Boolean'];
+  isMember: Scalars['Boolean'];
+  isNew: Scalars['Boolean'];
+  isOwner: Scalars['Boolean'];
+  languages: Array<Scalars['String']>;
+  members: Array<User>;
+  membersCount: Scalars['Int'];
+  name: Scalars['String'];
+  owner: User;
+  pendingInvites: Array<User>;
+  pendingRequests: Array<User>;
+  reactions: Array<Reaction>;
+  reactionsCount: Scalars['Int'];
+  requestToJoinPending: Scalars['Boolean'];
+  stack: Array<Scalars['String']>;
+  title: Scalars['String'];
+  updatedAt: Scalars['String'];
 };
 
 export type CollabPostArgs = {
-  description: Scalars['String'],
-  experience: Experience,
-  hasStarted: Scalars['Boolean'],
-  languages: Array<Scalars['String']>,
-  name: Scalars['String'],
-  stack: Array<Scalars['String']>,
-  title: Scalars['String'],
+  description: Scalars['String'];
+  experience: Experience;
+  hasStarted: Scalars['Boolean'];
+  languages: Array<Scalars['String']>;
+  name: Scalars['String'];
+  stack: Array<Scalars['String']>;
+  title: Scalars['String'];
 };
 
 export type CollabPostComment = {
-   __typename?: 'CollabPostComment',
-  author: User,
-  content: Scalars['String'],
-  id: Scalars['ID'],
-  reactions: Array<Reaction>,
+   __typename?: 'CollabPostComment';
+  author: User;
+  content: Scalars['String'];
+  id: Scalars['ID'];
+  reactions: Array<Reaction>;
 };
 
 export type CollabPostsPayload = {
-   __typename?: 'CollabPostsPayload',
-  hasNextPage: Scalars['Boolean'],
-  posts: Array<CollabPost>,
+   __typename?: 'CollabPostsPayload';
+  hasNextPage: Scalars['Boolean'];
+  posts: Array<CollabPost>;
 };
 
 export type CollabRequest = {
-   __typename?: 'CollabRequest',
-  collab: Collab,
-  member: User,
+   __typename?: 'CollabRequest';
+  collab: Collab;
+  member: User;
 };
 
 export type CreateCollabDiscussionThreadCommentInput = {
-  collabId: Scalars['ID'],
-  content: Scalars['String'],
-  threadId: Scalars['ID'],
+  collabId: Scalars['ID'];
+  content: Scalars['String'];
+  threadId: Scalars['ID'];
 };
 
 export type CreateTaskCommentInput = {
-  collabId: Scalars['ID'],
-  content: Scalars['String'],
-  taskId: Scalars['ID'],
+  collabId: Scalars['ID'];
+  content: Scalars['String'];
+  taskId: Scalars['ID'];
 };
 
 export type CreateTaskInput = {
-  assigneeId?: Maybe<Scalars['ID']>,
-  collabId: Scalars['ID'],
-  description: Scalars['String'],
-  taskListId: Scalars['ID'],
+  assigneeId?: Maybe<Scalars['ID']>;
+  collabId: Scalars['ID'];
+  description: Scalars['String'];
+  taskListId: Scalars['ID'];
 };
 
 export type CreateTaskListInput = {
-  collabId: Scalars['ID'],
-  name: Scalars['String'],
+  collabId: Scalars['ID'];
+  name: Scalars['String'];
 };
 
 export type CreateThreadArgs = {
-  collabId: Scalars['ID'],
-  content: Scalars['String'],
-  title: Scalars['String'],
+  collabId: Scalars['ID'];
+  content: Scalars['String'];
+  title: Scalars['String'];
 };
 
 export type CurrentUser = {
-   __typename?: 'CurrentUser',
-  avatar?: Maybe<Scalars['String']>,
-  bio?: Maybe<Scalars['String']>,
-  collabInvites: Array<Collab>,
-  collabRequests: Array<CollabRequest>,
-  collabs: Array<Collab>,
-  email: Scalars['String'],
-  id: Scalars['ID'],
-  username: Scalars['String'],
+   __typename?: 'CurrentUser';
+  avatar?: Maybe<Scalars['String']>;
+  bio?: Maybe<Scalars['String']>;
+  collabInvites: Array<Collab>;
+  collabRequests: Array<CollabRequest>;
+  collabs: Array<Collab>;
+  country?: Maybe<Scalars['String']>;
+  email: Scalars['String'];
+  firstName?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  lastName?: Maybe<Scalars['String']>;
+  tasks: Array<Task>;
+  /** the user's engineering title */
+  title?: Maybe<Scalars['String']>;
+  username: Scalars['String'];
 };
 
 export enum Experience {
@@ -194,424 +201,442 @@ export enum Experience {
 }
 
 export type LoginArgs = {
-  email: Scalars['String'],
-  password: Scalars['String'],
+  email: Scalars['String'];
+  password: Scalars['String'];
 };
 
 export type MoveTaskToListInput = {
-  newTaskListId: Scalars['ID'],
-  newTaskPosition: Scalars['Int'],
-  oldTaskListId: Scalars['ID'],
-  oldTaskPosition: Scalars['Int'],
+  newTaskListId: Scalars['ID'];
+  newTaskPosition: Scalars['Int'];
+  oldTaskListId: Scalars['ID'];
+  oldTaskPosition: Scalars['Int'];
 };
 
 export type Mutation = {
-   __typename?: 'Mutation',
-  acceptCollabInvitation: User,
-  acceptMemberRequest: Collab,
-  addCollabDiscussionThreadCommentReaction: Scalars['Boolean'],
-  addCollabDiscussionThreadReaction: Scalars['Boolean'],
-  addCollabPostCommentReaction: Scalars['Boolean'],
-  addCollabPostReaction: CollabPost,
-  addCollabTaskCommentReaction: Scalars['Boolean'],
-  cancelRequestToJoin: Scalars['Boolean'],
-  createCollabDiscussionThread: CollabDiscussionThread,
-  createCollabDiscussionThreadComment: CollabDiscussionThreadComment,
-  createCollabPost: CollabPost,
-  createComment: CollabPostComment,
-  createTask: Task,
-  createTaskComment: TaskComment,
-  createTaskList: TaskList,
-  declineCollabInvitation: Scalars['Boolean'],
-  declineMemberRequest: Scalars['Boolean'],
-  deleteCollab: Scalars['Boolean'],
-  deleteCollabDiscussionThread: Scalars['Boolean'],
-  deleteCollabDiscussionThreadComment: Scalars['Boolean'],
-  deleteCollabPost: Scalars['Boolean'],
-  deleteComment: Scalars['Boolean'],
-  deleteTask: Scalars['Boolean'],
-  deleteTaskComment: Scalars['Boolean'],
-  deleteTaskList: Scalars['Boolean'],
-  deleteUser: Scalars['Boolean'],
-  inviteMember: User,
-  login: AuthPayload,
-  moveTaskToList: Task,
-  removeCollabDiscussionThreadCommentReaction: Scalars['Boolean'],
-  removeCollabDiscussionThreadReaction: Scalars['Boolean'],
-  removeCollabPostCommentReaction: Scalars['Boolean'],
-  removeCollabPostReaction: CollabPost,
-  removeCollabTaskCommentReaction: Scalars['Boolean'],
-  removeMember: Collab,
-  requestToJoin: Scalars['Boolean'],
-  signUp: AuthPayload,
-  toggleAcceptInvites: Collab,
-  updateTaskAssignee: Task,
-  updateTaskListPosition: TaskList,
-  updateTaskPosition: Task,
+   __typename?: 'Mutation';
+  acceptCollabInvitation: User;
+  acceptMemberRequest: Collab;
+  addCollabDiscussionThreadCommentReaction: Scalars['Boolean'];
+  addCollabDiscussionThreadReaction: Scalars['Boolean'];
+  addCollabPostCommentReaction: Scalars['Boolean'];
+  addCollabPostReaction: CollabPost;
+  addCollabTaskCommentReaction: Scalars['Boolean'];
+  cancelRequestToJoin: Scalars['Boolean'];
+  createCollabDiscussionThread: CollabDiscussionThread;
+  createCollabDiscussionThreadComment: CollabDiscussionThreadComment;
+  createCollabPost: CollabPost;
+  createComment: CollabPostComment;
+  createTask: Task;
+  createTaskComment: TaskComment;
+  createTaskList: TaskList;
+  declineCollabInvitation: Scalars['Boolean'];
+  declineMemberRequest: Scalars['Boolean'];
+  deleteCollab: Scalars['Boolean'];
+  deleteCollabDiscussionThread: Scalars['Boolean'];
+  deleteCollabDiscussionThreadComment: Scalars['Boolean'];
+  deleteCollabPost: Scalars['Boolean'];
+  deleteComment: Scalars['Boolean'];
+  deleteTask: Scalars['Boolean'];
+  deleteTaskComment: Scalars['Boolean'];
+  deleteTaskList: Scalars['Boolean'];
+  deleteUser: Scalars['Boolean'];
+  inviteMember: User;
+  login: AuthPayload;
+  moveTaskToList: Task;
+  removeCollabDiscussionThreadCommentReaction: Scalars['Boolean'];
+  removeCollabDiscussionThreadReaction: Scalars['Boolean'];
+  removeCollabPostCommentReaction: Scalars['Boolean'];
+  removeCollabPostReaction: CollabPost;
+  removeCollabTaskCommentReaction: Scalars['Boolean'];
+  removeMember: Collab;
+  requestToJoin: Scalars['Boolean'];
+  signUp: AuthPayload;
+  toggleAcceptInvites: Collab;
+  updateTaskAssignee: Task;
+  updateTaskListPosition: TaskList;
+  updateTaskPosition: Task;
+  updateUserInfo: CurrentUser;
 };
 
 
 export type MutationAcceptCollabInvitationArgs = {
-  collabId: Scalars['ID']
+  collabId: Scalars['ID'];
 };
 
 
 export type MutationAcceptMemberRequestArgs = {
-  collabId: Scalars['ID'],
-  memberId: Scalars['ID']
+  collabId: Scalars['ID'];
+  memberId: Scalars['ID'];
 };
 
 
 export type MutationAddCollabDiscussionThreadCommentReactionArgs = {
-  reaction: AddDiscussionThreadCommentReactionInput
+  reaction: AddDiscussionThreadCommentReactionInput;
 };
 
 
 export type MutationAddCollabDiscussionThreadReactionArgs = {
-  reaction: AddCollabDiscussionThreadReactionInput
+  reaction: AddCollabDiscussionThreadReactionInput;
 };
 
 
 export type MutationAddCollabPostCommentReactionArgs = {
-  reaction: AddCollabPostCommentReactionInput
+  reaction: AddCollabPostCommentReactionInput;
 };
 
 
 export type MutationAddCollabPostReactionArgs = {
-  reaction: AddCollabPostReactionInput
+  reaction: AddCollabPostReactionInput;
 };
 
 
 export type MutationAddCollabTaskCommentReactionArgs = {
-  reaction: AddCollabTaskCommentReactionInput
+  reaction: AddCollabTaskCommentReactionInput;
 };
 
 
 export type MutationCancelRequestToJoinArgs = {
-  collabId: Scalars['ID']
+  collabId: Scalars['ID'];
 };
 
 
 export type MutationCreateCollabDiscussionThreadArgs = {
-  thread: CreateThreadArgs
+  thread: CreateThreadArgs;
 };
 
 
 export type MutationCreateCollabDiscussionThreadCommentArgs = {
-  input: CreateCollabDiscussionThreadCommentInput
+  input: CreateCollabDiscussionThreadCommentInput;
 };
 
 
 export type MutationCreateCollabPostArgs = {
-  post: CollabPostArgs
+  post: CollabPostArgs;
 };
 
 
 export type MutationCreateCommentArgs = {
-  content: Scalars['String'],
-  postId: Scalars['ID']
+  content: Scalars['String'];
+  postId: Scalars['ID'];
 };
 
 
 export type MutationCreateTaskArgs = {
-  input: CreateTaskInput
+  input: CreateTaskInput;
 };
 
 
 export type MutationCreateTaskCommentArgs = {
-  input: CreateTaskCommentInput
+  input: CreateTaskCommentInput;
 };
 
 
 export type MutationCreateTaskListArgs = {
-  input: CreateTaskListInput
+  input: CreateTaskListInput;
 };
 
 
 export type MutationDeclineCollabInvitationArgs = {
-  collabId: Scalars['ID']
+  collabId: Scalars['ID'];
 };
 
 
 export type MutationDeclineMemberRequestArgs = {
-  collabId: Scalars['ID'],
-  memberId: Scalars['ID']
+  collabId: Scalars['ID'];
+  memberId: Scalars['ID'];
 };
 
 
 export type MutationDeleteCollabArgs = {
-  collabId: Scalars['ID']
+  collabId: Scalars['ID'];
 };
 
 
 export type MutationDeleteCollabDiscussionThreadArgs = {
-  threadId: Scalars['ID']
+  threadId: Scalars['ID'];
 };
 
 
 export type MutationDeleteCollabDiscussionThreadCommentArgs = {
-  commentId: Scalars['ID']
+  commentId: Scalars['ID'];
 };
 
 
 export type MutationDeleteCollabPostArgs = {
-  postId: Scalars['ID']
+  postId: Scalars['ID'];
 };
 
 
 export type MutationDeleteCommentArgs = {
-  commentId: Scalars['ID']
+  commentId: Scalars['ID'];
 };
 
 
 export type MutationDeleteTaskArgs = {
-  taskId: Scalars['ID']
+  taskId: Scalars['ID'];
 };
 
 
 export type MutationDeleteTaskCommentArgs = {
-  commentId: Scalars['ID']
+  commentId: Scalars['ID'];
 };
 
 
 export type MutationDeleteTaskListArgs = {
-  taskListId: Scalars['ID']
+  taskListId: Scalars['ID'];
 };
 
 
 export type MutationInviteMemberArgs = {
-  collabId: Scalars['ID'],
-  memberId: Scalars['ID']
+  collabId: Scalars['ID'];
+  memberId: Scalars['ID'];
 };
 
 
 export type MutationLoginArgs = {
-  credentials: LoginArgs
+  credentials: LoginArgs;
 };
 
 
 export type MutationMoveTaskToListArgs = {
-  input: MoveTaskToListInput
+  input: MoveTaskToListInput;
 };
 
 
 export type MutationRemoveCollabDiscussionThreadCommentReactionArgs = {
-  reaction: RemoveDiscussionThreadCommentReactionInput
+  reaction: RemoveDiscussionThreadCommentReactionInput;
 };
 
 
 export type MutationRemoveCollabDiscussionThreadReactionArgs = {
-  reaction: RemoveCollabDiscussionThreadReactionInput
+  reaction: RemoveCollabDiscussionThreadReactionInput;
 };
 
 
 export type MutationRemoveCollabPostCommentReactionArgs = {
-  reaction: RemoveCollabPostCommentReactionInput
+  reaction: RemoveCollabPostCommentReactionInput;
 };
 
 
 export type MutationRemoveCollabPostReactionArgs = {
-  reaction: RemoveCollabPostReactionInput
+  reaction: RemoveCollabPostReactionInput;
 };
 
 
 export type MutationRemoveCollabTaskCommentReactionArgs = {
-  reaction: RemoveCollabTaskCommentReactionInput
+  reaction: RemoveCollabTaskCommentReactionInput;
 };
 
 
 export type MutationRemoveMemberArgs = {
-  collabId: Scalars['ID'],
-  memberId: Scalars['ID']
+  collabId: Scalars['ID'];
+  memberId: Scalars['ID'];
 };
 
 
 export type MutationRequestToJoinArgs = {
-  collabId: Scalars['ID']
+  collabId: Scalars['ID'];
 };
 
 
 export type MutationSignUpArgs = {
-  credentials: SignUpArgs
+  credentials: SignUpArgs;
 };
 
 
 export type MutationToggleAcceptInvitesArgs = {
-  collabId: Scalars['ID']
+  collabId: Scalars['ID'];
 };
 
 
 export type MutationUpdateTaskAssigneeArgs = {
-  input: UpdateTaskAssigneeInput
+  input: UpdateTaskAssigneeInput;
 };
 
 
 export type MutationUpdateTaskListPositionArgs = {
-  input: UpdateTaskListPositionInput
+  input: UpdateTaskListPositionInput;
 };
 
 
 export type MutationUpdateTaskPositionArgs = {
-  input: UpdateTaskPositionInput
+  input: UpdateTaskPositionInput;
+};
+
+
+export type MutationUpdateUserInfoArgs = {
+  input?: Maybe<UpdateUserInfoInput>;
 };
 
 export type Query = {
-   __typename?: 'Query',
-  collab?: Maybe<Collab>,
-  collabPost?: Maybe<CollabPost>,
-  collabPosts: CollabPostsPayload,
-  collabPostsByStack: CollabPostsPayload,
-  collabs: Array<Collab>,
-  currentUser?: Maybe<CurrentUser>,
-  languages: Array<Scalars['String']>,
-  task?: Maybe<Task>,
-  taskList?: Maybe<Array<TaskList>>,
-  thread?: Maybe<CollabDiscussionThread>,
-  user?: Maybe<User>,
-  users: Array<User>,
+   __typename?: 'Query';
+  collab?: Maybe<Collab>;
+  collabPost?: Maybe<CollabPost>;
+  collabPosts: CollabPostsPayload;
+  collabPostsByStack: CollabPostsPayload;
+  collabs: Array<Collab>;
+  currentUser?: Maybe<CurrentUser>;
+  languages: Array<Scalars['String']>;
+  task?: Maybe<Task>;
+  taskList?: Maybe<Array<TaskList>>;
+  thread?: Maybe<CollabDiscussionThread>;
+  user?: Maybe<User>;
+  users: Array<User>;
 };
 
 
 export type QueryCollabArgs = {
-  collabId: Scalars['ID']
+  collabId: Scalars['ID'];
 };
 
 
 export type QueryCollabPostArgs = {
-  postId: Scalars['ID']
+  postId: Scalars['ID'];
 };
 
 
 export type QueryCollabPostsArgs = {
-  limit: Scalars['Int'],
-  offset: Scalars['Int']
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
 };
 
 
 export type QueryCollabPostsByStackArgs = {
-  limit: Scalars['Int'],
-  offset: Scalars['Int'],
-  stack: Scalars['String']
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
+  stack: Scalars['String'];
 };
 
 
 export type QueryTaskArgs = {
-  taskId: Scalars['ID']
+  taskId: Scalars['ID'];
 };
 
 
 export type QueryTaskListArgs = {
-  collabId: Scalars['ID']
+  collabId: Scalars['ID'];
 };
 
 
 export type QueryThreadArgs = {
-  threadId: Scalars['ID']
+  threadId: Scalars['ID'];
 };
 
 
 export type QueryUserArgs = {
-  id: Scalars['ID']
+  id: Scalars['ID'];
 };
 
 export type Reaction = {
-   __typename?: 'Reaction',
-  count: Scalars['Int'],
-  emojiId: Scalars['ID'],
-  isLiked: Scalars['Boolean'],
+   __typename?: 'Reaction';
+  count: Scalars['Int'];
+  emojiId: Scalars['ID'];
+  isLiked: Scalars['Boolean'];
 };
 
 export type RemoveCollabDiscussionThreadReactionInput = {
-  emojiId: Scalars['ID'],
-  threadId: Scalars['ID'],
+  emojiId: Scalars['ID'];
+  threadId: Scalars['ID'];
 };
 
 export type RemoveCollabPostCommentReactionInput = {
-  commentId: Scalars['ID'],
-  emojiId: Scalars['ID'],
+  commentId: Scalars['ID'];
+  emojiId: Scalars['ID'];
 };
 
 export type RemoveCollabPostReactionInput = {
-  emojiId: Scalars['ID'],
-  postId: Scalars['ID'],
+  emojiId: Scalars['ID'];
+  postId: Scalars['ID'];
 };
 
 export type RemoveCollabTaskCommentReactionInput = {
-  commentId: Scalars['ID'],
-  emojiId: Scalars['ID'],
+  commentId: Scalars['ID'];
+  emojiId: Scalars['ID'];
 };
 
 export type RemoveDiscussionThreadCommentReactionInput = {
-  commentId: Scalars['ID'],
-  emojiId: Scalars['ID'],
+  commentId: Scalars['ID'];
+  emojiId: Scalars['ID'];
 };
 
 export type SignUpArgs = {
-  email: Scalars['String'],
-  password: Scalars['String'],
-  username: Scalars['String'],
+  email: Scalars['String'];
+  password: Scalars['String'];
+  username: Scalars['String'];
 };
 
 export type Task = {
-   __typename?: 'Task',
-  assignedBy?: Maybe<User>,
-  assignee?: Maybe<User>,
-  author: User,
-  authorId: Scalars['ID'],
-  comments: Array<TaskComment>,
-  commentsCount: Scalars['Int'],
-  description: Scalars['ID'],
-  id: Scalars['ID'],
-  order: Scalars['Int'],
-  taskListId: Scalars['ID'],
+   __typename?: 'Task';
+  assignedBy?: Maybe<User>;
+  assignee?: Maybe<User>;
+  author: User;
+  authorId: Scalars['ID'];
+  comments: Array<TaskComment>;
+  commentsCount: Scalars['Int'];
+  description: Scalars['ID'];
+  id: Scalars['ID'];
+  order: Scalars['Int'];
+  taskListId: Scalars['ID'];
 };
 
 export type TaskComment = {
-   __typename?: 'TaskComment',
-  author?: Maybe<User>,
-  content: Scalars['String'],
-  id: Scalars['ID'],
-  reactions: Array<Reaction>,
-  task?: Maybe<Task>,
+   __typename?: 'TaskComment';
+  author?: Maybe<User>;
+  content: Scalars['String'];
+  id: Scalars['ID'];
+  reactions: Array<Reaction>;
+  task?: Maybe<Task>;
 };
 
 export type TaskList = {
-   __typename?: 'TaskList',
-  collab?: Maybe<Collab>,
-  id: Scalars['ID'],
-  name: Scalars['String'],
-  order: Scalars['Int'],
-  tasks: Array<Task>,
+   __typename?: 'TaskList';
+  collab?: Maybe<Collab>;
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  order: Scalars['Int'];
+  tasks: Array<Task>;
 };
 
 export type UpdateTaskAssigneeInput = {
-  assigneeId: Scalars['ID'],
-  taskId: Scalars['ID'],
+  assigneeId: Scalars['ID'];
+  taskId: Scalars['ID'];
 };
 
 export type UpdateTaskListPositionInput = {
-  collabId: Scalars['ID'],
-  newTaskListPosition: Scalars['Int'],
-  oldTaskListPosition: Scalars['Int'],
+  collabId: Scalars['ID'];
+  newTaskListPosition: Scalars['Int'];
+  oldTaskListPosition: Scalars['Int'];
 };
 
 export type UpdateTaskPositionInput = {
-  newTaskPosition: Scalars['Int'],
-  oldTaskPosition: Scalars['Int'],
-  taskListId: Scalars['ID'],
+  newTaskPosition: Scalars['Int'];
+  oldTaskPosition: Scalars['Int'];
+  taskListId: Scalars['ID'];
+};
+
+export type UpdateUserInfoInput = {
+  bio?: Maybe<Scalars['String']>;
+  country?: Maybe<Scalars['String']>;
+  firstName?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
 };
 
 export type User = {
-   __typename?: 'User',
-  avatar?: Maybe<Scalars['String']>,
-  bio?: Maybe<Scalars['String']>,
-  collabs: Array<Collab>,
-  id: Scalars['ID'],
-  username: Scalars['String'],
+   __typename?: 'User';
+  avatar?: Maybe<Scalars['String']>;
+  bio?: Maybe<Scalars['String']>;
+  collabs: Array<Collab>;
+  firstName?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  lastName?: Maybe<Scalars['String']>;
+  /** the user's engineering title */
+  title?: Maybe<Scalars['String']>;
+  username: Scalars['String'];
 };
 
 export type SignUpMutationVariables = {
-  credentials: SignUpArgs
+  credentials: SignUpArgs;
 };
 
 
@@ -624,7 +649,7 @@ export type SignUpMutation = (
 );
 
 export type LoginMutationVariables = {
-  credentials: LoginArgs
+  credentials: LoginArgs;
 };
 
 
@@ -636,8 +661,21 @@ export type LoginMutation = (
   ) }
 );
 
+export type UpdateUserInfoMutationVariables = {
+  input: UpdateUserInfoInput;
+};
+
+
+export type UpdateUserInfoMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUserInfo: (
+    { __typename?: 'CurrentUser' }
+    & Pick<CurrentUser, 'id' | 'firstName' | 'lastName' | 'title' | 'country' | 'bio'>
+  ) }
+);
+
 export type CreateCollabPostMutationVariables = {
-  post: CollabPostArgs
+  post: CollabPostArgs;
 };
 
 
@@ -650,8 +688,8 @@ export type CreateCollabPostMutation = (
 );
 
 export type AddCollabPostCommentMutationVariables = {
-  content: Scalars['String'],
-  postId: Scalars['ID']
+  content: Scalars['String'];
+  postId: Scalars['ID'];
 };
 
 
@@ -668,7 +706,7 @@ export type AddCollabPostCommentMutation = (
 );
 
 export type AddCollabPostReactionMutationVariables = {
-  reaction: AddCollabPostReactionInput
+  reaction: AddCollabPostReactionInput;
 };
 
 
@@ -685,7 +723,7 @@ export type AddCollabPostReactionMutation = (
 );
 
 export type RemoveCollabPostReactionMutationVariables = {
-  reaction: RemoveCollabPostReactionInput
+  reaction: RemoveCollabPostReactionInput;
 };
 
 
@@ -702,7 +740,7 @@ export type RemoveCollabPostReactionMutation = (
 );
 
 export type AddCollabPostCommentReactionMutationVariables = {
-  reaction: AddCollabPostCommentReactionInput
+  reaction: AddCollabPostCommentReactionInput;
 };
 
 
@@ -712,7 +750,7 @@ export type AddCollabPostCommentReactionMutation = (
 );
 
 export type RemoveCollabPostCommentReactionMutationVariables = {
-  reaction: RemoveCollabPostCommentReactionInput
+  reaction: RemoveCollabPostCommentReactionInput;
 };
 
 
@@ -722,7 +760,7 @@ export type RemoveCollabPostCommentReactionMutation = (
 );
 
 export type AddCollabDiscussionThreadReactionMutationVariables = {
-  reaction: AddCollabDiscussionThreadReactionInput
+  reaction: AddCollabDiscussionThreadReactionInput;
 };
 
 
@@ -732,7 +770,7 @@ export type AddCollabDiscussionThreadReactionMutation = (
 );
 
 export type RemoveCollabDiscussionThreadReactionMutationVariables = {
-  reaction: RemoveCollabDiscussionThreadReactionInput
+  reaction: RemoveCollabDiscussionThreadReactionInput;
 };
 
 
@@ -742,7 +780,7 @@ export type RemoveCollabDiscussionThreadReactionMutation = (
 );
 
 export type AddDiscussionThreadCommentReactionMutationVariables = {
-  reaction: AddDiscussionThreadCommentReactionInput
+  reaction: AddDiscussionThreadCommentReactionInput;
 };
 
 
@@ -752,7 +790,7 @@ export type AddDiscussionThreadCommentReactionMutation = (
 );
 
 export type RemoveDiscussionThreadCommentReactionMutationVariables = {
-  reaction: RemoveDiscussionThreadCommentReactionInput
+  reaction: RemoveDiscussionThreadCommentReactionInput;
 };
 
 
@@ -762,7 +800,7 @@ export type RemoveDiscussionThreadCommentReactionMutation = (
 );
 
 export type RequestToJoinMutationVariables = {
-  collabId: Scalars['ID']
+  collabId: Scalars['ID'];
 };
 
 
@@ -772,7 +810,7 @@ export type RequestToJoinMutation = (
 );
 
 export type CancelCollabRequestToJoinMutationVariables = {
-  collabId: Scalars['ID']
+  collabId: Scalars['ID'];
 };
 
 
@@ -782,7 +820,7 @@ export type CancelCollabRequestToJoinMutation = (
 );
 
 export type AcceptCollabInvitationMutationVariables = {
-  collabId: Scalars['ID']
+  collabId: Scalars['ID'];
 };
 
 
@@ -795,7 +833,7 @@ export type AcceptCollabInvitationMutation = (
 );
 
 export type DeclineCollabInvitationMutationVariables = {
-  collabId: Scalars['ID']
+  collabId: Scalars['ID'];
 };
 
 
@@ -805,7 +843,7 @@ export type DeclineCollabInvitationMutation = (
 );
 
 export type CreateTaskListMutationVariables = {
-  input: CreateTaskListInput
+  input: CreateTaskListInput;
 };
 
 
@@ -813,12 +851,12 @@ export type CreateTaskListMutation = (
   { __typename?: 'Mutation' }
   & { createTaskList: (
     { __typename?: 'TaskList' }
-    & Pick<TaskList, 'id'>
+    & Pick<TaskList, 'id' | 'name' | 'order'>
   ) }
 );
 
 export type UpdateTaskListPositionMutationVariables = {
-  input: UpdateTaskListPositionInput
+  input: UpdateTaskListPositionInput;
 };
 
 
@@ -831,7 +869,7 @@ export type UpdateTaskListPositionMutation = (
 );
 
 export type DeleteTaskListMutationVariables = {
-  taskListId: Scalars['ID']
+  taskListId: Scalars['ID'];
 };
 
 
@@ -841,7 +879,7 @@ export type DeleteTaskListMutation = (
 );
 
 export type CreateTaskMutationVariables = {
-  input: CreateTaskInput
+  input: CreateTaskInput;
 };
 
 
@@ -849,16 +887,22 @@ export type CreateTaskMutation = (
   { __typename?: 'Mutation' }
   & { createTask: (
     { __typename?: 'Task' }
-    & Pick<Task, 'id' | 'taskListId' | 'description' | 'order' | 'commentsCount'>
+    & Pick<Task, 'id' | 'description' | 'order' | 'commentsCount'>
     & { author: (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
-    ) }
+    ), assignee?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    )>, assignedBy?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    )> }
   ) }
 );
 
 export type DeleteTaskMutationVariables = {
-  taskId: Scalars['ID']
+  taskId: Scalars['ID'];
 };
 
 
@@ -868,7 +912,7 @@ export type DeleteTaskMutation = (
 );
 
 export type MoveTaskToListMutationVariables = {
-  input: MoveTaskToListInput
+  input: MoveTaskToListInput;
 };
 
 
@@ -881,7 +925,7 @@ export type MoveTaskToListMutation = (
 );
 
 export type UpdateTaskPositionMutationVariables = {
-  input: UpdateTaskPositionInput
+  input: UpdateTaskPositionInput;
 };
 
 
@@ -894,7 +938,7 @@ export type UpdateTaskPositionMutation = (
 );
 
 export type UpdateTaskAssigneeMutationVariables = {
-  input: UpdateTaskAssigneeInput
+  input: UpdateTaskAssigneeInput;
 };
 
 
@@ -903,10 +947,10 @@ export type UpdateTaskAssigneeMutation = (
   & { updateTaskAssignee: (
     { __typename?: 'Task' }
     & Pick<Task, 'id'>
-    & { assignee: Maybe<(
+    & { assignee?: Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
-    )>, assignedBy: Maybe<(
+    )>, assignedBy?: Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
     )> }
@@ -914,7 +958,7 @@ export type UpdateTaskAssigneeMutation = (
 );
 
 export type CreateTaskCommentMutationVariables = {
-  input: CreateTaskCommentInput
+  input: CreateTaskCommentInput;
 };
 
 
@@ -923,7 +967,7 @@ export type CreateTaskCommentMutation = (
   & { createTaskComment: (
     { __typename?: 'TaskComment' }
     & Pick<TaskComment, 'id' | 'content'>
-    & { author: Maybe<(
+    & { author?: Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
     )>, reactions: Array<(
@@ -934,7 +978,7 @@ export type CreateTaskCommentMutation = (
 );
 
 export type AddTaskCommentReactionMutationVariables = {
-  reaction: AddCollabTaskCommentReactionInput
+  reaction: AddCollabTaskCommentReactionInput;
 };
 
 
@@ -944,7 +988,7 @@ export type AddTaskCommentReactionMutation = (
 );
 
 export type RemoveTaskCommentReactionMutationVariables = {
-  reaction: RemoveCollabTaskCommentReactionInput
+  reaction: RemoveCollabTaskCommentReactionInput;
 };
 
 
@@ -954,7 +998,7 @@ export type RemoveTaskCommentReactionMutation = (
 );
 
 export type CreateDiscussionThreadCommentMutationVariables = {
-  input: CreateCollabDiscussionThreadCommentInput
+  input: CreateCollabDiscussionThreadCommentInput;
 };
 
 
@@ -978,18 +1022,29 @@ export type GetCurrentUserQueryVariables = {};
 
 export type GetCurrentUserQuery = (
   { __typename?: 'Query' }
-  & { currentUser: Maybe<(
+  & { currentUser?: Maybe<(
     { __typename?: 'CurrentUser' }
     & Pick<CurrentUser, 'id' | 'username' | 'avatar' | 'email'>
   )> }
 );
 
-export type GetMyCollabsQueryVariables = {};
+export type GetCurrentUserInfoQueryVariables = {};
 
 
-export type GetMyCollabsQuery = (
+export type GetCurrentUserInfoQuery = (
   { __typename?: 'Query' }
-  & { currentUser: Maybe<(
+  & { currentUser?: Maybe<(
+    { __typename?: 'CurrentUser' }
+    & Pick<CurrentUser, 'id' | 'firstName' | 'lastName' | 'title' | 'country' | 'bio'>
+  )> }
+);
+
+export type GetCurrentUserCollabsQueryVariables = {};
+
+
+export type GetCurrentUserCollabsQuery = (
+  { __typename?: 'Query' }
+  & { currentUser?: Maybe<(
     { __typename?: 'CurrentUser' }
     & Pick<CurrentUser, 'id'>
     & { collabs: Array<(
@@ -999,22 +1054,73 @@ export type GetMyCollabsQuery = (
   )> }
 );
 
+export type GetCurrentUserCollabInvitationsQueryVariables = {};
+
+
+export type GetCurrentUserCollabInvitationsQuery = (
+  { __typename?: 'Query' }
+  & { currentUser?: Maybe<(
+    { __typename?: 'CurrentUser' }
+    & Pick<CurrentUser, 'id'>
+    & { collabInvites: Array<(
+      { __typename?: 'Collab' }
+      & Pick<Collab, 'id' | 'name'>
+    )> }
+  )> }
+);
+
+export type GetCurrentUserCollabRequestsQueryVariables = {};
+
+
+export type GetCurrentUserCollabRequestsQuery = (
+  { __typename?: 'Query' }
+  & { currentUser?: Maybe<(
+    { __typename?: 'CurrentUser' }
+    & Pick<CurrentUser, 'id'>
+    & { collabRequests: Array<(
+      { __typename?: 'CollabRequest' }
+      & { collab: (
+        { __typename?: 'Collab' }
+        & Pick<Collab, 'name'>
+      ), member: (
+        { __typename?: 'User' }
+        & Pick<User, 'username'>
+      ) }
+    )> }
+  )> }
+);
+
+export type GetCurrentUserTasksQueryVariables = {};
+
+
+export type GetCurrentUserTasksQuery = (
+  { __typename?: 'Query' }
+  & { currentUser?: Maybe<(
+    { __typename?: 'CurrentUser' }
+    & Pick<CurrentUser, 'id'>
+    & { tasks: Array<(
+      { __typename?: 'Task' }
+      & Pick<Task, 'id' | 'description'>
+    )> }
+  )> }
+);
+
 export type UserQueryVariables = {
-  id: Scalars['ID']
+  id: Scalars['ID'];
 };
 
 
 export type UserQuery = (
   { __typename?: 'Query' }
-  & { user: Maybe<(
+  & { user?: Maybe<(
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username' | 'avatar'>
   )> }
 );
 
 export type CollabPostsQueryVariables = {
-  offset: Scalars['Int'],
-  limit: Scalars['Int']
+  offset: Scalars['Int'];
+  limit: Scalars['Int'];
 };
 
 
@@ -1035,9 +1141,9 @@ export type CollabPostsQuery = (
 );
 
 export type CollabPostsByStackQueryVariables = {
-  stack: Scalars['String'],
-  offset: Scalars['Int'],
-  limit: Scalars['Int']
+  stack: Scalars['String'];
+  offset: Scalars['Int'];
+  limit: Scalars['Int'];
 };
 
 
@@ -1058,13 +1164,13 @@ export type CollabPostsByStackQuery = (
 );
 
 export type GetCollabPostQueryVariables = {
-  postId: Scalars['ID']
+  postId: Scalars['ID'];
 };
 
 
 export type GetCollabPostQuery = (
   { __typename?: 'Query' }
-  & { collabPost: Maybe<(
+  & { collabPost?: Maybe<(
     { __typename?: 'CollabPost' }
     & Pick<CollabPost, 'id' | 'name' | 'title' | 'description' | 'isNew' | 'collabId' | 'experience' | 'stack' | 'hasStarted' | 'languages' | 'acceptsInvites' | 'isOwner' | 'isMember' | 'invitationPending' | 'requestToJoinPending' | 'createdAt'>
     & { owner: (
@@ -1089,13 +1195,13 @@ export type CollabPostLanguagesQuery = (
 );
 
 export type CollabPostCommentsQueryVariables = {
-  postId: Scalars['ID']
+  postId: Scalars['ID'];
 };
 
 
 export type CollabPostCommentsQuery = (
   { __typename?: 'Query' }
-  & { collabPost: Maybe<(
+  & { collabPost?: Maybe<(
     { __typename?: 'CollabPost' }
     & Pick<CollabPost, 'id'>
     & { comments: Array<(
@@ -1113,16 +1219,16 @@ export type CollabPostCommentsQuery = (
 );
 
 export type CollabQueryVariables = {
-  collabId: Scalars['ID']
+  collabId: Scalars['ID'];
 };
 
 
 export type CollabQuery = (
   { __typename?: 'Query' }
-  & { collab: Maybe<(
+  & { collab?: Maybe<(
     { __typename?: 'Collab' }
     & Pick<Collab, 'id' | 'name' | 'collabPostId' | 'acceptsInvites' | 'isOwner'>
-    & { owner: Maybe<(
+    & { owner?: Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
     )>, pendingInvites: Array<Maybe<(
@@ -1136,13 +1242,13 @@ export type CollabQuery = (
 );
 
 export type CollabMembersQueryVariables = {
-  collabId: Scalars['ID']
+  collabId: Scalars['ID'];
 };
 
 
 export type CollabMembersQuery = (
   { __typename?: 'Query' }
-  & { collab: Maybe<(
+  & { collab?: Maybe<(
     { __typename?: 'Collab' }
     & Pick<Collab, 'id'>
     & { members: Array<(
@@ -1153,13 +1259,13 @@ export type CollabMembersQuery = (
 );
 
 export type CollabDiscussionThreadsQueryVariables = {
-  collabId: Scalars['ID']
+  collabId: Scalars['ID'];
 };
 
 
 export type CollabDiscussionThreadsQuery = (
   { __typename?: 'Query' }
-  & { collab: Maybe<(
+  & { collab?: Maybe<(
     { __typename?: 'Collab' }
     & Pick<Collab, 'id'>
     & { discussionThreads: Array<(
@@ -1174,13 +1280,13 @@ export type CollabDiscussionThreadsQuery = (
 );
 
 export type CollabThreadQueryVariables = {
-  threadId: Scalars['ID']
+  threadId: Scalars['ID'];
 };
 
 
 export type CollabThreadQuery = (
   { __typename?: 'Query' }
-  & { thread: Maybe<(
+  & { thread?: Maybe<(
     { __typename?: 'CollabDiscussionThread' }
     & Pick<CollabDiscussionThread, 'id' | 'title' | 'content'>
     & { author: (
@@ -1194,13 +1300,13 @@ export type CollabThreadQuery = (
 );
 
 export type CollabThreadCommentsQueryVariables = {
-  threadId: Scalars['ID']
+  threadId: Scalars['ID'];
 };
 
 
 export type CollabThreadCommentsQuery = (
   { __typename?: 'Query' }
-  & { thread: Maybe<(
+  & { thread?: Maybe<(
     { __typename?: 'CollabDiscussionThread' }
     & Pick<CollabDiscussionThread, 'id'>
     & { comments: Array<(
@@ -1218,22 +1324,22 @@ export type CollabThreadCommentsQuery = (
 );
 
 export type TaskListQueryVariables = {
-  collabId: Scalars['ID']
+  collabId: Scalars['ID'];
 };
 
 
 export type TaskListQuery = (
   { __typename?: 'Query' }
-  & { taskList: Maybe<Array<(
+  & { taskList?: Maybe<Array<(
     { __typename?: 'TaskList' }
     & Pick<TaskList, 'id' | 'name' | 'order'>
     & { tasks: Array<(
       { __typename?: 'Task' }
       & Pick<Task, 'id' | 'description' | 'order' | 'commentsCount'>
-      & { assignee: Maybe<(
+      & { assignee?: Maybe<(
         { __typename?: 'User' }
         & Pick<User, 'id' | 'username' | 'avatar'>
-      )>, assignedBy: Maybe<(
+      )>, assignedBy?: Maybe<(
         { __typename?: 'User' }
         & Pick<User, 'id' | 'username' | 'avatar'>
       )>, author: (
@@ -1245,19 +1351,19 @@ export type TaskListQuery = (
 );
 
 export type TaskCommentsQueryVariables = {
-  taskId: Scalars['ID']
+  taskId: Scalars['ID'];
 };
 
 
 export type TaskCommentsQuery = (
   { __typename?: 'Query' }
-  & { task: Maybe<(
+  & { task?: Maybe<(
     { __typename?: 'Task' }
     & Pick<Task, 'id'>
     & { comments: Array<(
       { __typename?: 'TaskComment' }
       & Pick<TaskComment, 'id' | 'content'>
-      & { author: Maybe<(
+      & { author?: Maybe<(
         { __typename?: 'User' }
         & Pick<User, 'id' | 'username' | 'avatar'>
       )>, reactions: Array<(
@@ -1333,6 +1439,43 @@ export function useLoginMutation(baseOptions?: ApolloReactHooks.MutationHookOpti
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = ApolloReactCommon.MutationResult<LoginMutation>;
 export type LoginMutationOptions = ApolloReactCommon.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const UpdateUserInfoDocument = gql`
+    mutation UpdateUserInfo($input: UpdateUserInfoInput!) {
+  updateUserInfo(input: $input) {
+    id
+    firstName
+    lastName
+    title
+    country
+    bio
+  }
+}
+    `;
+export type UpdateUserInfoMutationFn = ApolloReactCommon.MutationFunction<UpdateUserInfoMutation, UpdateUserInfoMutationVariables>;
+
+/**
+ * __useUpdateUserInfoMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserInfoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserInfoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserInfoMutation, { data, loading, error }] = useUpdateUserInfoMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateUserInfoMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateUserInfoMutation, UpdateUserInfoMutationVariables>) {
+        return ApolloReactHooks.useMutation<UpdateUserInfoMutation, UpdateUserInfoMutationVariables>(UpdateUserInfoDocument, baseOptions);
+      }
+export type UpdateUserInfoMutationHookResult = ReturnType<typeof useUpdateUserInfoMutation>;
+export type UpdateUserInfoMutationResult = ApolloReactCommon.MutationResult<UpdateUserInfoMutation>;
+export type UpdateUserInfoMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateUserInfoMutation, UpdateUserInfoMutationVariables>;
 export const CreateCollabPostDocument = gql`
     mutation CreateCollabPost($post: CollabPostArgs!) {
   createCollabPost(post: $post) {
@@ -1786,6 +1929,8 @@ export const CreateTaskListDocument = gql`
     mutation CreateTaskList($input: CreateTaskListInput!) {
   createTaskList(input: $input) {
     id
+    name
+    order
   }
 }
     `;
@@ -1880,7 +2025,6 @@ export const CreateTaskDocument = gql`
     mutation CreateTask($input: CreateTaskInput!) {
   createTask(input: $input) {
     id
-    taskListId
     description
     order
     author {
@@ -1889,6 +2033,16 @@ export const CreateTaskDocument = gql`
       avatar
     }
     commentsCount
+    assignee {
+      id
+      username
+      avatar
+    }
+    assignedBy {
+      id
+      username
+      avatar
+    }
   }
 }
     `;
@@ -2233,8 +2387,45 @@ export function useGetCurrentUserLazyQuery(baseOptions?: ApolloReactHooks.LazyQu
 export type GetCurrentUserQueryHookResult = ReturnType<typeof useGetCurrentUserQuery>;
 export type GetCurrentUserLazyQueryHookResult = ReturnType<typeof useGetCurrentUserLazyQuery>;
 export type GetCurrentUserQueryResult = ApolloReactCommon.QueryResult<GetCurrentUserQuery, GetCurrentUserQueryVariables>;
-export const GetMyCollabsDocument = gql`
-    query GetMyCollabs {
+export const GetCurrentUserInfoDocument = gql`
+    query GetCurrentUserInfo {
+  currentUser {
+    id
+    firstName
+    lastName
+    title
+    country
+    bio
+  }
+}
+    `;
+
+/**
+ * __useGetCurrentUserInfoQuery__
+ *
+ * To run a query within a React component, call `useGetCurrentUserInfoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCurrentUserInfoQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCurrentUserInfoQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCurrentUserInfoQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetCurrentUserInfoQuery, GetCurrentUserInfoQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetCurrentUserInfoQuery, GetCurrentUserInfoQueryVariables>(GetCurrentUserInfoDocument, baseOptions);
+      }
+export function useGetCurrentUserInfoLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetCurrentUserInfoQuery, GetCurrentUserInfoQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetCurrentUserInfoQuery, GetCurrentUserInfoQueryVariables>(GetCurrentUserInfoDocument, baseOptions);
+        }
+export type GetCurrentUserInfoQueryHookResult = ReturnType<typeof useGetCurrentUserInfoQuery>;
+export type GetCurrentUserInfoLazyQueryHookResult = ReturnType<typeof useGetCurrentUserInfoLazyQuery>;
+export type GetCurrentUserInfoQueryResult = ApolloReactCommon.QueryResult<GetCurrentUserInfoQuery, GetCurrentUserInfoQueryVariables>;
+export const GetCurrentUserCollabsDocument = gql`
+    query GetCurrentUserCollabs {
   currentUser {
     id
     collabs {
@@ -2246,29 +2437,141 @@ export const GetMyCollabsDocument = gql`
     `;
 
 /**
- * __useGetMyCollabsQuery__
+ * __useGetCurrentUserCollabsQuery__
  *
- * To run a query within a React component, call `useGetMyCollabsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetMyCollabsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * To run a query within a React component, call `useGetCurrentUserCollabsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCurrentUserCollabsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetMyCollabsQuery({
+ * const { data, loading, error } = useGetCurrentUserCollabsQuery({
  *   variables: {
  *   },
  * });
  */
-export function useGetMyCollabsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetMyCollabsQuery, GetMyCollabsQueryVariables>) {
-        return ApolloReactHooks.useQuery<GetMyCollabsQuery, GetMyCollabsQueryVariables>(GetMyCollabsDocument, baseOptions);
+export function useGetCurrentUserCollabsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetCurrentUserCollabsQuery, GetCurrentUserCollabsQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetCurrentUserCollabsQuery, GetCurrentUserCollabsQueryVariables>(GetCurrentUserCollabsDocument, baseOptions);
       }
-export function useGetMyCollabsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetMyCollabsQuery, GetMyCollabsQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<GetMyCollabsQuery, GetMyCollabsQueryVariables>(GetMyCollabsDocument, baseOptions);
+export function useGetCurrentUserCollabsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetCurrentUserCollabsQuery, GetCurrentUserCollabsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetCurrentUserCollabsQuery, GetCurrentUserCollabsQueryVariables>(GetCurrentUserCollabsDocument, baseOptions);
         }
-export type GetMyCollabsQueryHookResult = ReturnType<typeof useGetMyCollabsQuery>;
-export type GetMyCollabsLazyQueryHookResult = ReturnType<typeof useGetMyCollabsLazyQuery>;
-export type GetMyCollabsQueryResult = ApolloReactCommon.QueryResult<GetMyCollabsQuery, GetMyCollabsQueryVariables>;
+export type GetCurrentUserCollabsQueryHookResult = ReturnType<typeof useGetCurrentUserCollabsQuery>;
+export type GetCurrentUserCollabsLazyQueryHookResult = ReturnType<typeof useGetCurrentUserCollabsLazyQuery>;
+export type GetCurrentUserCollabsQueryResult = ApolloReactCommon.QueryResult<GetCurrentUserCollabsQuery, GetCurrentUserCollabsQueryVariables>;
+export const GetCurrentUserCollabInvitationsDocument = gql`
+    query GetCurrentUserCollabInvitations {
+  currentUser {
+    id
+    collabInvites {
+      id
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetCurrentUserCollabInvitationsQuery__
+ *
+ * To run a query within a React component, call `useGetCurrentUserCollabInvitationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCurrentUserCollabInvitationsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCurrentUserCollabInvitationsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCurrentUserCollabInvitationsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetCurrentUserCollabInvitationsQuery, GetCurrentUserCollabInvitationsQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetCurrentUserCollabInvitationsQuery, GetCurrentUserCollabInvitationsQueryVariables>(GetCurrentUserCollabInvitationsDocument, baseOptions);
+      }
+export function useGetCurrentUserCollabInvitationsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetCurrentUserCollabInvitationsQuery, GetCurrentUserCollabInvitationsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetCurrentUserCollabInvitationsQuery, GetCurrentUserCollabInvitationsQueryVariables>(GetCurrentUserCollabInvitationsDocument, baseOptions);
+        }
+export type GetCurrentUserCollabInvitationsQueryHookResult = ReturnType<typeof useGetCurrentUserCollabInvitationsQuery>;
+export type GetCurrentUserCollabInvitationsLazyQueryHookResult = ReturnType<typeof useGetCurrentUserCollabInvitationsLazyQuery>;
+export type GetCurrentUserCollabInvitationsQueryResult = ApolloReactCommon.QueryResult<GetCurrentUserCollabInvitationsQuery, GetCurrentUserCollabInvitationsQueryVariables>;
+export const GetCurrentUserCollabRequestsDocument = gql`
+    query GetCurrentUserCollabRequests {
+  currentUser {
+    id
+    collabRequests {
+      collab {
+        name
+      }
+      member {
+        username
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetCurrentUserCollabRequestsQuery__
+ *
+ * To run a query within a React component, call `useGetCurrentUserCollabRequestsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCurrentUserCollabRequestsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCurrentUserCollabRequestsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCurrentUserCollabRequestsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetCurrentUserCollabRequestsQuery, GetCurrentUserCollabRequestsQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetCurrentUserCollabRequestsQuery, GetCurrentUserCollabRequestsQueryVariables>(GetCurrentUserCollabRequestsDocument, baseOptions);
+      }
+export function useGetCurrentUserCollabRequestsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetCurrentUserCollabRequestsQuery, GetCurrentUserCollabRequestsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetCurrentUserCollabRequestsQuery, GetCurrentUserCollabRequestsQueryVariables>(GetCurrentUserCollabRequestsDocument, baseOptions);
+        }
+export type GetCurrentUserCollabRequestsQueryHookResult = ReturnType<typeof useGetCurrentUserCollabRequestsQuery>;
+export type GetCurrentUserCollabRequestsLazyQueryHookResult = ReturnType<typeof useGetCurrentUserCollabRequestsLazyQuery>;
+export type GetCurrentUserCollabRequestsQueryResult = ApolloReactCommon.QueryResult<GetCurrentUserCollabRequestsQuery, GetCurrentUserCollabRequestsQueryVariables>;
+export const GetCurrentUserTasksDocument = gql`
+    query GetCurrentUserTasks {
+  currentUser {
+    id
+    tasks {
+      id
+      description
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetCurrentUserTasksQuery__
+ *
+ * To run a query within a React component, call `useGetCurrentUserTasksQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCurrentUserTasksQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCurrentUserTasksQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCurrentUserTasksQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetCurrentUserTasksQuery, GetCurrentUserTasksQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetCurrentUserTasksQuery, GetCurrentUserTasksQueryVariables>(GetCurrentUserTasksDocument, baseOptions);
+      }
+export function useGetCurrentUserTasksLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetCurrentUserTasksQuery, GetCurrentUserTasksQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetCurrentUserTasksQuery, GetCurrentUserTasksQueryVariables>(GetCurrentUserTasksDocument, baseOptions);
+        }
+export type GetCurrentUserTasksQueryHookResult = ReturnType<typeof useGetCurrentUserTasksQuery>;
+export type GetCurrentUserTasksLazyQueryHookResult = ReturnType<typeof useGetCurrentUserTasksLazyQuery>;
+export type GetCurrentUserTasksQueryResult = ApolloReactCommon.QueryResult<GetCurrentUserTasksQuery, GetCurrentUserTasksQueryVariables>;
 export const UserDocument = gql`
     query User($id: ID!) {
   user(id: $id) {

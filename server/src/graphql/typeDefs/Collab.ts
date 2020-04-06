@@ -22,6 +22,7 @@ export const collabTypeDefs = gql`
     name: String!
     owner: User
     collabPostId: ID
+    frontPagePost: String
     acceptsInvites: Boolean!
     members: [User!]!
     isOwner: Boolean!

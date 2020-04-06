@@ -22,7 +22,7 @@ export const apolloContext: ApolloServerExpressConfig['context'] = async ({
   try {
     const token = (req.headers.authorization || '').replace('Bearer ', '')
     const { userId } = await decodeToken(token)
-    user = await User.findByPk(userId, { raw: true })
+    user = await User.findByPk(userId)
     // eslint-disable-next-line no-empty
   } catch (err) {}
 
