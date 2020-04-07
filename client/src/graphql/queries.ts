@@ -44,6 +44,11 @@ export const GET_CURRENT_USER_COLLAB_INVITATIONS = gql`
       collabInvites {
         id
         name
+        owner {
+          id
+          username
+          avatar
+        }
       }
     }
   }
@@ -55,10 +60,13 @@ export const GET_CURRENT_USER_COLLAB_REQUESTS = gql`
       id
       collabRequests {
         collab {
+          id
           name
         }
         member {
+          id
           username
+          avatar
         }
       }
     }
@@ -72,6 +80,14 @@ export const GET_CURRENT_USER_TASKS = gql`
       tasks {
         id
         description
+        assignedBy {
+          id
+          username
+        }
+        collab {
+          id
+          name
+        }
       }
     }
   }

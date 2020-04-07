@@ -7,12 +7,18 @@ export const taskListTypeDefs = gql`
 
   type Mutation {
     createTaskList(input: CreateTaskListInput!): TaskList!
+    updateTaskListName(input: UpdateTaskListNameInput!): TaskList!
     updateTaskListPosition(input: UpdateTaskListPositionInput!): TaskList!
     deleteTaskList(taskListId: ID!): Boolean!
   }
 
   input CreateTaskListInput {
     collabId: ID!
+    name: String!
+  }
+
+  input UpdateTaskListNameInput {
+    taskListId: ID!
     name: String!
   }
 

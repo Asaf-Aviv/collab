@@ -24,6 +24,7 @@ export const taskTypeDefs = gql`
     assignedBy: User
     comments: [TaskComment!]!
     commentsCount: Int!
+    collab: Collab!
   }
 
   input CreateTaskInput {

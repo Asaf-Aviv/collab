@@ -12,6 +12,7 @@ import {
 import {
   CreateTaskListInput,
   UpdateTaskListPositionInput,
+  UpdateTaskListNameInput,
 } from '../../graphql/types.d'
 import uuid from 'uuid/v4'
 import { Collab } from './Collab'
@@ -64,6 +65,24 @@ export class CollabTaskList extends Model<CollabTaskList> {
       ...input,
       order: nextPosition,
     })
+  }
+
+  static async updateTaskListName(
+    { taskListId, name }: UpdateTaskListNameInput,
+    userId: string,
+  ) {
+    const taskList = await this.findByPk(taskListId)
+
+    if (!taskList) {
+      throw new Error('Task list not found')
+    }
+
+    //FIXME:
+    // if (ownerId !== collab.ownerId) {
+    //   throw new Error('You have no permissions to create a task list')
+    // }
+
+    return taskList.update({ name })
   }
 
   static async updateTaskListPosition(

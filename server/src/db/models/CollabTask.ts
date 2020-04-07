@@ -22,6 +22,7 @@ import {
 } from '../../graphql/types.d'
 import { GQLResolverTypes } from './../../graphql/helpers/GQLResolverTypes'
 import { CollabMember } from './CollabMember'
+import { Collab } from './Collab'
 
 @Table({ tableName: 'collab_tasks' })
 export class CollabTask extends Model<CollabTask> {
@@ -63,6 +64,10 @@ export class CollabTask extends Model<CollabTask> {
   @Column
   taskListId!: string
 
+  @ForeignKey(() => Collab)
+  @Column
+  collabId!: string
+
   @BelongsTo(() => CollabTaskList, {
     foreignKey: 'taskListId',
     onDelete: 'CASCADE',
@@ -87,12 +92,13 @@ export class CollabTask extends Model<CollabTask> {
     const taskPosition = await this.count({ where: { taskListId } })
 
     return this.create({
+      collabId,
       description,
       authorId: userId,
       taskListId,
       order: taskPosition,
       assigneeId,
-      assignedBy: assigneeId ? userId : null,
+      assignedById: assigneeId ? userId : null,
     })
   }
 
