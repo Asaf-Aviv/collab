@@ -1,6 +1,7 @@
 import { isAuthenticated } from './../middleware/isAuthenticated'
 import { and } from 'graphql-shield'
 import { Resolvers } from '../types'
+import { GQLCollab } from '../../db/models/Collab'
 
 export const collabTaskResolver: Resolvers = {
   Query: {
@@ -29,6 +30,12 @@ export const collabTaskResolver: Resolvers = {
       models.CollabTaskComment.findAll({ where: { taskId: id } }),
     commentsCount: ({ id }, args, { models }) =>
       models.CollabTaskComment.count({ where: { taskId: id } }),
+    collab: (parent, args, { loaders }) => {
+      console.log(parent)
+      return (loaders.collabLoader.load(
+        parent.collabId,
+      ) as unknown) as GQLCollab
+    },
   },
 }
 

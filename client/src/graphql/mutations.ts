@@ -157,6 +157,12 @@ export const DECLINE_COLLAB_INVITATION = gql`
   }
 `
 
+export const DECLINE_COLLAB_MEMBER_REQUEST = gql`
+  mutation DeclineCollabMemberRequest($collabId: ID!, $memberId: ID!) {
+    declineMemberRequest(collabId: $collabId, memberId: $memberId)
+  }
+`
+
 // Task List
 export const CREATE_TASK_LIST = gql`
   mutation CreateTaskList($input: CreateTaskListInput!) {
@@ -164,6 +170,15 @@ export const CREATE_TASK_LIST = gql`
       id
       name
       order
+    }
+  }
+`
+
+export const UPDATE_TASK_LIST_NAME = gql`
+  mutation UpdateTaskListName($input: UpdateTaskListNameInput!) {
+    updateTaskListName(input: $input) {
+      id
+      name
     }
   }
 `

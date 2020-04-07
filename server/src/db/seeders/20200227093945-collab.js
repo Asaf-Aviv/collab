@@ -25,9 +25,10 @@ const collabTaskLists = _.flatten(
   seededCollabs.map(({ id }) => createRandomTaskListLength(id)),
 )
 
-const createCollabTask = (listId, index) => ({
+const createCollabTask = (listId, collabId, index) => ({
   id: uuid(),
   task_list_id: listId,
+  collab_id: collabId,
   author_id: seededCollabs.find(
     x => x.id === collabTaskLists.find(x => x.id === listId).collab_id,
   ).owner_id,
@@ -37,11 +38,15 @@ const createCollabTask = (listId, index) => ({
   order: index,
 })
 
-const createRandomTaskLength = listId =>
-  [...Array(_.random(3, 12))].map((_, i) => createCollabTask(listId, i))
+const createRandomTaskLength = (listId, collabId) =>
+  [...Array(_.random(3, 12))].map((_, i) =>
+    createCollabTask(listId, collabId, i),
+  )
 
 const collabTasks = _.flatten(
-  collabTaskLists.map(({ id }) => createRandomTaskLength(id)),
+  collabTaskLists.map(({ id, collab_id }) =>
+    createRandomTaskLength(id, collab_id),
+  ),
 )
 
 const createTaskComment = (task_id, author_id) => ({

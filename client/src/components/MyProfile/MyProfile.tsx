@@ -5,6 +5,7 @@ import {
   useRouteMatch,
   NavLink,
   Redirect,
+  Link as RouterLink,
 } from 'react-router-dom'
 import {
   Flex,
@@ -13,6 +14,10 @@ import {
   Input,
   Button,
   Textarea,
+  Heading,
+  Link,
+  Text,
+  Avatar,
 } from '@chakra-ui/core'
 import styled from '@emotion/styled'
 import { Container, Paper } from '../global'
@@ -26,6 +31,10 @@ import {
   useGetCurrentUserTasksQuery,
   useGetCurrentUserCollabRequestsQuery,
   useGetCurrentUserCollabInvitationsQuery,
+  useAcceptCollabInvitationMutation,
+  useDeclineCollabInvitationMutation,
+  useCancelCollabRequestToJoinMutation,
+  useDeclineCollabMemberRequestMutation,
 } from '../../graphql/generates'
 
 export const MyProfile = () => {
@@ -153,12 +162,6 @@ export const MyInformation = () => {
   // wait for the initial values to populate the inputs
   if (!infoInput) return null
 
-  console.log(infoInput)
-  console.log(
-    'found',
-    countryOptions.find(x => x.label === infoInput.country),
-  )
-
   return (
     <Flex direction="column" p={4} width="100%">
       <Flex>
@@ -236,7 +239,20 @@ export const MyCollabs = () => {
   console.log(data)
   if (loading) return null
   if (error) return <span>Could not fetch collabs</span>
-  return <div></div>
+  return (
+    <div>
+      {data?.currentUser?.collabs.map(({ id, name }) => (
+        <Link
+          as={RouterLink as any}
+          key={id}
+          //@ts-ignore
+          to={`/collab/${id}`}
+        >
+          <Heading size="md">{name}</Heading>
+        </Link>
+      ))}
+    </div>
+  )
 }
 
 export const MyTasks = () => {
@@ -245,23 +261,110 @@ export const MyTasks = () => {
   console.log(data)
   if (loading) return null
   if (error) return <span>Could not fetch tasks</span>
-  return <div></div>
+  if (!data?.currentUser) return null
+
+  const { tasks } = data.currentUser
+  return (
+    <div>
+      {tasks.map(task => (
+        <div key={task.id}>
+          <Text>{task.collab.name}</Text>
+          <Text> Assigned by {task.assignedBy?.username}</Text>
+          <Text>{task.description}</Text>
+        </div>
+      ))}
+    </div>
+  )
 }
 
 export const CollabInvitations = () => {
   const { data, loading, error } = useGetCurrentUserCollabInvitationsQuery()
+  const [acceptInvitation] = useAcceptCollabInvitationMutation()
+  const [declineInvitation] = useDeclineCollabInvitationMutation()
 
   console.log(data)
   if (loading) return null
   if (error) return <span>Could not fetch invitations</span>
-  return <div></div>
+  if (!data?.currentUser) return null
+
+  const { collabInvites } = data.currentUser
+
+  return (
+    <div>
+      {collabInvites.map(invite => (
+        <div key={invite.id}>
+          <Text>
+            <Avatar
+              src={invite.owner!.avatar ?? undefined}
+              name={invite.owner!.username}
+            />
+            {invite.owner!.username} invited you to join {invite.name}
+          </Text>
+          <Button
+            variant="ghost"
+            mr={3}
+            onClick={() => {
+              declineInvitation({
+                variables: {
+                  collabId: invite.id,
+                },
+              })
+            }}
+          >
+            Decline
+          </Button>
+          <Button
+            variantColor="purple"
+            onClick={() =>
+              acceptInvitation({
+                variables: {
+                  collabId: invite.id,
+                },
+              })
+            }
+          >
+            Accept
+          </Button>
+        </div>
+      ))}
+    </div>
+  )
 }
 
 export const CollabRequests = () => {
   const { data, loading, error } = useGetCurrentUserCollabRequestsQuery()
+  const [cancelRequest] = useCancelCollabRequestToJoinMutation()
 
   console.log(data)
   if (loading) return null
   if (error) return <span>Could not fetch requests</span>
-  return <div></div>
+  if (!data?.currentUser) return null
+
+  const { collabRequests } = data.currentUser
+
+  return (
+    <div>
+      {collabRequests.map(({ member, collab }) => (
+        <div key={member.username + collab.name}>
+          <Text>
+            <Avatar src={member.avatar ?? undefined} name={member.username} />
+            {member.username} invited you to join {collab.name}
+          </Text>
+          <Button
+            variant="ghost"
+            mr={3}
+            onClick={() => {
+              cancelRequest({
+                variables: {
+                  collabId: collab.id,
+                },
+              })
+            }}
+          >
+            Cancel
+          </Button>
+        </div>
+      ))}
+    </div>
+  )
 }

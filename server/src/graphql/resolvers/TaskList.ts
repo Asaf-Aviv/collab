@@ -10,6 +10,8 @@ export const collabTaskListResolver: Resolvers = {
   Mutation: {
     createTaskList: (root, { input }, { user, models }) =>
       models.CollabTaskList.createTaskList(input, user.id),
+    updateTaskListName: (root, { input }, { user, models }) =>
+      models.CollabTaskList.updateTaskListName(input, user!.id),
     updateTaskListPosition: (root, { input }, { user, models }) =>
       models.CollabTaskList.updateTaskListPosition(input, user!.id),
     deleteTaskList: (root, { taskListId }, { user, models }) =>
