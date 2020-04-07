@@ -19,6 +19,7 @@ import {
   MoveTaskToListInput,
   CreateTaskInput,
   UpdateTaskAssigneeInput,
+  UpdateTaskInput,
 } from '../../graphql/types.d'
 import { GQLResolverTypes } from './../../graphql/helpers/GQLResolverTypes'
 import { CollabMember } from './CollabMember'
@@ -97,6 +98,24 @@ export class CollabTask extends Model<CollabTask> {
       authorId: userId,
       taskListId,
       order: taskPosition,
+      assigneeId,
+      assignedById: assigneeId ? userId : null,
+    })
+  }
+
+  static async updateTask(
+    { taskId, description, assigneeId }: UpdateTaskInput,
+    userId: string,
+  ) {
+    const task = await this.findByPk(taskId)
+
+    if (!task) {
+      throw new Error('Task not found')
+    }
+    //FIXME: validate
+
+    return task.update({
+      description,
       assigneeId,
       assignedById: assigneeId ? userId : null,
     })

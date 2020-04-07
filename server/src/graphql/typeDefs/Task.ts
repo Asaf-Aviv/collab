@@ -9,6 +9,7 @@ export const taskTypeDefs = gql`
     createTask(input: CreateTaskInput!): Task!
     updateTaskPosition(input: UpdateTaskPositionInput!): Task!
     updateTaskAssignee(input: UpdateTaskAssigneeInput!): Task!
+    updateTask(input: UpdateTaskInput!): Task!
     moveTaskToList(input: MoveTaskToListInput!): Task!
     deleteTask(taskId: ID!): Boolean!
   }
@@ -25,6 +26,12 @@ export const taskTypeDefs = gql`
     comments: [TaskComment!]!
     commentsCount: Int!
     collab: Collab!
+  }
+
+  input UpdateTaskInput {
+    taskId: ID!
+    description: String!
+    assigneeId: ID
   }
 
   input CreateTaskInput {

@@ -10,6 +10,8 @@ export const collabTaskResolver: Resolvers = {
   Mutation: {
     createTask: (root, { input }, { user, models }) =>
       models.CollabTask.createTask(input, user.id),
+    updateTask: (root, { input }, { models, user }) =>
+      models.CollabTask.updateTask(input, user!.id),
     updateTaskAssignee: (root, { input }, { models, user }) =>
       models.CollabTask.updateTaskAssignee(input, user!.id),
     updateTaskPosition: (root, { input }, { models, user }) =>

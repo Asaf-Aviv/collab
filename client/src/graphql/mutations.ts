@@ -230,6 +230,25 @@ export const DELETE_TASK = gql`
   }
 `
 
+export const UPDATE_TASK = gql`
+  mutation UpdateTask($input: UpdateTaskInput!) {
+    updateTask(input: $input) {
+      id
+      description
+      assignee {
+        id
+        username
+        avatar
+      }
+      assignedBy {
+        id
+        username
+        avatar
+      }
+    }
+  }
+`
+
 export const MOVE_TASK_TO_LIST = gql`
   mutation MoveTaskToList($input: MoveTaskToListInput!) {
     moveTaskToList(input: $input) {

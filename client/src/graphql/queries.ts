@@ -336,6 +336,7 @@ export const GET_COLLAB_TASK_BOARD = gql`
         description
         order
         commentsCount
+        taskListId
         assignee {
           id
           username
