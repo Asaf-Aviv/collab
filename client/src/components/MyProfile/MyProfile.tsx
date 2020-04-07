@@ -291,14 +291,11 @@ export const CollabInvitations = () => {
 
   return (
     <div>
-      {collabInvites.map(invite => (
-        <div key={invite.id}>
+      {collabInvites.map(({ id, name, owner }) => (
+        <div key={id}>
+          <Avatar src={owner!.avatar ?? undefined} name={owner!.username} />
           <Text>
-            <Avatar
-              src={invite.owner!.avatar ?? undefined}
-              name={invite.owner!.username}
-            />
-            {invite.owner!.username} invited you to join {invite.name}
+            {owner!.username} invited you to join {name}
           </Text>
           <Button
             variant="ghost"
@@ -306,7 +303,7 @@ export const CollabInvitations = () => {
             onClick={() => {
               declineInvitation({
                 variables: {
-                  collabId: invite.id,
+                  collabId: id,
                 },
               })
             }}
@@ -318,7 +315,7 @@ export const CollabInvitations = () => {
             onClick={() =>
               acceptInvitation({
                 variables: {
-                  collabId: invite.id,
+                  collabId: id,
                 },
               })
             }
@@ -346,8 +343,8 @@ export const CollabRequests = () => {
     <div>
       {collabRequests.map(({ member, collab }) => (
         <div key={member.username + collab.name}>
+          <Avatar src={member.avatar ?? undefined} name={member.username} />
           <Text>
-            <Avatar src={member.avatar ?? undefined} name={member.username} />
             {member.username} invited you to join {collab.name}
           </Text>
           <Button
@@ -368,3 +365,13 @@ export const CollabRequests = () => {
     </div>
   )
 }
+
+// onChange={(e) => {
+//   const { value } = e.target
+
+//   setFormData(prevState =>
+//     prevState.map((obj, i) => i === index
+//       ? {...obj, title: value}
+//       : objx
+//   ))
+// }}
