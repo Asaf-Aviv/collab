@@ -168,6 +168,7 @@ export const GET_COLLAB_POST = gql`
       owner {
         id
         username
+        avatar
       }
       collabId
       experience
