@@ -24,19 +24,6 @@ export const collabResolver: Resolvers = {
       models.Collab.toggleAcceptInvites(collabId, user.id),
     declineMemberRequest: (root, { collabId, memberId }, { user, models }) =>
       models.Collab.declineMemberRequest(collabId, memberId, user.id),
-    createTaskComment: (
-      root,
-      { collabId, content, taskId },
-      { user, models },
-    ) =>
-      models.CollabTaskComment.createComment(
-        collabId,
-        content,
-        user.id,
-        taskId,
-      ),
-    deleteTaskComment: (root, { commentId }, { user, models }) =>
-      models.CollabTaskComment.deleteComment(commentId, user.id),
     cancelRequestToJoin: (root, { collabId }, { user, models }) =>
       models.Collab.cancelRequestToJoin(collabId, user!.id),
   },
