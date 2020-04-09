@@ -9,7 +9,7 @@ import {
 import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 import { User } from './User'
 
-@Table({ tableName: 'user_friends', timestamps: true })
+@Table({ tableName: 'user_friendships', timestamps: true })
 export class UserFriend extends Model<UserFriend> {
   @PrimaryKey
   @ForeignKey(() => User)
