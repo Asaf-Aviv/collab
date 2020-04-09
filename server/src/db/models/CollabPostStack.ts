@@ -23,7 +23,7 @@ export class CollabPostStack extends Model<CollabPostStack> {
   @Column
   collabId!: string
 
-  @BelongsTo(() => Collab, { foreignKey: 'collabId' })
+  @BelongsTo(() => Collab, { foreignKey: 'collabId', onDelete: 'CASCADE' })
   collab!: Collab
 
   @ForeignKey(() => Stack)
