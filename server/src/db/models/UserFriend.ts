@@ -1,3 +1,4 @@
+import { Op } from 'sequelize'
 import {
   Model,
   Column,
@@ -14,26 +15,42 @@ export class UserFriend extends Model<UserFriend> {
   @PrimaryKey
   @ForeignKey(() => User)
   @Column
-  userOneId!: string
+  userId!: string
 
-  @BelongsTo(() => User, { foreignKey: 'userOneId', onDelete: 'CASCADE' })
-  userOne!: User
+  @BelongsTo(() => User, { foreignKey: 'userId', onDelete: 'CASCADE' })
+  user!: User
 
   @PrimaryKey
   @ForeignKey(() => User)
   @Column
-  userTwoId!: string
+  friendId!: string
 
-  @BelongsTo(() => User, { foreignKey: 'userTwoId', onDelete: 'CASCADE' })
-  userTwo!: User
+  @BelongsTo(() => User, { foreignKey: 'friendId', onDelete: 'CASCADE' })
+  friend!: User
 
-  static async createFriendship(userOneId: string, userTwoId: string) {
-    return this.create({ userOneId, userTwoId })
+  static async createFriendship(friendId: string, userId: string) {
+    //FIXME: add validation
+    // creates a row for each side of the friendship
+    await this.bulkCreate([
+      { friendId, userId },
+      { friendId: userId, userId: friendId },
+    ])
+    return true
   }
 
-  static async deleteFriendship(userOneId: string, userTwoId: string) {
-    return this.destroy({ where: { userOneId, userTwoId } })
+  static async deleteFriendship(friendId: string, userId: string) {
+    //FIXME: add validation
+    // delete both rows of the friendship
+    await this.destroy({
+      where: {
+        [Op.or]: [
+          { friendId, userId },
+          { friendId: userId, userId: friendId },
+        ],
+      },
+    })
+    return true
   }
 }
 
-export type GQLUserFriend = GQLResolverTypes<UserFriend, 'userOne' | 'userTwo'>
+export type GQLUserFriend = GQLResolverTypes<UserFriend, 'friendId' | 'userId'>

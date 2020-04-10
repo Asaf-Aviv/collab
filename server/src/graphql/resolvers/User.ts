@@ -27,8 +27,27 @@ export const userResolver: Resolvers = {
     declineCollabInvitation: (root, { collabId }, { user, models }) =>
       models.User.declineCollabInvitation(collabId, user.id),
     updateUserInfo: (root, { input }, { user }) => user.update(input),
+    sendFriendRequest: (root, { friendId }, { models, user }) =>
+      models.UserFriendRequest.createFriendRequest(friendId, user!.id),
+    acceptFriendRequest: (root, { friendId }, { models, user }) =>
+      models.UserFriend.createFriendship(friendId, user!.id),
+    declineFriendRequest: (root, { senderId }, { models, user }) =>
+      models.UserFriendRequest.deleteFriendRequest(senderId, user!.id),
+    removeFriend: (root, { friendId }, { models, user }) =>
+      models.UserFriend.deleteFriendship(friendId, user!.id),
   },
   CurrentUser: {
+    friendRequestsCount: ({ id }, args, { models }) =>
+      models.UserFriendRequest.count({
+        where: { receiverId: id },
+      }),
+    friendRequests: async ({ id }, args, { models }) => {
+      const requests = await models.UserFriendRequest.findAll({
+        where: { receiverId: id },
+        include: [{ model: models.User, as: 'sender' }],
+      })
+      return requests.map(request => request.sender)
+    },
     collabs: ({ id }, args, { models }) =>
       models.Collab.findAll({
         include: [
