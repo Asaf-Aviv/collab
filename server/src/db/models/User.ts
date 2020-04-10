@@ -218,5 +218,11 @@ export class User extends Model<User> {
 
 export type GQLUser = GQLResolverTypes<
   User,
-  'collabInvites' | 'collabRequests' | 'collabs'
+  | 'collabInvites'
+  | 'collabRequests'
+  | 'collabs'
+  | 'friendRequests'
+  | 'friends'
+  | 'tasks'
+  | 'reactions'
 >
