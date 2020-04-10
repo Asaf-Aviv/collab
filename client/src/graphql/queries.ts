@@ -7,7 +7,20 @@ export const GET_CURRENT_USER = gql`
       id
       username
       avatar
-      email
+      friendRequestsCount
+    }
+  }
+`
+
+export const GET_CURRENT_FRIEND_REQUESTS = gql`
+  query CurrentUserFriendRequests {
+    currentUser {
+      id
+      friendRequests {
+        id
+        username
+        avatar
+      }
     }
   }
 `
