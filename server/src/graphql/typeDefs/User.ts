@@ -35,6 +35,7 @@ export const userTypeDefs = gql`
     bio: String
     friendRequests: [User!]!
     friendRequestsCount: Int!
+    friends: [User!]!
     collabs: [Collab!]!
     collabInvites: [Collab!]!
     collabRequests: [CollabRequest!]!
