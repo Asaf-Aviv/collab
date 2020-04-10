@@ -31,6 +31,8 @@ import { CollabMemberRequest } from './CollabMemberRequest'
 import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 import { CollabPostReaction } from './CollabPostReaction'
 import { CollabTask } from './CollabTask'
+import { UserFriend } from './UserFriend'
+import { UserFriendRequest } from './UserFriendRequest'
 
 @DefaultScope(() => ({
   attributes: { exclude: ['password'] },
@@ -111,6 +113,12 @@ export class User extends Model<User> {
 
   @HasMany(() => CollabMemberRequest)
   collabRequests!: CollabMemberRequest[]
+
+  @HasMany(() => UserFriendRequest, { foreignKey: 'receiverId' })
+  friendRequests!: User[]
+
+  @HasMany(() => UserFriend, { foreignKey: 'userId' })
+  friends!: User[]
 
   @HasMany(() => CollabPostReaction)
   reactions!: CollabPostReaction[]

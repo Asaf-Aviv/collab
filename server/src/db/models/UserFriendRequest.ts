@@ -30,12 +30,15 @@ export class UserFriendRequest extends Model<UserFriendRequest> {
   @BelongsTo(() => User, { foreignKey: 'receiverId', onDelete: 'CASCADE' })
   receiver!: User
 
-  static createFriendRequest(receiverId: string, senderId: string) {
-    return this.create({ receiverId, senderId })
+  static async createFriendRequest(receiverId: string, senderId: string) {
+    //FIXME: check if there is already a request from the receiver
+    await this.create({ receiverId, senderId })
+    return true
   }
 
-  static deleteFriendRequest(receiverId: string, senderId: string) {
-    return this.destroy({ where: { receiverId, senderId } })
+  static async deleteFriendRequest(receiverId: string, senderId: string) {
+    await this.destroy({ where: { receiverId, senderId } })
+    return true
   }
 }
 

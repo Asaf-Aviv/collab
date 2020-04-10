@@ -14,6 +14,10 @@ export const userTypeDefs = gql`
     acceptCollabInvitation(collabId: ID!): User!
     declineCollabInvitation(collabId: ID!): Boolean!
     updateUserInfo(input: UpdateUserInfoInput): CurrentUser!
+    sendFriendRequest(friendId: ID!): Boolean!
+    acceptFriendRequest(friendId: ID!): Boolean!
+    declineFriendRequest(senderId: ID!): Boolean!
+    removeFriend(friendId: ID!): Boolean!
   }
 
   type CurrentUser {
@@ -29,6 +33,8 @@ export const userTypeDefs = gql`
     title: String
     country: String
     bio: String
+    friendRequests: [User!]!
+    friendRequestsCount: Int!
     collabs: [Collab!]!
     collabInvites: [Collab!]!
     collabRequests: [CollabRequest!]!
