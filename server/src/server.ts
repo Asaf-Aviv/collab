@@ -1,22 +1,168 @@
+/* eslint-disable */
 require('dotenv').config()
-import { Sequelize } from 'sequelize'
+import { createServer } from 'http'
+import { Sequelize, Op } from 'sequelize'
 import { User } from './db/models/User'
 import sequelize from './db/sequelize'
-import { app } from './app'
+import { app, apolloServer } from './app'
 import { Collab } from './db/models/Collab'
 import { CollabMember } from './db/models/CollabMember'
 import { createLoaders } from './graphql/loaders/loaders'
 import { Stack } from './db/models/Stack'
 import { CollabPostReaction } from './db/models/CollabPostReaction'
 import { CollabPost } from './db/models/CollabPost'
+import { UserFriend } from './db/models/UserFriend'
+import { PrivateMessage } from './db/models/PrivateMessage'
+import { Language } from './db/models/Language'
+import { CollabPostLanguage } from './db/models/CollabPostLanguage'
+import { subDays } from 'date-fns'
 
 const PORT = 5555
+
+const httpServer = createServer(app)
+apolloServer.installSubscriptionHandlers(httpServer)
 
 sequelize
   .authenticate()
   .then(async () => {
     // await sequelize.sync({ force: true })
-    console.log('Connected to postgres')
+    try {
+      const lngIds = await CollabPostLanguage.findAll({
+        attributes: ['post_id'],
+        where: {
+          languageName: {
+            [Op.in]: ['%english%'],
+          },
+        },
+      })
+      console.log(lngIds)
+      console.log(
+        await CollabPost.findAll({
+          attributes: ['name'],
+          where: {
+            [Op.or]: [
+              { experience: 'SENIOR' },
+              { hasStarted: true },
+              {
+                createdAt: {
+                  [Op.gte]: subDays(new Date(), 7),
+                },
+              },
+              {
+                id: {
+                  [Op.or]: [
+                    {
+                      [Op.in]: Sequelize.literal(`(
+                        SELECT cpl.post_id
+                        FROM collab_post_languages cpl
+                        WHERE cpl.language_name IN ('French'))`),
+                    },
+                    {
+                      [Op.in]: Sequelize.literal(`(
+                        SELECT cps.post_id
+                        FROM collab_post_stack cps
+                        WHERE cps.stack_id IN (
+                          SELECT s.id
+                          FROM stacks s
+                          WHERE s.name IN ('React')))`),
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+          order: ['createdAt'],
+          offset: 10,
+          limit: 10,
+          raw: true,
+        }),
+      )
+    } catch (error) {
+      console.log(error.message)
+    }
+    // console.log('Connected to postgres')
+    // const user = await User.findByPk('6d480813-c854-40fc-a3cf-cea0944854ab')
+    // console.log(await user?.getFriends())
+    // console.log(
+    //   await User.findAll({
+    //     where: { id: 'UserFriend.friend_id' },
+    //     attributes: [],
+    //     include: [
+    //       {
+    //         attributes: [],
+    //         model: UserFriend,
+    //         where: { userId: '6d480813-c854-40fc-a3cf-cea0944854ab' },
+    //         include: [
+    //           {
+    //             model: User,
+    //             foreignKey: 'friend_id',
+    //             as: 'friend',
+    //           },
+    //         ],
+    //       },
+    //     ],
+    //     nest: true,
+    //     raw: true,
+    //   }),
+    // )
+    // console.log(
+    //   await User.findAll({
+    //     where: { id: { [Op.ne]: '6d480813-c854-40fc-a3cf-cea0944854ab' } },
+    //     include: [
+    //       {
+    //         attributes: [],
+    //         on: {
+    //           friend_id: { [Op.col]: 'User.id' },
+    //           user_id: '6d480813-c854-40fc-a3cf-cea0944854ab',
+    //         },
+    //         model: UserFriend,
+    //       },
+    //     ],
+    //     raw: true,
+    //   }),
+    // )
+    // console.log(
+    //   await user!.getFriends({
+    //     attributes: ['friend.*'],
+    //     include: [
+    //       { attributes: [], model: User, as: 'friend', raw: true, nest: true },
+    //     ],
+    //     nest: true,
+    //     raw: true,
+    //   }),
+    // )
+
+    // console.log(
+    //   await User.findAll({
+    //     attributes: ['id', 'username'],
+    //     // where: { id: 'UserFriend.friend_id' },
+    //     include: [
+    //       {
+    //         where: {
+    //           userId: '6d480813-c854-40fc-a3cf-cea0944854ab',
+    //           friendId: {
+    //             [Op.and]: {
+    //               friendId: 'User.id',
+    //               userId: {
+    //                 [Op.ne]: '6d480813-c854-40fc-a3cf-cea0944854ab',
+    //               },
+    //             },
+    //             // 'User.id',
+    //           },
+    //         },
+    //         // where: {
+    //         //   'User.id': '6d480813-c854-40fc-a3cf-cea0944854ab',
+    //         // },
+    //         // on: {
+    //         //   'User.id': 'friend_id',
+    //         // },
+    //         attributes: [],
+    //         model: UserFriend,
+    //       },
+    //     ],
+    //     raw: true,
+    //   }),
+    // )
     // Collab.findAll({
     //   include: [
     //     {
@@ -65,6 +211,21 @@ sequelize
 
     // console.log(JSON.stringify(u, null, 4))
 
-    app.listen(PORT, () => console.info(`Server running on port ${PORT}`))
+    httpServer.listen(PORT, () =>
+      console.info(`Server running on port ${PORT}`),
+    )
   })
   .catch(console.log)
+
+// {
+//   "id": "b6e6ddaa-c0dd-4495-8f63-fd1eea177ddf",
+//   "username": "AbbieHuels"
+// },
+// {
+//   "id": "67e0d6f4-5f74-4ef2-a112-55cbbe905f0a",
+//   "username": "KeelyKuvalis"
+// },
+// {
+//   "id": "6d480813-c854-40fc-a3cf-cea0944854ab",
+//   "username": "AsafAviv"
+// }

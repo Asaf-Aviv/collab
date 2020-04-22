@@ -6,6 +6,7 @@ import {
   Column,
   PrimaryKey,
   BelongsTo,
+  DataType,
 } from 'sequelize-typescript'
 import { CollabPost } from './CollabPost'
 import { Language } from './Language'
@@ -31,7 +32,7 @@ export class CollabPostLanguage extends Model<CollabPostLanguage> {
 
   @PrimaryKey
   @ForeignKey(() => Language)
-  @Column
+  @Column(DataType.CITEXT)
   languageName!: string
 }
 

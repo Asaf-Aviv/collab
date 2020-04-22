@@ -1,3 +1,10 @@
 {
-  "plugins": ["react-hot-loader/babel"]
+  "env": {
+    "production": {
+      "plugins": ["emotion"]
+    },
+    "development": {
+      "plugins": [["emotion", { "sourceMap": true }], "react-hot-loader/babel"]
+    }
+  }
 }

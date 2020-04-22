@@ -12,6 +12,19 @@ export const GET_CURRENT_USER = gql`
   }
 `
 
+export const GET_CURRENT_USER_FRIENDS = gql`
+  query CurrentUserFriends {
+    currentUser {
+      id
+      friends {
+        id
+        username
+        avatar
+      }
+    }
+  }
+`
+
 export const GET_CURRENT_FRIEND_REQUESTS = gql`
   query CurrentUserFriendRequests {
     currentUser {
@@ -34,6 +47,44 @@ export const GET_CURRENT_USER_INFO = gql`
       title
       country
       bio
+    }
+  }
+`
+
+export const GET_CURRENT_USER_CONVERSATIONS_PREVIEW = gql`
+  query CurrentUserConversationsPreview {
+    currentUser {
+      id
+      conversationsPreview {
+        userId
+        username
+        avatar
+        content
+      }
+    }
+  }
+`
+
+export const GET_CURRENT_USER_CONVERSATION = gql`
+  query CurrentUserConversation($userId: ID!, $offset: Int!, $limit: Int!) {
+    getConversation(userId: $userId, offset: $offset, limit: $limit) {
+      hasNextPage
+      messages {
+        id
+        author {
+          id
+          username
+          avatar
+        }
+        recipient {
+          id
+          username
+          avatar
+        }
+        content
+        creationDate
+        isRead
+      }
     }
   }
 `

@@ -31,6 +31,28 @@ export const UPDATE_CURRENT_USER_INFO = gql`
   }
 `
 
+export const ACCEPT_FRIEND_REQUEST = gql`
+  mutation AcceptFriendRequest($friendId: ID!) {
+    acceptFriendRequest(friendId: $friendId) {
+      id
+      username
+      avatar
+    }
+  }
+`
+
+export const DECLINE_FRIEND_REQUEST = gql`
+  mutation DeclineFriendRequest($senderId: ID!) {
+    declineFriendRequest(senderId: $senderId)
+  }
+`
+// User
+export const SEND_FRIEND_REQUEST = gql`
+  mutation SendFriendRequest($friendId: ID!) {
+    sendFriendRequest(friendId: $friendId)
+  }
+`
+
 // Collab Post
 export const CREATE_COLLAB_POST = gql`
   mutation CreateCollabPost($post: CollabPostArgs!) {
@@ -335,6 +357,63 @@ export const ADD_DISCUSSION_THREAD_COMMENT = gql`
         count
         isLiked
       }
+    }
+  }
+`
+
+// Chat
+const CONNECT_TO_CHAT = gql`
+  mutation ConnectToChat($status: UserChatStatus!) {
+    connectToChat(status: $status) {
+      users {
+        user {
+          id
+          username
+          avatar
+        }
+        status
+      }
+    }
+  }
+`
+
+const SEND_PRIVATE_CHAT_MESSAGE = gql`
+  mutation SendPrivateChatMessage($input: SendPrivateChatMessageInput!) {
+    sendPrivateChatMessage(input: $input) {
+      id
+      authorId
+      content
+      creationDate
+    }
+  }
+`
+
+const UPDATE_STATUS = gql`
+  mutation UpdateStatus($status: UserChatStatus!) {
+    updateStatus(status: $status)
+  }
+`
+
+const FRIEND_STATUS_CHANGE = gql`
+  subscription FriendStatusChange {
+    friendStatusChange {
+      user {
+        id
+        username
+        avatar
+      }
+      status
+    }
+  }
+`
+
+const NEW_PRIVATE_CHAT_MESSAGE = gql`
+  subscription NewPrivateChatMessage {
+    newPrivateChatMessage {
+      id
+      authorId
+      content
+      creationDate
     }
   }
 `

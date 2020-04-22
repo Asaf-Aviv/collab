@@ -1,3 +1,4 @@
+import { redis } from '../../redis/redis'
 import { ApolloServerExpressConfig } from 'apollo-server-express'
 import { models, Models } from '../../db/models/index'
 import { decodeToken } from '../../utils/index'
@@ -8,15 +9,31 @@ export type CollabContext = {
   loaders: Loaders
   models: Models
   user: User | null
+  redis: typeof redis
+}
+
+export type CollabContextWithRedix = CollabContext & {
+  redis: typeof redis
 }
 
 export type CollabContextWithUser = CollabContext & {
   user: User
 }
 
+export const createContext = () => ({
+  models,
+  redis,
+  loaders: createLoaders(),
+})
+
 export const apolloContext: ApolloServerExpressConfig['context'] = async ({
   req,
+  connection,
 }) => {
+  if (connection) {
+    return connection.context
+  }
+
   let user: User | null = null
 
   try {
@@ -27,8 +44,7 @@ export const apolloContext: ApolloServerExpressConfig['context'] = async ({
   } catch (err) {}
 
   return {
-    loaders: createLoaders(),
-    models,
+    ...createContext(),
     user,
   }
 }

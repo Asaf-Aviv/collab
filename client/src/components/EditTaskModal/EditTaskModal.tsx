@@ -38,7 +38,7 @@ export const EditTaskModal = ({ closeModal, task }: Props) => {
   const { data: membersData } = useCollabMembersQuery({
     variables: { collabId },
   })!
-  const [updateTask, { loading, error }] = useUpdateTaskMutation({
+  const [updateTask, { loading, /* error */ }] = useUpdateTaskMutation({
     variables: {
       input: {
         taskId: task.id,

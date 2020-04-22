@@ -1,17 +1,20 @@
 import { and } from 'graphql-shield'
+import { Op } from 'sequelize'
 import { generateToken } from '../../utils/index'
 import { isAuthenticated } from '../middleware/isAuthenticated'
-import { Resolvers } from '../types'
+import { Resolvers, ResolversTypes, Maybe } from '../types'
 
 export const userResolver: Resolvers = {
   Query: {
     users: (root, args, { models }) => models.User.findAll(),
     user: (root, { id }, { loaders }) => loaders.userLoader.load(id),
-    currentUser: async (root, args, { user }) => user,
+    currentUser: (root, args, { user }) =>
+      user as Maybe<ResolversTypes['currentUser']>,
   },
   Mutation: {
     signUp: async (root, { credentials }, { models }) => {
       const user = await models.User.createUser(credentials)
+      console.log(user)
       const token = await generateToken({ userId: user.id })
       return { user, token }
     },
@@ -32,11 +35,22 @@ export const userResolver: Resolvers = {
     acceptFriendRequest: (root, { friendId }, { models, user }) =>
       models.UserFriend.createFriendship(friendId, user!.id),
     declineFriendRequest: (root, { senderId }, { models, user }) =>
-      models.UserFriendRequest.deleteFriendRequest(senderId, user!.id),
+      models.UserFriendRequest.deleteFriendRequest(user!.id, senderId),
     removeFriend: (root, { friendId }, { models, user }) =>
       models.UserFriend.deleteFriendship(friendId, user!.id),
   },
   CurrentUser: {
+    friends: async ({ id }, args, { models, user }) => {
+      const friends = await models.UserFriend.findAll({
+        where: { userId: user!.id },
+        include: [{ model: models.User, as: 'friend' }],
+      })
+
+      console.log(friends)
+      return friends.map(f => f.friend)
+    },
+    conversationsPreview: ({ id }, args, { models }) =>
+      models.PrivateMessage.getConversationsPreview(id),
     friendRequestsCount: ({ id }, args, { models }) =>
       models.UserFriendRequest.count({
         where: { receiverId: id },
@@ -83,6 +97,29 @@ export const userResolver: Resolvers = {
   User: {
     collabs: ({ id }, args, { models }) =>
       models.Collab.findAll({ where: { ownerId: id } }),
+    isFriend: async ({ id }, args, { models, user }) => {
+      if (user?.id) {
+        const areFriends = await models.UserFriend.count({
+          where: { userId: user.id, friendId: id },
+        })
+        return Boolean(areFriends)
+      }
+      return false
+    },
+    canRequestFriendship: async ({ id }, args, { models, user }) => {
+      if (!user) return true
+      if (user.id === id) return false
+
+      const friendRequest = await models.UserFriendRequest.findOne({
+        where: {
+          [Op.or]: [
+            { senderId: user.id, receiverId: id },
+            { senderId: id, receiverId: user.id },
+          ],
+        },
+      })
+      return !friendRequest
+    },
   },
 }
 

@@ -9,6 +9,7 @@ import {
 } from 'sequelize-typescript'
 import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 import { User } from './User'
+import { UserFriendRequest } from './UserFriendRequest'
 
 @Table({ tableName: 'user_friendships', timestamps: true })
 export class UserFriend extends Model<UserFriend> {
@@ -30,12 +31,19 @@ export class UserFriend extends Model<UserFriend> {
 
   static async createFriendship(friendId: string, userId: string) {
     //FIXME: add validation
-    // creates a row for each side of the friendship
-    await this.bulkCreate([
-      { friendId, userId },
-      { friendId: userId, userId: friendId },
-    ])
-    return true
+    return this.sequelize!.transaction(async () => {
+      await UserFriendRequest.deleteFriendRequest(userId, friendId)
+      // creates a row for each side of the friendship
+      await this.bulkCreate([
+        { friendId, userId },
+        { friendId: userId, userId: friendId },
+      ])
+      const newFriend = await User.findByPk(friendId)
+      if (!newFriend) {
+        throw new Error('User not found')
+      }
+      return newFriend
+    })
   }
 
   static async deleteFriendship(friendId: string, userId: string) {
@@ -49,7 +57,20 @@ export class UserFriend extends Model<UserFriend> {
         ],
       },
     })
-    return true
+    return friendId
+  }
+
+  static async areFriends(userOneId: string, userTwoId: string) {
+    const matchedRows = await this.findOne({
+      where: {
+        [Op.or]: [
+          { friendId: userOneId, userId: userTwoId },
+          { friendId: userTwoId, userId: userOneId },
+        ],
+      },
+    })
+
+    return Boolean(matchedRows)
   }
 }
 

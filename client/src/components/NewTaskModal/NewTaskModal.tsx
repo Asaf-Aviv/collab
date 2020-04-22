@@ -37,7 +37,7 @@ export const NewTaskModal = ({ closeModal, taskListId }: Props) => {
   const { data: membersData } = useCollabMembersQuery({
     variables: { collabId },
   })!
-  const [createTask, { loading, error }] = useCreateTaskMutation({
+  const [createTask, { loading /* error */ }] = useCreateTaskMutation({
     variables: {
       input: {
         collabId,

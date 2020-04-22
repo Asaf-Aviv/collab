@@ -5,8 +5,7 @@ import { App } from './components/App'
 import { ApolloProvider } from '@apollo/react-hooks'
 import * as serviceWorker from './serviceWorker'
 import { apolloClient } from './apolloClient'
-import 'normalize.css'
-import './index.css'
+// import 'normalize.css'
 
 ReactDOM.render(
   <ApolloProvider client={apolloClient}>
