@@ -9,6 +9,8 @@ import { store } from '../../chat/reducers'
 import { Provider } from 'react-redux'
 import { WindowWidthProvider } from '../WindowWidthProvider'
 import { useCurrentUser } from '../../hooks/useCurrentUser'
+import { connect } from 'react-redux'
+import './index.css'
 
 export const App = hot(() => {
   const currentUser = useCurrentUser()
@@ -26,15 +28,11 @@ export const App = hot(() => {
       >
         <CSSReset />
         <NavBar />
-        <Box pt="96px" minHeight="100vh">
+        <Box pt="64px" minHeight="100vh">
           <Routes />
         </Box>
         <Footer />
-        {currentUser && (
-          <Provider store={store}>
-            <Chat />
-          </Provider>
-        )}
+        {currentUser && <Provider store={store}>{/* <Chat /> */}</Provider>}
       </ThemeProvider>
     </WindowWidthProvider>
   )
