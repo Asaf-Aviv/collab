@@ -12,243 +12,83 @@ export type Scalars = {
   Date: any;
 };
 
-export type AddCollabDiscussionThreadReactionInput = {
-  emojiId: Scalars['ID'];
-  threadId: Scalars['ID'];
+export type Query = {
+   __typename?: 'Query';
+  advancedPostsSearch: CollabPostsSearchResultsPaload;
+  collab?: Maybe<Collab>;
+  collabPost?: Maybe<CollabPost>;
+  collabPosts: CollabPostsPayload;
+  collabPostsByStack: CollabPostsSearchResultsPaload;
+  collabs: Array<Collab>;
+  currentUser?: Maybe<CurrentUser>;
+  getConversation: GetConversationPayload;
+  languages: Array<Scalars['String']>;
+  searchPostsByTitle: CollabPostsSearchResultsPaload;
+  task?: Maybe<Task>;
+  taskList?: Maybe<Array<TaskList>>;
+  thread?: Maybe<CollabDiscussionThread>;
+  user?: Maybe<User>;
+  users: Array<User>;
 };
 
-export type AddCollabPostCommentReactionInput = {
-  commentId: Scalars['ID'];
-  emojiId: Scalars['ID'];
+
+export type QueryAdvancedPostsSearchArgs = {
+  input: AdvancedPostsSearchInput;
 };
 
-export type AddCollabPostReactionInput = {
-  emojiId: Scalars['ID'];
+
+export type QueryCollabArgs = {
+  collabId: Scalars['ID'];
+};
+
+
+export type QueryCollabPostArgs = {
   postId: Scalars['ID'];
 };
 
-export type AddCollabTaskCommentReactionInput = {
-  commentId: Scalars['ID'];
-  emojiId: Scalars['ID'];
-};
 
-export type AddDiscussionThreadCommentReactionInput = {
-  commentId: Scalars['ID'];
-  emojiId: Scalars['ID'];
-};
-
-export type AdvancedPostsSearchInput = {
-  experience?: Maybe<Experience>;
-  hasStarted?: Maybe<Scalars['Boolean']>;
-  isNew?: Maybe<Scalars['Boolean']>;
-  languages?: Maybe<Array<Scalars['String']>>;
+export type QueryCollabPostsArgs = {
   limit: Scalars['Int'];
   offset: Scalars['Int'];
-  stack?: Maybe<Array<Scalars['String']>>;
 };
 
-export type AuthPayload = {
-   __typename?: 'AuthPayload';
-  token: Scalars['String'];
+
+export type QueryCollabPostsByStackArgs = {
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
+  stack: Scalars['String'];
 };
 
-export type ChatUsersPayload = {
-   __typename?: 'ChatUsersPayload';
-  status: UserChatStatus;
-  user: User;
+
+export type QueryGetConversationArgs = {
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
+  userId: Scalars['ID'];
 };
 
-export type Collab = {
-   __typename?: 'Collab';
-  acceptsInvites: Scalars['Boolean'];
-  collabPostId?: Maybe<Scalars['ID']>;
-  discussionThreads: Array<CollabDiscussionThread>;
-  frontPagePost?: Maybe<Scalars['String']>;
-  id: Scalars['ID'];
-  invitationPending: Scalars['Boolean'];
-  isMember: Scalars['Boolean'];
-  isOwner: Scalars['Boolean'];
-  members: Array<User>;
-  name: Scalars['String'];
-  owner?: Maybe<User>;
-  pendingInvites: Array<Maybe<User>>;
-  pendingRequests: Array<Maybe<User>>;
-  requestToJoinPending: Scalars['Boolean'];
-  taskList: Array<TaskList>;
+
+export type QuerySearchPostsByTitleArgs = {
+  input: SearchPostsInput;
 };
 
-export type CollabDiscussionThread = {
-   __typename?: 'CollabDiscussionThread';
-  author: User;
-  collab?: Maybe<Collab>;
-  comments: Array<CollabDiscussionThreadComment>;
-  commentsCount: Scalars['Int'];
-  content: Scalars['String'];
-  id: Scalars['ID'];
-  reactions: Array<Reaction>;
-  reactionsCount: Scalars['Int'];
-  title: Scalars['String'];
-};
 
-export type CollabDiscussionThreadComment = {
-   __typename?: 'CollabDiscussionThreadComment';
-  author: User;
-  collab?: Maybe<Collab>;
-  content: Scalars['String'];
-  id: Scalars['ID'];
-  reactions: Array<Reaction>;
-  thread?: Maybe<CollabDiscussionThread>;
-};
-
-export type CollabPost = {
-   __typename?: 'CollabPost';
-  acceptsInvites: Scalars['Boolean'];
-  collabId: Scalars['ID'];
-  comments: Array<CollabPostComment>;
-  commentsCount: Scalars['Int'];
-  createdAt: Scalars['String'];
-  description: Scalars['String'];
-  experience: Scalars['String'];
-  hasStarted: Scalars['Boolean'];
-  id: Scalars['ID'];
-  invitationPending: Scalars['Boolean'];
-  isMember: Scalars['Boolean'];
-  isNew: Scalars['Boolean'];
-  isOwner: Scalars['Boolean'];
-  languages: Array<Scalars['String']>;
-  members: Array<User>;
-  membersCount: Scalars['Int'];
-  name: Scalars['String'];
-  owner: User;
-  pendingInvites: Array<User>;
-  pendingRequests: Array<User>;
-  reactions: Array<Reaction>;
-  reactionsCount: Scalars['Int'];
-  requestToJoinPending: Scalars['Boolean'];
-  stack: Array<Scalars['String']>;
-  title: Scalars['String'];
-  updatedAt: Scalars['String'];
-};
-
-export type CollabPostArgs = {
-  description: Scalars['String'];
-  experience: Experience;
-  hasStarted: Scalars['Boolean'];
-  languages: Array<Scalars['String']>;
-  name: Scalars['String'];
-  stack: Array<Scalars['String']>;
-  title: Scalars['String'];
-};
-
-export type CollabPostComment = {
-   __typename?: 'CollabPostComment';
-  author: User;
-  content: Scalars['String'];
-  id: Scalars['ID'];
-  reactions: Array<Reaction>;
-};
-
-export type CollabPostsPayload = {
-   __typename?: 'CollabPostsPayload';
-  hasNextPage: Scalars['Boolean'];
-  posts: Array<CollabPost>;
-};
-
-export type CollabPostsSearchResultsPaload = {
-   __typename?: 'CollabPostsSearchResultsPaload';
-  hasNextPage: Scalars['Boolean'];
-  posts: Array<CollabPost>;
-};
-
-export type CollabRequest = {
-   __typename?: 'CollabRequest';
-  collab: Collab;
-  member: User;
-};
-
-export type ConnectToChatPayload = {
-   __typename?: 'ConnectToChatPayload';
-  users: Array<ChatUsersPayload>;
-};
-
-export type CreateCollabDiscussionThreadCommentInput = {
-  collabId: Scalars['ID'];
-  content: Scalars['String'];
-  threadId: Scalars['ID'];
-};
-
-export type CreateTaskCommentInput = {
-  collabId: Scalars['ID'];
-  content: Scalars['String'];
+export type QueryTaskArgs = {
   taskId: Scalars['ID'];
 };
 
-export type CreateTaskInput = {
-  assigneeId?: Maybe<Scalars['ID']>;
+
+export type QueryTaskListArgs = {
   collabId: Scalars['ID'];
-  description: Scalars['String'];
-  taskListId: Scalars['ID'];
 };
 
-export type CreateTaskListInput = {
-  collabId: Scalars['ID'];
-  name: Scalars['String'];
+
+export type QueryThreadArgs = {
+  threadId: Scalars['ID'];
 };
 
-export type CreateThreadArgs = {
-  collabId: Scalars['ID'];
-  content: Scalars['String'];
-  title: Scalars['String'];
-};
 
-export type CurrentUser = {
-   __typename?: 'CurrentUser';
-  avatar?: Maybe<Scalars['String']>;
-  bio?: Maybe<Scalars['String']>;
-  collabInvites: Array<Collab>;
-  collabRequests: Array<CollabRequest>;
-  collabs: Array<Collab>;
-  conversationsPreview: Array<PrivateMessagePreview>;
-  country?: Maybe<Scalars['String']>;
-  email: Scalars['String'];
-  firstName?: Maybe<Scalars['String']>;
-  friendRequests: Array<User>;
-  friendRequestsCount: Scalars['Int'];
-  friends: Array<User>;
+export type QueryUserArgs = {
   id: Scalars['ID'];
-  lastName?: Maybe<Scalars['String']>;
-  tasks: Array<Task>;
-  /** the user's engineering title */
-  title?: Maybe<Scalars['String']>;
-  username: Scalars['String'];
-};
-
-
-export enum Experience {
-  All = 'ALL',
-  Junior = 'JUNIOR',
-  JuniorMid = 'JUNIOR_MID',
-  Mid = 'MID',
-  MidSenior = 'MID_SENIOR',
-  Senior = 'SENIOR'
-}
-
-export type GetConversationPayload = {
-   __typename?: 'GetConversationPayload';
-  hasNextPage: Scalars['Boolean'];
-  messages: Array<PrivateMessage>;
-};
-
-export type LoginArgs = {
-  email: Scalars['String'];
-  password: Scalars['String'];
-};
-
-export type MoveTaskToListInput = {
-  newTaskListId: Scalars['ID'];
-  newTaskPosition: Scalars['Int'];
-  oldTaskListId: Scalars['ID'];
-  oldTaskPosition: Scalars['Int'];
 };
 
 export type Mutation = {
@@ -581,12 +421,237 @@ export type MutationUpdateUserInfoArgs = {
   input?: Maybe<UpdateUserInfoInput>;
 };
 
+export type Collab = {
+   __typename?: 'Collab';
+  acceptsInvites: Scalars['Boolean'];
+  collabPostId?: Maybe<Scalars['ID']>;
+  discussionThreads: Array<CollabDiscussionThread>;
+  frontPagePost?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  invitationPending: Scalars['Boolean'];
+  isMember: Scalars['Boolean'];
+  isOwner: Scalars['Boolean'];
+  members: Array<User>;
+  name: Scalars['String'];
+  owner?: Maybe<User>;
+  pendingInvites: Array<Maybe<User>>;
+  pendingRequests: Array<Maybe<User>>;
+  requestToJoinPending: Scalars['Boolean'];
+  taskList: Array<TaskList>;
+};
+
+export type CollabDiscussionThreadComment = {
+   __typename?: 'CollabDiscussionThreadComment';
+  author: User;
+  collab?: Maybe<Collab>;
+  content: Scalars['String'];
+  id: Scalars['ID'];
+  reactions: Array<Reaction>;
+  thread?: Maybe<CollabDiscussionThread>;
+};
+
+export type CreateCollabDiscussionThreadCommentInput = {
+  collabId: Scalars['ID'];
+  content: Scalars['String'];
+  threadId: Scalars['ID'];
+};
+
+export type AddDiscussionThreadCommentReactionInput = {
+  commentId: Scalars['ID'];
+  emojiId: Scalars['ID'];
+};
+
+export type RemoveDiscussionThreadCommentReactionInput = {
+  commentId: Scalars['ID'];
+  emojiId: Scalars['ID'];
+};
+
+export type AddCollabDiscussionThreadReactionInput = {
+  emojiId: Scalars['ID'];
+  threadId: Scalars['ID'];
+};
+
+export type RemoveCollabDiscussionThreadReactionInput = {
+  emojiId: Scalars['ID'];
+  threadId: Scalars['ID'];
+};
+
+export type CollabDiscussionThread = {
+   __typename?: 'CollabDiscussionThread';
+  author: User;
+  collab?: Maybe<Collab>;
+  comments: Array<CollabDiscussionThreadComment>;
+  commentsCount: Scalars['Int'];
+  content: Scalars['String'];
+  id: Scalars['ID'];
+  reactions: Array<Reaction>;
+  reactionsCount: Scalars['Int'];
+  title: Scalars['String'];
+};
+
+export type CreateThreadArgs = {
+  collabId: Scalars['ID'];
+  content: Scalars['String'];
+  title: Scalars['String'];
+};
+
+export type AdvancedPostsSearchInput = {
+  experience?: Maybe<Experience>;
+  hasStarted?: Maybe<Scalars['Boolean']>;
+  isNew?: Maybe<Scalars['Boolean']>;
+  languages?: Maybe<Array<Scalars['String']>>;
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
+  stack?: Maybe<Array<Scalars['String']>>;
+};
+
+export type CollabPostsSearchResultsPaload = {
+   __typename?: 'CollabPostsSearchResultsPaload';
+  hasNextPage: Scalars['Boolean'];
+  posts: Array<CollabPost>;
+};
+
+export type SearchPostsInput = {
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
+  title: Scalars['String'];
+};
+
+export type SearchPostsPayload = {
+   __typename?: 'SearchPostsPayload';
+  hasNextPage: Scalars['Boolean'];
+  posts: Array<CollabPost>;
+  totalResults: Scalars['Int'];
+};
+
+export type CollabPost = {
+   __typename?: 'CollabPost';
+  acceptsInvites: Scalars['Boolean'];
+  collabId: Scalars['ID'];
+  comments: Array<CollabPostComment>;
+  commentsCount: Scalars['Int'];
+  createdAt: Scalars['String'];
+  description: Scalars['String'];
+  experience: Scalars['String'];
+  hasStarted: Scalars['Boolean'];
+  id: Scalars['ID'];
+  invitationPending: Scalars['Boolean'];
+  isMember: Scalars['Boolean'];
+  isNew: Scalars['Boolean'];
+  isOwner: Scalars['Boolean'];
+  languages: Array<Scalars['String']>;
+  members: Array<User>;
+  membersCount: Scalars['Int'];
+  name: Scalars['String'];
+  owner: User;
+  pendingInvites: Array<User>;
+  pendingRequests: Array<User>;
+  reactions: Array<Reaction>;
+  reactionsCount: Scalars['Int'];
+  requestToJoinPending: Scalars['Boolean'];
+  stack: Array<Scalars['String']>;
+  title: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type CollabPostsPayload = {
+   __typename?: 'CollabPostsPayload';
+  hasNextPage: Scalars['Boolean'];
+  posts: Array<CollabPost>;
+};
+
+export type CollabPostArgs = {
+  description: Scalars['String'];
+  experience: Experience;
+  hasStarted: Scalars['Boolean'];
+  languages: Array<Scalars['String']>;
+  name: Scalars['String'];
+  stack: Array<Scalars['String']>;
+  title: Scalars['String'];
+};
+
+export enum Experience {
+  All = 'ALL',
+  Junior = 'JUNIOR',
+  JuniorMid = 'JUNIOR_MID',
+  Mid = 'MID',
+  MidSenior = 'MID_SENIOR',
+  Senior = 'SENIOR'
+}
+
+export type CollabPostComment = {
+   __typename?: 'CollabPostComment';
+  author: User;
+  content: Scalars['String'];
+  id: Scalars['ID'];
+  reactions: Array<Reaction>;
+};
+
+export type AddCollabPostCommentReactionInput = {
+  commentId: Scalars['ID'];
+  emojiId: Scalars['ID'];
+};
+
+export type RemoveCollabPostCommentReactionInput = {
+  commentId: Scalars['ID'];
+  emojiId: Scalars['ID'];
+};
+
+export type AddCollabPostReactionInput = {
+  emojiId: Scalars['ID'];
+  postId: Scalars['ID'];
+};
+
+export type RemoveCollabPostReactionInput = {
+  emojiId: Scalars['ID'];
+  postId: Scalars['ID'];
+};
+
+export type AddCollabTaskCommentReactionInput = {
+  commentId: Scalars['ID'];
+  emojiId: Scalars['ID'];
+};
+
+export type RemoveCollabTaskCommentReactionInput = {
+  commentId: Scalars['ID'];
+  emojiId: Scalars['ID'];
+};
+
+export type Subscription = {
+   __typename?: 'Subscription';
+  friendStatusChange: ChatUsersPayload;
+  newPrivateChatMessage: PrivateChatMessage;
+};
+
+export enum UserChatStatus {
+  Away = 'AWAY',
+  Dnd = 'DND',
+  Offline = 'OFFLINE',
+  Online = 'ONLINE'
+}
+
+export type ConnectToChatPayload = {
+   __typename?: 'ConnectToChatPayload';
+  users: Array<ChatUsersPayload>;
+};
+
+export type ChatUsersPayload = {
+   __typename?: 'ChatUsersPayload';
+  status: UserChatStatus;
+  user: User;
+};
+
 export type PrivateChatMessage = {
    __typename?: 'PrivateChatMessage';
   authorId: Scalars['ID'];
   content: Scalars['String'];
   creationDate: Scalars['Date'];
   id: Scalars['ID'];
+};
+
+export type SendPrivateChatMessageInput = {
+  content: Scalars['String'];
+  recipientId: Scalars['ID'];
 };
 
 export type PrivateMessage = {
@@ -607,83 +672,15 @@ export type PrivateMessagePreview = {
   username: Scalars['String'];
 };
 
-export type Query = {
-   __typename?: 'Query';
-  advancedPostsSearch: CollabPostsSearchResultsPaload;
-  collab?: Maybe<Collab>;
-  collabPost?: Maybe<CollabPost>;
-  collabPosts: CollabPostsPayload;
-  collabPostsByStack: CollabPostsSearchResultsPaload;
-  collabs: Array<Collab>;
-  currentUser?: Maybe<CurrentUser>;
-  getConversation: GetConversationPayload;
-  languages: Array<Scalars['String']>;
-  searchPostsByTitle: CollabPostsSearchResultsPaload;
-  task?: Maybe<Task>;
-  taskList?: Maybe<Array<TaskList>>;
-  thread?: Maybe<CollabDiscussionThread>;
-  user?: Maybe<User>;
-  users: Array<User>;
+export type GetConversationPayload = {
+   __typename?: 'GetConversationPayload';
+  hasNextPage: Scalars['Boolean'];
+  messages: Array<PrivateMessage>;
 };
 
-
-export type QueryAdvancedPostsSearchArgs = {
-  input: AdvancedPostsSearchInput;
-};
-
-
-export type QueryCollabArgs = {
-  collabId: Scalars['ID'];
-};
-
-
-export type QueryCollabPostArgs = {
-  postId: Scalars['ID'];
-};
-
-
-export type QueryCollabPostsArgs = {
-  limit: Scalars['Int'];
-  offset: Scalars['Int'];
-};
-
-
-export type QueryCollabPostsByStackArgs = {
-  limit: Scalars['Int'];
-  offset: Scalars['Int'];
-  stack: Scalars['String'];
-};
-
-
-export type QueryGetConversationArgs = {
-  limit: Scalars['Int'];
-  offset: Scalars['Int'];
-  userId: Scalars['ID'];
-};
-
-
-export type QuerySearchPostsByTitleArgs = {
-  input: SearchPostsInput;
-};
-
-
-export type QueryTaskArgs = {
-  taskId: Scalars['ID'];
-};
-
-
-export type QueryTaskListArgs = {
-  collabId: Scalars['ID'];
-};
-
-
-export type QueryThreadArgs = {
-  threadId: Scalars['ID'];
-};
-
-
-export type QueryUserArgs = {
-  id: Scalars['ID'];
+export type SendPrivateMessageInput = {
+  content: Scalars['String'];
+  recipientId: Scalars['ID'];
 };
 
 export type Reaction = {
@@ -693,65 +690,6 @@ export type Reaction = {
   isLiked: Scalars['Boolean'];
 };
 
-export type RemoveCollabDiscussionThreadReactionInput = {
-  emojiId: Scalars['ID'];
-  threadId: Scalars['ID'];
-};
-
-export type RemoveCollabPostCommentReactionInput = {
-  commentId: Scalars['ID'];
-  emojiId: Scalars['ID'];
-};
-
-export type RemoveCollabPostReactionInput = {
-  emojiId: Scalars['ID'];
-  postId: Scalars['ID'];
-};
-
-export type RemoveCollabTaskCommentReactionInput = {
-  commentId: Scalars['ID'];
-  emojiId: Scalars['ID'];
-};
-
-export type RemoveDiscussionThreadCommentReactionInput = {
-  commentId: Scalars['ID'];
-  emojiId: Scalars['ID'];
-};
-
-export type SearchPostsInput = {
-  limit: Scalars['Int'];
-  offset: Scalars['Int'];
-  title: Scalars['String'];
-};
-
-export type SearchPostsPayload = {
-   __typename?: 'SearchPostsPayload';
-  hasNextPage: Scalars['Boolean'];
-  posts: Array<CollabPost>;
-  totalResults: Scalars['Int'];
-};
-
-export type SendPrivateChatMessageInput = {
-  content: Scalars['String'];
-  recipientId: Scalars['ID'];
-};
-
-export type SendPrivateMessageInput = {
-  content: Scalars['String'];
-  recipientId: Scalars['ID'];
-};
-
-export type SignUpArgs = {
-  email: Scalars['String'];
-  password: Scalars['String'];
-  username: Scalars['String'];
-};
-
-export type Subscription = {
-   __typename?: 'Subscription';
-  friendStatusChange: ChatUsersPayload;
-  newPrivateChatMessage: PrivateChatMessage;
-};
 
 export type Task = {
    __typename?: 'Task';
@@ -768,6 +706,37 @@ export type Task = {
   taskListId: Scalars['ID'];
 };
 
+export type UpdateTaskInput = {
+  assigneeId?: Maybe<Scalars['ID']>;
+  description: Scalars['String'];
+  taskId: Scalars['ID'];
+};
+
+export type CreateTaskInput = {
+  assigneeId?: Maybe<Scalars['ID']>;
+  collabId: Scalars['ID'];
+  description: Scalars['String'];
+  taskListId: Scalars['ID'];
+};
+
+export type UpdateTaskAssigneeInput = {
+  assigneeId: Scalars['ID'];
+  taskId: Scalars['ID'];
+};
+
+export type UpdateTaskPositionInput = {
+  newTaskPosition: Scalars['Int'];
+  oldTaskPosition: Scalars['Int'];
+  taskListId: Scalars['ID'];
+};
+
+export type MoveTaskToListInput = {
+  newTaskListId: Scalars['ID'];
+  newTaskPosition: Scalars['Int'];
+  oldTaskListId: Scalars['ID'];
+  oldTaskPosition: Scalars['Int'];
+};
+
 export type TaskComment = {
    __typename?: 'TaskComment';
   author?: Maybe<User>;
@@ -777,24 +746,15 @@ export type TaskComment = {
   task?: Maybe<Task>;
 };
 
-export type TaskList = {
-   __typename?: 'TaskList';
-  collab?: Maybe<Collab>;
-  id: Scalars['ID'];
+export type CreateTaskCommentInput = {
+  collabId: Scalars['ID'];
+  content: Scalars['String'];
+  taskId: Scalars['ID'];
+};
+
+export type CreateTaskListInput = {
+  collabId: Scalars['ID'];
   name: Scalars['String'];
-  order: Scalars['Int'];
-  tasks: Array<Task>;
-};
-
-export type UpdateTaskAssigneeInput = {
-  assigneeId: Scalars['ID'];
-  taskId: Scalars['ID'];
-};
-
-export type UpdateTaskInput = {
-  assigneeId?: Maybe<Scalars['ID']>;
-  description: Scalars['String'];
-  taskId: Scalars['ID'];
 };
 
 export type UpdateTaskListNameInput = {
@@ -808,18 +768,35 @@ export type UpdateTaskListPositionInput = {
   oldTaskListPosition: Scalars['Int'];
 };
 
-export type UpdateTaskPositionInput = {
-  newTaskPosition: Scalars['Int'];
-  oldTaskPosition: Scalars['Int'];
-  taskListId: Scalars['ID'];
+export type TaskList = {
+   __typename?: 'TaskList';
+  collab?: Maybe<Collab>;
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  order: Scalars['Int'];
+  tasks: Array<Task>;
 };
 
-export type UpdateUserInfoInput = {
+export type CurrentUser = {
+   __typename?: 'CurrentUser';
+  avatar?: Maybe<Scalars['String']>;
   bio?: Maybe<Scalars['String']>;
+  collabInvites: Array<Collab>;
+  collabRequests: Array<CollabRequest>;
+  collabs: Array<Collab>;
+  conversationsPreview: Array<PrivateMessagePreview>;
   country?: Maybe<Scalars['String']>;
+  email: Scalars['String'];
   firstName?: Maybe<Scalars['String']>;
+  friendRequests: Array<User>;
+  friendRequestsCount: Scalars['Int'];
+  friends: Array<User>;
+  id: Scalars['ID'];
   lastName?: Maybe<Scalars['String']>;
+  tasks: Array<Task>;
+  /** the user's engineering title */
   title?: Maybe<Scalars['String']>;
+  username: Scalars['String'];
 };
 
 export type User = {
@@ -837,12 +814,35 @@ export type User = {
   username: Scalars['String'];
 };
 
-export enum UserChatStatus {
-  Away = 'AWAY',
-  Dnd = 'DND',
-  Offline = 'OFFLINE',
-  Online = 'ONLINE'
-}
+export type UpdateUserInfoInput = {
+  bio?: Maybe<Scalars['String']>;
+  country?: Maybe<Scalars['String']>;
+  firstName?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+};
+
+export type CollabRequest = {
+   __typename?: 'CollabRequest';
+  collab: Collab;
+  member: User;
+};
+
+export type AuthPayload = {
+   __typename?: 'AuthPayload';
+  token: Scalars['String'];
+};
+
+export type SignUpArgs = {
+  email: Scalars['String'];
+  password: Scalars['String'];
+  username: Scalars['String'];
+};
+
+export type LoginArgs = {
+  email: Scalars['String'];
+  password: Scalars['String'];
+};
 
 export type SignUpMutationVariables = {
   credentials: SignUpArgs;
@@ -3111,7 +3111,7 @@ export const FriendStatusChangeDocument = gql`
  * __useFriendStatusChangeSubscription__
  *
  * To run a query within a React component, call `useFriendStatusChangeSubscription` and pass it any options that fit your needs.
- * When your component renders, `useFriendStatusChangeSubscription` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useFriendStatusChangeSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -3142,7 +3142,7 @@ export const NewPrivateChatMessageDocument = gql`
  * __useNewPrivateChatMessageSubscription__
  *
  * To run a query within a React component, call `useNewPrivateChatMessageSubscription` and pass it any options that fit your needs.
- * When your component renders, `useNewPrivateChatMessageSubscription` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useNewPrivateChatMessageSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -3173,7 +3173,7 @@ export const GetCurrentUserDocument = gql`
  * __useGetCurrentUserQuery__
  *
  * To run a query within a React component, call `useGetCurrentUserQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCurrentUserQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useGetCurrentUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -3210,7 +3210,7 @@ export const CurrentUserFriendsDocument = gql`
  * __useCurrentUserFriendsQuery__
  *
  * To run a query within a React component, call `useCurrentUserFriendsQuery` and pass it any options that fit your needs.
- * When your component renders, `useCurrentUserFriendsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useCurrentUserFriendsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -3247,7 +3247,7 @@ export const CurrentUserFriendRequestsDocument = gql`
  * __useCurrentUserFriendRequestsQuery__
  *
  * To run a query within a React component, call `useCurrentUserFriendRequestsQuery` and pass it any options that fit your needs.
- * When your component renders, `useCurrentUserFriendRequestsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useCurrentUserFriendRequestsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -3284,7 +3284,7 @@ export const GetCurrentUserInfoDocument = gql`
  * __useGetCurrentUserInfoQuery__
  *
  * To run a query within a React component, call `useGetCurrentUserInfoQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCurrentUserInfoQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useGetCurrentUserInfoQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -3322,7 +3322,7 @@ export const CurrentUserConversationsPreviewDocument = gql`
  * __useCurrentUserConversationsPreviewQuery__
  *
  * To run a query within a React component, call `useCurrentUserConversationsPreviewQuery` and pass it any options that fit your needs.
- * When your component renders, `useCurrentUserConversationsPreviewQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useCurrentUserConversationsPreviewQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -3370,7 +3370,7 @@ export const CurrentUserConversationDocument = gql`
  * __useCurrentUserConversationQuery__
  *
  * To run a query within a React component, call `useCurrentUserConversationQuery` and pass it any options that fit your needs.
- * When your component renders, `useCurrentUserConversationQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useCurrentUserConversationQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -3409,7 +3409,7 @@ export const GetCurrentUserCollabsDocument = gql`
  * __useGetCurrentUserCollabsQuery__
  *
  * To run a query within a React component, call `useGetCurrentUserCollabsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCurrentUserCollabsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useGetCurrentUserCollabsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -3450,7 +3450,7 @@ export const GetCurrentUserCollabInvitationsDocument = gql`
  * __useGetCurrentUserCollabInvitationsQuery__
  *
  * To run a query within a React component, call `useGetCurrentUserCollabInvitationsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCurrentUserCollabInvitationsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useGetCurrentUserCollabInvitationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -3493,7 +3493,7 @@ export const GetCurrentUserCollabRequestsDocument = gql`
  * __useGetCurrentUserCollabRequestsQuery__
  *
  * To run a query within a React component, call `useGetCurrentUserCollabRequestsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCurrentUserCollabRequestsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useGetCurrentUserCollabRequestsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -3537,7 +3537,7 @@ export const GetCurrentUserTasksDocument = gql`
  * __useGetCurrentUserTasksQuery__
  *
  * To run a query within a React component, call `useGetCurrentUserTasksQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCurrentUserTasksQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useGetCurrentUserTasksQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -3571,7 +3571,7 @@ export const UserDocument = gql`
  * __useUserQuery__
  *
  * To run a query within a React component, call `useUserQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -3622,7 +3622,7 @@ export const CollabPostsDocument = gql`
  * __useCollabPostsQuery__
  *
  * To run a query within a React component, call `useCollabPostsQuery` and pass it any options that fit your needs.
- * When your component renders, `useCollabPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useCollabPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -3674,7 +3674,7 @@ export const CollabPostsByStackDocument = gql`
  * __useCollabPostsByStackQuery__
  *
  * To run a query within a React component, call `useCollabPostsByStackQuery` and pass it any options that fit your needs.
- * When your component renders, `useCollabPostsByStackQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useCollabPostsByStackQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -3739,7 +3739,7 @@ export const GetCollabPostDocument = gql`
  * __useGetCollabPostQuery__
  *
  * To run a query within a React component, call `useGetCollabPostQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCollabPostQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useGetCollabPostQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -3770,7 +3770,7 @@ export const CollabPostLanguagesDocument = gql`
  * __useCollabPostLanguagesQuery__
  *
  * To run a query within a React component, call `useCollabPostLanguagesQuery` and pass it any options that fit your needs.
- * When your component renders, `useCollabPostLanguagesQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useCollabPostLanguagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -3816,7 +3816,7 @@ export const CollabPostCommentsDocument = gql`
  * __useCollabPostCommentsQuery__
  *
  * To run a query within a React component, call `useCollabPostCommentsQuery` and pass it any options that fit your needs.
- * When your component renders, `useCollabPostCommentsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useCollabPostCommentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -3868,7 +3868,7 @@ export const CollabDocument = gql`
  * __useCollabQuery__
  *
  * To run a query within a React component, call `useCollabQuery` and pass it any options that fit your needs.
- * When your component renders, `useCollabQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useCollabQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -3907,7 +3907,7 @@ export const CollabMembersDocument = gql`
  * __useCollabMembersQuery__
  *
  * To run a query within a React component, call `useCollabMembersQuery` and pass it any options that fit your needs.
- * When your component renders, `useCollabMembersQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useCollabMembersQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -3951,7 +3951,7 @@ export const CollabDiscussionThreadsDocument = gql`
  * __useCollabDiscussionThreadsQuery__
  *
  * To run a query within a React component, call `useCollabDiscussionThreadsQuery` and pass it any options that fit your needs.
- * When your component renders, `useCollabDiscussionThreadsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useCollabDiscussionThreadsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -3996,7 +3996,7 @@ export const CollabThreadDocument = gql`
  * __useCollabThreadQuery__
  *
  * To run a query within a React component, call `useCollabThreadQuery` and pass it any options that fit your needs.
- * When your component renders, `useCollabThreadQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useCollabThreadQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -4043,7 +4043,7 @@ export const CollabThreadCommentsDocument = gql`
  * __useCollabThreadCommentsQuery__
  *
  * To run a query within a React component, call `useCollabThreadCommentsQuery` and pass it any options that fit your needs.
- * When your component renders, `useCollabThreadCommentsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useCollabThreadCommentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -4100,7 +4100,7 @@ export const TaskListDocument = gql`
  * __useTaskListQuery__
  *
  * To run a query within a React component, call `useTaskListQuery` and pass it any options that fit your needs.
- * When your component renders, `useTaskListQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useTaskListQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -4147,7 +4147,7 @@ export const TaskCommentsDocument = gql`
  * __useTaskCommentsQuery__
  *
  * To run a query within a React component, call `useTaskCommentsQuery` and pass it any options that fit your needs.
- * When your component renders, `useTaskCommentsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useTaskCommentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
