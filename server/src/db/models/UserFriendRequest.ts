@@ -38,7 +38,7 @@ export class UserFriendRequest extends Model<UserFriendRequest> {
 
   static async deleteFriendRequest(receiverId: string, senderId: string) {
     await this.destroy({ where: { receiverId, senderId } })
-    return true
+    return senderId
   }
 }
 

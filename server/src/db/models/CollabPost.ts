@@ -13,9 +13,11 @@ import {
   HasMany,
   AllowNull,
   BelongsToMany,
+  Sequelize,
 } from 'sequelize-typescript'
+import { Op, QueryTypes } from 'sequelize'
 import uuid from 'uuid/v4'
-import { CollabPostArgs } from '../../graphql/types'
+import { CollabPostArgs, AdvancedPostsSearchInput } from '../../graphql/types'
 import { CollabMember } from './CollabMember'
 import { User } from './User'
 import { Collab } from './Collab'
@@ -25,6 +27,7 @@ import { CollabPostLanguage } from './CollabPostLanguage'
 import { Stack } from './Stack'
 import { CollabPostStack } from './CollabPostStack'
 import { CollabPostReaction } from './CollabPostReaction'
+import { subDays } from 'date-fns'
 
 @Table({ tableName: 'collab_posts' })
 export class CollabPost extends Model<CollabPost> {
@@ -157,8 +160,77 @@ export class CollabPost extends Model<CollabPost> {
       'Collab post not found or you are not the author of this post',
     )
   }
-}
 
+  static async search({
+    experience,
+    hasStarted,
+    isNew,
+    languages,
+    stack,
+    offset,
+    limit,
+  }: AdvancedPostsSearchInput) {
+    const or = []
+    if (experience != null) {
+      or.push({ experience })
+    }
+    if (hasStarted != null) {
+      or.push({ hasStarted })
+    }
+    if (isNew) {
+      or.push({
+        createdAt: {
+          [Op.gte]: subDays(new Date(), 7),
+        },
+      })
+    }
+    if (languages?.length) {
+      or.push({
+        id: {
+          [Op.in]: Sequelize.literal(
+            `(
+            SELECT cpl.post_id
+            FROM collab_post_languages cpl
+            WHERE cpl.language_name
+            IN (${languages.map(l => `'${l}'`)})
+            )`,
+          ),
+        },
+      })
+    }
+    if (stack?.length) {
+      or.push({
+        id: {
+          [Op.in]: Sequelize.literal(
+            `(
+            SELECT cps.post_id
+            FROM collab_post_stack cps
+            WHERE cps.stack_id
+            IN (
+              SELECT s.id
+              FROM stacks s
+              WHERE s.name IN (${stack.map(s => `'${s}'`)}))
+            )`,
+          ),
+        },
+      })
+    }
+
+    const posts = await this.findAll({
+      where: {
+        [Op.or]: or,
+      },
+      order: ['createdAt'],
+      offset,
+      limit: limit + 1,
+    })
+
+    return {
+      posts,
+      hasNextPage: posts.length > limit,
+    }
+  }
+}
 // type for graphql-codegen resolver
 export type GQLCollabPost = GQLResolverTypes<
   CollabPost,

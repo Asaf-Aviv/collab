@@ -15,9 +15,11 @@ export const userTypeDefs = gql`
     declineCollabInvitation(collabId: ID!): Boolean!
     updateUserInfo(input: UpdateUserInfoInput): CurrentUser!
     sendFriendRequest(friendId: ID!): Boolean!
-    acceptFriendRequest(friendId: ID!): Boolean!
-    declineFriendRequest(senderId: ID!): Boolean!
-    removeFriend(friendId: ID!): Boolean!
+    acceptFriendRequest(friendId: ID!): User!
+    "returns the id of the declined friend"
+    declineFriendRequest(senderId: ID!): ID!
+    "returns the id of the removed friend"
+    removeFriend(friendId: ID!): ID!
   }
 
   type CurrentUser {
@@ -27,9 +29,7 @@ export const userTypeDefs = gql`
     avatar: String
     firstName: String
     lastName: String
-    """
-    the user's engineering title
-    """
+    "the user's engineering title"
     title: String
     country: String
     bio: String
@@ -40,6 +40,7 @@ export const userTypeDefs = gql`
     collabInvites: [Collab!]!
     collabRequests: [CollabRequest!]!
     tasks: [Task!]!
+    conversationsPreview: [PrivateMessagePreview!]!
   }
 
   type User {
@@ -47,10 +48,10 @@ export const userTypeDefs = gql`
     username: String!
     firstName: String
     lastName: String
-    """
-    the user's engineering title
-    """
+    "the user's engineering title"
     title: String
+    isFriend: Boolean!
+    canRequestFriendship: Boolean!
     avatar: String
     bio: String
     collabs: [Collab!]!

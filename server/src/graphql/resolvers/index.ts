@@ -13,6 +13,8 @@ import { collabPostCommentReactionResolver } from './CollabPostCommentReaction'
 import { collabTaskCommentReactionResolver } from './CollabTaskCommentReaction'
 import { collabDiscussionThreadCommentReactionResolver } from './CollabDiscussionThreadCommentReaction'
 import { collabDiscussionThreadReactionResolver } from './CollabDiscussionThreadReaction'
+import { privateMessageResolver } from './PrivateMessage'
+import { privateChatResolver } from './PrivateChat'
 
 export const resolvers = mergeResolvers([
   userResolver,
@@ -29,4 +31,6 @@ export const resolvers = mergeResolvers([
   collabTaskCommentReactionResolver,
   collabDiscussionThreadReactionResolver,
   collabDiscussionThreadCommentReactionResolver,
+  privateMessageResolver,
+  privateChatResolver,
 ])

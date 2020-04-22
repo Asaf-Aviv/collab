@@ -1,12 +1,9 @@
 import React, { useState, memo } from 'react'
-import { useParams } from 'react-router-dom'
+// import { useParams } from 'react-router-dom'
 import {
   TaskListQuery,
   useDeleteTaskListMutation,
-  useCreateTaskMutation,
   useDeleteTaskMutation,
-  useUpdateTaskAssigneeMutation,
-  useCollabMembersQuery,
 } from '../../graphql/generates'
 import { Heading, Box, IconButton, Flex } from '@chakra-ui/core'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
@@ -39,17 +36,17 @@ type ColumnProps = {
 }
 
 const Column = ({ taskList, tasks, refetch, index }: ColumnProps) => {
-  const { collabId } = useParams<{ collabId: string }>()
-  const { data: membersData } = useCollabMembersQuery({
-    variables: {
-      collabId,
-    },
-  })
+  // const { collabId } = useParams<{ collabId: string }>()
+  // const { data: membersData } = useCollabMembersQuery({
+  //   variables: {
+  //     collabId,
+  //   },
+  // })
   const [isNewTaskModalOpen, setIsNewTaskModalOpen] = useState(false)
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null)
-  const [createTask] = useCreateTaskMutation({
-    onCompleted: () => refetch(),
-  })
+  // const [createTask] = useCreateTaskMutation({
+  //   onCompleted: () => refetch(),
+  // })
   const [deleteTaskList] = useDeleteTaskListMutation({
     variables: {
       taskListId: taskList.id,
@@ -59,9 +56,9 @@ const Column = ({ taskList, tasks, refetch, index }: ColumnProps) => {
   const [deleteTask] = useDeleteTaskMutation({
     onCompleted: () => refetch(),
   })
-  const [updateTaskAssignee] = useUpdateTaskAssigneeMutation({
-    onCompleted: () => refetch(),
-  })
+  // const [updateTaskAssignee] = useUpdateTaskAssigneeMutation({
+  //   onCompleted: () => refetch(),
+  // })
 
   return (
     <Draggable draggableId={taskList.id} index={index}>

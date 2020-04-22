@@ -3,7 +3,7 @@ import { Flex, Text, Avatar, AvatarProps } from '@chakra-ui/core'
 import { User } from '../../graphql/generates'
 import { Link } from 'react-router-dom'
 
-type Props = Omit<User, 'collabs' | '__typename'> & {
+type Props = Pick<User, 'id' | 'username' | 'avatar'> & {
   size?: AvatarProps['size']
   className?: string
 }

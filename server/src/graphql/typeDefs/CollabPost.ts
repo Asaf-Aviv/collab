@@ -9,12 +9,45 @@ export const collabPostTypeDefs = gql`
       stack: String!
       offset: Int!
       limit: Int!
-    ): CollabPostsPayload!
+    ): CollabPostsSearchResultsPaload!
+    searchPostsByTitle(
+      input: SearchPostsInput!
+    ): CollabPostsSearchResultsPaload!
+    advancedPostsSearch(
+      input: AdvancedPostsSearchInput!
+    ): CollabPostsSearchResultsPaload!
   }
 
   type Mutation {
     createCollabPost(post: CollabPostArgs!): CollabPost!
     deleteCollabPost(postId: ID!): Boolean!
+  }
+
+  input AdvancedPostsSearchInput {
+    experience: Experience
+    hasStarted: Boolean
+    isNew: Boolean
+    languages: [String!]
+    stack: [String!]
+    offset: Int!
+    limit: Int!
+  }
+
+  type CollabPostsSearchResultsPaload {
+    hasNextPage: Boolean!
+    posts: [CollabPost!]!
+  }
+
+  input SearchPostsInput {
+    title: String!
+    offset: Int!
+    limit: Int!
+  }
+
+  type SearchPostsPayload {
+    posts: [CollabPost!]!
+    totalResults: Int!
+    hasNextPage: Boolean!
   }
 
   type CollabPost {

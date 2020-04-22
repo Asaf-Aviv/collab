@@ -1,5 +1,6 @@
 import { isAuthenticated } from './../middleware/isAuthenticated'
 import { and } from 'graphql-shield'
+import { Op } from 'sequelize'
 import { Resolvers, Reaction } from '../types'
 import { replaceErrorWithNull } from '../helpers/replaceErrorWithNull'
 import { differenceInDays } from 'date-fns'
@@ -53,13 +54,31 @@ export const collabPostResolver: Resolvers = {
         limit,
       })
 
-      const posts = postsByStack.map(stack => stack.post) as GQLCollabPost[]
+      const posts = postsByStack.map(stack => stack.post)
 
       return {
         hasNextPage: count > offset + limit,
         posts,
       }
     },
+    searchPostsByTitle: async (root, { input }, { models }) => {
+      const { title, limit, offset } = input
+      const { rows: posts, count } = await models.CollabPost.findAndCountAll({
+        where: {
+          title: {
+            [Op.iLike]: `%${title}%`,
+          },
+        },
+        offset,
+        limit,
+      })
+
+      return {
+        posts,
+        hasNextPage: count > offset + limit,
+      }
+    },
+    advancedPostsSearch: (root, { input },{models}) => models.CollabPost.search(input),
   },
   Mutation: {
     createCollabPost: async (root, { post }, { user, models }) =>

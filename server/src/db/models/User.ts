@@ -18,6 +18,7 @@ import {
 import uuid from 'uuid/v4'
 import bcrypt from 'bcrypt'
 import {
+  Op,
   HasManyGetAssociationsMixin,
   HasManyAddAssociationMixin,
   HasManyHasAssociationMixin,
@@ -39,6 +40,10 @@ import { UserFriendRequest } from './UserFriendRequest'
 }))
 @Table({ tableName: 'users', timestamps: true })
 export class User extends Model<User> {
+  // GQL computed fields
+  isFriend!: boolean
+  canRequestFriendship!: boolean
+
   @IsUUID(4)
   @PrimaryKey
   @Default(uuid)
@@ -146,10 +151,11 @@ export class User extends Model<User> {
   }
 
   static async login({ email, password }: LoginArgs) {
-    const user = (await this.findOne({
+    const user = await this.findOne({
       where: { email: email.toLowerCase() },
       attributes: { include: ['password'] },
-    })) as User & { password: string }
+      raw: true,
+    })
 
     if (!user) {
       throw new Error('User not found')
@@ -161,9 +167,7 @@ export class User extends Model<User> {
       throw new Error('Incorrect Credentials')
     }
 
-    const { password: matchedUserPassword, ...userWithoutPass } = user
-
-    return userWithoutPass
+    return user
   }
 
   static async deleteUser(id: string) {
@@ -214,6 +218,23 @@ export class User extends Model<User> {
       return true
     })
   }
+
+  static getAllUserFriends(userId: string) {
+    return this.findAll({
+      where: { id: { [Op.ne]: userId } },
+      include: [
+        {
+          attributes: [],
+          on: {
+            friend_id: { [Op.col]: 'User.id' },
+            user_id: userId,
+          },
+          model: UserFriend,
+        },
+      ],
+      raw: true,
+    })
+  }
 }
 
 export type GQLUser = GQLResolverTypes<
@@ -225,4 +246,7 @@ export type GQLUser = GQLResolverTypes<
   | 'friends'
   | 'tasks'
   | 'reactions'
->
+> & {
+  isFriend: boolean
+  canRequestFriendship: boolean
+}

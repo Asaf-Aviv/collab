@@ -3,13 +3,13 @@ const bcrypt = require('bcrypt')
 const faker = require('faker')
 const _ = require('lodash')
 
-const generageUser = () => ({
+const generageUser = (__, i) => ({
   id: uuid(),
   username: faker.name
     .findName()
     .replace(/[\W_]+/g, '')
     .slice(0, 16),
-  email: faker.internet.email().toLocaleLowerCase(),
+  email: `test${i}@gmail.com`,
   bio: faker.random.words(_.random(5, 10)),
   password: bcrypt.hashSync('test1234', 12),
   updated_at: new Date(),
@@ -28,7 +28,7 @@ const asaf = {
   avatar: 'https://randomuser.me/api/portraits/women/82.jpg',
 }
 
-const seededUsers = [...Array(10)].map(generageUser).concat(asaf)
+const seededUsers = [...Array(30)].map(generageUser).concat(asaf)
 
 module.exports = {
   asaf,

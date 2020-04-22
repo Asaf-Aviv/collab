@@ -20,6 +20,7 @@ import { CollabDiscussionThreadCommentReaction } from './CollabDiscussionThreadC
 import { CollabTaskCommentReaction } from './CollabTaskCommentReaction'
 import { UserFriend } from './UserFriend'
 import { UserFriendRequest } from './UserFriendRequest'
+import { PrivateMessage } from './PrivateMessage'
 
 export const models = {
   Language,
@@ -44,6 +45,7 @@ export const models = {
   CollabTaskCommentReaction,
   UserFriend,
   UserFriendRequest,
+  PrivateMessage,
 }
 
 export type Models = typeof models

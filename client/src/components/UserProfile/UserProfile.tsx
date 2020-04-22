@@ -1,8 +1,32 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import { useUserQuery } from '../../graphql/generates'
+import {
+  useUserQuery,
+  useSendFriendRequestMutation,
+} from '../../graphql/generates'
 import { Container } from '../global'
-import { Flex, Avatar, Heading } from '@chakra-ui/core'
+import { Flex, Avatar, Heading, Icon, Button } from '@chakra-ui/core'
+
+type Props = {
+  userId: string
+  onCompleted?: (friendId: string) => void
+}
+
+const AddFriendButton = ({ userId, onCompleted }: Props) => {
+  const [sendFriendRequest] = useSendFriendRequestMutation({
+    variables: { friendId: userId },
+    onCompleted: () => {
+      onCompleted && onCompleted(userId)
+    },
+  })
+
+  return (
+    <Button size="sm" variantColor="purple" onClick={() => sendFriendRequest()}>
+      <Icon name="add" aria-label="add friend" mr={2} />
+      Add Friend
+    </Button>
+  )
+}
 
 export const UserProfile = () => {
   const { userId } = useParams<{ userId: string }>()
@@ -29,7 +53,9 @@ export const UserProfile = () => {
             {username}
           </Heading>
         </Flex>
-        <Flex flex={1}></Flex>
+        <Flex flex={1}>
+          <AddFriendButton userId={userId} />
+        </Flex>
       </Flex>
     </Container>
   )

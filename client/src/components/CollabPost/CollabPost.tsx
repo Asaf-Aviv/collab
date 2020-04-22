@@ -191,7 +191,7 @@ export const CollabPost = () => {
 }
 
 type Props = {
-  members: Omit<User, 'collabs'>[]
+  members: Pick<User, 'id' | 'username' | 'avatar'>[]
 }
 
 const CollabMembers = ({ members }: Props) => {

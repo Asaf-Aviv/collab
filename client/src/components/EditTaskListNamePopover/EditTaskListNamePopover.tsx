@@ -28,7 +28,7 @@ export const EditTaskListNamePopover = ({
   const firstFieldRef = useRef(null)
   const [
     updateTaskListName,
-    { loading, error },
+    { loading /* error */ },
   ] = useUpdateTaskListNameMutation({
     onCompleted: () => close(),
   })

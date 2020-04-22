@@ -32,12 +32,8 @@ export const collabTaskResolver: Resolvers = {
       models.CollabTaskComment.findAll({ where: { taskId: id } }),
     commentsCount: ({ id }, args, { models }) =>
       models.CollabTaskComment.count({ where: { taskId: id } }),
-    collab: (parent, args, { loaders }) => {
-      console.log(parent)
-      return (loaders.collabLoader.load(
-        parent.collabId,
-      ) as unknown) as GQLCollab
-    },
+    collab: (parent, args, { loaders }) =>
+      (loaders.collabLoader.load(parent.collabId) as unknown) as GQLCollab,
   },
 }
 

@@ -20,6 +20,7 @@ generates:
         TaskComment: '../db/models/CollabTaskComment#GQLCollabTaskComment'
         TaskList: '../db/models/CollabTaskList#GQLCollabTaskList'
         User: '../db/models/User#GQLUser'
+        PrivateMessage: '../db/models/PrivateMessage#GQLPrivateMessage'
       useIndexSignature: true
       contextType: ./context/CollabContext#CollabContext
       fieldContextTypes:

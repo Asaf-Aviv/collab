@@ -6,6 +6,7 @@ import {
   NavLink,
   Redirect,
   Link as RouterLink,
+  useParams,
 } from 'react-router-dom'
 import {
   Flex,
@@ -34,7 +35,9 @@ import {
   useAcceptCollabInvitationMutation,
   useDeclineCollabInvitationMutation,
   useCancelCollabRequestToJoinMutation,
-  useDeclineCollabMemberRequestMutation,
+  useCurrentUserConversationsPreviewQuery,
+  useCurrentUserFriendsQuery,
+  useCurrentUserConversationQuery,
 } from '../../graphql/generates'
 
 export const MyProfile = () => {
@@ -65,6 +68,12 @@ export const MyProfile = () => {
           <StyledNavLink exact to={`${path}/collab-requests`}>
             Requests to join
           </StyledNavLink>
+          <StyledNavLink exact to={`${path}/friends`}>
+            Friends
+          </StyledNavLink>
+          <StyledNavLink to={`${path}/coversations`}>
+            Coversations
+          </StyledNavLink>
         </Paper>
         <Paper flex={1}>
           <Switch>
@@ -82,6 +91,12 @@ export const MyProfile = () => {
             </Route>
             <Route exact path={`${path}/collab-requests`}>
               <CollabRequests />
+            </Route>
+            <Route exact path={`${path}/friends`}>
+              <Friends />
+            </Route>
+            <Route path={`${path}/coversations`}>
+              <Coversations />
             </Route>
             <Redirect to="/profile/info" />
           </Switch>
@@ -108,7 +123,7 @@ export const MyInformation = () => {
 
   const [
     updateInfo,
-    { loading: updateInfoLoading, error: updateInfoError },
+    { loading: updateInfoLoading,/*  error: updateInfoError */ },
   ] = useUpdateUserInfoMutation({
     variables: {
       input: infoInput!,
@@ -366,12 +381,62 @@ export const CollabRequests = () => {
   )
 }
 
-// onChange={(e) => {
-//   const { value } = e.target
+const Friends = () => {
+  const { data, loading, error } = useCurrentUserFriendsQuery()
 
-//   setFormData(prevState =>
-//     prevState.map((obj, i) => i === index
-//       ? {...obj, title: value}
-//       : objx
-//   ))
-// }}
+  if (loading) return null
+  if (error) return <span>Could not fetch friends</span>
+  if (!data?.currentUser) return null
+
+  const { friends } = data.currentUser
+
+  return (
+    <Flex>
+      {friends.map(friend => (
+        <Flex key={friend.id}>{friend.username}</Flex>
+      ))}
+    </Flex>
+  )
+}
+
+const Coversations = () => {
+  const { data, loading, error } = useCurrentUserConversationsPreviewQuery()
+  const { path } = useRouteMatch()
+
+  if (loading) return <span>loading...</span>
+  if (error) return <span>Could not fetch conversations</span>
+  if (!data?.currentUser) return null
+
+  const { conversationsPreview } = data.currentUser
+
+  return (
+    <Flex>
+      {conversationsPreview.map(conversation => (
+        <NavLink
+          key={conversation.userId}
+          to={`${path}/${conversation.userId}`}
+        >
+          <Flex>{conversation.username}</Flex>
+        </NavLink>
+      ))}
+      <Switch>
+        <Route path={`${path}/:userId`} component={Conversation} />
+      </Switch>
+    </Flex>
+  )
+}
+
+const Conversation = () => {
+  const { userId } = useParams<{ userId: string }>()
+  const { data, loading, error, /* fetchMore */ } = useCurrentUserConversationQuery({
+    variables: { userId, offset: 0, limit: 10 },
+  })
+
+  if (loading) return <span>loading...</span>
+  if (error) return <span>Could not fetch conversations</span>
+  if (!data?.getConversation) return null
+
+  // const { messages, hasNextPage } = data.getConversation
+
+  return null
+}

@@ -27,7 +27,7 @@ export const NewTaskListModal = ({ closeModal }: Props) => {
   const { collabId } = useParams<{ collabId: string }>()
   const [taskListName, setTaskListName] = useState('')
   const inputRef = useRef<HTMLInputElement>(null!)
-  const [createTaskList, { loading, error }] = useCreateTaskListMutation({
+  const [createTaskList, { loading /* error */ }] = useCreateTaskListMutation({
     variables: {
       input: {
         collabId,

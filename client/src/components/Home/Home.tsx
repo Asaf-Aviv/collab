@@ -7,7 +7,9 @@ import { ReactComponent as CollabSvg4 } from '../../assets/illustrations/undraw_
 import { ReactComponent as CollabSvg5 } from '../../assets/illustrations/undraw_hang_out_h9ud.svg'
 import { ReactComponent as CollabSvg6 } from '../../assets/illustrations/undraw_connected_world_wuay.svg'
 import { Container } from '../global'
-import { Heading, Box, Stack, Flex } from '@chakra-ui/core'
+import RadioButtonUncheckedOutlinedIcon from '@material-ui/icons/RadioButtonUncheckedOutlined'
+import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory'
+import { Heading, Box, Stack, Flex, Button, Text } from '@chakra-ui/core'
 import styled from '@emotion/styled'
 
 type Props = {
@@ -39,17 +41,26 @@ const FeatureSection = ({ svg: SvgComponent, title, text }: Props) => (
 export const Home = () => {
   return (
     <Container>
-      <StyledFlex>
-        <Stack spacing={3}>
-          <Heading as="h1" size="2xl">
+      <Flex direction="column">
+        <Stack spacing={3} align="center">
+          <Heading as="h1" size="2xl" color="#654c6f">
             Collab
           </Heading>
-          <Heading as="h2" size="lg" fontWeight={500}>
-            Connect with other developers and build awesome apps together!
+          <Heading
+            maxWidth="40ch"
+            flexShrink={0}
+            textAlign="center"
+            color="#836e86"
+            as="h2"
+            size="lg"
+            fontWeight={500}
+          >
+            Connect with other developers from all over the world and build
+            awesome Apps together!
           </Heading>
         </Stack>
         <CollabSvg6 />
-      </StyledFlex>
+      </Flex>
       <FeatureSection
         title="Collab"
         text="Connect with other engineers and build awesome apps together!"
@@ -72,26 +83,34 @@ export const Home = () => {
       />
       {/* <CollabSvg2 />
       <CollabSvg3 /> */}
+      <Flex position="relative">
+        <RadioButtonUncheckedOutlinedIcon />
+        <ChangeHistoryIcon />
+        <Text as="span">Let's make some apps together!</Text>
+        <Button color="purple" size="lg">
+          Get Started
+        </Button>
+      </Flex>
     </Container>
   )
 }
 
 const StyledSection = styled(Box)`
-  background: #fff;
+  /* background: #fff;
   box-shadow: 2px 6px 15px 0 rgba(219, 195, 255, 0.38);
   padding: 2.5rem;
   border-top: 5px solid #964cff;
   border-radius: 6px;
   &:not(:first-of-type) {
     margin-top: 2.5rem;
-  }
+  } */
 `
 
 const StyledFlex = styled(Flex)`
-  align-items: center;
+  /* align-items: center;
   & > svg {
     height: 100%;
     width: 30%;
     margin-left: 2rem;
-  }
+  } */
 `
