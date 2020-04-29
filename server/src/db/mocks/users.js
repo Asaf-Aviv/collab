@@ -28,7 +28,7 @@ const asaf = {
   avatar: 'https://randomuser.me/api/portraits/women/82.jpg',
 }
 
-const seededUsers = [...Array(30)].map(generageUser).concat(asaf)
+const seededUsers = [...Array(50)].map(generageUser).concat(asaf)
 
 module.exports = {
   asaf,
