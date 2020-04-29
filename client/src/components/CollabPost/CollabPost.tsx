@@ -173,7 +173,6 @@ export const CollabPost = () => {
                   borderBottom="2px solid #964cff"
                   mb="-2px"
                   position="relative"
-                  zIndex={2}
                 >
                   <Heading as="h3" mb={2} size="sm" mr={2}>
                     Comments
