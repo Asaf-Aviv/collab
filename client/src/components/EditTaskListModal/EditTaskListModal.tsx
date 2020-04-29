@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import {
   useCreateTaskListMutation,
   TaskListDocument,
-  TaskListQueryResult,
+  TaskListQuery,
 } from '../../graphql/generates'
 import { useParams } from 'react-router-dom'
 import {
@@ -20,7 +20,7 @@ import {
 } from '@chakra-ui/core'
 
 type Props = {
-  task: NonNullable<NonNullable<TaskListQueryResult['data']>['taskList']>[0]
+  task: NonNullable<NonNullable<TaskListQuery>['taskList']>[0]
   closeModal: () => void
 }
 
@@ -36,7 +36,7 @@ export const NewTaskListModal = ({ closeModal, task }: Props) => {
       },
     },
     update(store, { data }) {
-      const taskListData = store.readQuery<TaskListQueryResult['data']>({
+      const taskListData = store.readQuery<TaskListQuery>({
         query: TaskListDocument,
         variables: { collabId },
       })!

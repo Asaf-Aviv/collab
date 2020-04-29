@@ -3,8 +3,10 @@ import {
   useSignUpMutation,
   useGetCurrentUserLazyQuery,
 } from '../../graphql/generates'
-import { FormControl, Input, FormLabel, Button } from '@chakra-ui/core'
-import { useHistory } from 'react-router-dom'
+import { Button, Box, Stack, Heading, Link, Text } from '@chakra-ui/core'
+import { Container, PageHeaderSpacing } from '../global'
+import { InputWithLabel } from '../InputWithLabel/InputWithLabel'
+import { useHistory, Link as RouterLink } from 'react-router-dom'
 
 export const SignUp = () => {
   const [username, setUsername] = useState('')
@@ -14,7 +16,7 @@ export const SignUp = () => {
   const [getCurrentUser, { data }] = useGetCurrentUserLazyQuery({
     fetchPolicy: 'network-only',
   })
-  const [login] = useSignUpMutation({
+  const [signup, { loading }] = useSignUpMutation({
     variables: {
       credentials: { username, email, password },
     },
@@ -32,34 +34,67 @@ export const SignUp = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    login()
+    if (loading) return
+
+    signup()
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <FormControl>
-        <FormLabel htmlFor="username">Username</FormLabel>
-        <Input
-          value={username}
-          onChange={(e: any) => setUsername(e.target.value)}
-          id="username"
-        />
-        <FormLabel htmlFor="email">Email address</FormLabel>
-        <Input
-          value={email}
-          onChange={(e: any) => setEmail(e.target.value)}
-          type="email"
-          id="email"
-        />
-        <FormLabel htmlFor="password">Password</FormLabel>
-        <Input
-          value={password}
-          onChange={(e: any) => setPassword(e.target.value)}
-          type="password"
-          id="password"
-        />
-        <Button type="submit">Login</Button>
-      </FormControl>
-    </form>
+    <Container>
+      <PageHeaderSpacing />
+      <Heading as="h1" mb={8} textAlign="center">
+        Sign Up
+      </Heading>
+      <Box as="form" onSubmit={handleSubmit} maxWidth={400} mx="auto">
+        <Stack spacing={8}>
+          <Box>
+            <InputWithLabel
+              label="Username"
+              htmlFor="username"
+              id="username"
+              value={username}
+              onChange={(e: any) => setUsername(e.target.value)}
+            />
+          </Box>
+          <Box>
+            <InputWithLabel
+              label="Email address"
+              htmlFor="email"
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e: any) => setEmail(e.target.value)}
+            />
+          </Box>
+          <Box>
+            <InputWithLabel
+              label="Password"
+              htmlFor="password"
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e: any) => setPassword(e.target.value)}
+            />
+          </Box>
+          <Button type="submit" variantColor="purple">
+            Signup
+          </Button>
+          <Text>
+            Already have an account?
+            <Link
+              //@ts-ignore
+              as={RouterLink}
+              ml={4}
+              py={2}
+              color="#7a5eb5"
+              _hover={{ color: '#483277', textDecoration: 'underline' }}
+              to="/login"
+            >
+              Log In
+            </Link>
+          </Text>
+        </Stack>
+      </Box>
+    </Container>
   )
 }

@@ -1,23 +1,18 @@
 import React from 'react'
-import { ReactComponent as CollabSvg } from '../../assets/illustrations/undraw_real_time_collaboration_c62i.svg'
 import { ReactComponent as TaskBoardSvg } from '../../assets/illustrations/undraw_scrum_board_cesn.svg'
-// import { ReactComponent as CollabSvg2 } from '../../assets/illustrations/undraw_team_page_pgpr.svg'
-import { ReactComponent as WorkTogether } from '../../assets/illustrations/undraw_work_together_h63l.svg'
 import { ReactComponent as CoWorkers } from '../../assets/illustrations/undraw_co-workers_ujs6.svg'
 import { ReactComponent as CollabSvg4 } from '../../assets/illustrations/undraw_having_fun_iais.svg'
 import { ReactComponent as CollabSvg5 } from '../../assets/illustrations/undraw_hang_out_h9ud.svg'
-import { ReactComponent as CollabSvg6 } from '../../assets/illustrations/undraw_connected_world_wuay.svg'
-import { ReactComponent as CircleSvg } from '../../assets/svgs/untitled.svg'
+import { ReactComponent as FeedbackSvg } from '../../assets/illustrations/feedback.svg'
 import { Container, PageHeaderSpacing } from '../global'
-import RadioButtonUncheckedOutlinedIcon from '@material-ui/icons/RadioButtonUncheckedOutlined'
-import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory'
 import { Heading, Box, Stack, Flex, Button, Text } from '@chakra-ui/core'
 import styled from '@emotion/styled'
+import { Link } from 'react-router-dom'
 
 export const Home = () => {
   return (
     <>
-      <Container bg="#582398">
+      <Container bg="#582398" fullWidth>
         <PageHeaderSpacing />
         <Flex direction="column" position="relative">
           <Circle bg="#42d29f" border="#42d29f" top="-10px" left="15px" />
@@ -54,66 +49,123 @@ export const Home = () => {
               awesome Apps together!
             </Heading>
           </Stack>
-          <CoWorkers style={{ maxWidth: '100%' }} />
+          <Box w={['100%', '100%', '60%']} m="0 auto">
+            <CoWorkers style={{ maxWidth: '100%' }} />
+          </Box>
         </Flex>
       </Container>
-      <Container bg="#ecddff">
-        <FeatureSection
-          title="Task Board"
-          text="Track your team's tasks on the task board!"
-          svg={TaskBoardSvg}
-        />
-      </Container>
-      <Container>
-        <FeatureSection
-          title="Collab"
-          text="Connect with other engineers and build awesome apps together!"
-          svg={CollabSvg}
-        />
-        <FeatureSection
-          title="Make Friends"
-          text="Meet new friends from around the world!"
-          svg={CollabSvg5}
-        />
-        <FeatureSection
-          title="Showcase"
-          text="Launch your app and show the world what you have built together!"
-          svg={CollabSvg4}
-        />
-        <Flex position="relative">
-          <RadioButtonUncheckedOutlinedIcon />
-          <ChangeHistoryIcon />
-          <Text as="span">Let's make some apps together!</Text>
-          <Button color="purple" size="lg">
-            Get Started
-          </Button>
-        </Flex>
-      </Container>
+      <StyledBox>
+        <Container fullWidth>
+          <FeatureSection
+            title="Task Board"
+            text="Track your team's tasks on the task board!"
+            svg={TaskBoardSvg}
+          />
+        </Container>
+        <Container fullWidth>
+          <FeatureSection
+            title="Make Friends"
+            text="Make new friends from all around the world!"
+            svg={CollabSvg5}
+            textColor="white"
+          />
+        </Container>
+        <Container fullWidth>
+          <FeatureSection
+            title="Feedback"
+            text="Get feedback from the community"
+            svg={FeedbackSvg}
+          />
+        </Container>
+        <Container fullWidth>
+          <FeatureSection
+            title="Showcase"
+            text="Launch your app and show the community what you have built together!"
+            svg={CollabSvg4}
+            textColor="white"
+          />
+        </Container>
+        <Container fullWidth>
+          <Flex
+            direction={['column', 'column', 'row']}
+            align={['center']}
+            justify={'flex-start'}
+            py={[12, 12, 20]}
+            maxWidth={900}
+            mx="auto"
+          >
+            <Text
+              fontWeight={600}
+              fontSize={['xl', '2xl', '3xl']}
+              mb={[6, 6, 0]}
+              mr={[0, 0, 16]}
+              color="#735b80"
+            >
+              Let's make some apps together!
+            </Text>
+            <Button
+              as={Link}
+              //@ts-ignore
+              to="/signup"
+              variantColor="purple"
+              size="lg"
+              boxShadow="xl"
+            >
+              Get Started
+            </Button>
+          </Flex>
+        </Container>
+      </StyledBox>
     </>
   )
 }
 
 type Props = {
-  title?: string
   text: string
   svg: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
+  title?: string
+  textColor?: string
 }
 
-const FeatureSection = ({ svg: SvgComponent, title, text }: Props) => (
-  <StyledSection>
-    <StyledFlex py={4}>
-      <Stack spacing={3} flex={1}>
+const FeatureSection = ({
+  svg: SvgComponent,
+  title,
+  text,
+  textColor,
+}: Props) => (
+  <StyledSection maxWidth={900} m="0 auto" h={['auto', 'auto', 400]}>
+    <StyledFlex
+      py={8}
+      direction={['column', 'column', 'row']}
+      align={['center', 'center']}
+      height="100%"
+    >
+      <Stack
+        spacing={[2, 4]}
+        mb={[4, 6]}
+        flex={[1, 1, 2]}
+        textAlign={['center', 'center', 'left']}
+        color={textColor}
+      >
         {title && (
-          <Heading as="h3" size="lg">
+          <Heading as="h3" size="lg" letterSpacing="1px">
             {title}
           </Heading>
         )}
-        <Text>{text}</Text>
+        <Text maxWidth={400} fontSize={['md', 'lg', 'xl']}>
+          {text}
+        </Text>
       </Stack>
       <SvgComponent />
     </StyledFlex>
   </StyledSection>
 )
+
+const StyledBox = styled.div`
+  ${Container}:nth-child(even) {
+    background-color: #582398;
+  }
+`
 
 const StyledTriangle = styled.svg<{ [k: string]: any }>`
   clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
@@ -157,6 +209,7 @@ const StyledFlex = styled(Flex)`
   align-items: center;
   flex-direction: column;
   > svg {
+    flex: 1;
     /* height: 100%; */
     /* width: 30%; */
   }

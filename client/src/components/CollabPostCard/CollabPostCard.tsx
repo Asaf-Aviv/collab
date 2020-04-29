@@ -53,7 +53,6 @@ export const CollabPostCard = ({
       key={id}
       w="100%"
       flex={1}
-      zIndex={1}
       _hover={{ textDecoration: 'none' }}
     >
       <Heading size="md" fontWeight={500} pb={6} as="h2">
