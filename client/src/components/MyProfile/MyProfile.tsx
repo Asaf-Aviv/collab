@@ -47,7 +47,7 @@ export const MyProfile = () => {
     <Container>
       <Flex>
         <Paper
-          direction="column"
+          flexDirection="column"
           bg="white"
           minWidth={200}
           mr={10}
@@ -178,7 +178,7 @@ export const MyInformation = () => {
   if (!infoInput) return null
 
   return (
-    <Flex direction="column" p={4} width="100%">
+    <Flex flexDirection="column" p={4} width="100%">
       <Flex>
         <FormControl>
           <FormLabel htmlFor="first-name">First Name</FormLabel>

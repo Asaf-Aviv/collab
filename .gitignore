@@ -4,7 +4,10 @@ dist
 
 .env
 .env.development
+.env.production
+build
 
 package-lock.json
 
 t.js
+server/dump.rdb

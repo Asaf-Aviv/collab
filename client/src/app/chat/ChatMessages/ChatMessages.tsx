@@ -1,22 +1,21 @@
 import React, { useLayoutEffect, useRef, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { Box, Flex, Text, Avatar, Heading, PseudoBox } from '@chakra-ui/core'
+import { useSelector, useDispatch } from 'react-redux'
+import { Box } from '@chakra-ui/core'
 import { debounce } from 'lodash-es'
 import styled from '@emotion/styled'
 import { useCurrentUser } from '../../../hooks/useCurrentUser'
-import { RootState } from '../reducers'
+import { RootState, messagesActions } from '../reducers'
 import { ChatMessageBubble } from '../ChatMessageBubble'
 
-type Props = {
-  friendId: string
-}
-
-export const ChatMessages = ({ friendId }: Props) => {
+export const ChatMessages = () => {
   const currentUser = useCurrentUser()!
-  const messages = useSelector(
-    (state: RootState) => state.messages[friendId] || [],
+  const friend = useSelector(
+    ({ users, messages }: RootState) => users[messages.selectedFriendId!],
   )
-  const friend = useSelector((state: RootState) => state.users[friendId])
+  const messages = useSelector(
+    ({ messages }: RootState) => messages.byUserIds[friend.id].messages,
+  )
+  const dispatch = useDispatch()
   const [showNewMessagesPopup, setShowNewMessagesPopup] = useState(false)
   const isAtBottomRef = useRef(true)
   const messagesListRef = useRef<HTMLUListElement | null>(null)
@@ -60,7 +59,12 @@ export const ChatMessages = ({ friendId }: Props) => {
     if (lastMessage && lastMessage.authorId !== currentUser.id) {
       setShowNewMessagesPopup(true)
     }
-  }, [messages])
+  }, [messages, currentUser.id])
+
+  useLayoutEffect(() => {
+    dispatch(messagesActions.readMessages())
+    scrollToBottom()
+  }, [dispatch, friend.id])
 
   return (
     <Box
@@ -76,7 +80,7 @@ export const ChatMessages = ({ friendId }: Props) => {
         <ChatMessageBubble
           key={message.id}
           message={message}
-          author={message.authorId === friendId ? friend : currentUser}
+          author={message.authorId === friend.id ? friend : currentUser}
           isAuthor={message.authorId === currentUser.id}
         />
       ))}

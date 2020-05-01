@@ -1,59 +1,66 @@
 import React from 'react'
 import { useCollabPostsQuery } from '../../graphql/generates'
-import { SimpleGrid } from '@chakra-ui/core'
+import { Box } from '@chakra-ui/core'
 import { Container } from '../global'
 import { CollabPostCard } from '../CollabPostCard/CollabPostCard'
+import { Loader } from '../Loader'
+import { DisplayError } from '../DisplayError'
+import { useInfiniteScroll } from '../../hooks/useInfiniteScroll'
+import produce from 'immer'
 
 export const CollabPosts = () => {
-  const { data, loading, error, fetchMore } = useCollabPostsQuery({
+  const { data, loading, error, fetchMore, refetch } = useCollabPostsQuery({
     variables: {
       offset: 0,
       limit: 10,
     },
     notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'cache-and-network',
   })
 
-  if (loading) return <h1>loading</h1>
-  if (error) return <h1>Could not fetch Collabs</h1>
-  if (!data?.collabPosts) return null
+  const { posts, hasNextPage } = data?.collabPosts ?? {}
 
-  const { posts, hasNextPage } = data.collabPosts
+  const trigger = useInfiniteScroll(() => {
+    if (!posts || loading) return
+
+    fetchMore({
+      variables: {
+        offset: posts.length,
+        limit: 10,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev
+        const { hasNextPage, posts } = fetchMoreResult.collabPosts
+
+        const collabPosts = produce(prev.collabPosts, draft => {
+          draft.hasNextPage = hasNextPage
+          draft.posts.push(...posts)
+        })
+
+        console.log(collabPosts)
+        console.log(collabPosts.posts.length)
+
+        return { collabPosts }
+      },
+    })
+  }, hasNextPage)
 
   return (
     <main>
       <Container>
-        <SimpleGrid as="section" columns={{ lg: 1, xl: 2 }} spacing={6}>
-          {posts.map(post => (
-            <CollabPostCard key={post.id} {...post} />
+        <Box maxWidth={768} mx="auto">
+          {posts?.map(post => (
+            <CollabPostCard key={post.id} {...post} mb={8} />
           ))}
-          {hasNextPage && (
-            <button
-              onClick={() =>
-                fetchMore({
-                  variables: {
-                    offset: posts.length,
-                    limit: 10,
-                  },
-                  updateQuery: (prev, { fetchMoreResult }) => {
-                    if (!fetchMoreResult) return prev
-                    return {
-                      collabPosts: {
-                        ...prev.collabPosts,
-                        hasNextPage: fetchMoreResult.collabPosts.hasNextPage,
-                        posts: [
-                          ...prev.collabPosts.posts,
-                          ...fetchMoreResult.collabPosts.posts,
-                        ],
-                      },
-                    }
-                  },
-                })
-              }
-            >
-              fetch more
-            </button>
+          {error && (
+            <DisplayError
+              message="Could not fetch collab posts"
+              onClick={refetch}
+            />
           )}
-        </SimpleGrid>
+          {loading && <Loader />}
+          {trigger}
+        </Box>
       </Container>
     </main>
   )

@@ -1,25 +1,26 @@
 import React, { useState, FormEvent } from 'react'
 import {
-  useLoginMutation,
+  useSignUpMutation,
   useGetCurrentUserLazyQuery,
-} from '../../graphql/generates'
+} from '../../../graphql/generates'
 import { Button, Box, Stack, Heading, Link, Text } from '@chakra-ui/core'
-import { Container, PageHeaderSpacing } from '../global'
-import { InputWithLabel } from '../InputWithLabel/InputWithLabel'
+import { Container } from '../../../components/global'
+import { InputWithLabel } from '../../../components/InputWithLabel/InputWithLabel'
 import { Link as RouterLink } from 'react-router-dom'
 
-export const Login = () => {
+export const SignUp = () => {
+  const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [getCurrentUser] = useGetCurrentUserLazyQuery({
     fetchPolicy: 'network-only',
   })
-  const [login, { loading }] = useLoginMutation({
+  const [signup, { loading }] = useSignUpMutation({
     variables: {
-      credentials: { email, password },
+      credentials: { username, email, password },
     },
-    onCompleted: async ({ login }) => {
-      localStorage.setItem('token', login.token)
+    onCompleted: async ({ signUp }) => {
+      localStorage.setItem('token', signUp.token)
       getCurrentUser()
     },
   })
@@ -28,17 +29,25 @@ export const Login = () => {
     e.preventDefault()
     if (loading) return
 
-    login()
+    signup()
   }
 
   return (
     <Container>
-      <PageHeaderSpacing />
       <Heading as="h1" mb={8} textAlign="center">
-        Login
+        Sign Up
       </Heading>
       <Box as="form" onSubmit={handleSubmit} maxWidth={400} mx="auto">
         <Stack spacing={8}>
+          <Box>
+            <InputWithLabel
+              label="Username"
+              htmlFor="username"
+              id="username"
+              value={username}
+              onChange={(e: any) => setUsername(e.target.value)}
+            />
+          </Box>
           <Box>
             <InputWithLabel
               label="Email address"
@@ -55,29 +64,15 @@ export const Login = () => {
               htmlFor="password"
               id="password"
               type="password"
-              autoComplete="current-password"
               value={password}
               onChange={(e: any) => setPassword(e.target.value)}
             />
           </Box>
-          <Link
-            //@ts-ignore
-            as={RouterLink}
-            style={{ marginBottom: '1rem' }}
-            py={2}
-            mt={-4}
-            // mb="1rem !important"
-            color="#7a5eb5"
-            _hover={{ color: '#483277', textDecoration: 'underline' }}
-            to="/forgot"
-          >
-            Forgot password?
-          </Link>
           <Button type="submit" variantColor="purple">
-            Login
+            Signup
           </Button>
           <Text>
-            don't have an account?
+            Already have an account?
             <Link
               //@ts-ignore
               as={RouterLink}
@@ -85,9 +80,9 @@ export const Login = () => {
               py={2}
               color="#7a5eb5"
               _hover={{ color: '#483277', textDecoration: 'underline' }}
-              to="/signup"
+              to="/login"
             >
-              Sign Up
+              Log In
             </Link>
           </Text>
         </Stack>

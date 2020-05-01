@@ -1,14 +1,45 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { CollabPostsQuery } from '../../graphql/generates'
 import { Link as RouterLink } from 'react-router-dom'
-import { Flex, Heading, Tag, Link, Text } from '@chakra-ui/core'
+import {
+  Flex,
+  Heading,
+  Tag,
+  Link,
+  Text,
+  PseudoBoxProps,
+  TagProps,
+} from '@chakra-ui/core'
 import { AvatarWithUsername } from '../AvatarWithUsername/AvatarWithUsername'
 import { Paper } from '../global'
 import { CommentsAndReactionsCount } from '../CommentsAndReactionsCount/CommentsAndReactionsCount'
-import { formatDate } from '../../utils'
-import { PostStackTag } from '../PostStackTag/PostStackTag'
+import { DisplayDate } from '../DisplayDate/DisplayDate'
+import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline'
 
-export const CollabPostCard = ({
+type Post = NonNullable<CollabPostsQuery['collabPosts']>['posts'][0]
+
+type Props = Post & PseudoBoxProps
+
+type HeaderProps = {
+  owner: Post['owner']
+  createdAt: Post['createdAt']
+  isNew: Post['isNew']
+}
+const CollabPostCardHeader = ({ owner, createdAt, isNew }: HeaderProps) => (
+  <Flex p={2} w="100%" align="center" justify="space-between">
+    <Flex align="center" wrap="wrap">
+      <AvatarWithUsername size="sm" {...owner} />
+      <DisplayDate date={createdAt} px={2} />
+    </Flex>
+    {isNew && (
+      <PostTag order={1} variantColor="green">
+        NEW
+      </PostTag>
+    )}
+  </Flex>
+)
+
+export const CollabPostCard = memo(function CollabPostCard({
   id,
   title,
   stack,
@@ -21,66 +52,61 @@ export const CollabPostCard = ({
   membersCount,
   // hasStarted,
   owner,
-}: NonNullable<CollabPostsQuery['collabPosts']>['posts'][0]) => (
-  <Paper h="100%" direction="column" align="start" as="article">
-    <Flex p={4} w="100%" align="center" justify="space-between">
-      <Flex align="center">
-        <AvatarWithUsername size="sm" {...owner} />
-        <Text ml={2} as="time" fontSize="0.9rem">
-          {formatDate(createdAt)}
-        </Text>
-        <Text ml={2} fontSize="0.9rem">
-          {`${membersCount} ${membersCount > 1 ? 'members' : 'member'}`}
-        </Text>
+  ...props
+}: Props) {
+  return (
+    <Paper flexDirection="column" as="article" {...props}>
+      <CollabPostCardHeader owner={owner} isNew={isNew} createdAt={createdAt} />
+      <Link
+        as={RouterLink as any}
+        // @ts-ignore
+        to={`/collabs/posts/${id}`}
+        h="100%"
+        px={2}
+        w="100%"
+        flex={1}
+        _hover={{ textDecoration: 'none' }}
+      >
+        <Heading size="sm" fontWeight={500} pb={6} as="h2">
+          {title}
+        </Heading>
+      </Link>
+      <Flex
+        bg="#f2f2ff"
+        px={2}
+        w="100%"
+        wrap="wrap"
+        align="center"
+        justify="space-between"
+      >
+        <Flex py={3}>
+          <PostTag mr={2}>{experience}</PostTag>
+          {languages.map(language => (
+            <PostTag key={language} mr={2}>
+              {language}
+            </PostTag>
+          ))}
+          {stack.map(tech => (
+            <PostTag key={tech} mr={2}>
+              {tech}
+            </PostTag>
+          ))}
+        </Flex>
+        <Flex align="center" flexShrink={0} pb={3}>
+          <PeopleOutlineIcon />
+          <Text as="span" ml="3px" mr={3} fontWeight={700}>
+            {membersCount}
+          </Text>
+          <CommentsAndReactionsCount
+            reactionsCount={reactionsCount}
+            commentsCount={commentsCount}
+          />
+        </Flex>
       </Flex>
-      <Flex align="center">
-        <Tag boxShadow="sm" mr={2} size="sm" variantColor="pink">
-          {experience}
-        </Tag>
-        {isNew && (
-          <Tag boxShadow="sm" size="sm" variantColor="green">
-            NEW
-          </Tag>
-        )}
-      </Flex>
-    </Flex>
-    <Link
-      as={RouterLink as any}
-      // @ts-ignore
-      to={`/collabs/posts/${id}`}
-      h="100%"
-      px={4}
-      key={id}
-      w="100%"
-      flex={1}
-      _hover={{ textDecoration: 'none' }}
-    >
-      <Heading size="md" fontWeight={500} pb={6} as="h2">
-        {title}
-      </Heading>
-    </Link>
-    <Flex bg="#f2f2ff" p={4} w="100%">
-      {languages.map(language => (
-        <Tag
-          boxShadow="sm"
-          size="sm"
-          variantColor="purple"
-          key={language}
-          mr={2}
-        >
-          {language}
-        </Tag>
-      ))}
-      {stack.map(tech => (
-        <PostStackTag key={tech} mr={2}>
-          {tech}
-        </PostStackTag>
-      ))}
-      <CommentsAndReactionsCount
-        ml="auto"
-        reactionsCount={reactionsCount}
-        commentsCount={commentsCount}
-      />
-    </Flex>
-  </Paper>
+    </Paper>
+  )
+})
+
+const PostTag = ({ variantColor = 'purple', ...props }: TagProps) => (
+  <Tag variantColor={variantColor} size="sm" boxShadow="sm" {...props} />
 )

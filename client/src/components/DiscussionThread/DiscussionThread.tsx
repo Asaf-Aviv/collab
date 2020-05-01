@@ -121,7 +121,7 @@ export const DiscussionThread = () => {
 
   return (
     <Box>
-      <Paper direction="column" p={6} mb={6}>
+      <Paper flexDirection="column" p={6} mb={6}>
         <PostAuthorHeader author={author} date="" mb={2} />
         <Heading as="h1" size="lg" mb={6}>
           {title}

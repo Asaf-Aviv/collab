@@ -10,15 +10,19 @@ import { GQLCollabPost } from '../../db/models/CollabPost'
 export const collabPostResolver: Resolvers = {
   Query: {
     collabPosts: async (root, { offset, limit }, { models }) => {
-      const { count, rows: posts } = await models.CollabPost.findAndCountAll({
-        order: [['createdAt', 'DESC']],
+      console.log(offset, limit)
+      const posts = await models.CollabPost.findAll({
+        order: [
+          ['created_at', 'desc'],
+          ['id', 'desc'],
+        ],
         offset,
-        limit,
+        limit: limit + 1,
       })
 
       return {
-        hasNextPage: count > offset + limit,
-        posts: posts as GQLCollabPost[],
+        hasNextPage: posts.length > limit,
+        posts: posts.slice(0, -1) as GQLCollabPost[],
       }
     },
     collabPost: (root, { postId }, { models }) =>
@@ -78,7 +82,8 @@ export const collabPostResolver: Resolvers = {
         hasNextPage: count > offset + limit,
       }
     },
-    advancedPostsSearch: (root, { input },{models}) => models.CollabPost.search(input),
+    advancedPostsSearch: (root, { input }, { models }) =>
+      models.CollabPost.search(input),
   },
   Mutation: {
     createCollabPost: async (root, { post }, { user, models }) =>

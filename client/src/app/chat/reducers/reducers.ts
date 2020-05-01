@@ -3,6 +3,7 @@ import {
   createSlice,
   PayloadAction,
   combineReducers,
+  createSelector,
 } from '@reduxjs/toolkit'
 import { UserChatStatus, User as GQLUser } from '../../../graphql/generates'
 
@@ -27,6 +28,10 @@ const usersSlice = createSlice({
 })
 
 export const { actions: userActions } = usersSlice
+export const selectChatUsers = createSelector(
+  ({ users }: RootState) => users,
+  users => Object.values(users),
+)
 
 type Message = {
   id: string
@@ -40,21 +45,71 @@ type MessageSent = {
   message: Message
 }
 
+type MessagesState = {
+  selectedFriendId: string | null
+  totalUnreadCount: number
+  byUserIds: Record<
+    string,
+    {
+      messages: Message[]
+      unreadCount: number
+    }
+  >
+}
+
+const initialState: MessagesState = {
+  selectedFriendId: null,
+  totalUnreadCount: 0,
+  byUserIds: {},
+}
+
 const messagesSlice = createSlice({
   name: 'messages',
-  initialState: {} as Record<string, Message[]>,
+  initialState,
   reducers: {
     newMessage: (state, action: PayloadAction<Message>) => {
-      const { authorId } = action.payload
-      state[authorId] = state[authorId] || []
-      state[authorId].push(action.payload)
+      const message = action.payload
+      const { authorId } = message
+      const { byUserIds, selectedFriendId } = state
+
+      byUserIds[authorId].messages.push(message)
+
+      if (selectedFriendId !== authorId) {
+        byUserIds[authorId].unreadCount++
+        state.totalUnreadCount++
+      }
     },
     messageSent: (state, action: PayloadAction<MessageSent>) => {
       const { recipientId, message } = action.payload
-      state[recipientId] = state[recipientId] || []
-      state[recipientId].push(message)
+      state.byUserIds[recipientId].messages.push(message)
     },
-    clear: () => {},
+    readMessages: state => {
+      const { byUserIds, selectedFriendId } = state
+      const { unreadCount } = byUserIds[selectedFriendId!]
+
+      if (!unreadCount) return
+
+      byUserIds[selectedFriendId!].unreadCount = 0
+      state.totalUnreadCount -= unreadCount
+    },
+    selectedFriendIdChanged: (state, action: PayloadAction<string>) => {
+      state.selectedFriendId =
+        state.selectedFriendId === action.payload ? null : action.payload
+    },
+    closeChatBox: state => {
+      state.selectedFriendId = null
+    },
+    clear: () => initialState,
+  },
+  extraReducers: builder => {
+    builder.addCase(userActions.receivedInitialUsers, (state, action) => {
+      action.payload.forEach(user => {
+        state.byUserIds[user.id] = {
+          messages: [],
+          unreadCount: 0,
+        }
+      })
+    })
   },
 })
 

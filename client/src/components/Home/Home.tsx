@@ -4,7 +4,7 @@ import { ReactComponent as CoWorkers } from '../../assets/illustrations/undraw_c
 import { ReactComponent as CollabSvg4 } from '../../assets/illustrations/undraw_having_fun_iais.svg'
 import { ReactComponent as CollabSvg5 } from '../../assets/illustrations/undraw_hang_out_h9ud.svg'
 import { ReactComponent as FeedbackSvg } from '../../assets/illustrations/feedback.svg'
-import { Container, PageHeaderSpacing } from '../global'
+import { Container } from '../global'
 import { Heading, Box, Stack, Flex, Button, Text } from '@chakra-ui/core'
 import styled from '@emotion/styled'
 import { Link } from 'react-router-dom'
@@ -12,8 +12,7 @@ import { Link } from 'react-router-dom'
 export const Home = () => {
   return (
     <>
-      <Container bg="#582398" fullWidth>
-        <PageHeaderSpacing />
+      <Container bg="#582398" fullWidth pt={4}>
         <Flex direction="column" position="relative">
           <Circle bg="#42d29f" border="#42d29f" top="-10px" left="15px" />
           <Circle border="#E91E63" top="80px" left="25px" />
@@ -162,7 +161,7 @@ const FeatureSection = ({
 )
 
 const StyledBox = styled.div`
-  ${Container}:nth-child(even) {
+  ${Container}:nth-of-type(even) {
     background-color: #582398;
   }
 `

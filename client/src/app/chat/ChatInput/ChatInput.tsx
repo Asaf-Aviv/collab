@@ -4,14 +4,16 @@ import { messagesActions, RootState } from '../reducers/reducers'
 import { useDispatch, useSelector } from 'react-redux'
 import { Textarea, Box } from '@chakra-ui/core'
 
-export const ChatInput = ({ friendId }: { friendId: string }) => {
+export const ChatInput = () => {
   const dispatch = useDispatch()
-  const friend = useSelector((state: RootState) => state.users[friendId])
+  const friend = useSelector(
+    ({ users, messages }: RootState) => users[messages.selectedFriendId!],
+  )
   const [messageContent, setMessageContent] = useState('')
   const [sendMessage] = useSendPrivateChatMessageMutation({
     variables: {
       input: {
-        recipientId: friendId,
+        recipientId: friend.id,
         content: messageContent,
       },
     },
@@ -19,7 +21,7 @@ export const ChatInput = ({ friendId }: { friendId: string }) => {
       setMessageContent('')
       dispatch(
         messagesActions.messageSent({
-          recipientId: friendId,
+          recipientId: friend.id,
           message: sendPrivateChatMessage,
         }),
       )

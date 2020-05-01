@@ -1,33 +1,50 @@
-import React, { memo } from 'react'
-import { RootState } from '../reducers/reducers'
-import { useSelector } from 'react-redux'
+import React, { memo, useMemo } from 'react'
+import { RootState, selectChatUsers } from '../reducers/reducers'
 import { Flex, Box, Heading } from '@chakra-ui/core'
 import { ChatUserListItem } from '../ChatUserListItem'
+import { useTypedSelector } from '../useTypedSelector'
+import { useStore } from 'react-redux'
 
 type Props = {
-  openChatBox: (friendId: string) => void
+  onFriendClick: (friendId: string) => void
 }
 
 export const ChatUsersList = memo(function ChatUsersList({
-  openChatBox,
+  onFriendClick,
 }: Props) {
-  const users = useSelector((state: RootState) =>
-    Object.values(state.users).sort((a, b) =>
-      a.username.toLowerCase().localeCompare(b.username.toLowerCase()),
-    ),
+  const store = useStore()
+  const users = useTypedSelector(selectChatUsers)
+  const totalUnreadCount = useTypedSelector(
+    ({ messages }) => messages.totalUnreadCount,
   )
 
+  const sortedUsers = useMemo(() => {
+    const { byUserIds } = (store.getState() as RootState).messages
+    return Object.values(users).sort(
+      (a, b) =>
+        byUserIds[b.id].unreadCount - byUserIds[a.id].unreadCount ||
+        a.username.toLowerCase().localeCompare(b.username.toLowerCase()),
+    )
+    // eslint-disable-next-line
+  }, [store, users, totalUnreadCount])
+
   return (
-    <Box overflow="scroll">
+    <Box
+      overflow="scroll"
+      bg="white"
+      borderRadius={6}
+      p={2}
+      boxShadow="0 1px 1px 1px #c3c3c3"
+    >
       <Heading size="xs" fontWeight={500} as="h5" mb={1}>
         Friends
       </Heading>
       <Flex direction="column" as="ul" listStyleType="none">
-        {users.map(user => (
+        {sortedUsers.map(user => (
           <ChatUserListItem
             key={user.id}
             user={user}
-            onClick={() => openChatBox(user.id)}
+            onClick={() => onFriendClick(user.id)}
           />
         ))}
       </Flex>

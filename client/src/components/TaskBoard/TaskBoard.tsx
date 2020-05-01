@@ -101,11 +101,7 @@ export const TaskBoard = () => {
         onClick={() => setIsCreateTaskListModalOpen(true)}
         icon="add"
       ></IconButton>
-      <DragDropContext
-        onDragStart={console.log}
-        onDragUpdate={console.log}
-        onDragEnd={handleDragEnd}
-      >
+      <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable
           droppableId="list-columns"
           direction="horizontal"
