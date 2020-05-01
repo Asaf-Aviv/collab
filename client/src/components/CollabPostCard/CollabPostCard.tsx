@@ -74,12 +74,13 @@ export const CollabPostCard = memo(function CollabPostCard({
       <Flex
         bg="#f2f2ff"
         px={2}
+        pb={3}
         w="100%"
         wrap="wrap"
         align="center"
         justify="space-between"
       >
-        <Flex py={3}>
+        <Flex pt={2}>
           <PostTag mr={2}>{experience}</PostTag>
           {languages.map(language => (
             <PostTag key={language} mr={2}>
@@ -92,7 +93,7 @@ export const CollabPostCard = memo(function CollabPostCard({
             </PostTag>
           ))}
         </Flex>
-        <Flex align="center" flexShrink={0} pb={3}>
+        <Flex align="center" flexShrink={0} pt={3}>
           <PeopleOutlineIcon />
           <Text as="span" ml="3px" mr={3} fontWeight={700}>
             {membersCount}

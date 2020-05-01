@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Flex } from '@chakra-ui/core'
 import { NavBar } from '../../navbar'
 import { Footer } from '../Footer'
@@ -13,6 +13,7 @@ import { PageHeaderSpacing } from '../../../components/global'
 export const Layout = () => {
   const currentUser = useCurrentUser()
   const location = useLocation()
+  const [isChatMinimized, setIsChatMinimized] = useState(false)
 
   useEffect(() => {
     window.scrollTo({ top: 0 })
@@ -31,7 +32,10 @@ export const Layout = () => {
         </Box>
         {currentUser && (
           <Provider store={store}>
-            <Chat />
+            <Chat
+              isMinimized={isChatMinimized}
+              toggleMinimize={() => setIsChatMinimized(prevState => !prevState)}
+            />
           </Provider>
         )}
       </Flex>

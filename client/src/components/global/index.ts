@@ -23,6 +23,7 @@ export const IconButton = styled.button`
   height: 30px;
   width: 30px;
   display: flex;
+  flex-shrink: 0;
   justify-content: center;
   align-items: center;
   border-radius: 4px;

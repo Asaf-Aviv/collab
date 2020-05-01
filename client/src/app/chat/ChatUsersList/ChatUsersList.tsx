@@ -29,25 +29,27 @@ export const ChatUsersList = memo(function ChatUsersList({
   }, [store, users, totalUnreadCount])
 
   return (
-    <Box
-      overflow="scroll"
-      bg="white"
-      borderRadius={6}
-      p={2}
-      boxShadow="0 1px 1px 1px #c3c3c3"
-    >
+    <>
       <Heading size="xs" fontWeight={500} as="h5" mb={1}>
         Friends
       </Heading>
-      <Flex direction="column" as="ul" listStyleType="none">
-        {sortedUsers.map(user => (
-          <ChatUserListItem
-            key={user.id}
-            user={user}
-            onClick={() => onFriendClick(user.id)}
-          />
-        ))}
-      </Flex>
-    </Box>
+      <Box
+        overflowY="auto"
+        bg="white"
+        borderRadius={6}
+        p={2}
+        boxShadow="0 1px 1px 1px #c3c3c3"
+      >
+        <Flex direction="column" as="ul" listStyleType="none">
+          {sortedUsers.map(user => (
+            <ChatUserListItem
+              key={user.id}
+              user={user}
+              onClick={() => onFriendClick(user.id)}
+            />
+          ))}
+        </Flex>
+      </Box>
+    </>
   )
 })

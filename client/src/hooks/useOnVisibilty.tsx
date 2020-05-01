@@ -1,11 +1,15 @@
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef, MutableRefObject } from 'react'
 
-export const useInfiniteScroll = (
+export const useOnVisibilty = (
+  ref: MutableRefObject<Element | null>,
   callback: () => void,
   active: boolean | undefined | null,
   threshold = 400,
 ) => {
-  const triggerRef = useRef<HTMLSpanElement | null>(null)
+  if (!ref) {
+    throw new Error('You must pass a ref object')
+  }
+
   const cbRef = useRef(callback)
 
   useEffect(() => {
@@ -13,8 +17,7 @@ export const useInfiniteScroll = (
   }, [callback])
 
   useEffect(() => {
-    const node = triggerRef.current
-    console.log(node)
+    const node = ref.current
 
     if (!node || !active) return
 
@@ -36,7 +39,5 @@ export const useInfiniteScroll = (
     observer.observe(node)
 
     return () => observer.unobserve(node)
-  }, [active])
-
-  return <span ref={triggerRef} />
+  }, [active, threshold, ref])
 }
