@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Flex, Text } from '@chakra-ui/core'
-import { Container } from '../global'
+import { Container } from '../../../components/global'
 import { Link } from 'react-router-dom'
 import styled from '@emotion/styled'
 
@@ -24,13 +24,13 @@ export const Footer = () => {
             <StyledLink to="/faq">Faq</StyledLink>
             <StyledLink to="/help">Help</StyledLink>
             <StyledLink to="/suggestions">Suggestions</StyledLink>
-            <StyledLink
+            {/* <StyledLink
               //@ts-ignore
               as="a"
               href="mailto:"
             >
               Contact
-            </StyledLink>
+            </StyledLink> */}
           </StyledFlex>
         </Flex>
       </Container>

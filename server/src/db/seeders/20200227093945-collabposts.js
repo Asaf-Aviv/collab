@@ -31,8 +31,8 @@ const comments = _.flatten(
       content: faker.lorem.words(_.random(5, 14)),
       updated_at: new Date(),
       created_at: new Date(),
-    }))
-  )
+    })),
+  ),
 )
 
 const postLanguages = _.flatten(
@@ -40,7 +40,7 @@ const postLanguages = _.flatten(
     post_id: id,
     collab_id,
     language_name: 'English',
-  }))
+  })),
 )
 
 const postStacks = _.flatten(
@@ -48,7 +48,7 @@ const postStacks = _.flatten(
     post_id: id,
     collab_id,
     stack_id: stacks[0].id,
-  }))
+  })),
 )
 
 module.exports = {
@@ -58,20 +58,20 @@ module.exports = {
       .then(() =>
         queryInterface.bulkInsert(
           { tableName: 'collab_post_languages' },
-          postLanguages
-        )
+          postLanguages,
+        ),
       )
       .then(() =>
         queryInterface.bulkInsert(
           { tableName: 'collab_post_stack' },
-          postStacks
-        )
+          postStacks,
+        ),
       )
       .then(() =>
         queryInterface.bulkInsert(
           { tableName: 'collab_post_comments' },
-          comments
-        )
+          comments,
+        ),
       )
       .catch(err => {
         console.log(err)

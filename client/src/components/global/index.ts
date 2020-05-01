@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { Box, Flex, FlexProps } from '@chakra-ui/core'
+import { Box, PseudoBox, PseudoBoxProps } from '@chakra-ui/core'
 
 export const Container = styled(Box)<{ fullWidth?: boolean }>`
   margin: 0 auto;
@@ -12,11 +12,11 @@ export const PageHeaderSpacing = styled.div`
   padding-top: 2rem;
 `
 
-export const Paper = styled(Flex)<FlexProps>`
+export const Paper = styled(PseudoBox)<PseudoBoxProps>`
+  display: flex;
   height: 100%;
   border-radius: 6px;
   box-shadow: 2px 6px 15px 0 rgba(179, 163, 204, 0.38);
-  background-color: ${props => props.bg || 'white'};
 `
 
 export const IconButton = styled.button`

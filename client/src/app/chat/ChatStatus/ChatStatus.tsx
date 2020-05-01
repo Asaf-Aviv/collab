@@ -14,10 +14,12 @@ import {
 } from '@chakra-ui/core'
 import { useCurrentUser } from '../../../hooks/useCurrentUser'
 import { ChatUserListItem } from '../ChatUserListItem'
+import { useIsFirstRender } from '../../../hooks/useIsFirstRender'
 
 export const ChatStatus = () => {
   const currentUser = useCurrentUser()!
   const [status, setStatus] = useState(UserChatStatus.Online)
+  const isFirstRender = useIsFirstRender()
   const [updateStatus] = useUpdateStatusMutation({
     variables: {
       status,
@@ -25,11 +27,15 @@ export const ChatStatus = () => {
   })
 
   useEffect(() => {
+    if (isFirstRender) {
+      return
+    }
+
     updateStatus()
   }, [updateStatus, status])
 
   return (
-    <Flex>
+    <Flex bg="white" borderRadius={6} p={2} boxShadow="0 1px 1px 1px #c3c3c3">
       <Flex direction="column" flex={1}>
         <Heading size="xs" fontWeight={500} as="h5" mb={1}>
           Status

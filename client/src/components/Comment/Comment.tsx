@@ -13,7 +13,12 @@ type Props = {
 }
 
 export const Comment = ({ /* id ,*/ content, author, children }: Props) => (
-  <CommentContainer as="article" direction="column" align="start" p={6}>
+  <CommentContainer
+    as="article"
+    flexDirection="column"
+    alignItems="start"
+    p={6}
+  >
     <AvatarWithUsername size="sm" {...author} />
     <Text mt={2} mb={4}>
       {content}

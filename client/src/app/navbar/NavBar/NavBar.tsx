@@ -56,6 +56,7 @@ export const NavBar = () => {
             Showcase
           </StyledLink>
           <StyledLink to="/create">Create</StyledLink>
+          <StyledLink to="/search">Search</StyledLink>
         </StyledFlex>
         {currentUser ? (
           <NavUserPanel />

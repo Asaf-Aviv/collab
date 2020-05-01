@@ -38,7 +38,7 @@ export const EditTaskModal = ({ closeModal, task }: Props) => {
   const { data: membersData } = useCollabMembersQuery({
     variables: { collabId },
   })!
-  const [updateTask, { loading, /* error */ }] = useUpdateTaskMutation({
+  const [updateTask, { loading /* error */ }] = useUpdateTaskMutation({
     variables: {
       input: {
         taskId: task.id,
@@ -123,7 +123,6 @@ export const EditTaskModal = ({ closeModal, task }: Props) => {
 }
 
 const CustomOption = (props: any) => {
-  console.log(props)
   return (
     <Flex cursor="pointer" {...props.innerProps} align="center" px={2} py={1}>
       <Avatar

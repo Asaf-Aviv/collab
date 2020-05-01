@@ -4,6 +4,7 @@ import uuid from 'uuid/v1'
 import { Resolvers, UserChatStatus } from '../types.d'
 import { isNotNull, withCancel } from '../../helpers/helpers'
 import { REDIS_CHAT_USERS } from '../../redis/redis'
+import _ from 'lodash'
 
 const pubsub = new PubSub()
 
@@ -42,7 +43,7 @@ export const privateChatResolver: Resolvers = {
       return {
         users: allFriends.map(f => ({
           user: f,
-          status: 'ONLINE',
+          status: _.sample(['ONLINE', 'AWAY', 'DND', 'OFFLINE']),
         })),
       }
       return { users }

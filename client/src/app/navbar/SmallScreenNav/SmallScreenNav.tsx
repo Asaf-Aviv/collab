@@ -6,6 +6,7 @@ import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
 import AccountBoxOutlinedIcon from '@material-ui/icons/AccountBoxOutlined'
 import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined'
+import SearchRoundedIcon from '@material-ui/icons/SearchRounded'
 import PostAddIcon from '@material-ui/icons/PostAdd'
 import { Flex, Divider, Button, Text } from '@chakra-ui/core'
 import styled from '@emotion/styled'
@@ -63,6 +64,11 @@ export const SmallScreenNav = () => {
               <StyledLink to="/create">
                 <PostAddIcon />
                 Create
+                <ArrowForwardIosIcon />
+              </StyledLink>
+              <StyledLink to="/search">
+                <SearchRoundedIcon />
+                Search
                 <ArrowForwardIosIcon />
               </StyledLink>
               <Divider />

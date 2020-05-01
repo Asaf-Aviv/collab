@@ -26,60 +26,36 @@ sequelize
   .authenticate()
   .then(async () => {
     // await sequelize.sync({ force: true })
-    try {
-      const lngIds = await CollabPostLanguage.findAll({
-        attributes: ['post_id'],
-        where: {
-          languageName: {
-            [Op.in]: ['%english%'],
-          },
-        },
-      })
-      console.log(lngIds)
-      console.log(
-        await CollabPost.findAll({
-          attributes: ['name'],
-          where: {
-            [Op.or]: [
-              { experience: 'SENIOR' },
-              { hasStarted: true },
-              {
-                createdAt: {
-                  [Op.gte]: subDays(new Date(), 7),
-                },
-              },
-              {
-                id: {
-                  [Op.or]: [
-                    {
-                      [Op.in]: Sequelize.literal(`(
-                        SELECT cpl.post_id
-                        FROM collab_post_languages cpl
-                        WHERE cpl.language_name IN ('French'))`),
-                    },
-                    {
-                      [Op.in]: Sequelize.literal(`(
-                        SELECT cps.post_id
-                        FROM collab_post_stack cps
-                        WHERE cps.stack_id IN (
-                          SELECT s.id
-                          FROM stacks s
-                          WHERE s.name IN ('React')))`),
-                    },
-                  ],
-                },
-              },
-            ],
-          },
-          order: ['createdAt'],
-          offset: 10,
-          limit: 10,
-          raw: true,
-        }),
-      )
-    } catch (error) {
-      console.log(error.message)
-    }
+    let rows = await CollabPost.findAll({
+      attributes: ['id'],
+      order: [
+        ['created_at', 'desc'],
+        ['id', 'desc'],
+      ],
+      offset: 0,
+      limit: 10,
+    })
+
+    const rows2 = await CollabPost.findAll({
+      attributes: ['id'],
+      // [Sequelize.literal('"CollabPost".id, "CollabPost".createdAt'), 'desc'],
+      order: [
+        ['created_at', 'desc'],
+        ['id', 'desc'],
+      ],
+      offset: 10,
+      limit: 10,
+    })
+
+    console.log(rows2.length)
+    console.log(
+      rows
+        .concat(rows2)
+        .map(x => x.id)
+        .sort(),
+    )
+    // console.log(rows2.map(x => x.id))
+
     // console.log('Connected to postgres')
     // const user = await User.findByPk('6d480813-c854-40fc-a3cf-cea0944854ab')
     // console.log(await user?.getFriends())
