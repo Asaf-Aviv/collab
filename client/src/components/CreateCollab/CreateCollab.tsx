@@ -164,7 +164,7 @@ export const CreateCollab = () => {
             }}
           />
           <Stack spacing={2} isInline mt={4} flexWrap="wrap">
-            {selectedLanguages.map(({ label }) => (
+            {selectedLanguages?.map(({ label }) => (
               <Tag
                 size="md"
                 key={label}

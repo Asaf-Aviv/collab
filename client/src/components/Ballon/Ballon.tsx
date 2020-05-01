@@ -9,6 +9,7 @@ import {
   PopoverBody,
   useDisclosure,
   Box,
+  FlexProps,
 } from '@chakra-ui/core'
 import styled from '@emotion/styled'
 import FocusLock from 'react-focus-lock'
@@ -51,6 +52,7 @@ export const Ballon = ({
         <Flex height="100%" align="center">
           <PopoverTrigger>
             <IconButton
+              aria-label="open friend requests"
               onClick={() => {
                 onToggle()
                 onTriggerClick?.()

@@ -28,6 +28,7 @@ export const UserAccountMenu = () => {
     <Menu>
       <MenuButton width="64px">
         <Avatar
+          size="sm"
           src={currentUser.avatar ?? undefined}
           name={currentUser.username}
         />

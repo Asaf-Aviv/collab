@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { useCollabPostsQuery } from '../../graphql/generates'
 import { Box } from '@chakra-ui/core'
 import { Container } from '../global'
 import { CollabPostCard } from '../CollabPostCard/CollabPostCard'
 import { Loader } from '../Loader'
 import { DisplayError } from '../DisplayError'
-import { useInfiniteScroll } from '../../hooks/useInfiniteScroll'
+import { useOnVisibilty } from '../../hooks/useOnVisibilty'
 import produce from 'immer'
 
 export const CollabPosts = () => {
@@ -17,11 +17,12 @@ export const CollabPosts = () => {
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'cache-and-network',
   })
+  const loadNextPageTriggerRef = useRef<HTMLSpanElement | null>(null)
 
   const { posts, hasNextPage } = data?.collabPosts ?? {}
 
-  const trigger = useInfiniteScroll(() => {
-    if (!posts || loading) return
+  const handleNextPageLoad = () => {
+    if (!posts) return
 
     fetchMore({
       variables: {
@@ -30,6 +31,7 @@ export const CollabPosts = () => {
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev
+
         const { hasNextPage, posts } = fetchMoreResult.collabPosts
 
         const collabPosts = produce(prev.collabPosts, draft => {
@@ -37,13 +39,16 @@ export const CollabPosts = () => {
           draft.posts.push(...posts)
         })
 
-        console.log(collabPosts)
-        console.log(collabPosts.posts.length)
-
         return { collabPosts }
       },
     })
-  }, hasNextPage)
+  }
+
+  useOnVisibilty(
+    loadNextPageTriggerRef,
+    handleNextPageLoad,
+    hasNextPage && !loading,
+  )
 
   return (
     <main>
@@ -59,7 +64,7 @@ export const CollabPosts = () => {
             />
           )}
           {loading && <Loader />}
-          {trigger}
+          {!error && <span ref={loadNextPageTriggerRef} />}
         </Box>
       </Container>
     </main>
