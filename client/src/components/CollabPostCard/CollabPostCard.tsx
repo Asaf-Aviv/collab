@@ -15,6 +15,7 @@ import { Paper } from '../global'
 import { CommentsAndReactionsCount } from '../CommentsAndReactionsCount/CommentsAndReactionsCount'
 import { DisplayDate } from '../DisplayDate/DisplayDate'
 import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline'
+import { PostTag } from '../PostTag'
 
 type Post = NonNullable<CollabPostsQuery['collabPosts']>['posts'][0]
 
@@ -62,7 +63,8 @@ export const CollabPostCard = memo(function CollabPostCard({
         // @ts-ignore
         to={`/collabs/posts/${id}`}
         h="100%"
-        px={2}
+        pl={12}
+        pr={2}
         w="100%"
         flex={1}
         _hover={{ textDecoration: 'none' }}
@@ -107,7 +109,3 @@ export const CollabPostCard = memo(function CollabPostCard({
     </Paper>
   )
 })
-
-const PostTag = ({ variantColor = 'purple', ...props }: TagProps) => (
-  <Tag variantColor={variantColor} size="sm" boxShadow="sm" {...props} />
-)

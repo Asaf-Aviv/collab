@@ -32,6 +32,7 @@ import { ReactionPanel } from '../ReactionPanel/ReactionPanel'
 import { PostAuthorHeader } from '../PostAuthorHeader/PostAuthorHeader'
 import { CommentForm } from '../CommentForm/CommentForm'
 import { PostStackTag } from '../PostStackTag/PostStackTag'
+import { PostTag } from '../PostTag'
 
 export const CollabPost = () => {
   const { postId } = useParams<{ postId: string }>()
@@ -123,9 +124,9 @@ export const CollabPost = () => {
                   </PostStackTag>
                 )}
                 {isNew && (
-                  <PostStackTag variantColor="green" ml={2}>
+                  <PostTag variantColor="green" ml={2}>
                     NEW
-                  </PostStackTag>
+                  </PostTag>
                 )}
               </Flex>
               <Stack spacing={4} mb={6}>
