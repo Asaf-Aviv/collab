@@ -5,7 +5,7 @@ import { WindowWidthProvider } from '../../components/WindowWidthProvider'
 import { Layout } from '../layout'
 import './index.css'
 
-export const App = hot(({ children }: any) => (
+export const App = hot(() => (
   <WindowWidthProvider>
     <ThemeProvider
       theme={Object.assign(theme, {

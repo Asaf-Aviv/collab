@@ -47,7 +47,7 @@ export const ChatStatus = () => {
               <ChatUserListItem as="div" user={{ ...currentUser, status }} />
             </MenuButton>
             <MenuList
-              placement="right-start"
+              placement="bottom"
               fontSize="0.75rem"
               zIndex={3}
               position="relative"
