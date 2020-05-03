@@ -9,11 +9,13 @@ import { Provider } from 'react-redux'
 import { useCurrentUser } from '../../../hooks/useCurrentUser'
 import { useLocation } from 'react-router-dom'
 import { PageHeaderSpacing } from '../../../components/global'
+import { useWindowWidth } from '../../../components/WindowWidthProvider'
 
 export const Layout = () => {
   const currentUser = useCurrentUser()
   const location = useLocation()
   const [isChatMinimized, setIsChatMinimized] = useState(false)
+  const windowWidth = useWindowWidth()
 
   useEffect(() => {
     window.scrollTo({ top: 0 })
@@ -30,7 +32,7 @@ export const Layout = () => {
           </Box>
           <Footer />
         </Box>
-        {currentUser && (
+        {currentUser && windowWidth >= 786 && (
           <Provider store={store}>
             <Chat
               isMinimized={isChatMinimized}
