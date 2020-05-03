@@ -14,6 +14,7 @@ import { NavLink } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useApolloClient } from '@apollo/react-hooks'
 import { Container } from '../../../components/global'
+import { NavUserPanel } from '../NavUserPanel'
 
 export const SmallScreenNav = () => {
   const [isOpen, toggleIsOpen] = useReducer(prevState => !prevState, false)
@@ -35,6 +36,7 @@ export const SmallScreenNav = () => {
             <MenuRoundedIcon width={32} height={32} />
           )}
         </IconButton>
+        <NavUserPanel />
       </Container>
       <AnimatePresence>
         {isOpen && (
