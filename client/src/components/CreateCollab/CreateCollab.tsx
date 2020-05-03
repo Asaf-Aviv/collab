@@ -109,7 +109,7 @@ export const CreateCollab = () => {
             onChange={handleInputChange}
           />
         </FormControl>
-        <Flex>
+        <Flex wrap="wrap">
           <FormControl mr={10}>
             <FormLabel htmlFor="new-project" mb={2}>
               New Project?
@@ -128,7 +128,7 @@ export const CreateCollab = () => {
               </Radio>
             </RadioButtonGroup>
           </FormControl>
-          <FormControl width={200}>
+          <FormControl width={['100%', 200]} mt={[4, 0]} >
             <FormLabel htmlFor="experience">Experience</FormLabel>
             <ReactSelect
               defaultValue={experienceOptions[0]}
@@ -238,6 +238,7 @@ export const CreateCollab = () => {
           />
         </FormControl>
         <Button
+          alignSelf={{ md: 'flex-end' }}
           variantColor="purple"
           onClick={() =>
             createCollabPost({

@@ -31,7 +31,6 @@ import { GET_COLLAB_POST, COLLAB_POST_COMMENTS } from '../../graphql/queries'
 import { ReactionPanel } from '../ReactionPanel/ReactionPanel'
 import { PostAuthorHeader } from '../PostAuthorHeader/PostAuthorHeader'
 import { CommentForm } from '../CommentForm/CommentForm'
-import { PostStackTag } from '../PostStackTag/PostStackTag'
 import { PostTag } from '../PostTag'
 
 export const CollabPost = () => {
@@ -112,54 +111,46 @@ export const CollabPost = () => {
             <MemberInvitationActions {...memberRequestsInfo} />
           </Box>
           <Box flex={1}>
-            <Box bg="white" p={8} boxShadow="md" borderRadius={6} mb={10}>
+            <Box bg="white" p={6} boxShadow="md" borderRadius={6} mb={10}>
               <Flex as="header" align="center" mb={6}>
                 <PostAuthorHeader author={owner} date={createdAt} />
-                <PostStackTag ml="auto" variantColor="blue">
-                  {experience}
-                </PostStackTag>
-                {!hasStarted && (
-                  <PostStackTag variantColor="green" ml={2}>
-                    FRESH PROJECT
-                  </PostStackTag>
-                )}
                 {isNew && (
-                  <PostTag variantColor="green" ml={2}>
+                  <PostTag variantColor="green" ml="auto">
                     NEW
                   </PostTag>
                 )}
               </Flex>
-              <Stack spacing={4} mb={6}>
-                <Link to={`/collab/${collabId}`}>
-                  <Heading as="h2" color="#964cff">
+              <Stack spacing={4}>
+                <Box
+                  as={Link}
+                  //@ts-ignore
+                  to={`/collab/${collabId}`}
+                >
+                  <Heading size="lg" as="h2" color="#964cff">
                     {name}
                   </Heading>
-                </Link>
-                <Heading as="h1">{title}</Heading>
+                </Box>
+                <Heading size="lg" as="h1">
+                  {title}
+                </Heading>
+                <Text>{description}</Text>
+                <Flex wrap="wrap">
+                  <PostTag>{experience}</PostTag>
+                  {!hasStarted && <PostTag>FRESH PROJECT</PostTag>}
+                  {languages.map(language => (
+                    <PostTag key={language}>{language}</PostTag>
+                  ))}
+                  {stack.map(tech => (
+                    <PostTag key={tech}>{tech}</PostTag>
+                  ))}
+                </Flex>
+                <ReactionPanel
+                  mt={2}
+                  reactions={reactions}
+                  addReaction={handleAddReaction}
+                  removeReaction={handleRemoveReaction}
+                />
               </Stack>
-              <Text fontSize={['lg', 'xl']}>{description}</Text>
-              <Flex wrap="wrap" mt={6} mb={4}>
-                {languages.map(language => (
-                  <PostStackTag
-                    key={language}
-                    variantColor="blue"
-                    mr={2}
-                    mb={2}
-                  >
-                    {language}
-                  </PostStackTag>
-                ))}
-                {stack.map(tech => (
-                  <PostStackTag key={tech} mr={2} mb={2}>
-                    {tech}
-                  </PostStackTag>
-                ))}
-              </Flex>
-              <ReactionPanel
-                reactions={reactions}
-                addReaction={handleAddReaction}
-                removeReaction={handleRemoveReaction}
-              />
             </Box>
             <section>
               <CommentForm
@@ -197,19 +188,23 @@ type Props = {
 const CollabMembers = ({ members }: Props) => {
   return (
     <Box>
-      <Heading size="md" as="h3">
+      <Heading fontWeight={500} size="sm" as="h3">
         Members
       </Heading>
       <MemberList
         mt={2}
         mb={4}
-        shadow="md"
+        shadow="0 1px 1px 1px #c3c3c3"
         direction="column"
-        borderWidth="1px"
         borderRadius={6}
       >
         {members.map(member => (
-          <AvatarWithUsername size="sm" key={member.id} {...member} />
+          <AvatarWithUsername
+            fontSize="0.85rem"
+            size="xs"
+            key={member.id}
+            {...member}
+          />
         ))}
       </MemberList>
     </Box>
@@ -218,7 +213,7 @@ const CollabMembers = ({ members }: Props) => {
 
 const MemberList = styled(Flex)`
   > * {
-    padding: 0.25rem;
+    padding: 0.5rem;
   }
 `
 
@@ -313,6 +308,7 @@ const MemberInvitationActions = ({
         !requestToJoinPending &&
         !invitationPending && (
           <Button
+            size="sm"
             boxShadow="md"
             variantColor="purple"
             onClick={() => requestToJoin({ variables: { collabId } })}
@@ -326,6 +322,7 @@ const MemberInvitationActions = ({
             Pending
           </Button>
           <Button
+            size="sm"
             variantColor="red"
             boxShadow="md"
             onClick={() => cancelRequestToJoin({ variables: { collabId } })}
@@ -337,12 +334,14 @@ const MemberInvitationActions = ({
       {invitationPending && (
         <>
           <Button
+            size="sm"
             boxShadow="md"
             onClick={() => declineCollabInvitation({ variables: { collabId } })}
           >
             Decline
           </Button>
           <Button
+            size="sm"
             boxShadow="md"
             variantColor="purple"
             onClick={() => acceptCollabInvitation({ variables: { collabId } })}
@@ -356,10 +355,10 @@ const MemberInvitationActions = ({
 }
 
 const ButtonsContainer = styled(Flex)`
-  & :nth-of-type(2) {
+  > :nth-child(2) {
     margin-left: 1rem;
   }
-  & > * {
+  > * {
     flex: 1;
   }
 `

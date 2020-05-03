@@ -2,7 +2,7 @@ import React, { useState, useRef, useCallback } from 'react'
 import { NimblePicker, EmojiData, Emoji } from 'emoji-mart'
 import twitterEmojiData from 'emoji-mart/data/twitter.json'
 import 'emoji-mart/css/emoji-mart.css'
-import { Button, Flex, Box, Text } from '@chakra-ui/core'
+import { Button, Flex, Box, Text, FlexProps } from '@chakra-ui/core'
 import './emoji-picker.css'
 import { Reaction } from '../../graphql/generates'
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick'
@@ -43,7 +43,7 @@ const EmojiPicker = ({
   )
 }
 
-type Props = {
+type Props = FlexProps & {
   reactions: Reaction[]
   addReaction: (emojiId: string) => void
   removeReaction: (emojiId: string) => void
@@ -53,6 +53,7 @@ export const ReactionPanel = ({
   reactions,
   addReaction,
   removeReaction,
+  ...props
 }: Props) => {
   const [isPickerOpen, setIsPickerOpen] = useState(false)
 
@@ -83,7 +84,7 @@ export const ReactionPanel = ({
   }
 
   return (
-    <Flex>
+    <Flex {...props}>
       <Flex>
         {reactions.map(({ isLiked, emojiId, count }) => (
           <Button

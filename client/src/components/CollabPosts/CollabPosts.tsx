@@ -60,7 +60,7 @@ export const CollabPosts = () => {
           {error && (
             <DisplayError
               message="Could not fetch collab posts"
-              onClick={refetch}
+              onClick={() => refetch()}
             />
           )}
           {loading && <Loader />}
