@@ -355,7 +355,7 @@ const MemberInvitationActions = ({
 }
 
 const ButtonsContainer = styled(Flex)`
-  > :nth-child(2) {
+  > :nth-of-type(2) {
     margin-left: 1rem;
   }
   > * {

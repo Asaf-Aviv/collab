@@ -32,7 +32,7 @@ export const Layout = () => {
           </Box>
           <Footer />
         </Box>
-        {currentUser && windowWidth >= 786 && (
+        {currentUser && windowWidth >= 768 && (
           <Provider store={store}>
             <Chat
               isMinimized={isChatMinimized}
