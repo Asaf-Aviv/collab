@@ -29,11 +29,7 @@ export const NavBar = () => {
   const currentUser = data?.currentUser
 
   if (width < 786) {
-    return (
-      <SiteHeader>
-        <SmallScreenNav />
-      </SiteHeader>
-    )
+    return <SmallScreenNav />
   }
 
   return (

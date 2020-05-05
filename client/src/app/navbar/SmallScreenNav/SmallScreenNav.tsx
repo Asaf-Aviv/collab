@@ -15,6 +15,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useApolloClient } from '@apollo/react-hooks'
 import { Container } from '../../../components/global'
 import { NavUserPanel } from '../NavUserPanel'
+import { SiteHeader } from '../NavBar'
 
 export const SmallScreenNav = () => {
   const [isOpen, toggleIsOpen] = useReducer(prevState => !prevState, false)
@@ -28,16 +29,27 @@ export const SmallScreenNav = () => {
 
   return (
     <>
-      <Container height="100%" flex={1} d="flex" alignItems="center">
-        <IconButton aria-label="navigation menu" onClick={() => toggleIsOpen()}>
-          {isOpen ? (
-            <MenuOpenRoundedIcon width={32} height={32} />
-          ) : (
-            <MenuRoundedIcon width={32} height={32} />
-          )}
-        </IconButton>
-        <NavUserPanel />
-      </Container>
+      <SiteHeader>
+        <Container
+          height="100%"
+          flex={1}
+          d="flex"
+          alignItems="center"
+          justifyContent="space-between"
+        >
+          <IconButton
+            aria-label="navigation menu"
+            onClick={() => toggleIsOpen()}
+          >
+            {isOpen ? (
+              <MenuOpenRoundedIcon width={32} height={32} />
+            ) : (
+              <MenuRoundedIcon width={32} height={32} />
+            )}
+          </IconButton>
+          <NavUserPanel />
+        </Container>
+      </SiteHeader>
       <AnimatePresence>
         {isOpen && (
           <StyledMotion
@@ -47,7 +59,7 @@ export const SmallScreenNav = () => {
             exit={{ opacity: 0 }}
             onClick={() => toggleIsOpen()}
           >
-            <Flex as="nav" direction="column">
+            <Flex as="nav" direction="column" bg="white" zIndex={3}>
               <StyledLink exact to="/">
                 <HomeOutlinedIcon />
                 Home
