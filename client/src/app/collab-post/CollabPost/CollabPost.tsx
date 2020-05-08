@@ -2,34 +2,20 @@ import React, { FormEvent, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import {
   useGetCollabPostQuery,
-  useRequestToJoinMutation,
-  useDeclineCollabInvitationMutation,
-  useAcceptCollabInvitationMutation,
-  useCancelCollabRequestToJoinMutation,
-  User,
   useAddCollabPostCommentMutation,
   useRemoveCollabPostReactionMutation,
   useAddCollabPostReactionMutation,
 } from '../../../graphql/generates'
-import {
-  Text,
-  Heading,
-  Stack,
-  Flex,
-  Button,
-  Box,
-  Divider,
-  FlexProps,
-} from '@chakra-ui/core'
+import { Text, Heading, Stack, Flex, Box, Divider } from '@chakra-ui/core'
 import { AvatarWithUsername } from '../../../components/AvatarWithUsername/AvatarWithUsername'
-import styled from '@emotion/styled'
 import { Container } from '../../../components/global'
-import { GET_COLLAB_POST, COLLAB_POST_COMMENTS } from '../../../graphql/queries'
+import { COLLAB_POST_COMMENTS } from '../../../graphql/queries'
 import { ReactionPanel } from '../../../components/ReactionPanel/ReactionPanel'
 import { PostAuthorHeader } from '../../../components/PostAuthorHeader/PostAuthorHeader'
 import { CommentForm } from '../../../components/CommentForm/CommentForm'
 import { PostTag } from '../../../components/PostTag'
 import { PostComments } from '../PostComments'
+import { MemberInvitationActions } from '../MemberInvitationActions'
 
 export const CollabPost = () => {
   const { postId } = useParams<{ postId: string }>()
@@ -215,139 +201,3 @@ export const CollabPost = () => {
     </main>
   )
 }
-
-type Props = FlexProps & {
-  members: Pick<User, 'id' | 'username' | 'avatar'>[]
-}
-
-// const CollabMembers = ({ members, ...props }: Props) => {
-//   return (
-//     <Flex direction="column" {...props}>
-//       <Heading fontWeight={500} size="sm" as="h3">
-//         Members
-//       </Heading>
-//       <MemberList
-//         mt={2}
-//         mb={4}
-//         shadow="0 1px 1px 1px #c3c3c3"
-//         direction="column"
-//         borderRadius={6}
-//       >
-//         {members.map(member => (
-//           <AvatarWithUsername
-//             fontSize="0.85rem"
-//             size="xs"
-//             key={member.id}
-//             {...member}
-//           />
-//         ))}
-//       </MemberList>
-//     </Flex>
-//   )
-// }
-
-// const MemberList = styled(Flex)`
-//   > * {
-//     padding: 0.5rem;
-//   }
-// `
-
-type InvitationProps = FlexProps & {
-  collabId: string
-  acceptsInvites: boolean
-  isMember: boolean
-  invitationPending: boolean
-  requestToJoinPending: boolean
-}
-
-const MemberInvitationActions = ({
-  acceptsInvites,
-  isMember,
-  requestToJoinPending,
-  invitationPending,
-  collabId,
-  ...props
-}: InvitationProps) => {
-  const { postId } = useParams<{ postId: string }>()
-  const variables = { collabId }
-  const [requestToJoin] = useRequestToJoinMutation({
-    variables,
-    refetchQueries: [{ query: GET_COLLAB_POST, variables: { postId } }],
-  })
-  const [declineCollabInvitation] = useDeclineCollabInvitationMutation({
-    variables,
-    refetchQueries: [{ query: GET_COLLAB_POST, variables: { postId } }],
-  })
-  const [acceptCollabInvitation] = useAcceptCollabInvitationMutation({
-    variables,
-    refetchQueries: [{ query: GET_COLLAB_POST, variables: { postId } }],
-  })
-  const [cancelRequestToJoin] = useCancelCollabRequestToJoinMutation({
-    variables,
-    refetchQueries: [{ query: GET_COLLAB_POST, variables: { postId } }],
-  })
-
-  return (
-    <ButtonsContainer {...props} wrap="wrap">
-      {acceptsInvites &&
-        !isMember &&
-        !requestToJoinPending &&
-        !invitationPending && (
-          <Button
-            size="sm"
-            boxShadow="md"
-            variantColor="purple"
-            onClick={() => requestToJoin()}
-          >
-            Request to join
-          </Button>
-        )}
-      {requestToJoinPending && (
-        <>
-          <Button isDisabled boxShadow="md">
-            Pending
-          </Button>
-          <Button
-            size="sm"
-            variantColor="red"
-            boxShadow="md"
-            onClick={() => cancelRequestToJoin()}
-          >
-            Cancel
-          </Button>
-        </>
-      )}
-      {invitationPending && (
-        <>
-          <Text flexBasis="100%" mb={4}>
-            You are invited to join this collab
-          </Text>
-          <Button
-            size="sm"
-            boxShadow="md"
-            onClick={() => declineCollabInvitation()}
-          >
-            Decline
-          </Button>
-          <Button
-            size="sm"
-            boxShadow="md"
-            variantColor="purple"
-            onClick={() => acceptCollabInvitation()}
-          >
-            Accept
-          </Button>
-        </>
-      )}
-    </ButtonsContainer>
-  )
-}
-
-const ButtonsContainer = styled(Flex)`
-  > :nth-of-type(2) {
-    margin-left: 1rem;
-  }
-  > * {
-    flex: 1;
-  }
-`
