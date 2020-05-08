@@ -5,8 +5,7 @@ import { App } from './app/App'
 import { ApolloProvider } from '@apollo/react-hooks'
 import * as serviceWorker from './serviceWorker'
 import { apolloClient } from './apolloClient'
-import { WindowWidthProvider } from './components/WindowWidthProvider'
-import { TokenValidatonProvider } from './components/TokenValidatonProvider/TokenValidatonProvider'
+import { WindowWidthProvider, TokenValidatonProvider } from './providers'
 
 ReactDOM.render(
   <ApolloProvider client={apolloClient}>

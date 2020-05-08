@@ -1,7 +1,7 @@
 import React from 'react'
 import { hot } from 'react-hot-loader/root'
 import { ThemeProvider, CSSReset, theme } from '@chakra-ui/core'
-import { WindowWidthProvider } from '../../components/WindowWidthProvider'
+import { WindowWidthProvider } from '../../providers'
 import { Layout } from '../layout'
 import './index.css'
 

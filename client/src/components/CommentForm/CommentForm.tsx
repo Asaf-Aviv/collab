@@ -18,18 +18,20 @@ export const CommentForm = ({ value, onChange, onSubmit }: Props) => {
         position="relative"
         zIndex={2}
       >
-        <Heading as="h3" mb={2} size="sm" mr={2}>
+        <Heading as="h3" mb={2} size="sm">
           Add a Comment
         </Heading>
       </Text>
       <Divider mt={0} mb={6} />
       <Textarea
         placeholder="Add a comment"
-        boxShadow="md"
+        bg="#e3dcf3"
+        p={2}
+        _hover={{ borderColor: '#cab3ff' }}
+        _focus={{ borderColor: '#805ad5' }}
         value={value}
         onChange={(e: any) => onChange(e.target.value)}
         minHeight={120}
-        border="none"
         mb={6}
       />
       <Button

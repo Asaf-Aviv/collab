@@ -1,4 +1,4 @@
-import React, { ButtonHTMLAttributes } from 'react'
+import React from 'react'
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded'
 import { IconButton } from '../global'
 import { IconButtonProps } from '@chakra-ui/core'

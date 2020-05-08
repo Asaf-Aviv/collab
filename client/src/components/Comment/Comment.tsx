@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text } from '@chakra-ui/core'
+import { Text, Box } from '@chakra-ui/core'
 import { AvatarWithUsername } from '../AvatarWithUsername/AvatarWithUsername'
 import { User } from '../../graphql/generates'
 import styled from '@emotion/styled'
@@ -17,9 +17,12 @@ export const Comment = ({ /* id ,*/ content, author, children }: Props) => (
     as="article"
     flexDirection="column"
     alignItems="start"
+    boxShadow="0 1px 1px 1px #c3c3c3"
     p={6}
   >
-    <AvatarWithUsername size="sm" {...author} />
+    <Box as="header">
+      <AvatarWithUsername size="sm" {...author} />
+    </Box>
     <Text mt={2} mb={4}>
       {content}
     </Text>

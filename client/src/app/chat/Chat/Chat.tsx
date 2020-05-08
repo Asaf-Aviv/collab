@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Flex, Divider, IconButton } from '@chakra-ui/core'
+import { Flex, Divider, IconButton, Box, Text } from '@chakra-ui/core'
 import { useSelector, useDispatch } from 'react-redux'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
@@ -12,6 +12,7 @@ import { ChatStatus } from '../ChatStatus'
 import { ChatUsersList } from '../ChatUsersList'
 import { ChatBox } from '../ChatBox/ChatBox'
 import { CloseButton } from '../../../components/CloseButton'
+import { useTypedSelector } from '../useTypedSelector'
 
 type Props = {
   isMinimized: boolean
@@ -38,6 +39,9 @@ export const Chat = ({ isMinimized, toggleMinimize }: Props) => {
       setConnected(true)
     },
   })
+  const totalUnreadCount = useTypedSelector(
+    ({ messages }) => messages.totalUnreadCount,
+  )
 
   useEffect(() => {
     connectToChat()
@@ -56,20 +60,40 @@ export const Chat = ({ isMinimized, toggleMinimize }: Props) => {
     <>
       <AnimatePresence>
         {isMinimized && (
-          <IconButton
-            onClick={toggleMinimize}
-            aria-label="maximize chat"
-            position="fixed"
-            bottom={0}
-            right="1rem"
-            bg="purple.700"
-            variantColor="purple"
-            color="white"
-            icon="chat"
-            roundedBottom={0}
-          />
+          <Box position="fixed" bottom={0} right="1rem">
+            <Box position="relative">
+              <IconButton
+                onClick={toggleMinimize}
+                aria-label="maximize chat"
+                bg="purple.700"
+                variantColor="purple"
+                color="white"
+                icon="chat"
+                roundedBottom={0}
+              />
+              {totalUnreadCount > -1 && (
+                <Flex
+                  align="center"
+                  justify="center"
+                  position="absolute"
+                  top={-15}
+                  right={-10}
+                  color="white"
+                  width="22px"
+                  height="22px"
+                  fontSize="0.75rem"
+                  fontWeight={500}
+                  borderRadius="50%"
+                  bg="#c70707"
+                >
+                  <Text as="span" userSelect="none">
+                    4
+                  </Text>
+                </Flex>
+              )}
+            </Box>
+          </Box>
         )}
-
         {!isMinimized && (
           <motion.div
             key="chat"

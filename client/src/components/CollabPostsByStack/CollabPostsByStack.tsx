@@ -1,4 +1,5 @@
 import React from 'react'
+import produce from 'immer'
 import { useParams } from 'react-router-dom'
 import { useCollabPostsByStackQuery } from '../../graphql/generates'
 import { Container } from '../global'
@@ -38,19 +39,23 @@ export const CollabPostsByStack = () => {
                   },
                   updateQuery: (prev, { fetchMoreResult }) => {
                     if (!fetchMoreResult) return prev
-                    return {
-                      collabPostsByStack: {
-                        ...prev.collabPostsByStack,
-                        hasNextPage:
-                          fetchMoreResult.collabPostsByStack.hasNextPage,
-                        posts: [
-                          ...prev.collabPostsByStack.posts,
-                          ...fetchMoreResult.collabPostsByStack.posts,
-                        ],
+
+                    const {
+                      hasNextPage,
+                      posts,
+                    } = fetchMoreResult.collabPostsByStack
+
+                    const collabPostsByStack = produce(
+                      prev.collabPostsByStack,
+                      draft => {
+                        draft.hasNextPage = hasNextPage
+                        draft.posts.push(...posts)
                       },
-                    }
+                    )
+
+                    return { collabPostsByStack }
                   },
-                })
+                }).catch(() => {})
               }
             >
               fetch more

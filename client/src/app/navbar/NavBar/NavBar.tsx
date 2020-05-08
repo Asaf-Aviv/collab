@@ -6,7 +6,7 @@ import { SmallScreenNav } from '../SmallScreenNav'
 import { NavUserPanel } from '../NavUserPanel'
 import { useGetCurrentUserQuery } from '../../../graphql/generates'
 import { Container } from '../../../components/global'
-import { useWindowWidth } from '../../../components/WindowWidthProvider'
+import { useWindowWidth } from '../../../providers'
 
 export const SiteHeader = ({ children }: { children: React.ReactNode }) => (
   <Flex
@@ -28,7 +28,7 @@ export const NavBar = () => {
   const width = useWindowWidth()
   const currentUser = data?.currentUser
 
-  if (width < 786) {
+  if (width < 768) {
     return <SmallScreenNav />
   }
 

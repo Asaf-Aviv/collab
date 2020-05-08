@@ -1,5 +1,5 @@
 import { useGetCurrentUserQuery } from '../graphql/generates'
-import { useTokenValidation } from '../components/TokenValidatonProvider/TokenValidatonProvider'
+import { useTokenValidation } from '../providers'
 
 export const useCurrentUser = () => {
   const { setHasBeenValidated } = useTokenValidation()
