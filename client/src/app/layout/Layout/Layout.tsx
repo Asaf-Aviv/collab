@@ -3,18 +3,16 @@ import { Box, Flex } from '@chakra-ui/core'
 import { NavBar } from '../../navbar'
 import { Footer } from '../Footer'
 import { Routes } from '../../routes'
-import { Chat } from '../../chat'
-import { store } from '../../chat/reducers'
-import { Provider } from 'react-redux'
+import { Chat, ChatProvider } from '../../chat'
 import { useCurrentUser } from '../../../hooks/useCurrentUser'
 import { useLocation } from 'react-router-dom'
 import { PageHeaderSpacing } from '../../../components/global'
-import { useWindowWidth } from '../../../components/WindowWidthProvider'
+import { useWindowWidth } from '../../../providers'
 
 export const Layout = () => {
   const currentUser = useCurrentUser()
   const location = useLocation()
-  const [isChatMinimized, setIsChatMinimized] = useState(false)
+  const [isChatMinimized, setIsChatMinimized] = useState(true)
   const windowWidth = useWindowWidth()
 
   useEffect(() => {
@@ -33,12 +31,12 @@ export const Layout = () => {
           <Footer />
         </Box>
         {currentUser && windowWidth >= 768 && (
-          <Provider store={store}>
+          <ChatProvider>
             <Chat
               isMinimized={isChatMinimized}
               toggleMinimize={() => setIsChatMinimized(prevState => !prevState)}
             />
-          </Provider>
+          </ChatProvider>
         )}
       </Flex>
     </>

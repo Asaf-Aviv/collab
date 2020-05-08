@@ -10,7 +10,7 @@ import {
 } from 'react-router-dom'
 import { TabList, Tab, Tabs } from '@chakra-ui/core'
 import { useCollabQuery } from '../../../graphql/generates'
-import { TaskBoard } from '../TaskBoard'
+import { TaskBoard } from '../../task-board/TaskBoard'
 import { CollabMembers } from '../CollabMembers'
 import { CollabDiscussions } from '../CollabDiscussions'
 import { DiscussionThread } from '../DiscussionThread'

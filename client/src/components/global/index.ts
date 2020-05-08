@@ -16,7 +16,7 @@ export const Paper = styled(PseudoBox)<PseudoBoxProps>`
   display: flex;
   height: 100%;
   border-radius: 6px;
-  box-shadow: 2px 6px 15px 0 rgba(179, 163, 204, 0.38);
+  box-shadow: 0px 2px 9px 0 rgb(221, 221, 221);
 `
 
 export const IconButton = styled.button`

@@ -11,7 +11,7 @@ import PostAddIcon from '@material-ui/icons/PostAdd'
 import { Flex, Divider, Button, Text } from '@chakra-ui/core'
 import styled from '@emotion/styled'
 import { NavLink } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useApolloClient } from '@apollo/react-hooks'
 import { Container } from '../../../components/global'
 import { NavUserPanel } from '../NavUserPanel'
@@ -47,87 +47,89 @@ export const SmallScreenNav = () => {
               <MenuRoundedIcon width={32} height={32} />
             )}
           </IconButton>
-          <NavUserPanel />
+          {currentUser && <NavUserPanel />}
         </Container>
       </SiteHeader>
-      <AnimatePresence>
-        {isOpen && (
-          <StyledMotion
-            animate={{ y: 0, opacity: 1 }}
-            initial={{ y: '-100%', opacity: 0.3 }}
-            transition={{ duration: 0.3 }}
-            exit={{ opacity: 0 }}
+      {isOpen && (
+        <StyledMotion
+          animate={{ y: 0, opacity: 1 }}
+          initial={{ y: '-100%', opacity: 0.3 }}
+          transition={{ duration: 0.3 }}
+        >
+          <Flex
+            as="nav"
+            direction="column"
+            bg="white"
+            zIndex={3}
             onClick={() => toggleIsOpen()}
           >
-            <Flex as="nav" direction="column" bg="white" zIndex={3}>
-              <StyledLink exact to="/">
-                <HomeOutlinedIcon />
-                Home
+            <StyledLink exact to="/">
+              <HomeOutlinedIcon />
+              Home
+              <ArrowForwardIosIcon />
+            </StyledLink>
+            <StyledLink exact to="/collabs/posts">
+              <HomeOutlinedIcon />
+              Collabs
+              <ArrowForwardIosIcon />
+            </StyledLink>
+            <StyledLink exact to="/showcase">
+              <HomeOutlinedIcon />
+              Showcase
+              <ArrowForwardIosIcon />
+            </StyledLink>
+            <StyledLink to="/create">
+              <PostAddIcon />
+              Create
+              <ArrowForwardIosIcon />
+            </StyledLink>
+            <StyledLink to="/search">
+              <SearchRoundedIcon />
+              Search
+              <ArrowForwardIosIcon />
+            </StyledLink>
+            <Divider />
+            {currentUser ? (
+              <StyledLink to="/profile">
+                <AccountBoxOutlinedIcon />
+                Profile
                 <ArrowForwardIosIcon />
               </StyledLink>
-              <StyledLink exact to="/collabs/posts">
-                <HomeOutlinedIcon />
-                Collabs
-                <ArrowForwardIosIcon />
-              </StyledLink>
-              <StyledLink exact to="/showcase">
-                <HomeOutlinedIcon />
-                Showcase
-                <ArrowForwardIosIcon />
-              </StyledLink>
-              <StyledLink to="/create">
-                <PostAddIcon />
-                Create
-                <ArrowForwardIosIcon />
-              </StyledLink>
-              <StyledLink to="/search">
-                <SearchRoundedIcon />
-                Search
-                <ArrowForwardIosIcon />
-              </StyledLink>
-              <Divider />
-              {currentUser ? (
-                <StyledLink to="/profile">
-                  <AccountBoxOutlinedIcon />
-                  Profile
+            ) : (
+              <>
+                <StyledLink to="/login">
+                  <PostAddIcon />
+                  Log in
                   <ArrowForwardIosIcon />
                 </StyledLink>
-              ) : (
-                <>
-                  <StyledLink to="/login">
-                    <PostAddIcon />
-                    Log in
-                    <ArrowForwardIosIcon />
-                  </StyledLink>
-                  <StyledLink to="/signup">
-                    <PostAddIcon />
-                    Sign up
-                    <ArrowForwardIosIcon />
-                  </StyledLink>
-                </>
-              )}
-              <Divider />
-              {currentUser && (
-                <Button
-                  bg="white"
-                  height="48px"
-                  justifyContent="flex-start"
-                  fontWeight={500}
-                  onClick={() => logout()}
-                  _hover={{
-                    backgroundColor: '#f2e5ff',
-                  }}
-                >
-                  <ExitToAppOutlinedIcon />
-                  <Text ml="0.5rem" as="span">
-                    Sign Out
-                  </Text>
-                </Button>
-              )}
-            </Flex>
-          </StyledMotion>
-        )}
-      </AnimatePresence>
+                <StyledLink to="/signup">
+                  <PostAddIcon />
+                  Sign up
+                  <ArrowForwardIosIcon />
+                </StyledLink>
+              </>
+            )}
+            <Divider />
+            {currentUser && (
+              <Button
+                bg="white"
+                height="48px"
+                justifyContent="flex-start"
+                fontWeight={500}
+                onClick={() => logout()}
+                _hover={{
+                  backgroundColor: '#f2e5ff',
+                }}
+              >
+                <ExitToAppOutlinedIcon />
+                <Text ml="0.5rem" as="span">
+                  Sign Out
+                </Text>
+              </Button>
+            )}
+          </Flex>
+        </StyledMotion>
+      )}
     </>
   )
 }
@@ -139,6 +141,7 @@ const StyledMotion = styled(motion.div)`
   left: 0;
   right: 0;
   background-color: white;
+  z-index: 3;
 `
 
 const IconButton = styled.button`

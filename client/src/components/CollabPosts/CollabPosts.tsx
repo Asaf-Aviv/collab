@@ -1,12 +1,12 @@
 import React, { useRef } from 'react'
-import { useCollabPostsQuery } from '../../graphql/generates'
+import produce from 'immer'
 import { Box } from '@chakra-ui/core'
 import { Container } from '../global'
-import { CollabPostCard } from '../CollabPostCard/CollabPostCard'
+import { useCollabPostsQuery } from '../../graphql/generates'
+import { CollabPostCard } from '../CollabPostCard'
 import { Loader } from '../Loader'
 import { DisplayError } from '../DisplayError'
 import { useOnVisibilty } from '../../hooks/useOnVisibilty'
-import produce from 'immer'
 
 export const CollabPosts = () => {
   const { data, loading, error, fetchMore, refetch } = useCollabPostsQuery({
@@ -41,7 +41,7 @@ export const CollabPosts = () => {
 
         return { collabPosts }
       },
-    })
+    }).catch(() => {})
   }
 
   useOnVisibilty(

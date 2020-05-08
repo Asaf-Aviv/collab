@@ -3,6 +3,11 @@
   outline: none;
 }
 
+.emoji-mart .emoji-mart-emoji:focus {
+  border-radius: 3px;
+  background-color: #d39eff;
+}
+
 .emoji-mart-anchor {
   display: flex;
   justify-content: center;

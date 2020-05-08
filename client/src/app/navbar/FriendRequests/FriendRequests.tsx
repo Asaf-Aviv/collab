@@ -126,11 +126,11 @@ const FriendRequestItem = ({
     pr={4}
     alignItems="center"
     h={45}
-    bg="#e5d8ff"
-    _hover={{ backgroundColor: '#d1bff7' }}
+    bg="white"
+    _hover={{ backgroundColor: '#f2f2f2' }}
     style={style}
     _notFirst={{
-      borderTop: '1px solid #ceb8ff',
+      borderTop: '1px solid #dcdcdc',
     }}
   >
     <Text as="span" fontSize="0.9rem">

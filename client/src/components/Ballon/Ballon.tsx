@@ -9,7 +9,6 @@ import {
   PopoverBody,
   useDisclosure,
   Box,
-  FlexProps,
 } from '@chakra-ui/core'
 import styled from '@emotion/styled'
 import FocusLock from 'react-focus-lock'

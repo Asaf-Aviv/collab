@@ -35,6 +35,7 @@ export const ChatUsersList = memo(function ChatUsersList({
       </Heading>
       <Box
         overflowY="auto"
+        overflowX="hidden"
         bg="white"
         borderRadius={6}
         p={2}

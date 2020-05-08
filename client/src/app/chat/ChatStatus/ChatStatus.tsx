@@ -33,7 +33,7 @@ export const ChatStatus = () => {
     }
 
     updateStatus()
-  }, [updateStatus, status])
+  }, [updateStatus, status, isFirstRender])
 
   return (
     <Box>

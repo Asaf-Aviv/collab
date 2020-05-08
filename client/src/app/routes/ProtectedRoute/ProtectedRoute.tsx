@@ -1,6 +1,6 @@
 import React from 'react'
 import { Route, Redirect, RouteProps } from 'react-router-dom'
-import { useTokenValidation } from '../../../components/TokenValidatonProvider/TokenValidatonProvider'
+import { useTokenValidation } from '../../../providers'
 import { useCurrentUser } from '../../../hooks/useCurrentUser'
 
 export const ProtectedRoute = ({ children, ...props }: RouteProps) => {

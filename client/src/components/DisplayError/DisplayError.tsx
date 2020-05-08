@@ -16,12 +16,7 @@ export const DisplayError = ({ message, onClick }: Props) => (
     </Flex>
     {onClick && (
       <Flex mt={4}>
-        <Button
-          onClick={onClick}
-          variant="outline"
-          variantColor="red"
-          // color="white"
-        >
+        <Button onClick={onClick} variant="outline" variantColor="red">
           <RefreshRoundedIcon fontSize="small" />
           <Text
             ml={1}
