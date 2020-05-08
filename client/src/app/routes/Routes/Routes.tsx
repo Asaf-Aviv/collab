@@ -14,16 +14,30 @@ import { PublicOnlyRoute } from '../PublicOnlyRoute'
 
 export const Routes = () => (
   <Switch>
-    <Route exact path="/" component={Home} />
+    <Route exact path="/">
+      <Home />
+    </Route>
     <ProtectedRoute path="/profile">
       <MyProfile />
     </ProtectedRoute>
-    <Route path="/create" component={CreateCollab} />
-    <Route exact path="/collabs/posts" component={CollabPosts} />
-    <Route exact path="/collabs/posts/:postId" component={CollabPost} />
-    <Route path="/collabs/posts/stack/:stack" component={CollabPostsByStack} />
-    <Route path="/collab/:collabId" component={Collab} />
-    <Route path="/user/:userId" component={UserProfile} />
+    <Route path="/create">
+      <CreateCollab />
+    </Route>
+    <Route exact path="/collabs/posts">
+      <CollabPosts />
+    </Route>
+    <Route exact path="/collabs/posts/:postId">
+      <CollabPost />
+    </Route>
+    <Route path="/collabs/posts/stack/:stack">
+      <CollabPostsByStack />
+    </Route>
+    <Route path="/collab/:collabId">
+      <Collab />
+    </Route>
+    <Route path="/user/:userId">
+      <UserProfile />
+    </Route>
     <PublicOnlyRoute path="/login">
       <Login />
     </PublicOnlyRoute>
