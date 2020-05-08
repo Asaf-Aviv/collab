@@ -5,7 +5,7 @@ export const Container = styled(Box)<{ fullWidth?: boolean }>`
   margin: 0 auto;
   padding-left: 2.5%;
   padding-right: 2.5%;
-  max-width: ${({ fullWidth }) => (fullWidth ? '100%' : '1200px')};
+  /* max-width: ${({ fullWidth }) => (fullWidth ? '100%' : '1200px')}; */
 `
 
 export const PageHeaderSpacing = styled.div`
