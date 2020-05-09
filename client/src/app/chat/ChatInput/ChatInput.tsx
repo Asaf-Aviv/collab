@@ -44,9 +44,10 @@ export const ChatInput = () => {
         placeholder={`Message ${friend.username}`}
         resize="none"
         bg="#e3dcf3"
-        border="none"
+        borderColor="transparent"
         minHeight={60}
-        _focus={{ boxShadow: '0 0 0 1px #c539ff' }}
+        _hover={{ borderColor: '#cab3ff' }}
+        _focus={{ borderColor: '#805ad5' }}
         onKeyPress={handleKeyDown}
         value={messageContent}
         onChange={(e: any) => setMessageContent(e.target.value)}
