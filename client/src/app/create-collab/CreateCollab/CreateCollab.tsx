@@ -10,7 +10,6 @@ import {
   Flex,
   FormControl,
   FormLabel,
-  Input,
   RadioButtonGroup,
   Textarea,
   Stack,
@@ -25,6 +24,8 @@ import {
   useCollabPostLanguagesQuery,
 } from '../../../graphql/generates'
 import { Option } from 'react-select/src/filters'
+import { InputWithLabel } from '../../../components/InputWithLabel'
+import styled from '@emotion/styled'
 
 const experienceOptions = [
   'ALL',
@@ -91,24 +92,22 @@ export const CreateCollab = () => {
         Create a Collab
       </Heading>
       <Stack spacing={6} m="auto" maxW={768}>
-        <FormControl>
-          <FormLabel htmlFor="name">Collab Name</FormLabel>
-          <Input
-            id="name"
-            name="name"
-            value={name}
-            onChange={handleInputChange}
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel htmlFor="title">Post Title</FormLabel>
-          <Input
-            id="title"
-            name="title"
-            value={title}
-            onChange={handleInputChange}
-          />
-        </FormControl>
+        <InputWithLabel
+          id="name"
+          htmlFor="name"
+          name="name"
+          label="Collab Name"
+          value={name}
+          onChange={handleInputChange}
+        />
+        <InputWithLabel
+          id="name"
+          htmlFor="title"
+          name="title"
+          label="Post Title"
+          value={title}
+          onChange={handleInputChange}
+        />
         <Flex wrap="wrap">
           <FormControl mr={10}>
             <FormLabel htmlFor="new-project" mb={2}>
@@ -120,23 +119,45 @@ export const CreateCollab = () => {
               id="new-project"
               value={hasStarted ? 'no' : 'yes'}
             >
-              <Radio value="no" onChange={handleHasStaredChange}>
+              <Radio
+                value="no"
+                variantColor="purple"
+                onChange={handleHasStaredChange}
+              >
                 No
               </Radio>
-              <Radio value="yes" onChange={handleHasStaredChange}>
+              <Radio
+                value="yes"
+                variantColor="purple"
+                onChange={handleHasStaredChange}
+              >
                 Yes
               </Radio>
             </RadioButtonGroup>
           </FormControl>
-          <FormControl width={['100%', 200]} mt={[4, 0]}>
+          <FormControl width={['100%', 180]} mt={[4, 0]}>
             <FormLabel htmlFor="experience">Experience</FormLabel>
-            <ReactSelect
+            <StyledReactSelect
               defaultValue={experienceOptions[0]}
               id="experience"
-              placeholder=""
+              classNamePrefix="react-select"
               name="experience"
               options={experienceOptions}
               onChange={handleExperienceChange as any}
+              styles={{
+                control: (base: any, state: any) => ({
+                  ...base,
+                  borderWidth: 2,
+                  '&:hover': {
+                    borderColor: '#cab3ff',
+                  },
+                  borderColor:
+                    state.isFocused || state.menuIsOpen
+                      ? '#805ad5 !important'
+                      : 'transparent',
+                  boxShadow: 'none',
+                }),
+              }}
             />
           </FormControl>
         </Flex>
@@ -235,6 +256,12 @@ export const CreateCollab = () => {
             value={description}
             minHeight={200}
             onChange={handleInputChange}
+            bg="#e3dcf3"
+            p={2}
+            borderColor="transparent"
+            _hover={{ borderColor: '#cab3ff' }}
+            _focus={{ borderColor: '#805ad5' }}
+            borderWidth={2}
           />
         </FormControl>
         <Button
@@ -258,3 +285,34 @@ export const CreateCollab = () => {
     </Container>
   )
 }
+
+const StyledReactSelect = styled(ReactSelect)`
+  .react-select__control {
+    background-color: #e3dcf3;
+    cursor: pointer;
+  }
+
+  .react-select__menu-list {
+    background-color: white;
+  }
+
+  .react-select__option {
+    cursor: pointer;
+  }
+
+  .react-select__option--is-selected {
+    color: inherit;
+    background-color: #dcd2f5;
+  }
+
+  .react-select__option--is-focused {
+    background-color: #dcd2f5;
+  }
+
+  .react-select__indicator {
+    color: hsl(0, 0%, 60%);
+    &:hover {
+      color: hsl(0, 0%, 40%);
+    }
+  }
+`
