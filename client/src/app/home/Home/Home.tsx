@@ -100,7 +100,7 @@ export const Home = () => {
               mr={[0, 0, 16]}
               color="#735b80"
             >
-              Let&aposs make some apps together!
+              Let&apos;s make some apps together!
             </Text>
             <Button
               as={Link}

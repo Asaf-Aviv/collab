@@ -176,7 +176,7 @@ export const collabPostResolver: Resolvers = {
       const users = await loaders.userLoader.loadMany(memberIds)
       return users.map(replaceErrorWithNull)
     },
-    isNew: ({ createdAt }) => differenceInDays(createdAt, new Date()) <= 7,
+    isNew: ({ createdAt }) => differenceInDays(new Date(), createdAt) <= 7,
     comments: ({ id }, args, { models }) =>
       models.CollabPostComment.findAll({ where: { postId: id } }),
     pendingInvites: async ({ collabId }, args, { models, loaders }) => {

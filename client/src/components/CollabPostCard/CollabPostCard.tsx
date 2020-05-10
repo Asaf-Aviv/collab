@@ -30,8 +30,8 @@ export const CollabPostCard = memo(
     ...props
   }: Props) => {
     return (
-      <Paper flexDirection="column" as="article" {...props}>
-        <Flex p={2} w="100%" align="center" justify="space-between">
+      <Paper flexDirection="column" as="article" bg="white" {...props}>
+        <Flex p={3} w="100%" align="center" justify="space-between">
           <Flex align="center" wrap="wrap">
             <AvatarWithUsername size="sm" {...owner} />
             <DisplayDate date={createdAt} px={2} />
@@ -46,10 +46,10 @@ export const CollabPostCard = memo(
           as={RouterLink as any}
           // @ts-ignore
           to={`/collabs/posts/${id}`}
-          h="100%"
           pl={12}
-          pr={2}
+          pr={3}
           w="100%"
+          position="relative"
           flex={1}
           _hover={{ textDecoration: 'none' }}
         >
@@ -59,8 +59,8 @@ export const CollabPostCard = memo(
         </Link>
         <Flex
           bg="#f2f2ff"
-          px={2}
-          py={3}
+          px={3}
+          py={2}
           w="100%"
           wrap="wrap"
           align="center"
@@ -79,7 +79,7 @@ export const CollabPostCard = memo(
               </PostTag>
             ))}
           </Flex>
-          <Flex align="center" flexShrink={0}>
+          <Flex align="center" flexShrink={0} roundedBottom={6}>
             <PeopleOutlineIcon />
             <Text as="span" ml="3px" mr={3} fontWeight={700}>
               {membersCount}

@@ -7,7 +7,7 @@ type Props = BoxProps & {
 }
 
 export const DisplayDate = ({ date, ...props }: Props) => (
-  <Text as="time" fontSize="0.8rem" lineHeight={1.1} opacity={0.7} {...props}>
+  <Text as="time" fontSize="0.8rem" lineHeight={1.4} opacity={0.7} {...props}>
     {formatDistanceToNowStrict(Number(date), {
       addSuffix: true,
     })}

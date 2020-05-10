@@ -17,7 +17,7 @@ export const SiteHeader = ({ children }: { children: React.ReactNode }) => (
     pos="fixed"
     width="100%"
     zIndex={100}
-    boxShadow="0px 4px 5px 0 rgba(231, 216, 255, 0.38)"
+    boxShadow="0px 4px 5px 0 rgba(210, 210, 210, 0.38)"
   >
     {children}
   </Flex>
