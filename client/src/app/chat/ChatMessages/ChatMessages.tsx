@@ -23,7 +23,7 @@ export const ChatMessages = () => {
   useEffect(() => {
     if (!messagesListRef.current) return
 
-    const handleScroll = debounce((e: Event) => {
+    const handleScroll = debounce(() => {
       if (!messagesListRef.current) return
       const { scrollHeight, scrollTop, clientHeight } = messagesListRef.current
       // This check is taking into account the display scaling

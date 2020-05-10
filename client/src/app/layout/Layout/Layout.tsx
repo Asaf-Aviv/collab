@@ -22,7 +22,7 @@ export const Layout = () => {
   return (
     <>
       <NavBar />
-      <Flex>
+      <Flex bg="gray.50">
         <Box flex={1}>
           <Box pt="64px" mb={8} minHeight="100vh">
             {location.pathname !== '/' && <PageHeaderSpacing />}
