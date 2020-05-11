@@ -22,9 +22,9 @@ export const Layout = () => {
   return (
     <>
       <NavBar />
-      <Flex bg="gray.50">
+      <Flex bg="bg" color="text">
         <Box flex={1}>
-          <Box pt="64px" mb={8} minHeight="100vh">
+          <Box pt="64px" mb={8} minHeight="calc(100vh - 64px)">
             {location.pathname !== '/' && <PageHeaderSpacing />}
             <Routes />
           </Box>

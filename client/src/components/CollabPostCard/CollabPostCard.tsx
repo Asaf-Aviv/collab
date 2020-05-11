@@ -30,7 +30,7 @@ export const CollabPostCard = memo(
     ...props
   }: Props) => {
     return (
-      <Paper flexDirection="column" as="article" bg="white" {...props}>
+      <Paper flexDirection="column" as="article" {...props}>
         <Flex p={3} w="100%" align="center" justify="space-between">
           <Flex align="center" wrap="wrap">
             <AvatarWithUsername size="sm" {...owner} />
@@ -48,17 +48,17 @@ export const CollabPostCard = memo(
           to={`/collabs/posts/${id}`}
           pl={12}
           pr={3}
+          py={2}
           w="100%"
           position="relative"
           flex={1}
           _hover={{ textDecoration: 'none' }}
         >
-          <Heading size="sm" fontWeight={500} pb={6} as="h2">
+          <Heading size="sm" fontWeight={600} as="h3">
             {title}
           </Heading>
         </Link>
         <Flex
-          bg="#f2f2ff"
           px={3}
           py={2}
           w="100%"

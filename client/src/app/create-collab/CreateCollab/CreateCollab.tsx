@@ -34,7 +34,7 @@ const experienceOptions = [
   'MID',
   'MID_SENIOR',
   'SENIOR',
-].map(value => ({ value, label: value }))
+].map(value => ({ value, label: value.replace('_', '-') }))
 
 export const CreateCollab = () => {
   const [postInput, setPostInput] = useState<
@@ -256,7 +256,7 @@ export const CreateCollab = () => {
             value={description}
             minHeight={200}
             onChange={handleInputChange}
-            bg="#e3dcf3"
+            bg="#f2f2ff"
             p={2}
             borderColor="transparent"
             _hover={{ borderColor: '#cab3ff' }}
@@ -288,7 +288,7 @@ export const CreateCollab = () => {
 
 const StyledReactSelect = styled(ReactSelect)`
   .react-select__control {
-    background-color: #e3dcf3;
+    background-color: #f2f2ff;
     cursor: pointer;
   }
 

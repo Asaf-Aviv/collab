@@ -1,6 +1,5 @@
 import React, { useRef } from 'react'
 import produce from 'immer'
-import { Box } from '@chakra-ui/core'
 import { Container } from '../global'
 import { useCollabPostsQuery } from '../../graphql/generates'
 import { CollabPostCard } from '../CollabPostCard'
@@ -52,20 +51,18 @@ export const CollabPosts = () => {
 
   return (
     <main>
-      <Container>
-        <Box maxWidth={768} mx="auto">
-          {posts?.map(post => (
-            <CollabPostCard key={post.id} {...post} mb={8} />
-          ))}
-          {error && (
-            <DisplayError
-              message="Could not fetch collab posts"
-              onClick={() => refetch()}
-            />
-          )}
-          {loading && <Loader />}
-          {!error && <span ref={loadNextPageTriggerRef} />}
-        </Box>
+      <Container maxWidth={900}>
+        {posts?.map(post => (
+          <CollabPostCard key={post.id} {...post} mb={8} />
+        ))}
+        {error && (
+          <DisplayError
+            message="Could not fetch collab posts"
+            onClick={() => refetch()}
+          />
+        )}
+        {loading && <Loader />}
+        {!error && <span ref={loadNextPageTriggerRef} />}
       </Container>
     </main>
   )

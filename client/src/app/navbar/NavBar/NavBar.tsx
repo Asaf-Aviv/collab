@@ -88,8 +88,7 @@ export const NavBar = () => {
 const StyledFlex = styled(Flex)`
   display: flex;
   align-items: center;
-  font-weight: 600;
-  letter-spacing: 1px;
+  font-weight: 300;
 `
 
 const StyledLink = styled(NavLink)`
