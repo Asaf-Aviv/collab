@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react'
+import React, { useReducer, useRef, useEffect } from 'react'
 import { useCurrentUser } from '../../../hooks/useCurrentUser'
 import MenuRoundedIcon from '@material-ui/icons/MenuRounded'
 import MenuOpenRoundedIcon from '@material-ui/icons/MenuOpenRounded'
@@ -8,6 +8,7 @@ import AccountBoxOutlinedIcon from '@material-ui/icons/AccountBoxOutlined'
 import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined'
 import SearchRoundedIcon from '@material-ui/icons/SearchRounded'
 import PostAddIcon from '@material-ui/icons/PostAdd'
+import FocusLock from 'react-focus-lock'
 import { Flex, Divider, Button, Text } from '@chakra-ui/core'
 import styled from '@emotion/styled'
 import { NavLink } from 'react-router-dom'
@@ -16,11 +17,21 @@ import { useApolloClient } from '@apollo/react-hooks'
 import { Container } from '../../../components/global'
 import { NavUserPanel } from '../NavUserPanel'
 import { SiteHeader } from '../NavBar'
+import { useKey } from '../../../hooks/useKey'
 
 export const SmallScreenNav = () => {
   const [isOpen, toggleIsOpen] = useReducer(prevState => !prevState, false)
   const currentUser = useCurrentUser()
   const client = useApolloClient()
+  const menuButtonRef = useRef<HTMLButtonElement>(null!)
+
+  useKey(['Esc', 'Escape'], toggleIsOpen, isOpen)
+
+  useEffect(() => {
+    if (!isOpen) {
+      menuButtonRef.current.focus()
+    }
+  }, [isOpen])
 
   const logout = () => {
     localStorage.removeItem('token')
@@ -40,6 +51,7 @@ export const SmallScreenNav = () => {
           <IconButton
             aria-label="navigation menu"
             onClick={() => toggleIsOpen()}
+            ref={menuButtonRef}
           >
             {isOpen ? (
               <MenuOpenRoundedIcon width={32} height={32} />
@@ -56,78 +68,86 @@ export const SmallScreenNav = () => {
           initial={{ y: '-100%', opacity: 0.3 }}
           transition={{ duration: 0.3 }}
         >
-          <Flex
-            as="nav"
-            direction="column"
-            bg="white"
-            zIndex={3}
-            onClick={() => toggleIsOpen()}
-          >
-            <StyledLink exact to="/">
-              <HomeOutlinedIcon />
-              Home
-              <ArrowForwardIosIcon />
-            </StyledLink>
-            <StyledLink exact to="/collabs/posts">
-              <HomeOutlinedIcon />
-              Collabs
-              <ArrowForwardIosIcon />
-            </StyledLink>
-            <StyledLink exact to="/showcase">
-              <HomeOutlinedIcon />
-              Showcase
-              <ArrowForwardIosIcon />
-            </StyledLink>
-            <StyledLink to="/create">
-              <PostAddIcon />
-              Create
-              <ArrowForwardIosIcon />
-            </StyledLink>
-            <StyledLink to="/search">
-              <SearchRoundedIcon />
-              Search
-              <ArrowForwardIosIcon />
-            </StyledLink>
-            <Divider />
-            {currentUser ? (
-              <StyledLink to="/profile">
-                <AccountBoxOutlinedIcon />
-                Profile
+          <FocusLock>
+            <Flex
+              as="nav"
+              direction="column"
+              bg="white"
+              zIndex={3}
+              onClick={() => toggleIsOpen()}
+            >
+              <StyledLink exact to="/">
+                <HomeOutlinedIcon />
+                Home
                 <ArrowForwardIosIcon />
               </StyledLink>
-            ) : (
-              <>
-                <StyledLink to="/login">
-                  <PostAddIcon />
-                  Log in
+              <StyledLink exact to="/collabs/posts">
+                <HomeOutlinedIcon />
+                Collabs
+                <ArrowForwardIosIcon />
+              </StyledLink>
+              <StyledLink exact to="/showcase">
+                <HomeOutlinedIcon />
+                Showcase
+                <ArrowForwardIosIcon />
+              </StyledLink>
+              <StyledLink to="/create">
+                <PostAddIcon />
+                Create
+                <ArrowForwardIosIcon />
+              </StyledLink>
+              <StyledLink to="/search">
+                <SearchRoundedIcon />
+                Search
+                <ArrowForwardIosIcon />
+              </StyledLink>
+              <Divider />
+              {currentUser ? (
+                <StyledLink to="/profile">
+                  <AccountBoxOutlinedIcon />
+                  Profile
                   <ArrowForwardIosIcon />
                 </StyledLink>
-                <StyledLink to="/signup">
-                  <PostAddIcon />
-                  Sign up
-                  <ArrowForwardIosIcon />
-                </StyledLink>
-              </>
-            )}
-            <Divider />
-            {currentUser && (
-              <Button
-                bg="white"
-                height="48px"
-                justifyContent="flex-start"
-                fontWeight={500}
-                onClick={() => logout()}
-                _hover={{
-                  backgroundColor: '#f2e5ff',
-                }}
-              >
-                <ExitToAppOutlinedIcon />
-                <Text ml="0.5rem" as="span">
-                  Sign Out
-                </Text>
-              </Button>
-            )}
-          </Flex>
+              ) : (
+                <>
+                  <StyledLink to="/login">
+                    <PostAddIcon />
+                    Log in
+                    <ArrowForwardIosIcon />
+                  </StyledLink>
+                  <StyledLink to="/signup">
+                    <PostAddIcon />
+                    Sign up
+                    <ArrowForwardIosIcon />
+                  </StyledLink>
+                </>
+              )}
+              <Divider />
+              {currentUser && (
+                <Button
+                  bg="white"
+                  height="48px"
+                  justifyContent="flex-start"
+                  fontWeight={300}
+                  onClick={() => logout()}
+                  _hover={{
+                    bg: '#f3f3f3',
+                  }}
+                  _focus={{
+                    bg: '#f3f3f3',
+                  }}
+                  _active={{
+                    bg: '#f3f3f3',
+                  }}
+                >
+                  <ExitToAppOutlinedIcon />
+                  <Text ml="0.5rem" as="span">
+                    Sign Out
+                  </Text>
+                </Button>
+              )}
+            </Flex>
+          </FocusLock>
         </StyledMotion>
       )}
     </>
@@ -160,7 +180,7 @@ const StyledLink = styled(NavLink)`
   padding-left: 1rem;
   padding-right: 1rem;
   align-items: center;
-  font-weight: 500;
+  font-weight: 300;
   svg:first-of-type {
     margin-right: 0.5rem;
   }
@@ -168,16 +188,17 @@ const StyledLink = styled(NavLink)`
     transition: transform 200ms;
     margin-left: auto;
   }
-  &:hover:not(.active) {
-    background-color: #f2e5ff;
+  &:hover:not(.active),
+  &:focus:not(.active) {
+    background-color: #f3f3f3;
     svg:last-of-type {
       transform: translateX(0.5rem);
     }
   }
   &.active {
     border-left: 3px solid #964cff;
-    color: #964cff;
     padding-left: 1.5rem;
+    color: #964cff;
     svg:first-of-type {
       color: #964cff;
     }

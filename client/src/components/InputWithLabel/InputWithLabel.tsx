@@ -11,7 +11,7 @@ export const InputWithLabel = ({ label, htmlFor, ...props }: Props) => (
     <FormLabel htmlFor={htmlFor}>{label}</FormLabel>
     <Input
       size="lg"
-      bg="#e3dcf3"
+      bg="#f2f2ff"
       borderColor="transparent"
       _hover={{ borderColor: '#cab3ff' }}
       _focus={{ borderColor: '#805ad5' }}

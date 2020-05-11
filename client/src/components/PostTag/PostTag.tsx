@@ -2,9 +2,10 @@ import React from 'react'
 import { Tag, TagProps } from '@chakra-ui/core'
 import styled from '@emotion/styled'
 
-export const PostTag = ({ variantColor = 'purple', ...props }: TagProps) => (
+export const PostTag = ({ ...props }: TagProps) => (
   <StyledTag
-    variantColor={variantColor}
+    bg="#942bd7"
+    color="white"
     size="sm"
     boxShadow="sm"
     whiteSpace="nowrap"

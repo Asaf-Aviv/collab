@@ -14,6 +14,11 @@ export const App = hot(() => (
           heading: 'Inter, serif',
           mono: 'Inter, monospace',
         },
+        colors: {
+          ...theme.colors,
+          bg: 'white',
+          text: '#303030',
+        },
       })}
     >
       <CSSReset />

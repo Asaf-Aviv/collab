@@ -18,7 +18,7 @@ export const Comment = ({ /* id ,*/ content, author, children }: Props) => (
     flexDirection="column"
     alignItems="start"
     boxShadow="0 1px 1px 1px #c3c3c3"
-    p={6}
+    p={3}
   >
     <Box as="header">
       <AvatarWithUsername size="sm" {...author} />

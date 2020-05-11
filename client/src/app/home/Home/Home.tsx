@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom'
 export const Home = () => {
   return (
     <>
-      <Container bg="#582398" fullWidth pt={4}>
+      <Container bg="#582398" pt={4}>
         <Flex direction="column" position="relative">
           <Circle bg="#42d29f" border="#42d29f" top="-10px" left="15px" />
           <Circle border="#E91E63" top="80px" left="25px" />
@@ -54,14 +54,14 @@ export const Home = () => {
         </Flex>
       </Container>
       <StyledBox>
-        <Container fullWidth>
+        <Container>
           <FeatureSection
             title="Task Board"
             text="Track your team's tasks on the task board!"
             svg={TaskBoardSvg}
           />
         </Container>
-        <Container fullWidth>
+        <Container>
           <FeatureSection
             title="Make Friends"
             text="Make new friends from all around the world!"
@@ -69,14 +69,14 @@ export const Home = () => {
             textColor="white"
           />
         </Container>
-        <Container fullWidth>
+        <Container>
           <FeatureSection
             title="Feedback"
             text="Get feedback from the community"
             svg={FeedbackSvg}
           />
         </Container>
-        <Container fullWidth>
+        <Container>
           <FeatureSection
             title="Showcase"
             text="Launch your app and show the community what you have built together!"
@@ -84,7 +84,7 @@ export const Home = () => {
             textColor="white"
           />
         </Container>
-        <Container fullWidth>
+        <Container>
           <Flex
             direction={['column', 'column', 'row']}
             align={['center']}

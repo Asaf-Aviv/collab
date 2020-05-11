@@ -1,11 +1,11 @@
 import styled from '@emotion/styled'
 import { Box, PseudoBox, PseudoBoxProps } from '@chakra-ui/core'
 
-export const Container = styled(Box)<{ fullWidth?: boolean }>`
+export const Container = styled(Box)`
   margin: 0 auto;
   padding-left: 2.5%;
   padding-right: 2.5%;
-  /* max-width: ${({ fullWidth }) => (fullWidth ? '100%' : '1200px')}; */
+  /* max-width: '1200px'; */
 `
 
 export const PageHeaderSpacing = styled.div`
@@ -14,9 +14,9 @@ export const PageHeaderSpacing = styled.div`
 
 export const Paper = styled(PseudoBox)<PseudoBoxProps>`
   display: flex;
-  height: 100%;
   border-radius: 6px;
-  box-shadow: 0px 2px 9px 0 rgb(221, 221, 221);
+  box-shadow: 0px 2px 4px 0 rgb(216, 216, 216);
+  background-color: #f2f2ff;
 `
 
 export const IconButton = styled.button`

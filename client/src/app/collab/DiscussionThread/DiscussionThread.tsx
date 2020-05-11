@@ -120,7 +120,7 @@ export const DiscussionThread = () => {
   const { title, author, ...thread } = threadData.thread
 
   return (
-    <Box>
+    <Box maxWidth={900} mx="auto">
       <Paper flexDirection="column" p={6} mb={6}>
         <PostAuthorHeader author={author} date="" mb={2} />
         <Heading as="h1" size="lg" mb={6}>

@@ -1,5 +1,6 @@
 import React from 'react'
-import { Text, Divider, Heading, Button, Textarea } from '@chakra-ui/core'
+import { Button, Textarea } from '@chakra-ui/core'
+import { SectionHorizonalHeader } from '../SectionHorizonalHeader/SectionHorizonalHeader'
 
 type Props = {
   value: string
@@ -10,22 +11,10 @@ type Props = {
 export const CommentForm = ({ value, onChange, onSubmit }: Props) => {
   return (
     <form onSubmit={onSubmit}>
-      <Text
-        as="span"
-        display="inline-block"
-        borderBottom="2px solid #964cff"
-        mb="-2px"
-        position="relative"
-        zIndex={2}
-      >
-        <Heading as="h3" mb={2} size="sm">
-          Add a Comment
-        </Heading>
-      </Text>
-      <Divider mt={0} mb={6} />
+      <SectionHorizonalHeader title="Add a Comment" titleTag="h3" />
       <Textarea
-        placeholder="Add a comment"
-        bg="#e3dcf3"
+        placeholder="Add a Comment"
+        bg="#f2f2ff"
         p={2}
         _hover={{ borderColor: '#cab3ff' }}
         _focus={{ borderColor: '#805ad5' }}
