@@ -14,14 +14,13 @@ import {
   HasMany,
   AllowNull,
 } from 'sequelize-typescript'
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid'
 import { CollabMember } from './CollabMember'
 import { User } from './User'
 import { CollabTaskList } from './CollabTaskList'
 import { CollabDiscussionThreadComment } from './CollabDiscussionThreadComment'
 import { CollabPost } from './CollabPost'
 import { CollabPostStack } from './CollabPostStack'
-import { CollabTask } from './CollabTask'
 
 @Table({ tableName: 'collabs' })
 export class Collab extends Model<Collab> {

@@ -14,7 +14,7 @@ import {
   UpdateTaskListPositionInput,
   UpdateTaskListNameInput,
 } from '../../graphql/types.d'
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid'
 import { Collab } from './Collab'
 import { CollabTask } from './CollabTask'
 import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'

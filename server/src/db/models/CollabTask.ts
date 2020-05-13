@@ -10,7 +10,7 @@ import {
   HasMany,
 } from 'sequelize-typescript'
 import { Op } from 'sequelize'
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid'
 import { CollabTaskList } from './CollabTaskList'
 import { CollabTaskComment } from './CollabTaskComment'
 import { User } from './User'

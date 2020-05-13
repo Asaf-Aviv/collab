@@ -1600,6 +1600,27 @@ export type CollabPostsByStackQuery = (
   ) }
 );
 
+export type AdvancedPostsSearchQueryVariables = {
+  input: AdvancedPostsSearchInput;
+};
+
+
+export type AdvancedPostsSearchQuery = (
+  { __typename?: 'Query' }
+  & { advancedPostsSearch: (
+    { __typename?: 'CollabPostsSearchResultsPaload' }
+    & Pick<CollabPostsSearchResultsPaload, 'hasNextPage'>
+    & { posts: Array<(
+      { __typename?: 'CollabPost' }
+      & Pick<CollabPost, 'id' | 'title' | 'stack' | 'experience' | 'hasStarted' | 'languages' | 'createdAt' | 'isNew' | 'membersCount' | 'reactionsCount' | 'commentsCount'>
+      & { owner: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'avatar'>
+      ) }
+    )> }
+  ) }
+);
+
 export type GetCollabPostQueryVariables = {
   postId: Scalars['ID'];
 };
@@ -3697,6 +3718,57 @@ export function useCollabPostsByStackLazyQuery(baseOptions?: ApolloReactHooks.La
 export type CollabPostsByStackQueryHookResult = ReturnType<typeof useCollabPostsByStackQuery>;
 export type CollabPostsByStackLazyQueryHookResult = ReturnType<typeof useCollabPostsByStackLazyQuery>;
 export type CollabPostsByStackQueryResult = ApolloReactCommon.QueryResult<CollabPostsByStackQuery, CollabPostsByStackQueryVariables>;
+export const AdvancedPostsSearchDocument = gql`
+    query AdvancedPostsSearch($input: AdvancedPostsSearchInput!) {
+  advancedPostsSearch(input: $input) {
+    hasNextPage
+    posts {
+      id
+      title
+      stack
+      experience
+      hasStarted
+      languages
+      createdAt
+      isNew
+      membersCount
+      reactionsCount
+      commentsCount
+      owner {
+        id
+        username
+        avatar
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useAdvancedPostsSearchQuery__
+ *
+ * To run a query within a React component, call `useAdvancedPostsSearchQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAdvancedPostsSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAdvancedPostsSearchQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAdvancedPostsSearchQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<AdvancedPostsSearchQuery, AdvancedPostsSearchQueryVariables>) {
+        return ApolloReactHooks.useQuery<AdvancedPostsSearchQuery, AdvancedPostsSearchQueryVariables>(AdvancedPostsSearchDocument, baseOptions);
+      }
+export function useAdvancedPostsSearchLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<AdvancedPostsSearchQuery, AdvancedPostsSearchQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<AdvancedPostsSearchQuery, AdvancedPostsSearchQueryVariables>(AdvancedPostsSearchDocument, baseOptions);
+        }
+export type AdvancedPostsSearchQueryHookResult = ReturnType<typeof useAdvancedPostsSearchQuery>;
+export type AdvancedPostsSearchLazyQueryHookResult = ReturnType<typeof useAdvancedPostsSearchLazyQuery>;
+export type AdvancedPostsSearchQueryResult = ApolloReactCommon.QueryResult<AdvancedPostsSearchQuery, AdvancedPostsSearchQueryVariables>;
 export const GetCollabPostDocument = gql`
     query GetCollabPost($postId: ID!) {
   collabPost(postId: $postId) {

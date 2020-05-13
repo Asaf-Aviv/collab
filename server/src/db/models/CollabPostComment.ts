@@ -9,7 +9,7 @@ import {
   BelongsTo,
   IsUUID,
 } from 'sequelize-typescript'
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid'
 import { User } from './User'
 import { CollabPost } from './CollabPost'
 
@@ -41,7 +41,7 @@ export class CollabPostComment extends Model<CollabPostComment> {
   static async createComment(
     content: string,
     authorId: string,
-    postId: string
+    postId: string,
   ) {
     const [post, user] = await Promise.all([
       CollabPost.findByPk(postId),

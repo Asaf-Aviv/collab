@@ -48,16 +48,24 @@ export const Collab = () => {
         mb={6}
       >
         <TabList as="nav">
-          //@ts-ignore
-          <Tab as={Link} to={`${match.url}/task-board`}>
+          <Tab
+            as={Link} //@ts-ignore
+            to={`${match.url}/task-board`}
+          >
             Task Board
           </Tab>
-          //@ts-ignore
-          <Tab as={Link} to={`${match.url}/members`}>
+          <Tab
+            as={Link}
+            //@ts-ignore
+            to={`${match.url}/members`}
+          >
             Members
           </Tab>
           //@ts-ignore
-          <Tab as={Link} to={`${match.url}/discussions`}>
+          <Tab
+            as={Link} //@ts-ignore
+            to={`${match.url}/discussions`}
+          >
             Discussions
           </Tab>
         </TabList>

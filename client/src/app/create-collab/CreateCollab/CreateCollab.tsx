@@ -42,7 +42,7 @@ export const CreateCollab = () => {
   >({
     name: 'Collabbbb',
     title: 'React TypeScript next level app',
-    experience: 'ALL' as Experience,
+    experience: 'MID' as Experience,
     description: 'Our first Collab!',
     hasStarted: false,
   })

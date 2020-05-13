@@ -7,7 +7,7 @@ import {
   IsUUID,
   Default,
 } from 'sequelize-typescript'
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid'
 import { User } from './User'
 
 export class Reaction extends Model<Reaction> {

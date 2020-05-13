@@ -9,7 +9,7 @@ import {
   BelongsTo,
   IsUUID,
 } from 'sequelize-typescript'
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid'
 import { Collab } from './Collab'
 import { User } from './User'
 import { CollabMember } from './CollabMember'

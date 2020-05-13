@@ -1,6 +1,6 @@
 import { Op } from 'sequelize'
 import { PubSub, withFilter } from 'apollo-server-express'
-import uuid from 'uuid/v1'
+import { v1 as uuid } from 'uuid'
 import { Resolvers, UserChatStatus } from '../types.d'
 import { isNotNull, withCancel } from '../../helpers/helpers'
 import { REDIS_CHAT_USERS } from '../../redis/redis'
