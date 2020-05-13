@@ -221,6 +221,32 @@ export const GET_COLLAB_POSTS_BY_STACK = gql`
   }
 `
 
+export const ADVANCED_POSTS_SEARCH = gql`
+  query AdvancedPostsSearch($input: AdvancedPostsSearchInput!) {
+    advancedPostsSearch(input: $input) {
+      hasNextPage
+      posts {
+        id
+        title
+        stack
+        experience
+        hasStarted
+        languages
+        createdAt
+        isNew
+        membersCount
+        reactionsCount
+        commentsCount
+        owner {
+          id
+          username
+          avatar
+        }
+      }
+    }
+  }
+`
+
 export const GET_COLLAB_POST = gql`
   query GetCollabPost($postId: ID!) {
     collabPost(postId: $postId) {

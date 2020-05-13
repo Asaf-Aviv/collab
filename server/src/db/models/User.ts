@@ -15,7 +15,7 @@ import {
   Validate,
   BeforeValidate,
 } from 'sequelize-typescript'
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid'
 import bcrypt from 'bcrypt'
 import {
   Op,

@@ -24,7 +24,7 @@ export const Home = () => {
           <StyledTriangle top="42px" bg="#ffbe40" />
           <StyledTriangle top="80px" right="30px" bg="#9a07ff" />
           <StyledTriangle top="42px" bg="#ffbe40" />
-          <Stack spacing={3} align="center" mb={10}>
+          <Stack spacing={3} align="center" my={10}>
             <Heading
               as="h1"
               size="2xl"

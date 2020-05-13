@@ -15,11 +15,11 @@ export const CollabDiscussions = () => {
   console.log(data, loading, error, variables)
 
   return (
-    <Box as="main" maxWidth={900}>
+    <Box as="main" maxWidth={900} mx="auto">
       <section>
         {data?.collab?.discussionThreads.map(
           ({ id, title, author, commentsCount, reactionsCount }) => (
-            <Paper as="article" key={id} p={3} mb={8}>
+            <Paper as="article" key={id} p={3} mb={4}>
               <Box as="header" flex={1}>
                 <Heading size="sm" fontWeight={600} pb={6} as="h3">
                   <Link to={`${match.url}/${id}`}>{title}</Link>

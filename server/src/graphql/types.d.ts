@@ -1402,5 +1402,5 @@ export type Resolvers<ContextType = CollabContext> = ResolversObject<{
 /**
  * @deprecated
  * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
-*/
+ */
 export type IResolvers<ContextType = CollabContext> = Resolvers<ContextType>;

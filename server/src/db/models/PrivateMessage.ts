@@ -13,7 +13,7 @@ import {
   AllowNull,
 } from 'sequelize-typescript'
 import { QueryTypes } from 'sequelize'
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid'
 import { User } from './User'
 import { UserFriend } from './UserFriend'
 

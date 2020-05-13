@@ -15,8 +15,8 @@ import {
   BelongsToMany,
   Sequelize,
 } from 'sequelize-typescript'
-import { Op, QueryTypes } from 'sequelize'
-import uuid from 'uuid/v4'
+import { Op } from 'sequelize'
+import { v4 as uuid } from 'uuid'
 import { CollabPostArgs, AdvancedPostsSearchInput } from '../../graphql/types'
 import { CollabMember } from './CollabMember'
 import { User } from './User'
@@ -62,10 +62,7 @@ export class CollabPost extends Model<CollabPost> {
   @Column
   createdAt!: Date
 
-  @BelongsToMany(
-    () => Stack,
-    () => CollabPostStack,
-  )
+  @BelongsToMany(() => Stack, () => CollabPostStack)
   stack!: (Stack & { CollabPostStack: CollabPostStack })[]
 
   @HasMany(() => CollabPostLanguage)
@@ -170,22 +167,22 @@ export class CollabPost extends Model<CollabPost> {
     offset,
     limit,
   }: AdvancedPostsSearchInput) {
-    const or = []
+    const and = []
     if (experience != null) {
-      or.push({ experience })
+      and.push({ experience })
     }
     if (hasStarted != null) {
-      or.push({ hasStarted })
+      and.push({ hasStarted })
     }
     if (isNew) {
-      or.push({
+      and.push({
         createdAt: {
           [Op.gte]: subDays(new Date(), 7),
         },
       })
     }
     if (languages?.length) {
-      or.push({
+      and.push({
         id: {
           [Op.in]: Sequelize.literal(
             `(
@@ -199,7 +196,7 @@ export class CollabPost extends Model<CollabPost> {
       })
     }
     if (stack?.length) {
-      or.push({
+      and.push({
         id: {
           [Op.in]: Sequelize.literal(
             `(
@@ -218,7 +215,7 @@ export class CollabPost extends Model<CollabPost> {
 
     const posts = await this.findAll({
       where: {
-        [Op.or]: or,
+        [Op.and]: and,
       },
       order: ['createdAt'],
       offset,

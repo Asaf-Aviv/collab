@@ -11,6 +11,7 @@ import { Home } from '../../home/Home/Home'
 import { UserProfile } from '../../../components/UserProfile'
 import { ProtectedRoute } from '../ProtectedRoute'
 import { PublicOnlyRoute } from '../PublicOnlyRoute'
+import { SearchPage } from '../../search-page'
 
 export const Routes = () => (
   <Switch>
@@ -34,6 +35,9 @@ export const Routes = () => (
     </Route>
     <Route path="/collab/:collabId">
       <Collab />
+    </Route>
+    <Route path="/search">
+      <SearchPage />
     </Route>
     <Route path="/user/:userId">
       <UserProfile />

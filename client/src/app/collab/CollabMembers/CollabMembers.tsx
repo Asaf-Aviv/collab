@@ -9,14 +9,17 @@ export const CollabMembers = () => {
   const { data } = useCollabMembersQuery({ variables: { collabId } })
 
   return (
-    <Grid
-      gap={4}
-      templateColumns="repeat(auto-fill, minMax(300px, 350px))"
-      justifyContent={{ sm: 'center', lg: 'initial' }}
-    >
-      {data?.collab?.members.map(member => (
-        <UserCard key={member.id} {...member} />
-      ))}
-    </Grid>
+    <main>
+      <Grid
+        as="section"
+        gap={4}
+        templateColumns="repeat(auto-fill, minMax(300px, 350px))"
+        justifyContent={{ sm: 'center', lg: 'initial' }}
+      >
+        {data?.collab?.members.map(member => (
+          <UserCard key={member.id} {...member} />
+        ))}
+      </Grid>
+    </main>
   )
 }

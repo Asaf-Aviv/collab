@@ -19,6 +19,7 @@ import {
 import { Paper } from '../../../components/global'
 import { PostAuthorHeader } from '../../../components/PostAuthorHeader/PostAuthorHeader'
 import { CommentForm } from '../../../components/CommentForm/CommentForm'
+import { SectionHorizonalHeader } from '../../../components/SectionHorizonalHeader/SectionHorizonalHeader'
 
 export const DiscussionThread = () => {
   const { collabId, threadId } = useParams<{
@@ -120,33 +121,44 @@ export const DiscussionThread = () => {
   const { title, author, ...thread } = threadData.thread
 
   return (
-    <Box maxWidth={900} mx="auto">
-      <Paper flexDirection="column" p={6} mb={6}>
-        <PostAuthorHeader author={author} date="" mb={2} />
-        <Heading as="h1" size="lg" mb={6}>
-          {title}
-        </Heading>
-        <Text mb={4}>{thread.content}</Text>
-        <ReactionPanel
-          reactions={thread.reactions}
-          addReaction={handleAddThreadReaction}
-          removeReaction={handleRemoveThreadReaction}
-        />
-      </Paper>
-      <CommentForm
-        onSubmit={handleCommentSubmit}
-        onChange={setCommentInput}
-        value={commentInput}
-      />
-      {commentsData?.thread?.comments.map(comment => (
-        <Comment key={comment.id} {...comment}>
+    <Box as="main" maxWidth={900} mx="auto">
+      <section>
+        <Paper as="article" flexDirection="column" p={3} mb={6}>
+          <header>
+            <PostAuthorHeader author={author} date="" mb={4} />
+            <Heading as="h1" size="lg" mb={4}>
+              {title}
+            </Heading>
+          </header>
+          <Text mb={8} maxWidth="60ch">
+            {thread.content}
+          </Text>
           <ReactionPanel
-            reactions={comment.reactions}
-            addReaction={handleAddReaction(comment.id)}
-            removeReaction={handleRemoveReaction(comment.id)}
+            reactions={thread.reactions}
+            addReaction={handleAddThreadReaction}
+            removeReaction={handleRemoveThreadReaction}
           />
-        </Comment>
-      ))}
+        </Paper>
+      </section>
+      <section>
+        <CommentForm
+          onSubmit={handleCommentSubmit}
+          onChange={setCommentInput}
+          value={commentInput}
+        />
+      </section>
+      <section>
+        <SectionHorizonalHeader title="Comments" titleTag="h3" />
+        {commentsData?.thread?.comments.map(comment => (
+          <Comment key={comment.id} {...comment}>
+            <ReactionPanel
+              reactions={comment.reactions}
+              addReaction={handleAddReaction(comment.id)}
+              removeReaction={handleRemoveReaction(comment.id)}
+            />
+          </Comment>
+        ))}
+      </section>
     </Box>
   )
 }
