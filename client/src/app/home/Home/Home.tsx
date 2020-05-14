@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom'
 export const Home = () => {
   return (
     <>
-      <Container bg="#582398" pt={4}>
+      <Container bg="#582398" width="100%" pt={4}>
         <Flex direction="column" position="relative">
           <Circle bg="#42d29f" border="#42d29f" top="-10px" left="15px" />
           <Circle border="#E91E63" top="80px" left="25px" />

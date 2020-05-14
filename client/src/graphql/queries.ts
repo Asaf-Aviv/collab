@@ -355,6 +355,25 @@ export const GET_COLLAB_MEMBERS = gql`
   }
 `
 
+export const GET_COLLAB_WALL_MESSAGES = gql`
+  query CollabWallMessages($input: CollabWallMessagesInput!) {
+    collabWallMessages(input: $input) {
+      hasNextPage
+      messages {
+        id
+        content
+        creationDate
+        author {
+          id
+          username
+          bio
+          avatar
+        }
+      }
+    }
+  }
+`
+
 export const GET_COLLAB_DISCUSSIONS = gql`
   query CollabDiscussionThreads($collabId: ID!) {
     collab(collabId: $collabId) {

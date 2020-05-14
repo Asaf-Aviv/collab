@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react'
 import {
   Radio,
   Button,
-  Heading,
   Flex,
   FormControl,
   FormLabel,

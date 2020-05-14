@@ -1,4 +1,4 @@
-const uuid = require('uuid/v4')
+const { v4: uuid } = require('uuid')
 const _ = require('lodash')
 const faker = require('faker')
 const { seededUsers } = require('../mocks/users')

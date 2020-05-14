@@ -11,7 +11,7 @@ export const SectionHorizonalHeader = ({
   titleTag = 'h3',
   ...props
 }: Props) => (
-  <Box as="header" {...props}>
+  <Box as="header" width="100%" {...props}>
     <Text
       as="span"
       display="inline-block"
