@@ -1,5 +1,5 @@
 const { seededUsers, asaf } = require('../mocks/users')
-const uuid = require('uuid/v4')
+const { v4: uuid } = require('uuid')
 
 const friendRequests = seededUsers
   .filter(user => user !== asaf)
@@ -26,7 +26,7 @@ const messages = seededUsers
     seededUsers
       .filter(x => x !== user)
       .map(user2 =>
-        [...Array(2)].map((__, i) => ({
+        [...Array(2)].map(() => ({
           id: uuid(),
           author_id: user.id,
           recipient_id: user2.id,

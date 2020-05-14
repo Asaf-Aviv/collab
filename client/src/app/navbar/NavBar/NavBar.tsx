@@ -1,12 +1,40 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { Flex, Button } from '@chakra-ui/core'
+import {
+  Flex,
+  Button,
+  Input,
+  Box,
+  InputRightElement,
+  InputGroup,
+  Icon,
+} from '@chakra-ui/core'
 import styled from '@emotion/styled'
 import { SmallScreenNav } from '../SmallScreenNav'
 import { NavUserPanel } from '../NavUserPanel'
 import { useGetCurrentUserQuery } from '../../../graphql/generates'
 import { Container } from '../../../components/global'
 import { useWindowWidth } from '../../../providers'
+
+export const NavSearchBar = () => {
+  return (
+    <Box maxWidth={500} flex={1}>
+      <InputGroup>
+        <Input
+          bg="#f2f2ff"
+          placeholder="Search Collabs"
+          borderColor="transparent"
+          _hover={{ borderColor: '#cab3ff' }}
+          _focus={{ borderColor: '#805ad5' }}
+          borderWidth={2}
+        />
+        <InputRightElement>
+          <Icon name="search" color="gray.500" />
+        </InputRightElement>
+      </InputGroup>
+    </Box>
+  )
+}
 
 export const SiteHeader = ({ children }: { children: React.ReactNode }) => (
   <Flex
@@ -40,6 +68,7 @@ export const NavBar = () => {
         m="0 auto"
         justifyContent="space-between"
         flex={1}
+        alignItems="center"
       >
         <StyledFlex as="nav">
           <StyledLink exact to="/">
@@ -54,6 +83,7 @@ export const NavBar = () => {
           <StyledLink to="/create">Create</StyledLink>
           <StyledLink to="/search">Search</StyledLink>
         </StyledFlex>
+        <NavSearchBar />
         {currentUser ? (
           <NavUserPanel />
         ) : (

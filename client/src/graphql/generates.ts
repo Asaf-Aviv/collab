@@ -19,6 +19,7 @@ export type Query = {
   collabPost?: Maybe<CollabPost>;
   collabPosts: CollabPostsPayload;
   collabPostsByStack: CollabPostsSearchResultsPaload;
+  collabWallMessages: CollabWallMessagesPayload;
   collabs: Array<Collab>;
   currentUser?: Maybe<CurrentUser>;
   getConversation: GetConversationPayload;
@@ -57,6 +58,11 @@ export type QueryCollabPostsByStackArgs = {
   limit: Scalars['Int'];
   offset: Scalars['Int'];
   stack: Scalars['String'];
+};
+
+
+export type QueryCollabWallMessagesArgs = {
+  input: CollabWallMessagesInput;
 };
 
 
@@ -110,6 +116,7 @@ export type Mutation = {
   createTask: Task;
   createTaskComment: TaskComment;
   createTaskList: TaskList;
+  createWallMessage: WallMessage;
   declineCollabInvitation: Scalars['Boolean'];
   /** returns the id of the declined friend */
   declineFriendRequest: Scalars['ID'];
@@ -124,6 +131,7 @@ export type Mutation = {
   deleteTaskComment: Scalars['Boolean'];
   deleteTaskList: Scalars['Boolean'];
   deleteUser: Scalars['Boolean'];
+  deleteWallMessage: Scalars['ID'];
   inviteMember: User;
   login: AuthPayload;
   markPrivateMessageAsRead: Scalars['Boolean'];
@@ -239,6 +247,11 @@ export type MutationCreateTaskListArgs = {
 };
 
 
+export type MutationCreateWallMessageArgs = {
+  input: CreateWallMessageInput;
+};
+
+
 export type MutationDeclineCollabInvitationArgs = {
   collabId: Scalars['ID'];
 };
@@ -297,6 +310,11 @@ export type MutationDeleteTaskCommentArgs = {
 
 export type MutationDeleteTaskListArgs = {
   taskListId: Scalars['ID'];
+};
+
+
+export type MutationDeleteWallMessageArgs = {
+  messageId: Scalars['ID'];
 };
 
 
@@ -438,6 +456,7 @@ export type Collab = {
   pendingRequests: Array<Maybe<User>>;
   requestToJoinPending: Scalars['Boolean'];
   taskList: Array<TaskList>;
+  wall: Array<WallMessage>;
 };
 
 export type CollabDiscussionThreadComment = {
@@ -615,6 +634,31 @@ export type AddCollabTaskCommentReactionInput = {
 export type RemoveCollabTaskCommentReactionInput = {
   commentId: Scalars['ID'];
   emojiId: Scalars['ID'];
+};
+
+export type WallMessage = {
+   __typename?: 'WallMessage';
+  author: User;
+  content: Scalars['String'];
+  creationDate: Scalars['Date'];
+  id: Scalars['ID'];
+};
+
+export type CreateWallMessageInput = {
+  collabId: Scalars['ID'];
+  content: Scalars['String'];
+};
+
+export type CollabWallMessagesPayload = {
+   __typename?: 'CollabWallMessagesPayload';
+  hasNextPage: Scalars['Boolean'];
+  messages: Array<WallMessage>;
+};
+
+export type CollabWallMessagesInput = {
+  collabId: Scalars['ID'];
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
 };
 
 export type Subscription = {
@@ -1714,6 +1758,27 @@ export type CollabMembersQuery = (
       & Pick<User, 'id' | 'username' | 'bio' | 'avatar'>
     )> }
   )> }
+);
+
+export type CollabWallMessagesQueryVariables = {
+  input: CollabWallMessagesInput;
+};
+
+
+export type CollabWallMessagesQuery = (
+  { __typename?: 'Query' }
+  & { collabWallMessages: (
+    { __typename?: 'CollabWallMessagesPayload' }
+    & Pick<CollabWallMessagesPayload, 'hasNextPage'>
+    & { messages: Array<(
+      { __typename?: 'WallMessage' }
+      & Pick<WallMessage, 'id' | 'content' | 'creationDate'>
+      & { author: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'bio' | 'avatar'>
+      ) }
+    )> }
+  ) }
 );
 
 export type CollabDiscussionThreadsQueryVariables = {
@@ -4000,6 +4065,50 @@ export function useCollabMembersLazyQuery(baseOptions?: ApolloReactHooks.LazyQue
 export type CollabMembersQueryHookResult = ReturnType<typeof useCollabMembersQuery>;
 export type CollabMembersLazyQueryHookResult = ReturnType<typeof useCollabMembersLazyQuery>;
 export type CollabMembersQueryResult = ApolloReactCommon.QueryResult<CollabMembersQuery, CollabMembersQueryVariables>;
+export const CollabWallMessagesDocument = gql`
+    query CollabWallMessages($input: CollabWallMessagesInput!) {
+  collabWallMessages(input: $input) {
+    hasNextPage
+    messages {
+      id
+      content
+      creationDate
+      author {
+        id
+        username
+        bio
+        avatar
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useCollabWallMessagesQuery__
+ *
+ * To run a query within a React component, call `useCollabWallMessagesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCollabWallMessagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCollabWallMessagesQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCollabWallMessagesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CollabWallMessagesQuery, CollabWallMessagesQueryVariables>) {
+        return ApolloReactHooks.useQuery<CollabWallMessagesQuery, CollabWallMessagesQueryVariables>(CollabWallMessagesDocument, baseOptions);
+      }
+export function useCollabWallMessagesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CollabWallMessagesQuery, CollabWallMessagesQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<CollabWallMessagesQuery, CollabWallMessagesQueryVariables>(CollabWallMessagesDocument, baseOptions);
+        }
+export type CollabWallMessagesQueryHookResult = ReturnType<typeof useCollabWallMessagesQuery>;
+export type CollabWallMessagesLazyQueryHookResult = ReturnType<typeof useCollabWallMessagesLazyQuery>;
+export type CollabWallMessagesQueryResult = ApolloReactCommon.QueryResult<CollabWallMessagesQuery, CollabWallMessagesQueryVariables>;
 export const CollabDiscussionThreadsDocument = gql`
     query CollabDiscussionThreads($collabId: ID!) {
   collab(collabId: $collabId) {

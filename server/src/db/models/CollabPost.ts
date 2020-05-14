@@ -223,7 +223,7 @@ export class CollabPost extends Model<CollabPost> {
     })
 
     return {
-      posts,
+      posts: posts.slice(0, limit),
       hasNextPage: posts.length > limit,
     }
   }

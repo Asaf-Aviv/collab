@@ -21,6 +21,7 @@ generates:
         TaskList: '../db/models/CollabTaskList#GQLCollabTaskList'
         User: '../db/models/User#GQLUser'
         PrivateMessage: '../db/models/PrivateMessage#GQLPrivateMessage'
+        WallMessage: '../db/models/CollabWallMessage#GQLWallMessage'
       useIndexSignature: true
       contextType: ./context/CollabContext#CollabContext
       fieldContextTypes:

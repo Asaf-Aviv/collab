@@ -8,10 +8,7 @@ export const privateMessageResolver: Resolvers = {
       { userId, offset, limit },
       { models, user },
     ) => {
-      const {
-        rows: messages,
-        count,
-      } = await models.PrivateMessage.findAndCountAll({
+      const messages = await models.PrivateMessage.findAll({
         where: {
           [Op.or]: [
             { authorId: userId, recipientId: user!.id },
@@ -19,12 +16,12 @@ export const privateMessageResolver: Resolvers = {
           ],
         },
         offset,
-        limit,
+        limit: limit + 1,
       })
 
       return {
-        hasNextPage: count > messages.length,
-        messages,
+        hasNextPage: messages.length > limit,
+        messages: messages.slice(0, limit),
       }
     },
   },

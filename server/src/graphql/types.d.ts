@@ -9,6 +9,7 @@ import { GQLCollabTaskComment } from '../db/models/CollabTaskComment';
 import { GQLCollabTaskList } from '../db/models/CollabTaskList';
 import { GQLUser } from '../db/models/User';
 import { GQLPrivateMessage } from '../db/models/PrivateMessage';
+import { GQLWallMessage } from '../db/models/CollabWallMessage';
 import { CollabContext, CollabContextWithUser } from './context/CollabContext';
 export type Maybe<T> = T | null;
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
@@ -30,6 +31,7 @@ export type Query = {
   collabPost?: Maybe<CollabPost>;
   collabPosts: CollabPostsPayload;
   collabPostsByStack: CollabPostsSearchResultsPaload;
+  collabWallMessages: CollabWallMessagesPayload;
   collabs: Array<Collab>;
   currentUser?: Maybe<CurrentUser>;
   getConversation: GetConversationPayload;
@@ -68,6 +70,11 @@ export type QueryCollabPostsByStackArgs = {
   limit: Scalars['Int'];
   offset: Scalars['Int'];
   stack: Scalars['String'];
+};
+
+
+export type QueryCollabWallMessagesArgs = {
+  input: CollabWallMessagesInput;
 };
 
 
@@ -121,6 +128,7 @@ export type Mutation = {
   createTask: Task;
   createTaskComment: TaskComment;
   createTaskList: TaskList;
+  createWallMessage: WallMessage;
   declineCollabInvitation: Scalars['Boolean'];
   /** returns the id of the declined friend */
   declineFriendRequest: Scalars['ID'];
@@ -135,6 +143,7 @@ export type Mutation = {
   deleteTaskComment: Scalars['Boolean'];
   deleteTaskList: Scalars['Boolean'];
   deleteUser: Scalars['Boolean'];
+  deleteWallMessage: Scalars['ID'];
   inviteMember: User;
   login: AuthPayload;
   markPrivateMessageAsRead: Scalars['Boolean'];
@@ -250,6 +259,11 @@ export type MutationCreateTaskListArgs = {
 };
 
 
+export type MutationCreateWallMessageArgs = {
+  input: CreateWallMessageInput;
+};
+
+
 export type MutationDeclineCollabInvitationArgs = {
   collabId: Scalars['ID'];
 };
@@ -308,6 +322,11 @@ export type MutationDeleteTaskCommentArgs = {
 
 export type MutationDeleteTaskListArgs = {
   taskListId: Scalars['ID'];
+};
+
+
+export type MutationDeleteWallMessageArgs = {
+  messageId: Scalars['ID'];
 };
 
 
@@ -449,6 +468,7 @@ export type Collab = {
   pendingRequests: Array<Maybe<User>>;
   requestToJoinPending: Scalars['Boolean'];
   taskList: Array<TaskList>;
+  wall: Array<WallMessage>;
 };
 
 export type CollabDiscussionThreadComment = {
@@ -626,6 +646,31 @@ export type AddCollabTaskCommentReactionInput = {
 export type RemoveCollabTaskCommentReactionInput = {
   commentId: Scalars['ID'];
   emojiId: Scalars['ID'];
+};
+
+export type WallMessage = {
+   __typename?: 'WallMessage';
+  author: User;
+  content: Scalars['String'];
+  creationDate: Scalars['Date'];
+  id: Scalars['ID'];
+};
+
+export type CreateWallMessageInput = {
+  collabId: Scalars['ID'];
+  content: Scalars['String'];
+};
+
+export type CollabWallMessagesPayload = {
+   __typename?: 'CollabWallMessagesPayload';
+  hasNextPage: Scalars['Boolean'];
+  messages: Array<WallMessage>;
+};
+
+export type CollabWallMessagesInput = {
+  collabId: Scalars['ID'];
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
 };
 
 export type Subscription = {
@@ -959,6 +1004,10 @@ export type ResolversTypes = ResolversObject<{
   RemoveCollabPostReactionInput: RemoveCollabPostReactionInput,
   AddCollabTaskCommentReactionInput: AddCollabTaskCommentReactionInput,
   RemoveCollabTaskCommentReactionInput: RemoveCollabTaskCommentReactionInput,
+  WallMessage: ResolverTypeWrapper<GQLWallMessage>,
+  CreateWallMessageInput: CreateWallMessageInput,
+  CollabWallMessagesPayload: ResolverTypeWrapper<Omit<CollabWallMessagesPayload, 'messages'> & { messages: Array<ResolversTypes['WallMessage']> }>,
+  CollabWallMessagesInput: CollabWallMessagesInput,
   Subscription: ResolverTypeWrapper<{}>,
   UserChatStatus: UserChatStatus,
   ConnectToChatPayload: ResolverTypeWrapper<Omit<ConnectToChatPayload, 'users'> & { users: Array<ResolversTypes['ChatUsersPayload']> }>,
@@ -1024,6 +1073,10 @@ export type ResolversParentTypes = ResolversObject<{
   RemoveCollabPostReactionInput: RemoveCollabPostReactionInput,
   AddCollabTaskCommentReactionInput: AddCollabTaskCommentReactionInput,
   RemoveCollabTaskCommentReactionInput: RemoveCollabTaskCommentReactionInput,
+  WallMessage: GQLWallMessage,
+  CreateWallMessageInput: CreateWallMessageInput,
+  CollabWallMessagesPayload: Omit<CollabWallMessagesPayload, 'messages'> & { messages: Array<ResolversParentTypes['WallMessage']> },
+  CollabWallMessagesInput: CollabWallMessagesInput,
   Subscription: {},
   UserChatStatus: UserChatStatus,
   ConnectToChatPayload: Omit<ConnectToChatPayload, 'users'> & { users: Array<ResolversParentTypes['ChatUsersPayload']> },
@@ -1063,6 +1116,7 @@ export type QueryResolvers<ContextType = CollabContext, ParentType extends Resol
   collabPost?: Resolver<Maybe<ResolversTypes['CollabPost']>, ParentType, ContextType, RequireFields<QueryCollabPostArgs, 'postId'>>,
   collabPosts?: Resolver<ResolversTypes['CollabPostsPayload'], ParentType, ContextType, RequireFields<QueryCollabPostsArgs, 'limit' | 'offset'>>,
   collabPostsByStack?: Resolver<ResolversTypes['CollabPostsSearchResultsPaload'], ParentType, ContextType, RequireFields<QueryCollabPostsByStackArgs, 'limit' | 'offset' | 'stack'>>,
+  collabWallMessages?: Resolver<ResolversTypes['CollabWallMessagesPayload'], ParentType, ContextType, RequireFields<QueryCollabWallMessagesArgs, 'input'>>,
   collabs?: Resolver<Array<ResolversTypes['Collab']>, ParentType, ContextType>,
   currentUser?: Resolver<Maybe<ResolversTypes['CurrentUser']>, ParentType, ContextType>,
   getConversation?: Resolver<ResolversTypes['GetConversationPayload'], ParentType, ContextType, RequireFields<QueryGetConversationArgs, 'limit' | 'offset' | 'userId'>>,
@@ -1093,6 +1147,7 @@ export type MutationResolvers<ContextType = CollabContext, ParentType extends Re
   createTask?: Resolver<ResolversTypes['Task'], ParentType, CollabContextWithUser, RequireFields<MutationCreateTaskArgs, 'input'>>,
   createTaskComment?: Resolver<ResolversTypes['TaskComment'], ParentType, CollabContextWithUser, RequireFields<MutationCreateTaskCommentArgs, 'input'>>,
   createTaskList?: Resolver<ResolversTypes['TaskList'], ParentType, CollabContextWithUser, RequireFields<MutationCreateTaskListArgs, 'input'>>,
+  createWallMessage?: Resolver<ResolversTypes['WallMessage'], ParentType, ContextType, RequireFields<MutationCreateWallMessageArgs, 'input'>>,
   declineCollabInvitation?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeclineCollabInvitationArgs, 'collabId'>>,
   declineFriendRequest?: Resolver<ResolversTypes['ID'], ParentType, ContextType, RequireFields<MutationDeclineFriendRequestArgs, 'senderId'>>,
   declineMemberRequest?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeclineMemberRequestArgs, 'collabId' | 'memberId'>>,
@@ -1106,6 +1161,7 @@ export type MutationResolvers<ContextType = CollabContext, ParentType extends Re
   deleteTaskComment?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeleteTaskCommentArgs, 'commentId'>>,
   deleteTaskList?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeleteTaskListArgs, 'taskListId'>>,
   deleteUser?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser>,
+  deleteWallMessage?: Resolver<ResolversTypes['ID'], ParentType, ContextType, RequireFields<MutationDeleteWallMessageArgs, 'messageId'>>,
   inviteMember?: Resolver<ResolversTypes['User'], ParentType, CollabContextWithUser, RequireFields<MutationInviteMemberArgs, 'collabId' | 'memberId'>>,
   login?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'credentials'>>,
   markPrivateMessageAsRead?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMarkPrivateMessageAsReadArgs, 'messageId'>>,
@@ -1148,6 +1204,7 @@ export type CollabResolvers<ContextType = CollabContext, ParentType extends Reso
   pendingRequests?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType>,
   requestToJoinPending?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   taskList?: Resolver<Array<ResolversTypes['TaskList']>, ParentType, ContextType>,
+  wall?: Resolver<Array<ResolversTypes['WallMessage']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
@@ -1228,6 +1285,20 @@ export type CollabPostCommentResolvers<ContextType = CollabContext, ParentType e
   content?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   reactions?: Resolver<Array<ResolversTypes['Reaction']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+}>;
+
+export type WallMessageResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['WallMessage'] = ResolversParentTypes['WallMessage']> = ResolversObject<{
+  author?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
+  content?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  creationDate?: Resolver<ResolversTypes['Date'], ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+}>;
+
+export type CollabWallMessagesPayloadResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['CollabWallMessagesPayload'] = ResolversParentTypes['CollabWallMessagesPayload']> = ResolversObject<{
+  hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  messages?: Resolver<Array<ResolversTypes['WallMessage']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
@@ -1380,6 +1451,8 @@ export type Resolvers<ContextType = CollabContext> = ResolversObject<{
   CollabPost?: CollabPostResolvers<ContextType>,
   CollabPostsPayload?: CollabPostsPayloadResolvers<ContextType>,
   CollabPostComment?: CollabPostCommentResolvers<ContextType>,
+  WallMessage?: WallMessageResolvers<ContextType>,
+  CollabWallMessagesPayload?: CollabWallMessagesPayloadResolvers<ContextType>,
   Subscription?: SubscriptionResolvers<ContextType>,
   ConnectToChatPayload?: ConnectToChatPayloadResolvers<ContextType>,
   ChatUsersPayload?: ChatUsersPayloadResolvers<ContextType>,

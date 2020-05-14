@@ -21,8 +21,8 @@ export const collabPostResolver: Resolvers = {
       })
 
       return {
+        posts: posts.slice(0, limit) as GQLCollabPost[],
         hasNextPage: posts.length > limit,
-        posts: posts.slice(0, -1) as GQLCollabPost[],
       }
     },
     collabPost: (root, { postId }, { models }) =>
@@ -44,10 +44,7 @@ export const collabPostResolver: Resolvers = {
         throw new Error('Stack not found')
       }
 
-      const {
-        count,
-        rows: postsByStack,
-      } = await models.CollabPostStack.findAndCountAll({
+      const postsByStack = await models.CollabPostStack.findAll({
         where: { stackId: stack.id },
         attributes: ['postId'],
         include: [{ model: models.CollabPost }],
@@ -55,31 +52,31 @@ export const collabPostResolver: Resolvers = {
           [{ model: models.CollabPost, as: 'post' }, 'createdAt', 'DESC'],
         ],
         offset,
-        limit,
+        limit: limit + 1,
       })
 
       const posts = postsByStack.map(stack => stack.post)
 
       return {
-        hasNextPage: count > offset + limit,
-        posts,
+        posts: posts.slice(0, limit),
+        hasNextPage: posts.length > limit,
       }
     },
     searchPostsByTitle: async (root, { input }, { models }) => {
       const { title, limit, offset } = input
-      const { rows: posts, count } = await models.CollabPost.findAndCountAll({
+      const posts = await models.CollabPost.findAll({
         where: {
           title: {
             [Op.iLike]: `%${title}%`,
           },
         },
         offset,
-        limit,
+        limit: limit + 1,
       })
 
       return {
-        posts,
-        hasNextPage: count > offset + limit,
+        posts: posts.slice(0, limit),
+        hasNextPage: posts.length > limit,
       }
     },
     advancedPostsSearch: (root, { input }, { models }) =>

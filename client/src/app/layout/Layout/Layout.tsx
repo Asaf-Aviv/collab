@@ -12,6 +12,7 @@ import { useWindowWidth } from '../../../providers'
 export const Layout = () => {
   const currentUser = useCurrentUser()
   const location = useLocation()
+  const { pathname } = location
   const [isChatMinimized, setIsChatMinimized] = useState(true)
   const windowWidth = useWindowWidth()
 
@@ -24,8 +25,10 @@ export const Layout = () => {
       <NavBar />
       <Flex bg="bg" color="text">
         <Box flex={1}>
-          <Box pt="64px" minHeight="100vh" pb={8}>
-            {location.pathname !== '/' && <PageHeaderSpacing />}
+          <Box pt="64px" minHeight="100vh">
+            {pathname !== '/' && !pathname.includes('/collab/') && (
+              <PageHeaderSpacing />
+            )}
             <Routes />
           </Box>
           <Footer />
