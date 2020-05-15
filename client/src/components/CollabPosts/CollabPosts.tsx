@@ -50,20 +50,18 @@ export const CollabPosts = () => {
   )
 
   return (
-    <main>
-      <Container maxWidth={900}>
-        {posts?.map(post => (
-          <CollabPostCard key={post.id} {...post} mb={8} />
-        ))}
-        {error && (
-          <DisplayError
-            message="Could not fetch collab posts"
-            onClick={() => refetch()}
-          />
-        )}
-        {loading && <Loader />}
-        {!error && <span ref={loadNextPageTriggerRef} />}
-      </Container>
-    </main>
+    <Container as="main" maxWidth={900} pb={4}>
+      {posts?.map(post => (
+        <CollabPostCard key={post.id} {...post} mb={8} />
+      ))}
+      {error && (
+        <DisplayError
+          message="Could not fetch collabs"
+          onClick={() => refetch()}
+        />
+      )}
+      {loading && <Loader />}
+      {!error && <span ref={loadNextPageTriggerRef} />}
+    </Container>
   )
 }

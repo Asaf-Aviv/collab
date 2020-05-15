@@ -9,13 +9,13 @@ export const collabPostTypeDefs = gql`
       stack: String!
       offset: Int!
       limit: Int!
-    ): CollabPostsSearchResultsPaload!
+    ): CollabPostsSearchResultsPayload!
     searchPostsByTitle(
       input: SearchPostsInput!
-    ): CollabPostsSearchResultsPaload!
+    ): CollabPostsSearchResultsPayload!
     advancedPostsSearch(
       input: AdvancedPostsSearchInput!
-    ): CollabPostsSearchResultsPaload!
+    ): CollabPostsSearchResultsPayload!
   }
 
   type Mutation {
@@ -33,7 +33,7 @@ export const collabPostTypeDefs = gql`
     limit: Int!
   }
 
-  type CollabPostsSearchResultsPaload {
+  type CollabPostsSearchResultsPayload {
     hasNextPage: Boolean!
     posts: [CollabPost!]!
   }
