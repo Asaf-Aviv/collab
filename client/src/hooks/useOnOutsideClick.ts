@@ -3,6 +3,7 @@ import { useEffect, RefObject, useRef } from 'react'
 export const useOnOutsideClick = (
   ref: RefObject<HTMLElement>,
   callback: () => void,
+  active = true,
 ) => {
   const cbRef = useRef(callback)
 
@@ -11,6 +12,8 @@ export const useOnOutsideClick = (
   }, [callback])
 
   useEffect(() => {
+    if (active === false) return
+
     const handleOutsideClick = (e: MouseEvent) => {
       if (ref.current?.contains(e.target as Node)) return
       cbRef.current()
@@ -22,5 +25,5 @@ export const useOnOutsideClick = (
       document.removeEventListener('click', handleOutsideClick)
       document.removeEventListener('touchstart', handleOutsideClick as any)
     }
-  }, [ref, callback])
+  }, [ref, active])
 }
