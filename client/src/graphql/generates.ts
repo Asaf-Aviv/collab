@@ -14,17 +14,17 @@ export type Scalars = {
 
 export type Query = {
    __typename?: 'Query';
-  advancedPostsSearch: CollabPostsSearchResultsPaload;
+  advancedPostsSearch: CollabPostsSearchResultsPayload;
   collab?: Maybe<Collab>;
   collabPost?: Maybe<CollabPost>;
   collabPosts: CollabPostsPayload;
-  collabPostsByStack: CollabPostsSearchResultsPaload;
+  collabPostsByStack: CollabPostsSearchResultsPayload;
   collabWallMessages: CollabWallMessagesPayload;
   collabs: Array<Collab>;
   currentUser?: Maybe<CurrentUser>;
   getConversation: GetConversationPayload;
   languages: Array<Scalars['String']>;
-  searchPostsByTitle: CollabPostsSearchResultsPaload;
+  searchPostsByTitle: CollabPostsSearchResultsPayload;
   task?: Maybe<Task>;
   taskList?: Maybe<Array<TaskList>>;
   thread?: Maybe<CollabDiscussionThread>;
@@ -444,7 +444,6 @@ export type Collab = {
   acceptsInvites: Scalars['Boolean'];
   collabPostId?: Maybe<Scalars['ID']>;
   discussionThreads: Array<CollabDiscussionThread>;
-  frontPagePost?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   invitationPending: Scalars['Boolean'];
   isMember: Scalars['Boolean'];
@@ -456,7 +455,6 @@ export type Collab = {
   pendingRequests: Array<Maybe<User>>;
   requestToJoinPending: Scalars['Boolean'];
   taskList: Array<TaskList>;
-  wall: Array<WallMessage>;
 };
 
 export type CollabDiscussionThreadComment = {
@@ -524,8 +522,8 @@ export type AdvancedPostsSearchInput = {
   stack?: Maybe<Array<Scalars['String']>>;
 };
 
-export type CollabPostsSearchResultsPaload = {
-   __typename?: 'CollabPostsSearchResultsPaload';
+export type CollabPostsSearchResultsPayload = {
+   __typename?: 'CollabPostsSearchResultsPayload';
   hasNextPage: Scalars['Boolean'];
   posts: Array<CollabPost>;
 };
@@ -1631,8 +1629,8 @@ export type CollabPostsByStackQueryVariables = {
 export type CollabPostsByStackQuery = (
   { __typename?: 'Query' }
   & { collabPostsByStack: (
-    { __typename?: 'CollabPostsSearchResultsPaload' }
-    & Pick<CollabPostsSearchResultsPaload, 'hasNextPage'>
+    { __typename?: 'CollabPostsSearchResultsPayload' }
+    & Pick<CollabPostsSearchResultsPayload, 'hasNextPage'>
     & { posts: Array<(
       { __typename?: 'CollabPost' }
       & Pick<CollabPost, 'id' | 'title' | 'stack' | 'experience' | 'hasStarted' | 'languages' | 'createdAt' | 'isNew' | 'membersCount' | 'reactionsCount' | 'commentsCount'>
@@ -1652,11 +1650,32 @@ export type AdvancedPostsSearchQueryVariables = {
 export type AdvancedPostsSearchQuery = (
   { __typename?: 'Query' }
   & { advancedPostsSearch: (
-    { __typename?: 'CollabPostsSearchResultsPaload' }
-    & Pick<CollabPostsSearchResultsPaload, 'hasNextPage'>
+    { __typename?: 'CollabPostsSearchResultsPayload' }
+    & Pick<CollabPostsSearchResultsPayload, 'hasNextPage'>
     & { posts: Array<(
       { __typename?: 'CollabPost' }
       & Pick<CollabPost, 'id' | 'title' | 'stack' | 'experience' | 'hasStarted' | 'languages' | 'createdAt' | 'isNew' | 'membersCount' | 'reactionsCount' | 'commentsCount'>
+      & { owner: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'avatar'>
+      ) }
+    )> }
+  ) }
+);
+
+export type SearchPostsByTitleQueryVariables = {
+  input: SearchPostsInput;
+};
+
+
+export type SearchPostsByTitleQuery = (
+  { __typename?: 'Query' }
+  & { searchPostsByTitle: (
+    { __typename?: 'CollabPostsSearchResultsPayload' }
+    & Pick<CollabPostsSearchResultsPayload, 'hasNextPage'>
+    & { posts: Array<(
+      { __typename?: 'CollabPost' }
+      & Pick<CollabPost, 'id' | 'title' | 'reactionsCount' | 'commentsCount'>
       & { owner: (
         { __typename?: 'User' }
         & Pick<User, 'id' | 'username' | 'avatar'>
@@ -3834,6 +3853,50 @@ export function useAdvancedPostsSearchLazyQuery(baseOptions?: ApolloReactHooks.L
 export type AdvancedPostsSearchQueryHookResult = ReturnType<typeof useAdvancedPostsSearchQuery>;
 export type AdvancedPostsSearchLazyQueryHookResult = ReturnType<typeof useAdvancedPostsSearchLazyQuery>;
 export type AdvancedPostsSearchQueryResult = ApolloReactCommon.QueryResult<AdvancedPostsSearchQuery, AdvancedPostsSearchQueryVariables>;
+export const SearchPostsByTitleDocument = gql`
+    query SearchPostsByTitle($input: SearchPostsInput!) {
+  searchPostsByTitle(input: $input) {
+    hasNextPage
+    posts {
+      id
+      title
+      reactionsCount
+      commentsCount
+      owner {
+        id
+        username
+        avatar
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useSearchPostsByTitleQuery__
+ *
+ * To run a query within a React component, call `useSearchPostsByTitleQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchPostsByTitleQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchPostsByTitleQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSearchPostsByTitleQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SearchPostsByTitleQuery, SearchPostsByTitleQueryVariables>) {
+        return ApolloReactHooks.useQuery<SearchPostsByTitleQuery, SearchPostsByTitleQueryVariables>(SearchPostsByTitleDocument, baseOptions);
+      }
+export function useSearchPostsByTitleLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SearchPostsByTitleQuery, SearchPostsByTitleQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<SearchPostsByTitleQuery, SearchPostsByTitleQueryVariables>(SearchPostsByTitleDocument, baseOptions);
+        }
+export type SearchPostsByTitleQueryHookResult = ReturnType<typeof useSearchPostsByTitleQuery>;
+export type SearchPostsByTitleLazyQueryHookResult = ReturnType<typeof useSearchPostsByTitleLazyQuery>;
+export type SearchPostsByTitleQueryResult = ApolloReactCommon.QueryResult<SearchPostsByTitleQuery, SearchPostsByTitleQueryVariables>;
 export const GetCollabPostDocument = gql`
     query GetCollabPost($postId: ID!) {
   collabPost(postId: $postId) {

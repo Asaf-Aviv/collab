@@ -26,17 +26,17 @@ export type Scalars = {
 
 export type Query = {
    __typename?: 'Query';
-  advancedPostsSearch: CollabPostsSearchResultsPaload;
+  advancedPostsSearch: CollabPostsSearchResultsPayload;
   collab?: Maybe<Collab>;
   collabPost?: Maybe<CollabPost>;
   collabPosts: CollabPostsPayload;
-  collabPostsByStack: CollabPostsSearchResultsPaload;
+  collabPostsByStack: CollabPostsSearchResultsPayload;
   collabWallMessages: CollabWallMessagesPayload;
   collabs: Array<Collab>;
   currentUser?: Maybe<CurrentUser>;
   getConversation: GetConversationPayload;
   languages: Array<Scalars['String']>;
-  searchPostsByTitle: CollabPostsSearchResultsPaload;
+  searchPostsByTitle: CollabPostsSearchResultsPayload;
   task?: Maybe<Task>;
   taskList?: Maybe<Array<TaskList>>;
   thread?: Maybe<CollabDiscussionThread>;
@@ -456,7 +456,6 @@ export type Collab = {
   acceptsInvites: Scalars['Boolean'];
   collabPostId?: Maybe<Scalars['ID']>;
   discussionThreads: Array<CollabDiscussionThread>;
-  frontPagePost?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   invitationPending: Scalars['Boolean'];
   isMember: Scalars['Boolean'];
@@ -468,7 +467,6 @@ export type Collab = {
   pendingRequests: Array<Maybe<User>>;
   requestToJoinPending: Scalars['Boolean'];
   taskList: Array<TaskList>;
-  wall: Array<WallMessage>;
 };
 
 export type CollabDiscussionThreadComment = {
@@ -536,8 +534,8 @@ export type AdvancedPostsSearchInput = {
   stack?: Maybe<Array<Scalars['String']>>;
 };
 
-export type CollabPostsSearchResultsPaload = {
-   __typename?: 'CollabPostsSearchResultsPaload';
+export type CollabPostsSearchResultsPayload = {
+   __typename?: 'CollabPostsSearchResultsPayload';
   hasNextPage: Scalars['Boolean'];
   posts: Array<CollabPost>;
 };
@@ -990,7 +988,7 @@ export type ResolversTypes = ResolversObject<{
   CollabDiscussionThread: ResolverTypeWrapper<GQLCollabDiscussionThread>,
   CreateThreadArgs: CreateThreadArgs,
   AdvancedPostsSearchInput: AdvancedPostsSearchInput,
-  CollabPostsSearchResultsPaload: ResolverTypeWrapper<Omit<CollabPostsSearchResultsPaload, 'posts'> & { posts: Array<ResolversTypes['CollabPost']> }>,
+  CollabPostsSearchResultsPayload: ResolverTypeWrapper<Omit<CollabPostsSearchResultsPayload, 'posts'> & { posts: Array<ResolversTypes['CollabPost']> }>,
   SearchPostsInput: SearchPostsInput,
   SearchPostsPayload: ResolverTypeWrapper<Omit<SearchPostsPayload, 'posts'> & { posts: Array<ResolversTypes['CollabPost']> }>,
   CollabPost: ResolverTypeWrapper<GQLCollabPost>,
@@ -1059,7 +1057,7 @@ export type ResolversParentTypes = ResolversObject<{
   CollabDiscussionThread: GQLCollabDiscussionThread,
   CreateThreadArgs: CreateThreadArgs,
   AdvancedPostsSearchInput: AdvancedPostsSearchInput,
-  CollabPostsSearchResultsPaload: Omit<CollabPostsSearchResultsPaload, 'posts'> & { posts: Array<ResolversParentTypes['CollabPost']> },
+  CollabPostsSearchResultsPayload: Omit<CollabPostsSearchResultsPayload, 'posts'> & { posts: Array<ResolversParentTypes['CollabPost']> },
   SearchPostsInput: SearchPostsInput,
   SearchPostsPayload: Omit<SearchPostsPayload, 'posts'> & { posts: Array<ResolversParentTypes['CollabPost']> },
   CollabPost: GQLCollabPost,
@@ -1111,17 +1109,17 @@ export type ResolversParentTypes = ResolversObject<{
 }>;
 
 export type QueryResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  advancedPostsSearch?: Resolver<ResolversTypes['CollabPostsSearchResultsPaload'], ParentType, ContextType, RequireFields<QueryAdvancedPostsSearchArgs, 'input'>>,
+  advancedPostsSearch?: Resolver<ResolversTypes['CollabPostsSearchResultsPayload'], ParentType, ContextType, RequireFields<QueryAdvancedPostsSearchArgs, 'input'>>,
   collab?: Resolver<Maybe<ResolversTypes['Collab']>, ParentType, ContextType, RequireFields<QueryCollabArgs, 'collabId'>>,
   collabPost?: Resolver<Maybe<ResolversTypes['CollabPost']>, ParentType, ContextType, RequireFields<QueryCollabPostArgs, 'postId'>>,
   collabPosts?: Resolver<ResolversTypes['CollabPostsPayload'], ParentType, ContextType, RequireFields<QueryCollabPostsArgs, 'limit' | 'offset'>>,
-  collabPostsByStack?: Resolver<ResolversTypes['CollabPostsSearchResultsPaload'], ParentType, ContextType, RequireFields<QueryCollabPostsByStackArgs, 'limit' | 'offset' | 'stack'>>,
+  collabPostsByStack?: Resolver<ResolversTypes['CollabPostsSearchResultsPayload'], ParentType, ContextType, RequireFields<QueryCollabPostsByStackArgs, 'limit' | 'offset' | 'stack'>>,
   collabWallMessages?: Resolver<ResolversTypes['CollabWallMessagesPayload'], ParentType, ContextType, RequireFields<QueryCollabWallMessagesArgs, 'input'>>,
   collabs?: Resolver<Array<ResolversTypes['Collab']>, ParentType, ContextType>,
   currentUser?: Resolver<Maybe<ResolversTypes['CurrentUser']>, ParentType, ContextType>,
   getConversation?: Resolver<ResolversTypes['GetConversationPayload'], ParentType, ContextType, RequireFields<QueryGetConversationArgs, 'limit' | 'offset' | 'userId'>>,
   languages?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>,
-  searchPostsByTitle?: Resolver<ResolversTypes['CollabPostsSearchResultsPaload'], ParentType, ContextType, RequireFields<QuerySearchPostsByTitleArgs, 'input'>>,
+  searchPostsByTitle?: Resolver<ResolversTypes['CollabPostsSearchResultsPayload'], ParentType, ContextType, RequireFields<QuerySearchPostsByTitleArgs, 'input'>>,
   task?: Resolver<Maybe<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<QueryTaskArgs, 'taskId'>>,
   taskList?: Resolver<Maybe<Array<ResolversTypes['TaskList']>>, ParentType, ContextType, RequireFields<QueryTaskListArgs, 'collabId'>>,
   thread?: Resolver<Maybe<ResolversTypes['CollabDiscussionThread']>, ParentType, ContextType, RequireFields<QueryThreadArgs, 'threadId'>>,
@@ -1192,7 +1190,6 @@ export type CollabResolvers<ContextType = CollabContext, ParentType extends Reso
   acceptsInvites?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   collabPostId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
   discussionThreads?: Resolver<Array<ResolversTypes['CollabDiscussionThread']>, ParentType, ContextType>,
-  frontPagePost?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   invitationPending?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   isMember?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
@@ -1204,7 +1201,6 @@ export type CollabResolvers<ContextType = CollabContext, ParentType extends Reso
   pendingRequests?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType>,
   requestToJoinPending?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   taskList?: Resolver<Array<ResolversTypes['TaskList']>, ParentType, ContextType>,
-  wall?: Resolver<Array<ResolversTypes['WallMessage']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
@@ -1231,7 +1227,7 @@ export type CollabDiscussionThreadResolvers<ContextType = CollabContext, ParentT
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
-export type CollabPostsSearchResultsPaloadResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['CollabPostsSearchResultsPaload'] = ResolversParentTypes['CollabPostsSearchResultsPaload']> = ResolversObject<{
+export type CollabPostsSearchResultsPayloadResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['CollabPostsSearchResultsPayload'] = ResolversParentTypes['CollabPostsSearchResultsPayload']> = ResolversObject<{
   hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   posts?: Resolver<Array<ResolversTypes['CollabPost']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
@@ -1446,7 +1442,7 @@ export type Resolvers<ContextType = CollabContext> = ResolversObject<{
   Collab?: CollabResolvers<ContextType>,
   CollabDiscussionThreadComment?: CollabDiscussionThreadCommentResolvers<ContextType>,
   CollabDiscussionThread?: CollabDiscussionThreadResolvers<ContextType>,
-  CollabPostsSearchResultsPaload?: CollabPostsSearchResultsPaloadResolvers<ContextType>,
+  CollabPostsSearchResultsPayload?: CollabPostsSearchResultsPayloadResolvers<ContextType>,
   SearchPostsPayload?: SearchPostsPayloadResolvers<ContextType>,
   CollabPost?: CollabPostResolvers<ContextType>,
   CollabPostsPayload?: CollabPostsPayloadResolvers<ContextType>,
