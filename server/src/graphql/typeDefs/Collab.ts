@@ -20,7 +20,7 @@ export const collabTypeDefs = gql`
   type Collab {
     id: ID!
     name: String!
-    owner: User
+    owner: User!
     collabPostId: ID
     acceptsInvites: Boolean!
     members: [User!]!

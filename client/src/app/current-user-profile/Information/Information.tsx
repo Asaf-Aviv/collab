@@ -3,9 +3,10 @@ import {
   Flex,
   FormControl,
   FormLabel,
-  Input,
   Button,
   Textarea,
+  Heading,
+  Box,
 } from '@chakra-ui/core'
 import Select from 'react-select'
 import { countryOptions } from '../../../data/countryOptions'
@@ -14,10 +15,14 @@ import {
   UpdateUserInfoInput,
   useGetCurrentUserInfoQuery,
 } from '../../../graphql/generates'
+import { InputWithLabel } from '../../../components/InputWithLabel'
+import styled from '@emotion/styled'
 
 export const Information = () => {
   const { data: userInfoData, loading, error } = useGetCurrentUserInfoQuery()
-  const [infoInput, setInfoInput] = useState<UpdateUserInfoInput>()
+  const [infoInput, setInfoInput] = useState<UpdateUserInfoInput>(
+    {} as UpdateUserInfoInput,
+  )
 
   const [
     updateInfo,
@@ -31,35 +36,22 @@ export const Information = () => {
   useEffect(() => {
     if (userInfoData?.currentUser) {
       const { currentUser } = userInfoData
+      // eslint-disable-next-line
+      const { id, __typename, ...userInfo } = currentUser
 
-      setInfoInput({
-        firstName: currentUser.firstName,
-        lastName: currentUser.lastName,
-        title: currentUser.title,
-        country: currentUser.country,
-        bio: currentUser.bio,
-      })
+      setInfoInput(userInfo)
     }
   }, [userInfoData])
 
   const handleUpdateInfo = () => {
     if (updateInfoLoading || !userInfoData?.currentUser) return
 
-    const { currentUser } = userInfoData
+    // eslint-disable-next-line
+    const { id, __typename, ...userInfo } = userInfoData.currentUser
 
-    const currentUserInfo = {
-      firstName: currentUser.firstName,
-      lastName: currentUser.lastName,
-      title: currentUser.title,
-      country: currentUser.country,
-      bio: currentUser.bio,
+    if (JSON.stringify(userInfo) !== JSON.stringify(infoInput)) {
+      updateInfo()
     }
-
-    if (JSON.stringify(currentUserInfo) === JSON.stringify(infoInput)) {
-      return
-    }
-
-    updateInfo()
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,72 +68,121 @@ export const Information = () => {
   if (!infoInput) return null
 
   return (
-    <Flex flexDirection="column" p={4} width="100%">
-      <Flex>
-        <FormControl>
-          <FormLabel htmlFor="first-name">First Name</FormLabel>
-          <Input
-            name="firstName"
-            id="first-name"
-            value={infoInput.firstName ?? ''}
-            onChange={handleInputChange}
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel htmlFor="last-name">Last Name</FormLabel>
-          <Input
-            name="lastName"
-            id="last-name"
-            onChange={handleInputChange}
-            value={infoInput.lastName ?? ''}
-          />
-        </FormControl>
-      </Flex>
-      <Flex>
-        <FormControl>
-          <FormLabel htmlFor="title">Title</FormLabel>
-          <Input
-            name="title"
-            id="title"
-            placeholder="e.g: Software Engineer, Frotn-End Engineer"
-            onChange={handleInputChange}
-            value={infoInput.title ?? ''}
-          />
-        </FormControl>
+    <Box>
+      <Heading as="h1" mb={4} fontWeight={500}>
+        Edit your Information
+      </Heading>
+      <StyledFlex>
+        <InputWithLabel
+          name="firstName"
+          pl={2}
+          htmlFor="first-name"
+          label="First Name"
+          value={infoInput.firstName}
+          onChange={handleInputChange}
+          size="md"
+        />
+        <InputWithLabel
+          name="lastName"
+          pl={2}
+          htmlFor="last-name"
+          label="Last Name"
+          value={infoInput.lastName}
+          onChange={handleInputChange}
+          size="md"
+        />
+        <InputWithLabel
+          name="title"
+          _placeholder={{
+            fontSize: '0.75rem',
+          }}
+          htmlFor="title"
+          label="Title"
+          pl={2}
+          value={infoInput.title}
+          onChange={handleInputChange}
+          size="md"
+          placeholder="Software Engineer, Frotn-End Engineer"
+        />
+        <InputWithLabel
+          name="twitter"
+          pl={2}
+          htmlFor="twitter"
+          label="Twitter"
+          value={infoInput.twitter}
+          onChange={handleInputChange}
+          size="md"
+        />
+        <InputWithLabel
+          name="github"
+          pl={2}
+          htmlFor="github"
+          label="Github"
+          value={infoInput.github}
+          onChange={handleInputChange}
+          size="md"
+        />
+        <InputWithLabel
+          name="linkedin"
+          pl={2}
+          htmlFor="linkedin"
+          label="Linkedin"
+          value={infoInput.linkedin}
+          onChange={handleInputChange}
+          size="md"
+        />
         <FormControl>
           <FormLabel htmlFor="country">Country</FormLabel>
           <Select
             id="country"
+            options={countryOptions}
             onChange={(e: any) =>
               setInfoInput({ ...infoInput, country: e?.value ?? null })
             }
             defaultValue={countryOptions.find(
               x => x.label === infoInput.country,
             )}
-            options={countryOptions}
           />
         </FormControl>
-      </Flex>
-      <Flex>
-        <FormControl>
+        <FormControl width="100%">
           <FormLabel htmlFor="bio">Bio</FormLabel>
           <Textarea
             name="bio"
             id="bio"
-            onChange={(e: any) =>
-              setInfoInput({ ...infoInput, bio: e.target.value })
-            }
+            bg="#f2f2ff"
+            p={2}
+            mb={4}
+            _hover={{ borderColor: '#cab3ff' }}
+            _focus={{ borderColor: '#805ad5' }}
             value={infoInput.bio ?? ''}
+            onChange={handleInputChange}
+            minHeight={140}
           />
         </FormControl>
-      </Flex>
+      </StyledFlex>
       <Button
-        alignSelf="flex-end"
+        ml="auto"
+        display="block"
         onClick={handleUpdateInfo}
+        isLoading={updateInfoLoading}
+        loadingText="Updating"
         variantColor="purple"
       >
         Update
       </Button>
-    </Flex>
+    </Box>
   )
 }
+
+const StyledFlex = styled(Flex)`
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  > *:not(:last-child) {
+    width: 100%;
+    margin-bottom: 1rem;
+    @media (min-width: 786px) {
+      width: 48%;
+    }
+  }
+`

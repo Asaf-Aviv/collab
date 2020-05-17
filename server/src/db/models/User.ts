@@ -86,18 +86,33 @@ export class User extends Model<User> {
   @Column
   avatar!: string
 
+  @Default('')
   @Column
   firstName!: string
 
+  @Default('')
   @Column
   lastName!: string
 
   // the users engineering title
+  @Default('')
   @Column
   title!: string
 
   @Column
   country!: string
+
+  @Default('')
+  @Column
+  github!: string
+
+  @Default('')
+  @Column
+  twitter!: string
+
+  @Default('')
+  @Column
+  linkedin!: string
 
   @Unique({
     msg: 'Email is already taken',

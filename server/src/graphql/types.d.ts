@@ -462,7 +462,7 @@ export type Collab = {
   isOwner: Scalars['Boolean'];
   members: Array<User>;
   name: Scalars['String'];
-  owner?: Maybe<User>;
+  owner: User;
   pendingInvites: Array<Maybe<User>>;
   pendingRequests: Array<Maybe<User>>;
   requestToJoinPending: Scalars['Boolean'];
@@ -834,22 +834,25 @@ export type TaskList = {
 export type CurrentUser = {
    __typename?: 'CurrentUser';
   avatar?: Maybe<Scalars['String']>;
-  bio?: Maybe<Scalars['String']>;
+  bio: Scalars['String'];
   collabInvites: Array<Collab>;
   collabRequests: Array<CollabRequest>;
   collabs: Array<Collab>;
   conversationsPreview: Array<PrivateMessagePreview>;
   country?: Maybe<Scalars['String']>;
   email: Scalars['String'];
-  firstName?: Maybe<Scalars['String']>;
+  firstName: Scalars['String'];
   friendRequests: Array<User>;
   friendRequestsCount: Scalars['Int'];
   friends: Array<User>;
+  github: Scalars['String'];
   id: Scalars['ID'];
-  lastName?: Maybe<Scalars['String']>;
+  lastName: Scalars['String'];
+  linkedin: Scalars['String'];
   tasks: Array<Task>;
   /** the user's engineering title */
-  title?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
+  twitter: Scalars['String'];
   username: Scalars['String'];
 };
 
@@ -869,11 +872,14 @@ export type User = {
 };
 
 export type UpdateUserInfoInput = {
-  bio?: Maybe<Scalars['String']>;
+  bio: Scalars['String'];
   country?: Maybe<Scalars['String']>;
-  firstName?: Maybe<Scalars['String']>;
-  lastName?: Maybe<Scalars['String']>;
-  title?: Maybe<Scalars['String']>;
+  firstName: Scalars['String'];
+  github: Scalars['String'];
+  lastName: Scalars['String'];
+  linkedin: Scalars['String'];
+  title: Scalars['String'];
+  twitter: Scalars['String'];
 };
 
 export type CollabRequest = {
@@ -1196,7 +1202,7 @@ export type CollabResolvers<ContextType = CollabContext, ParentType extends Reso
   isOwner?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   members?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  owner?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
+  owner?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
   pendingInvites?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType>,
   pendingRequests?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType>,
   requestToJoinPending?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
@@ -1392,21 +1398,24 @@ export type TaskListResolvers<ContextType = CollabContext, ParentType extends Re
 
 export type CurrentUserResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['CurrentUser'] = ResolversParentTypes['CurrentUser']> = ResolversObject<{
   avatar?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  bio?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  bio?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   collabInvites?: Resolver<Array<ResolversTypes['Collab']>, ParentType, ContextType>,
   collabRequests?: Resolver<Array<ResolversTypes['CollabRequest']>, ParentType, ContextType>,
   collabs?: Resolver<Array<ResolversTypes['Collab']>, ParentType, ContextType>,
   conversationsPreview?: Resolver<Array<ResolversTypes['PrivateMessagePreview']>, ParentType, ContextType>,
   country?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  firstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   friendRequests?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>,
   friendRequestsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   friends?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>,
+  github?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
-  lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  linkedin?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   tasks?: Resolver<Array<ResolversTypes['Task']>, ParentType, ContextType>,
-  title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  twitter?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;

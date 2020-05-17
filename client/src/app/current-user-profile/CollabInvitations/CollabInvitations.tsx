@@ -1,10 +1,11 @@
 import React from 'react'
-import { Button, Text, Avatar } from '@chakra-ui/core'
+import { Button, Text, Box, Heading, Flex } from '@chakra-ui/core'
 import {
   useGetCurrentUserCollabInvitationsQuery,
   useAcceptCollabInvitationMutation,
   useDeclineCollabInvitationMutation,
 } from '../../../graphql/generates'
+import { AvatarWithUsername } from '../../../components/AvatarWithUsername'
 
 export const CollabInvitations = () => {
   const { data, loading, error } = useGetCurrentUserCollabInvitationsQuery()
@@ -19,40 +20,58 @@ export const CollabInvitations = () => {
   const { collabInvites } = data.currentUser
 
   return (
-    <div>
-      {collabInvites.map(({ id, name, owner }) => (
-        <div key={id}>
-          <Avatar src={owner!.avatar ?? undefined} name={owner!.username} />
-          <Text>
-            {owner!.username} invited you to join {name}
-          </Text>
-          <Button
-            variant="ghost"
-            mr={3}
-            onClick={() => {
-              declineInvitation({
-                variables: {
-                  collabId: id,
-                },
-              })
-            }}
-          >
-            Decline
-          </Button>
-          <Button
-            variantColor="purple"
-            onClick={() =>
-              acceptInvitation({
-                variables: {
-                  collabId: id,
-                },
-              })
-            }
-          >
-            Accept
-          </Button>
-        </div>
-      ))}
-    </div>
+    <Box as="main">
+      <Heading as="h1" mb={4} fontWeight={500}>
+        Collab invitations
+      </Heading>
+      <section>
+        {collabInvites.map(({ id, name, owner }) => (
+          <Box key={id} py={4} px={2} borderBottom="1px solid #e1e1e1">
+            <Flex align="center" mb={4}>
+              <AvatarWithUsername
+                id={owner.id}
+                avatar={owner.avatar ?? undefined}
+                username={owner.username}
+                size="sm"
+                mr={2}
+              />
+              <Text>
+                invited you to join{' '}
+                <Text as="span" fontWeight={700}>
+                  {name}
+                </Text>
+              </Text>
+            </Flex>
+            <Button
+              size="sm"
+              variant="ghost"
+              mr={3}
+              onClick={() => {
+                declineInvitation({
+                  variables: {
+                    collabId: id,
+                  },
+                })
+              }}
+            >
+              Decline
+            </Button>
+            <Button
+              size="sm"
+              variantColor="purple"
+              onClick={() =>
+                acceptInvitation({
+                  variables: {
+                    collabId: id,
+                  },
+                })
+              }
+            >
+              Accept
+            </Button>
+          </Box>
+        ))}
+      </section>
+    </Box>
   )
 }

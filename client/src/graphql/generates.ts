@@ -450,7 +450,7 @@ export type Collab = {
   isOwner: Scalars['Boolean'];
   members: Array<User>;
   name: Scalars['String'];
-  owner?: Maybe<User>;
+  owner: User;
   pendingInvites: Array<Maybe<User>>;
   pendingRequests: Array<Maybe<User>>;
   requestToJoinPending: Scalars['Boolean'];
@@ -822,22 +822,25 @@ export type TaskList = {
 export type CurrentUser = {
    __typename?: 'CurrentUser';
   avatar?: Maybe<Scalars['String']>;
-  bio?: Maybe<Scalars['String']>;
+  bio: Scalars['String'];
   collabInvites: Array<Collab>;
   collabRequests: Array<CollabRequest>;
   collabs: Array<Collab>;
   conversationsPreview: Array<PrivateMessagePreview>;
   country?: Maybe<Scalars['String']>;
   email: Scalars['String'];
-  firstName?: Maybe<Scalars['String']>;
+  firstName: Scalars['String'];
   friendRequests: Array<User>;
   friendRequestsCount: Scalars['Int'];
   friends: Array<User>;
+  github: Scalars['String'];
   id: Scalars['ID'];
-  lastName?: Maybe<Scalars['String']>;
+  lastName: Scalars['String'];
+  linkedin: Scalars['String'];
   tasks: Array<Task>;
   /** the user's engineering title */
-  title?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
+  twitter: Scalars['String'];
   username: Scalars['String'];
 };
 
@@ -857,11 +860,14 @@ export type User = {
 };
 
 export type UpdateUserInfoInput = {
-  bio?: Maybe<Scalars['String']>;
+  bio: Scalars['String'];
   country?: Maybe<Scalars['String']>;
-  firstName?: Maybe<Scalars['String']>;
-  lastName?: Maybe<Scalars['String']>;
-  title?: Maybe<Scalars['String']>;
+  firstName: Scalars['String'];
+  github: Scalars['String'];
+  lastName: Scalars['String'];
+  linkedin: Scalars['String'];
+  title: Scalars['String'];
+  twitter: Scalars['String'];
 };
 
 export type CollabRequest = {
@@ -1462,7 +1468,7 @@ export type GetCurrentUserInfoQuery = (
   { __typename?: 'Query' }
   & { currentUser?: Maybe<(
     { __typename?: 'CurrentUser' }
-    & Pick<CurrentUser, 'id' | 'firstName' | 'lastName' | 'title' | 'country' | 'bio'>
+    & Pick<CurrentUser, 'id' | 'firstName' | 'lastName' | 'title' | 'country' | 'bio' | 'github' | 'twitter' | 'linkedin'>
   )> }
 );
 
@@ -1533,10 +1539,10 @@ export type GetCurrentUserCollabInvitationsQuery = (
     & { collabInvites: Array<(
       { __typename?: 'Collab' }
       & Pick<Collab, 'id' | 'name'>
-      & { owner?: Maybe<(
+      & { owner: (
         { __typename?: 'User' }
         & Pick<User, 'id' | 'username' | 'avatar'>
-      )> }
+      ) }
     )> }
   )> }
 );
@@ -1749,10 +1755,10 @@ export type CollabQuery = (
   & { collab?: Maybe<(
     { __typename?: 'Collab' }
     & Pick<Collab, 'id' | 'name' | 'collabPostId' | 'acceptsInvites' | 'isOwner'>
-    & { owner?: Maybe<(
+    & { owner: (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
-    )>, pendingInvites: Array<Maybe<(
+    ), pendingInvites: Array<Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
     )>>, pendingRequests: Array<Maybe<(
@@ -3381,6 +3387,9 @@ export const GetCurrentUserInfoDocument = gql`
     title
     country
     bio
+    github
+    twitter
+    linkedin
   }
 }
     `;

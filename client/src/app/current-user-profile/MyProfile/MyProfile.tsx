@@ -21,7 +21,7 @@ export const MyProfile = () => {
   const { path } = useRouteMatch()
 
   return (
-    <Container>
+    <Container maxWidth={900}>
       <Flex>
         <Paper
           flexDirection="column"
@@ -52,32 +52,30 @@ export const MyProfile = () => {
             Conversations
           </StyledNavLink>
         </Paper>
-        <Paper flex={1}>
-          <Switch>
-            <Route exact path={`${path}/info`}>
-              <Information />
-            </Route>
-            <Route exact path={`${path}/collabs`}>
-              <Collabs />
-            </Route>
-            <Route exact path={`${path}/tasks`}>
-              <Tasks />
-            </Route>
-            <Route exact path={`${path}/collab-invitations`}>
-              <CollabInvitations />
-            </Route>
-            <Route exact path={`${path}/collab-requests`}>
-              <CollabRequests />
-            </Route>
-            <Route exact path={`${path}/friends`}>
-              <Friends />
-            </Route>
-            <Route path={`${path}/conversations`}>
-              <Conversations />
-            </Route>
-            <Redirect to="/profile/info" />
-          </Switch>
-        </Paper>
+        <Switch>
+          <Route exact path={`${path}/info`}>
+            <Information />
+          </Route>
+          <Route exact path={`${path}/collabs`}>
+            <Collabs />
+          </Route>
+          <Route exact path={`${path}/tasks`}>
+            <Tasks />
+          </Route>
+          <Route exact path={`${path}/collab-invitations`}>
+            <CollabInvitations />
+          </Route>
+          <Route exact path={`${path}/collab-requests`}>
+            <CollabRequests />
+          </Route>
+          <Route exact path={`${path}/friends`}>
+            <Friends />
+          </Route>
+          <Route path={`${path}/conversations`}>
+            <Conversations />
+          </Route>
+          <Redirect to="/profile/info" />
+        </Switch>
       </Flex>
     </Container>
   )
