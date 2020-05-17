@@ -46,7 +46,9 @@ export class CollabPost extends Model<CollabPost> {
   title!: string
 
   @AllowNull(false)
-  @Column(DataType.ENUM('ALL', 'JUNIOR', 'JUNIOR_MID', 'MID_SENIOR', 'SENIOR'))
+  @Column(
+    DataType.ENUM('ALL', 'JUNIOR', 'JUNIOR_MID', 'MID', 'MID_SENIOR', 'SENIOR'),
+  )
   experience!: string
 
   @Length({

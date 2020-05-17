@@ -59,7 +59,8 @@ export const CollabPostCard = memo(
           </Heading>
         </Link>
         <Flex
-          px={3}
+          pl={12}
+          pr={3}
           py={2}
           w="100%"
           wrap="wrap"
