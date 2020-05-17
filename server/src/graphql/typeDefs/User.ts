@@ -27,12 +27,15 @@ export const userTypeDefs = gql`
     username: String!
     email: String!
     avatar: String
-    firstName: String
-    lastName: String
+    firstName: String!
+    lastName: String!
     "the user's engineering title"
-    title: String
+    title: String!
     country: String
-    bio: String
+    bio: String!
+    github: String!
+    twitter: String!
+    linkedin: String!
     friendRequests: [User!]!
     friendRequestsCount: Int!
     friends: [User!]!
@@ -58,11 +61,14 @@ export const userTypeDefs = gql`
   }
 
   input UpdateUserInfoInput {
-    firstName: String
-    lastName: String
-    title: String
+    firstName: String!
+    lastName: String!
+    title: String!
     country: String
-    bio: String
+    bio: String!
+    github: String!
+    twitter: String!
+    linkedin: String!
   }
 
   type CollabRequest {

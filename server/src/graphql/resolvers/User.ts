@@ -83,14 +83,19 @@ export const userResolver: Resolvers = {
           },
         ],
       }),
-    collabRequests: async ({ id }, args, { models }) =>
-      models.CollabMemberRequest.findAll({
+    collabRequests: async ({ id }, args, { models, loaders }) => {
+      const requests = await models.CollabMemberRequest.findAll({
         where: { type: 'request' },
         include: [
           { model: models.User },
           { model: models.Collab, where: { ownerId: id } },
         ],
-      }),
+        raw: true,
+      })
+
+      console.log(requests)
+      return requests
+    },
     tasks: ({ id }, args, { models }) =>
       models.CollabTask.findAll({ where: { assigneeId: id } }),
   },
@@ -121,6 +126,10 @@ export const userResolver: Resolvers = {
       return !friendRequest
     },
   },
+  // CollabRequest: {
+  //   member: {},
+  //   collab:: {}
+  // },
 }
 
 export const userMiddleware = {

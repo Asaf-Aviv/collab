@@ -5,7 +5,6 @@ export const Container = styled(Box)`
   margin: 0 auto;
   padding-left: 2.5%;
   padding-right: 2.5%;
-  /* max-width: '1200px'; */
 `
 
 export const PageHeaderSpacing = styled.div`
@@ -13,10 +12,10 @@ export const PageHeaderSpacing = styled.div`
 `
 
 export const Paper = styled(PseudoBox)<PseudoBoxProps>`
+  background-color: ${props => (props.bg as string) || '#f2f2ff'};
   display: flex;
   border-radius: 6px;
   box-shadow: 0px 2px 4px 0 rgb(216, 216, 216);
-  background-color: #f2f2ff;
 `
 
 export const IconButton = styled.button`

@@ -28,8 +28,10 @@ export const collabResolver: Resolvers = {
       models.Collab.cancelRequestToJoin(collabId, user!.id),
   },
   Collab: {
-    owner: async ({ ownerId }, args, { loaders }) =>
-      loaders.userLoader.load(ownerId),
+    owner: async ({ ownerId }, args, { loaders }) => {
+      const collabOwner = await loaders.userLoader.load(ownerId)
+      return collabOwner!
+    },
     isOwner: ({ ownerId }, args, { user }) => user?.id === ownerId,
     isMember: async ({ id }, args, { user, models }) => {
       if (!user?.id) {

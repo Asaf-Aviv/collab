@@ -47,6 +47,9 @@ export const GET_CURRENT_USER_INFO = gql`
       title
       country
       bio
+      github
+      twitter
+      linkedin
     }
   }
 `
