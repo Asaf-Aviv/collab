@@ -87,7 +87,7 @@ export const CreateCollab = () => {
   const { name, title, description, hasStarted } = postInput
 
   return (
-    <Container>
+    <Container pb={6}>
       <Heading as="h1" size="xl" textAlign="center" mb={10}>
         Create a Collab
       </Heading>

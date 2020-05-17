@@ -16,8 +16,9 @@ import { motion } from 'framer-motion'
 import { useApolloClient } from '@apollo/react-hooks'
 import { Container } from '../../../components/global'
 import { NavUserPanel } from '../NavUserPanel'
-import { SiteHeader } from '../NavBar'
+import { SiteTopBar } from '../SiteTopBar'
 import { useKey } from '../../../hooks/useKey'
+import { SearchBar } from '../SearchBar'
 
 export const SmallScreenNav = () => {
   const [isOpen, toggleIsOpen] = useReducer(prevState => !prevState, false)
@@ -40,7 +41,7 @@ export const SmallScreenNav = () => {
 
   return (
     <>
-      <SiteHeader>
+      <SiteTopBar>
         <Container
           height="100%"
           flex={1}
@@ -50,8 +51,8 @@ export const SmallScreenNav = () => {
         >
           <IconButton
             aria-label="navigation menu"
-            onClick={() => toggleIsOpen()}
             ref={menuButtonRef}
+            onClick={() => toggleIsOpen()}
           >
             {isOpen ? (
               <MenuOpenRoundedIcon width={32} height={32} />
@@ -59,9 +60,10 @@ export const SmallScreenNav = () => {
               <MenuRoundedIcon width={32} height={32} />
             )}
           </IconButton>
+          <SearchBar />
           {currentUser && <NavUserPanel />}
         </Container>
-      </SiteHeader>
+      </SiteTopBar>
       {isOpen && (
         <StyledMotion
           animate={{ y: 0, opacity: 1 }}
@@ -168,9 +170,11 @@ const IconButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 40px;
+  width: 40px;
   > svg {
-    height: 24px;
-    width: 24px;
+    height: 32px;
+    width: 32px;
   }
 `
 
