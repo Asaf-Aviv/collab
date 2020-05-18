@@ -226,6 +226,7 @@ export const CREATE_TASK = gql`
       id
       description
       order
+      taskListId
       author {
         id
         username

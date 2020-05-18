@@ -18,9 +18,8 @@ import {
   CollabWallMessagesInput,
 } from '../../graphql/types'
 import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
-import { CollabMember } from './CollabMember'
 
-@Table({ tableName: 'private_messages', updatedAt: false })
+@Table({ tableName: 'collab_wall_messages', updatedAt: false })
 export class CollabWallMessage extends Model<CollabWallMessage> {
   @IsUUID(4)
   @Default(uuid)

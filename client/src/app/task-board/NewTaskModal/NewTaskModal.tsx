@@ -52,6 +52,8 @@ export const NewTaskModal = ({ closeModal, taskListId }: Props) => {
         variables: { collabId },
       })!
 
+      console.log(taskListId)
+
       const updatedTaskList = taskListData.taskList!.map(taskList => {
         if (taskList.id === taskListId) {
           return {

@@ -29,7 +29,7 @@ export const userResolver: Resolvers = {
       models.User.acceptCollabInvitation(collabId, user.id),
     declineCollabInvitation: (root, { collabId }, { user, models }) =>
       models.User.declineCollabInvitation(collabId, user.id),
-    updateUserInfo: (root, { input }, { user }) => user.update(input),
+    updateUserInfo: (root, { input }, { user }) => user!.update(input!),
     sendFriendRequest: (root, { friendId }, { models, user }) =>
       models.UserFriendRequest.createFriendRequest(friendId, user!.id),
     acceptFriendRequest: (root, { friendId }, { models, user }) =>
@@ -90,7 +90,6 @@ export const userResolver: Resolvers = {
           { model: models.User },
           { model: models.Collab, where: { ownerId: id } },
         ],
-        raw: true,
       })
 
       console.log(requests)

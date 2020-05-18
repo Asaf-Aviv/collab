@@ -5,25 +5,29 @@ import {
   useCancelCollabRequestToJoinMutation,
 } from '../../../graphql/generates'
 import { AvatarWithUsername } from '../../../components/AvatarWithUsername'
+import { Loader } from '../../../components/Loader'
+import { DisplayError } from '../../../components/DisplayError'
 
 export const CollabRequests = () => {
-  const { data, loading, error } = useGetCurrentUserCollabRequestsQuery()
+  const {
+    data,
+    loading,
+    error,
+    refetch,
+  } = useGetCurrentUserCollabRequestsQuery({
+    notifyOnNetworkStatusChange: true,
+  })
   const [cancelRequest] = useCancelCollabRequestToJoinMutation()
 
-  console.log(data)
-  if (loading) return null
-  if (error) return <span>Could not fetch requests</span>
-  if (!data?.currentUser) return null
-
-  const { collabRequests } = data.currentUser
+  const { collabRequests } = data?.currentUser || {}
 
   return (
-    <Box as="main">
+    <Box as="main" flex={1} pb={4}>
       <Heading as="h1" mb={4} fontWeight={500}>
-        Collab invitations
+        Collab Requests
       </Heading>
       <section>
-        {collabRequests.map(({ member, collab }) => (
+        {collabRequests?.map(({ member, collab }) => (
           <Box
             key={member.username + collab.name}
             py={4}
@@ -55,6 +59,13 @@ export const CollabRequests = () => {
             </Button>
           </Box>
         ))}
+        {loading && <Loader />}
+        {error && (
+          <DisplayError
+            message="Could not fetch requests"
+            onClick={() => refetch()}
+          />
+        )}
       </section>
     </Box>
     // <div>

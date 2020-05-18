@@ -284,7 +284,6 @@ const StyledMotionDiv = styled(motion.div)`
     position: absolute;
     width: calc(100% - 2rem);
     left: 1rem;
-    padding: 0 1rem;
     top: 52px;
   }
 `

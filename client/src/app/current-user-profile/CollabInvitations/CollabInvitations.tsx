@@ -6,26 +6,28 @@ import {
   useDeclineCollabInvitationMutation,
 } from '../../../graphql/generates'
 import { AvatarWithUsername } from '../../../components/AvatarWithUsername'
+import { Loader } from '../../../components/Loader'
+import { DisplayError } from '../../../components/DisplayError'
 
 export const CollabInvitations = () => {
-  const { data, loading, error } = useGetCurrentUserCollabInvitationsQuery()
+  const {
+    data,
+    loading,
+    error,
+    refetch,
+  } = useGetCurrentUserCollabInvitationsQuery()
   const [acceptInvitation] = useAcceptCollabInvitationMutation()
   const [declineInvitation] = useDeclineCollabInvitationMutation()
 
-  console.log(data)
-  if (loading) return null
-  if (error) return <span>Could not fetch invitations</span>
-  if (!data?.currentUser) return null
-
-  const { collabInvites } = data.currentUser
+  const { collabInvites } = data?.currentUser || {}
 
   return (
-    <Box as="main">
+    <Box as="main" flex={1}>
       <Heading as="h1" mb={4} fontWeight={500}>
-        Collab invitations
+        Collab Invitations
       </Heading>
       <section>
-        {collabInvites.map(({ id, name, owner }) => (
+        {collabInvites?.map(({ id, name, owner }) => (
           <Box key={id} py={4} px={2} borderBottom="1px solid #e1e1e1">
             <Flex align="center" mb={4}>
               <AvatarWithUsername
@@ -71,6 +73,13 @@ export const CollabInvitations = () => {
             </Button>
           </Box>
         ))}
+        {loading && <Loader />}
+        {error && (
+          <DisplayError
+            message="Could not fetch requests"
+            onClick={() => refetch()}
+          />
+        )}
       </section>
     </Box>
   )

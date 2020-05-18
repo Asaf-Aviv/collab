@@ -17,9 +17,18 @@ import {
 } from '../../../graphql/generates'
 import { InputWithLabel } from '../../../components/InputWithLabel'
 import styled from '@emotion/styled'
+import { Loader } from '../../../components/Loader'
+import { DisplayError } from '../../../components/DisplayError'
 
 export const Information = () => {
-  const { data: userInfoData, loading, error } = useGetCurrentUserInfoQuery()
+  const {
+    data: userInfoData,
+    loading,
+    error,
+    refetch,
+  } = useGetCurrentUserInfoQuery({
+    notifyOnNetworkStatusChange: true,
+  })
   const [infoInput, setInfoInput] = useState<UpdateUserInfoInput>(
     {} as UpdateUserInfoInput,
   )
@@ -62,114 +71,121 @@ export const Information = () => {
     }))
   }
 
-  if (loading) return null
-  if (error) return <span>Could not fetch profile info</span>
-  // wait for the initial values to populate the inputs
-  if (!infoInput) return null
-
   return (
-    <Box>
+    <Box as="main" pb={4} flex={1}>
       <Heading as="h1" mb={4} fontWeight={500}>
         Edit your Information
       </Heading>
-      <StyledFlex>
-        <InputWithLabel
-          name="firstName"
-          pl={2}
-          htmlFor="first-name"
-          label="First Name"
-          value={infoInput.firstName}
-          onChange={handleInputChange}
-          size="md"
+      {/* wait for the initial values to populate the inputs */}
+      {infoInput && (
+        <>
+          <StyledFlex>
+            <InputWithLabel
+              name="firstName"
+              pl={2}
+              htmlFor="first-name"
+              label="First Name"
+              value={infoInput.firstName}
+              onChange={handleInputChange}
+              size="md"
+            />
+            <InputWithLabel
+              name="lastName"
+              pl={2}
+              htmlFor="last-name"
+              label="Last Name"
+              value={infoInput.lastName}
+              onChange={handleInputChange}
+              size="md"
+            />
+            <InputWithLabel
+              name="title"
+              _placeholder={{
+                fontSize: '0.75rem',
+              }}
+              htmlFor="title"
+              label="Title"
+              pl={2}
+              value={infoInput.title}
+              onChange={handleInputChange}
+              size="md"
+              placeholder="Software Engineer, Frotn-End Engineer"
+            />
+            <InputWithLabel
+              name="twitter"
+              pl={2}
+              htmlFor="twitter"
+              label="Twitter"
+              value={infoInput.twitter}
+              onChange={handleInputChange}
+              size="md"
+            />
+            <InputWithLabel
+              name="github"
+              pl={2}
+              htmlFor="github"
+              label="Github"
+              value={infoInput.github}
+              onChange={handleInputChange}
+              size="md"
+            />
+            <InputWithLabel
+              name="linkedin"
+              pl={2}
+              htmlFor="linkedin"
+              label="Linkedin"
+              value={infoInput.linkedin}
+              onChange={handleInputChange}
+              size="md"
+            />
+            <FormControl>
+              <FormLabel htmlFor="country">Country</FormLabel>
+              <Select
+                id="country"
+                options={countryOptions}
+                onChange={(e: any) =>
+                  setInfoInput({ ...infoInput, country: e?.value ?? null })
+                }
+                defaultValue={countryOptions.find(
+                  x => x.label === infoInput.country,
+                )}
+              />
+            </FormControl>
+            <FormControl width="100%">
+              <FormLabel htmlFor="bio">Bio</FormLabel>
+              <Textarea
+                name="bio"
+                id="bio"
+                bg="#f2f2ff"
+                p={2}
+                mb={4}
+                _hover={{ borderColor: '#cab3ff' }}
+                _focus={{ borderColor: '#805ad5' }}
+                value={infoInput.bio ?? ''}
+                onChange={handleInputChange}
+                minHeight={140}
+              />
+            </FormControl>
+          </StyledFlex>
+          <Button
+            ml="auto"
+            display="block"
+            onClick={handleUpdateInfo}
+            isLoading={updateInfoLoading}
+            loadingText="Updating"
+            variantColor="purple"
+          >
+            Update
+          </Button>
+        </>
+      )}
+      {loading && <Loader />}
+      {error && (
+        <DisplayError
+          message="Could not fetch information"
+          onClick={() => refetch()}
         />
-        <InputWithLabel
-          name="lastName"
-          pl={2}
-          htmlFor="last-name"
-          label="Last Name"
-          value={infoInput.lastName}
-          onChange={handleInputChange}
-          size="md"
-        />
-        <InputWithLabel
-          name="title"
-          _placeholder={{
-            fontSize: '0.75rem',
-          }}
-          htmlFor="title"
-          label="Title"
-          pl={2}
-          value={infoInput.title}
-          onChange={handleInputChange}
-          size="md"
-          placeholder="Software Engineer, Frotn-End Engineer"
-        />
-        <InputWithLabel
-          name="twitter"
-          pl={2}
-          htmlFor="twitter"
-          label="Twitter"
-          value={infoInput.twitter}
-          onChange={handleInputChange}
-          size="md"
-        />
-        <InputWithLabel
-          name="github"
-          pl={2}
-          htmlFor="github"
-          label="Github"
-          value={infoInput.github}
-          onChange={handleInputChange}
-          size="md"
-        />
-        <InputWithLabel
-          name="linkedin"
-          pl={2}
-          htmlFor="linkedin"
-          label="Linkedin"
-          value={infoInput.linkedin}
-          onChange={handleInputChange}
-          size="md"
-        />
-        <FormControl>
-          <FormLabel htmlFor="country">Country</FormLabel>
-          <Select
-            id="country"
-            options={countryOptions}
-            onChange={(e: any) =>
-              setInfoInput({ ...infoInput, country: e?.value ?? null })
-            }
-            defaultValue={countryOptions.find(
-              x => x.label === infoInput.country,
-            )}
-          />
-        </FormControl>
-        <FormControl width="100%">
-          <FormLabel htmlFor="bio">Bio</FormLabel>
-          <Textarea
-            name="bio"
-            id="bio"
-            bg="#f2f2ff"
-            p={2}
-            mb={4}
-            _hover={{ borderColor: '#cab3ff' }}
-            _focus={{ borderColor: '#805ad5' }}
-            value={infoInput.bio ?? ''}
-            onChange={handleInputChange}
-            minHeight={140}
-          />
-        </FormControl>
-      </StyledFlex>
-      <Button
-        ml="auto"
-        display="block"
-        onClick={handleUpdateInfo}
-        isLoading={updateInfoLoading}
-        loadingText="Updating"
-        variantColor="purple"
-      >
-        Update
-      </Button>
+      )}
     </Box>
   )
 }

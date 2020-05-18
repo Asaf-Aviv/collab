@@ -61,17 +61,18 @@ export const EditTaskModal = ({ closeModal, task }: Props) => {
     updateTask()
   }
 
-  const membersOptionsById = membersData!.collab!.members.reduce(
-    (res, member) => ({
-      ...res,
-      [member.id]: {
-        value: member.id,
-        label: member.username,
-        avatar: member.avatar,
-      },
-    }),
-    {} as Record<string, any>,
-  )
+  const membersOptionsById =
+    membersData?.collab?.members.reduce(
+      (res, member) => ({
+        ...res,
+        [member.id]: {
+          value: member.id,
+          label: member.username,
+          avatar: member.avatar,
+        },
+      }),
+      {} as Record<string, any>,
+    ) ?? {}
 
   return (
     <Modal
