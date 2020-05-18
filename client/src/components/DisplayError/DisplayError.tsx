@@ -8,7 +8,7 @@ type Props = {
 }
 
 export const DisplayError = ({ message, onClick }: Props) => (
-  <Flex direction="column" align="center" mx="auto" maxWidth={500}>
+  <Flex direction="column" align="center" mx="auto" maxWidth={500} mb={8}>
     <Flex align="center">
       <Text ml={2} fontWeight={500}>
         {message}

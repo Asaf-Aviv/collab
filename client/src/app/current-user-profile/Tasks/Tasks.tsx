@@ -1,25 +1,53 @@
 import React from 'react'
-import { Text } from '@chakra-ui/core'
+import { Box, Text, Heading } from '@chakra-ui/core'
 import { useGetCurrentUserTasksQuery } from '../../../graphql/generates'
+import { Link } from 'react-router-dom'
+import { useCurrentUser } from '../../../hooks/useCurrentUser'
+import styled from '@emotion/styled'
+import { Loader } from '../../../components/Loader'
+import { DisplayError } from '../../../components/DisplayError'
 
 export const Tasks = () => {
-  const { data, loading, error } = useGetCurrentUserTasksQuery()
+  const { data, loading, error, refetch } = useGetCurrentUserTasksQuery()
+  const currentUser = useCurrentUser()
 
-  console.log(data)
-  if (loading) return null
-  if (error) return <span>Could not fetch tasks</span>
-  if (!data?.currentUser) return null
+  const { tasks } = data?.currentUser || {}
 
-  const { tasks } = data.currentUser
   return (
-    <div>
-      {tasks.map(task => (
-        <div key={task.id}>
-          <Text>{task.collab.name}</Text>
-          <Text> Assigned by {task.assignedBy?.username}</Text>
-          <Text>{task.description}</Text>
-        </div>
-      ))}
-    </div>
+    <Box as="main" flex={1} pb={4}>
+      <Heading as="h1" mb={4} fontWeight={500}>
+        Your Tasks
+      </Heading>
+      <section>
+        {tasks?.map(task => (
+          <Box key={task.id} py={4} px={2} borderBottom="1px solid #e1e1e1">
+            <Text as="h3" fontWeight={600} fontSize="1.25rem">
+              Collab:{' '}
+              <Link to={`/collabs/${task.collab.id}`}>{task.collab.name}</Link>
+            </Text>
+            {task.assignedBy && task.assignedBy.id === currentUser!.id && (
+              <Text>
+                Assigned by{' '}
+                <StyledLink to={`/user/${task.assignedBy.id}`}>
+                  {task.assignedBy.username}
+                </StyledLink>
+              </Text>
+            )}
+            <Text mt={4}>{task.description}</Text>
+          </Box>
+        ))}
+        {loading && <Loader />}
+        {error && (
+          <DisplayError
+            message="Could not fetch tasks"
+            onClick={() => refetch()}
+          />
+        )}
+      </section>
+    </Box>
   )
 }
+
+const StyledLink = styled(Link)`
+  font-weight: 600;
+`

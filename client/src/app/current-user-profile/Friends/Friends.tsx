@@ -1,21 +1,31 @@
 import React from 'react'
-import { Flex } from '@chakra-ui/core'
+import { Box, Flex, Heading } from '@chakra-ui/core'
 import { useCurrentUserFriendsQuery } from '../../../graphql/generates'
+import { Loader } from '../../../components/Loader'
+import { DisplayError } from '../../../components/DisplayError'
 
 export const Friends = () => {
-  const { data, loading, error } = useCurrentUserFriendsQuery()
+  const { data, loading, error, refetch } = useCurrentUserFriendsQuery({
+    notifyOnNetworkStatusChange: true,
+  })
 
-  if (loading) return null
-  if (error) return <span>Could not fetch friends</span>
-  if (!data?.currentUser) return null
-
-  const { friends } = data.currentUser
+  const { friends } = data?.currentUser || {}
 
   return (
-    <Flex>
-      {friends.map(friend => (
+    <Box as="main" flex={1} pb={4}>
+      <Heading as="h1" mb={4} fontWeight={500}>
+        Your Friends
+      </Heading>
+      {friends?.map(friend => (
         <Flex key={friend.id}>{friend.username}</Flex>
       ))}
-    </Flex>
+      {loading && <Loader />}
+      {error && (
+        <DisplayError
+          message="Could not fetch friends"
+          onClick={() => refetch()}
+        />
+      )}
+    </Box>
   )
 }

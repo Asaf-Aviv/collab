@@ -1201,7 +1201,7 @@ export type CreateTaskMutation = (
   { __typename?: 'Mutation' }
   & { createTask: (
     { __typename?: 'Task' }
-    & Pick<Task, 'id' | 'description' | 'order' | 'commentsCount'>
+    & Pick<Task, 'id' | 'description' | 'order' | 'taskListId' | 'commentsCount'>
     & { author: (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
@@ -2733,6 +2733,7 @@ export const CreateTaskDocument = gql`
     id
     description
     order
+    taskListId
     author {
       id
       username

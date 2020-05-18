@@ -5,7 +5,9 @@ export const useCurrentUser = () => {
   const { setHasBeenValidated } = useTokenValidation()
   const { data } = useGetCurrentUserQuery({
     onCompleted() {
-      setHasBeenValidated(true)
+      // delay the update after apollo write the
+      // current user data into cache
+      setTimeout(() => setHasBeenValidated(true), 0)
     },
   })
 

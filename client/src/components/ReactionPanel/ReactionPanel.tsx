@@ -42,8 +42,8 @@ export const ReactionPanel = ({
     }
   }
 
-  useOnOutsideClick(emojiContainerRef, closePicker)
-  useKey(['Esc', 'Escape'], closePicker)
+  useOnOutsideClick(emojiContainerRef, closePicker, isPickerOpen)
+  useKey(['Esc', 'Escape'], closePicker, isPickerOpen)
 
   const handleEmojiSelect = (emoji: EmojiData) => {
     console.log(emoji)

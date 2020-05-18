@@ -9,7 +9,7 @@ const generageUser = (__, i) => ({
     .findName()
     .replace(/[\W_]+/g, '')
     .slice(0, 16),
-  email: `test${i}@gmail.com`,
+  email: `test${i}@test.com`,
   bio: faker.random.words(_.random(5, 10)),
   password: bcrypt.hashSync('test1234', 12),
   updated_at: new Date(),
