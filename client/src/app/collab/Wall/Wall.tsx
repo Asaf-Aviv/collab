@@ -3,7 +3,7 @@ import produce from 'immer'
 import { useCollabWallMessagesQuery } from '../../../graphql/generates'
 import { useParams } from 'react-router-dom'
 import { AvatarWithUsername } from '../../../components/AvatarWithUsername'
-import { Text } from '@chakra-ui/core'
+import { Text, Box, Flex, PseudoBox } from '@chakra-ui/core'
 import { DisplayError } from '../../../components/DisplayError'
 import { DisplayDate } from '../../../components/DisplayDate'
 import { Loader } from '../../../components/Loader'
@@ -64,19 +64,31 @@ export const Wall = () => {
   )
 
   return (
-    <main>
+    <Box as="main">
       {messages?.map(message => (
-        <div key={message.id}>
-          <div>
+        <PseudoBox
+          as="article"
+          key={message.id}
+          py={4}
+          px={2}
+          _notFirst={{
+            borderTop: '1px solid #e1e1e1',
+          }}
+          _hover={{
+            bg: '#EEE',
+          }}
+        >
+          <Flex align="center" mb={2}>
             <AvatarWithUsername
               size="xs"
               fontSize="0.85rem"
+              mr={2}
               {...message.author}
             />
-          </div>
-          <Text>{message.content}</Text>
-          <DisplayDate date={message.creationDate} />
-        </div>
+            <DisplayDate date={message.creationDate} />
+          </Flex>
+          <Text pl={8}>{message.content}</Text>
+        </PseudoBox>
       ))}
       {loading && <Loader />}
       {!error && <span ref={loadNextPageTriggerRef} />}
@@ -86,6 +98,6 @@ export const Wall = () => {
           onClick={() => refetch()}
         />
       )}
-    </main>
+    </Box>
   )
 }

@@ -22,6 +22,7 @@ export const AvatarWithUsername = ({
     as={Link}
     //@ts-ignore
     to={`/user/${id}`}
+    display="block"
     {...props}
   >
     <Flex align="center">

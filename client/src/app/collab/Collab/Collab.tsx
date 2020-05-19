@@ -48,7 +48,7 @@ export const Collab = () => {
           Discussions
         </StyledNavLink>
       </Flex>
-      <Box flex={1} pt={8} px="2.5%">
+      <Box flex={1} py={8} px="2.5%">
         <Switch>
           <Route path={`${match.path}/wall`} component={Wall} />
           <Route path={`${match.path}/task-board`} component={TaskBoard} />

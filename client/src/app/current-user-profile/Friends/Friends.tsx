@@ -13,7 +13,7 @@ export const Friends = () => {
 
   return (
     <Box as="main" flex={1} pb={4}>
-      <Heading as="h1" mb={4} fontWeight={500}>
+      <Heading as="h1" size="md" mb={4} fontWeight={500}>
         Your Friends
       </Heading>
       {friends?.map(friend => (

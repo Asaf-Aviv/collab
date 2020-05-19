@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Text, Heading } from '@chakra-ui/core'
+import { Box, Text, Heading, PseudoBox } from '@chakra-ui/core'
 import { useGetCurrentUserTasksQuery } from '../../../graphql/generates'
 import { Link } from 'react-router-dom'
 import { useCurrentUser } from '../../../hooks/useCurrentUser'
@@ -15,15 +15,27 @@ export const Tasks = () => {
 
   return (
     <Box as="main" flex={1} pb={4}>
-      <Heading as="h1" mb={4} fontWeight={500}>
+      <Heading as="h1" size="md" mb={4} fontWeight={500}>
         Your Tasks
       </Heading>
       <section>
         {tasks?.map(task => (
-          <Box key={task.id} py={4} px={2} borderBottom="1px solid #e1e1e1">
+          <PseudoBox
+            key={task.id}
+            py={4}
+            px={2}
+            _notFirst={{
+              borderTop: '1px solid #e1e1e1',
+            }}
+            _hover={{
+              bg: '#EEE',
+            }}
+          >
             <Text as="h3" fontWeight={600} fontSize="1.25rem">
               Collab:{' '}
-              <Link to={`/collabs/${task.collab.id}`}>{task.collab.name}</Link>
+              <Link to={`/collab/${task.collab.id}/task-board`}>
+                {task.collab.name}
+              </Link>
             </Text>
             {task.assignedBy && task.assignedBy.id === currentUser!.id && (
               <Text>
@@ -34,7 +46,7 @@ export const Tasks = () => {
               </Text>
             )}
             <Text mt={4}>{task.description}</Text>
-          </Box>
+          </PseudoBox>
         ))}
         {loading && <Loader />}
         {error && (
