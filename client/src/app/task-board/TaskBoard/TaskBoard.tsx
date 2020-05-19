@@ -5,8 +5,9 @@ import {
   useUpdateTaskPositionMutation,
   useUpdateTaskListPositionMutation,
   useMoveTaskToListMutation,
+  useCollabQuery,
 } from '../../../graphql/generates'
-import { Flex, IconButton } from '@chakra-ui/core'
+import { Flex, IconButton, Tooltip } from '@chakra-ui/core'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
 import { NewTaskListModal } from '../NewTaskListModal'
 import { MemoizedTaskListWrapper } from '../TaskList'
@@ -26,6 +27,7 @@ export const TaskBoard = () => {
   const [moveTaskToList] = useMoveTaskToListMutation({
     onCompleted: () => refetch(),
   })
+  const { data: collabData } = useCollabQuery({ variables: { collabId } })
 
   if (!data?.taskList) return null
 
@@ -87,20 +89,31 @@ export const TaskBoard = () => {
 
   const { taskList } = data
 
-  console.log(isCreateTaskListModalOpen)
-
   return (
     <Flex>
-      {isCreateTaskListModalOpen && (
-        <NewTaskListModal
-          closeModal={() => setIsCreateTaskListModalOpen(false)}
-        />
+      {collabData?.collab?.isOwner && (
+        <>
+          {isCreateTaskListModalOpen && (
+            <NewTaskListModal
+              closeModal={() => setIsCreateTaskListModalOpen(false)}
+            />
+          )}
+          <Tooltip
+            aria-label="create task list"
+            label="Create task list"
+            placement="bottom"
+            hasArrow
+            p={2}
+            borderRadius={4}
+          >
+            <IconButton
+              aria-label="create task list"
+              onClick={() => setIsCreateTaskListModalOpen(true)}
+              icon="add"
+            />
+          </Tooltip>
+        </>
       )}
-      <IconButton
-        aria-label="create task list"
-        onClick={() => setIsCreateTaskListModalOpen(true)}
-        icon="add"
-      ></IconButton>
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable
           droppableId="list-columns"

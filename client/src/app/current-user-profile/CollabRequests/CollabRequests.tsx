@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Text, Box, Heading, Flex } from '@chakra-ui/core'
+import { Button, Text, Box, Heading, Flex, PseudoBox } from '@chakra-ui/core'
 import {
   useGetCurrentUserCollabRequestsQuery,
   useCancelCollabRequestToJoinMutation,
@@ -23,16 +23,21 @@ export const CollabRequests = () => {
 
   return (
     <Box as="main" flex={1} pb={4}>
-      <Heading as="h1" mb={4} fontWeight={500}>
+      <Heading as="h1" size="md" mb={4} fontWeight={500}>
         Collab Requests
       </Heading>
       <section>
         {collabRequests?.map(({ member, collab }) => (
-          <Box
+          <PseudoBox
             key={member.username + collab.name}
             py={4}
             px={2}
-            borderBottom="1px solid #e1e1e1"
+            _notFirst={{
+              borderTop: '1px solid #e1e1e1',
+            }}
+            _hover={{
+              bg: '#EEE',
+            }}
           >
             <Flex align="center" mb={4}>
               <AvatarWithUsername
@@ -57,7 +62,7 @@ export const CollabRequests = () => {
             >
               Cancel
             </Button>
-          </Box>
+          </PseudoBox>
         ))}
         {loading && <Loader />}
         {error && (
@@ -68,28 +73,5 @@ export const CollabRequests = () => {
         )}
       </section>
     </Box>
-    // <div>
-    //   {collabRequests.map(({ member, collab }) => (
-    //     <div key={member.username + collab.name}>
-    //       <Avatar src={member.avatar ?? undefined} name={member.username} />
-    //       <Text>
-    //         {member.username} invited you to join {collab.name}
-    //       </Text>
-    //       <Button
-    //         variant="ghost"
-    //         mr={3}
-    //         onClick={() => {
-    //           cancelRequest({
-    //             variables: {
-    //               collabId: collab.id,
-    //             },
-    //           })
-    //         }}
-    //       >
-    //         Cancel
-    //       </Button>
-    //     </div>
-    //   ))}
-    // </div>
   )
 }

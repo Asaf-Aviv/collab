@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Text, Box, Heading, Flex } from '@chakra-ui/core'
+import { Button, Text, Box, Heading, Flex, PseudoBox } from '@chakra-ui/core'
 import {
   useGetCurrentUserCollabInvitationsQuery,
   useAcceptCollabInvitationMutation,
@@ -23,12 +23,22 @@ export const CollabInvitations = () => {
 
   return (
     <Box as="main" flex={1}>
-      <Heading as="h1" mb={4} fontWeight={500}>
+      <Heading as="h1" size="md" mb={4} fontWeight={500}>
         Collab Invitations
       </Heading>
       <section>
         {collabInvites?.map(({ id, name, owner }) => (
-          <Box key={id} py={4} px={2} borderBottom="1px solid #e1e1e1">
+          <PseudoBox
+            key={id}
+            py={4}
+            px={2}
+            _notFirst={{
+              borderTop: '1px solid #e1e1e1',
+            }}
+            _hover={{
+              bg: '#EEE',
+            }}
+          >
             <Flex align="center" mb={4}>
               <AvatarWithUsername
                 id={owner.id}
@@ -71,7 +81,7 @@ export const CollabInvitations = () => {
             >
               Accept
             </Button>
-          </Box>
+          </PseudoBox>
         ))}
         {loading && <Loader />}
         {error && (

@@ -73,7 +73,7 @@ export const Information = () => {
 
   return (
     <Box as="main" pb={4} flex={1}>
-      <Heading as="h1" mb={4} fontWeight={500}>
+      <Heading as="h1" size="md" mb={4} fontWeight={500}>
         Edit your Information
       </Heading>
       {/* wait for the initial values to populate the inputs */}
@@ -109,7 +109,7 @@ export const Information = () => {
               value={infoInput.title}
               onChange={handleInputChange}
               size="md"
-              placeholder="Software Engineer, Frotn-End Engineer"
+              placeholder="E.X: Software Engineer, Front-End Engineer"
             />
             <InputWithLabel
               name="twitter"

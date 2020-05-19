@@ -1,8 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Heading, Box } from '@chakra-ui/core'
+import { Heading, Box, PseudoBox } from '@chakra-ui/core'
 import { useGetCurrentUserCollabsQuery } from '../../../graphql/generates'
-import { Paper } from '../../../components/global'
 
 export const Collabs = () => {
   const { data, loading, error } = useGetCurrentUserCollabsQuery()
@@ -12,21 +11,27 @@ export const Collabs = () => {
 
   return (
     <Box as="main" flex={1}>
-      <Heading as="h1" mb={4} fontWeight={500}>
+      <Heading as="h1" size="md" mb={4} fontWeight={500}>
         My Collabs
       </Heading>
       {data?.currentUser?.collabs.map(({ id, name }) => (
-        <Paper
+        <PseudoBox
           key={id}
           as={Link}
-          width="100%"
-          maxWidth={500}
+          py={4}
+          px={2}
           //@ts-ignore
           to={`/collab/${id}`}
-          p={4}
+          display="block"
+          _notFirst={{
+            borderTop: '1px solid #e1e1e1',
+          }}
+          _hover={{
+            bg: '#EEE',
+          }}
         >
           <Heading size="sm">{name}</Heading>
-        </Paper>
+        </PseudoBox>
       ))}
     </Box>
   )

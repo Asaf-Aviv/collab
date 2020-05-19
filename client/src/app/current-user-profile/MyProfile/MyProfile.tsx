@@ -16,13 +16,14 @@ import { Friends } from '../Friends'
 import { CollabInvitations } from '../CollabInvitations'
 import { CollabRequests } from '../CollabRequests'
 import { Conversations } from '../Conversations'
+import { Conversation } from '../Conversation'
 
 export const MyProfile = () => {
   const { path } = useRouteMatch()
 
   return (
     <Container maxWidth={900}>
-      <Flex>
+      <Flex align="flex-start">
         <Paper
           flexDirection="column"
           bg="white"
@@ -71,8 +72,11 @@ export const MyProfile = () => {
           <Route exact path={`${path}/friends`}>
             <Friends />
           </Route>
-          <Route path={`${path}/conversations`}>
+          <Route exact path={`${path}/conversations`}>
             <Conversations />
+          </Route>
+          <Route path={`${path}/conversations/:userId`}>
+            <Conversation />
           </Route>
           <Redirect to="/profile/info" />
         </Switch>
