@@ -1,6 +1,10 @@
 import { gql } from 'apollo-server-express'
 
 export const notificationTypeDefs = gql`
+  type Subscription {
+    newNotification: Notification!
+  }
+
   type Mutation {
     markAsRead(notificationId: ID!): Notification!
     # markAllAsRead: Boolean!
@@ -8,6 +12,7 @@ export const notificationTypeDefs = gql`
 
   type Notification {
     id: ID!
+    type: String!
     body: String!
     url: String!
     isRead: Boolean!
