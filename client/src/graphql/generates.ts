@@ -665,18 +665,20 @@ export type CollabWallMessagesInput = {
   offset: Scalars['Int'];
 };
 
-export type Notification = {
-   __typename?: 'Notification';
-  id: Scalars['ID'];
-  body: Scalars['String'];
-  url: Scalars['String'];
-  isRead: Scalars['Boolean'];
-};
-
 export type Subscription = {
    __typename?: 'Subscription';
   friendStatusChange: ChatUsersPayload;
+  newNotification: Notification;
   newPrivateChatMessage: PrivateChatMessage;
+};
+
+export type Notification = {
+   __typename?: 'Notification';
+  body: Scalars['String'];
+  id: Scalars['ID'];
+  isRead: Scalars['Boolean'];
+  type: Scalars['String'];
+  url: Scalars['String'];
 };
 
 export enum UserChatStatus {
@@ -1936,6 +1938,17 @@ export type TaskCommentsQuery = (
       )> }
     )> }
   )> }
+);
+
+export type NewNotificationSubscriptionVariables = {};
+
+
+export type NewNotificationSubscription = (
+  { __typename?: 'Subscription' }
+  & { newNotification: (
+    { __typename?: 'Notification' }
+    & Pick<Notification, 'id' | 'body' | 'type' | 'isRead' | 'url'>
+  ) }
 );
 
 
@@ -4439,3 +4452,35 @@ export function useTaskCommentsLazyQuery(baseOptions?: ApolloReactHooks.LazyQuer
 export type TaskCommentsQueryHookResult = ReturnType<typeof useTaskCommentsQuery>;
 export type TaskCommentsLazyQueryHookResult = ReturnType<typeof useTaskCommentsLazyQuery>;
 export type TaskCommentsQueryResult = ApolloReactCommon.QueryResult<TaskCommentsQuery, TaskCommentsQueryVariables>;
+export const NewNotificationDocument = gql`
+    subscription NewNotification {
+  newNotification {
+    id
+    body
+    type
+    isRead
+    url
+  }
+}
+    `;
+
+/**
+ * __useNewNotificationSubscription__
+ *
+ * To run a query within a React component, call `useNewNotificationSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useNewNotificationSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNewNotificationSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useNewNotificationSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<NewNotificationSubscription, NewNotificationSubscriptionVariables>) {
+        return ApolloReactHooks.useSubscription<NewNotificationSubscription, NewNotificationSubscriptionVariables>(NewNotificationDocument, baseOptions);
+      }
+export type NewNotificationSubscriptionHookResult = ReturnType<typeof useNewNotificationSubscription>;
+export type NewNotificationSubscriptionResult = ApolloReactCommon.SubscriptionResult<NewNotificationSubscription>;

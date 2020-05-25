@@ -1,7 +1,34 @@
 import { Resolvers } from '../types'
+import { PubSub, withFilter } from 'apollo-server-express'
+
+const NEW_NOTIFICATION = 'NEW_NOTIFICATION'
+const pubsub = new PubSub()
+
+setInterval(
+  () =>
+    pubsub.publish(NEW_NOTIFICATION, {
+      newNotification: {
+        userId: '1',
+        id: '1',
+        body: 'body',
+        url: 'url',
+        isRead: false,
+      },
+    }),
+  10000,
+)
 
 export const notificationResolver: Resolvers = {
   Mutation: {},
+  Subscription: {
+    newNotification: {
+      subscribe: (root, args, { user }) =>
+        withFilter(
+          () => pubsub.asyncIterator(NEW_NOTIFICATION),
+          ({ newNotification: { userId } }) => userId === user!.id,
+        )(),
+    },
+  },
   CurrentUser: {
     notifications: async ({ id }, args, { models, loaders }) => {
       const notifications = await models.Notification.findAll({

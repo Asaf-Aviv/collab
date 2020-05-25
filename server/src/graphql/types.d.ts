@@ -677,18 +677,20 @@ export type CollabWallMessagesInput = {
   offset: Scalars['Int'];
 };
 
-export type Notification = {
-   __typename?: 'Notification';
-  id: Scalars['ID'];
-  body: Scalars['String'];
-  url: Scalars['String'];
-  isRead: Scalars['Boolean'];
-};
-
 export type Subscription = {
    __typename?: 'Subscription';
   friendStatusChange: ChatUsersPayload;
+  newNotification: Notification;
   newPrivateChatMessage: PrivateChatMessage;
+};
+
+export type Notification = {
+   __typename?: 'Notification';
+  body: Scalars['String'];
+  id: Scalars['ID'];
+  isRead: Scalars['Boolean'];
+  type: Scalars['String'];
+  url: Scalars['String'];
 };
 
 export enum UserChatStatus {
@@ -1028,8 +1030,8 @@ export type ResolversTypes = ResolversObject<{
   CreateWallMessageInput: CreateWallMessageInput,
   CollabWallMessagesPayload: ResolverTypeWrapper<Omit<CollabWallMessagesPayload, 'messages'> & { messages: Array<ResolversTypes['WallMessage']> }>,
   CollabWallMessagesInput: CollabWallMessagesInput,
-  Notification: ResolverTypeWrapper<Notification>,
   Subscription: ResolverTypeWrapper<{}>,
+  Notification: ResolverTypeWrapper<Notification>,
   UserChatStatus: UserChatStatus,
   ConnectToChatPayload: ResolverTypeWrapper<Omit<ConnectToChatPayload, 'users'> & { users: Array<ResolversTypes['ChatUsersPayload']> }>,
   ChatUsersPayload: ResolverTypeWrapper<Omit<ChatUsersPayload, 'user'> & { user: ResolversTypes['User'] }>,
@@ -1098,8 +1100,8 @@ export type ResolversParentTypes = ResolversObject<{
   CreateWallMessageInput: CreateWallMessageInput,
   CollabWallMessagesPayload: Omit<CollabWallMessagesPayload, 'messages'> & { messages: Array<ResolversParentTypes['WallMessage']> },
   CollabWallMessagesInput: CollabWallMessagesInput,
-  Notification: Notification,
   Subscription: {},
+  Notification: Notification,
   UserChatStatus: UserChatStatus,
   ConnectToChatPayload: Omit<ConnectToChatPayload, 'users'> & { users: Array<ResolversParentTypes['ChatUsersPayload']> },
   ChatUsersPayload: Omit<ChatUsersPayload, 'user'> & { user: ResolversParentTypes['User'] },
@@ -1323,17 +1325,19 @@ export type CollabWallMessagesPayloadResolvers<ContextType = CollabContext, Pare
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
-export type NotificationResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Notification'] = ResolversParentTypes['Notification']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
-  body?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  url?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  isRead?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
-  __isTypeOf?: isTypeOfResolverFn<ParentType>,
-}>;
-
 export type SubscriptionResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
   friendStatusChange?: SubscriptionResolver<ResolversTypes['ChatUsersPayload'], "friendStatusChange", ParentType, ContextType>,
+  newNotification?: SubscriptionResolver<ResolversTypes['Notification'], "newNotification", ParentType, ContextType>,
   newPrivateChatMessage?: SubscriptionResolver<ResolversTypes['PrivateChatMessage'], "newPrivateChatMessage", ParentType, ContextType>,
+}>;
+
+export type NotificationResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Notification'] = ResolversParentTypes['Notification']> = ResolversObject<{
+  body?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  isRead?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  url?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
 export type ConnectToChatPayloadResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['ConnectToChatPayload'] = ResolversParentTypes['ConnectToChatPayload']> = ResolversObject<{
@@ -1487,8 +1491,8 @@ export type Resolvers<ContextType = CollabContext> = ResolversObject<{
   CollabPostComment?: CollabPostCommentResolvers<ContextType>,
   WallMessage?: WallMessageResolvers<ContextType>,
   CollabWallMessagesPayload?: CollabWallMessagesPayloadResolvers<ContextType>,
-  Notification?: NotificationResolvers<ContextType>,
   Subscription?: SubscriptionResolvers<ContextType>,
+  Notification?: NotificationResolvers<ContextType>,
   ConnectToChatPayload?: ConnectToChatPayloadResolvers<ContextType>,
   ChatUsersPayload?: ChatUsersPayloadResolvers<ContextType>,
   PrivateChatMessage?: PrivateChatMessageResolvers<ContextType>,
