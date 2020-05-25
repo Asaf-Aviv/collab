@@ -5,11 +5,14 @@ import {
   useDeleteTaskListMutation,
   useDeleteTaskMutation,
 } from '../../../graphql/generates'
-import { Heading, Box, IconButton, Flex } from '@chakra-ui/core'
+import { Heading, Box, Flex } from '@chakra-ui/core'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
 import { NewTaskModal } from '../NewTaskModal'
 import { Task } from '../Task/Task'
 import { EditTaskListNamePopover } from '../EditTaskListNamePopover'
+import { DotsMenu } from '../../../components/DotsMenu/Index'
+import { IconButtonWithTooltip } from '../../../components/IconButtonWithTooltip'
+import styled from '@emotion/styled'
 
 export const MemoizedTaskListWrapper = memo(({ taskList, refetch }: any) => (
   <>
@@ -36,17 +39,8 @@ type ColumnProps = {
 }
 
 const Column = ({ taskList, tasks, refetch, index }: ColumnProps) => {
-  // const { collabId } = useParams<{ collabId: string }>()
-  // const { data: membersData } = useCollabMembersQuery({
-  //   variables: {
-  //     collabId,
-  //   },
-  // })
   const [isNewTaskModalOpen, setIsNewTaskModalOpen] = useState(false)
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null)
-  // const [createTask] = useCreateTaskMutation({
-  //   onCompleted: () => refetch(),
-  // })
   const [deleteTaskList] = useDeleteTaskListMutation({
     variables: {
       taskListId: taskList.id,
@@ -56,9 +50,6 @@ const Column = ({ taskList, tasks, refetch, index }: ColumnProps) => {
   const [deleteTask] = useDeleteTaskMutation({
     onCompleted: () => refetch(),
   })
-  // const [updateTaskAssignee] = useUpdateTaskAssigneeMutation({
-  //   onCompleted: () => refetch(),
-  // })
 
   return (
     <Draggable draggableId={taskList.id} index={index}>
@@ -70,39 +61,40 @@ const Column = ({ taskList, tasks, refetch, index }: ColumnProps) => {
           borderRadius={3}
           border="1px solid"
           padding={2}
-          flex={1}
           bg="white"
+          width={300}
+          flexShrink={0}
           maxWidth={300}
           minHeight={200}
         >
-          <IconButton
-            aria-label="delete task list"
-            onClick={() => deleteTaskList()}
-            icon="delete"
-          >
-            Delete
-          </IconButton>
-          {isNewTaskModalOpen && (
-            <NewTaskModal
-              closeModal={() => setIsNewTaskModalOpen(false)}
-              taskListId={taskList.id}
-            />
-          )}
-          <IconButton
-            aria-label="create new task"
-            onClick={() => setIsNewTaskModalOpen(true)}
-            icon="add"
-          >
-            ADD
-          </IconButton>
           <Flex justify="space-between">
             <Heading {...provided.dragHandleProps} size="sm" mb={2} p={2}>
               {taskList.name}
             </Heading>
-            <EditTaskListNamePopover
-              taskListId={taskList.id}
-              taskListName={taskList.name}
-            />
+            <DotsMenu ariaLabel="Open Tasklist Options">
+              <StyledOptionMenu>
+                <IconButtonWithTooltip
+                  ariaLabel="Create Task"
+                  onClick={() => setIsNewTaskModalOpen(true)}
+                  icon="add"
+                />
+                <IconButtonWithTooltip
+                  ariaLabel="Delete Tasklist"
+                  onClick={() => deleteTaskList()}
+                  icon="delete"
+                />
+                <EditTaskListNamePopover
+                  taskListId={taskList.id}
+                  taskListName={taskList.name}
+                />
+              </StyledOptionMenu>
+            </DotsMenu>
+            {isNewTaskModalOpen && (
+              <NewTaskModal
+                closeModal={() => setIsNewTaskModalOpen(false)}
+                taskListId={taskList.id}
+              />
+            )}
           </Flex>
           <Droppable droppableId={taskList.id} type="task">
             {provided => (
@@ -136,3 +128,9 @@ const Column = ({ taskList, tasks, refetch, index }: ColumnProps) => {
     </Draggable>
   )
 }
+
+const StyledOptionMenu = styled(Box)`
+  > :not(:first-of-type) {
+    margin-left: 0.5rem;
+  }
+`

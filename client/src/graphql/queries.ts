@@ -8,6 +8,7 @@ export const GET_CURRENT_USER = gql`
       username
       avatar
       friendRequestsCount
+      notificationsCount
     }
   }
 `

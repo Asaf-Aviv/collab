@@ -8,7 +8,7 @@ import {
 } from 'react-router-dom'
 import { Flex } from '@chakra-ui/core'
 import styled from '@emotion/styled'
-import { Container, Paper } from '../../../components/global'
+import { Container } from '../../../components/global'
 import { Information } from '../Information'
 import { Collabs } from '../Collabs'
 import { Tasks } from '../Tasks'
@@ -24,12 +24,13 @@ export const MyProfile = () => {
   return (
     <Container maxWidth={900}>
       <Flex align="flex-start">
-        <Paper
-          flexDirection="column"
+        <Flex
+          direction="column"
           bg="white"
           minWidth={200}
           mr={10}
           overflow="hidden"
+          border="1px solid #e1e1e1"
         >
           <StyledNavLink exact to={`${path}/info`}>
             Info
@@ -52,7 +53,7 @@ export const MyProfile = () => {
           <StyledNavLink to={`${path}/conversations`}>
             Conversations
           </StyledNavLink>
-        </Paper>
+        </Flex>
         <Switch>
           <Route exact path={`${path}/info`}>
             <Information />
@@ -87,11 +88,12 @@ export const MyProfile = () => {
 
 const StyledNavLink = styled(NavLink)`
   padding: 0.75rem 1rem;
-  font-weight: 700;
-  transition: color, background-color 300ms ease-out;
-  &:hover,
+  :hover,
   &.active {
     background-color: #964cff;
     color: white;
+  }
+  :not(:first-of-type) {
+    border-top: 1px solid #e1e1e1;
   }
 `

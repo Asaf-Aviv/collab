@@ -7,14 +7,12 @@ import {
   PopoverHeader,
   Heading,
   PopoverBody,
-  useDisclosure,
   Box,
+  PopoverCloseButton,
 } from '@chakra-ui/core'
 import styled from '@emotion/styled'
 import FocusLock from 'react-focus-lock'
-import { useOnOutsideClick } from '../../hooks/useOnOutsideClick'
 import { Loader } from '../Loader'
-import { CloseButton } from '../CloseButton/CloseButton'
 import { IconButton } from '../global'
 
 type Props = {
@@ -24,7 +22,6 @@ type Props = {
   rightHeaderSlot?: JSX.Element
   leftHeaderSlot?: JSX.Element
   isLoading?: boolean
-  onTriggerClick?: (...args: any) => void
 }
 
 export const Ballon = ({
@@ -34,31 +31,15 @@ export const Ballon = ({
   rightHeaderSlot,
   children,
   isLoading,
-  onTriggerClick,
 }: Props) => {
-  const { isOpen, onClose, onToggle } = useDisclosure()
   const popoverRef = useRef<HTMLDivElement>(null!)
 
-  useOnOutsideClick(popoverRef, () => {
-    if (isOpen) {
-      onClose()
-    }
-  })
-
   return (
-    <Popover placement="bottom-end" isOpen={isOpen}>
+    <Popover placement="bottom-end">
       <Box ref={popoverRef}>
         <Flex height="100%" align="center">
           <PopoverTrigger>
-            <IconButton
-              aria-label="open friend requests"
-              onClick={() => {
-                onToggle()
-                onTriggerClick?.()
-              }}
-            >
-              {triggerIcon}
-            </IconButton>
+            <Box position="relative">{triggerIcon}</Box>
           </PopoverTrigger>
         </Flex>
         <PopoverContent zIndex={4}>
@@ -84,7 +65,7 @@ export const Ballon = ({
               </Heading>
               <StyledFlex justify="flex-end">
                 {rightHeaderSlot}
-                <CloseButton onClick={onClose} />
+                <PopoverCloseButton position="initial" />
               </StyledFlex>
             </PopoverHeader>
             <PopoverBody p={0}>

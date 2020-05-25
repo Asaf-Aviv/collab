@@ -34,6 +34,7 @@ import { CollabPostReaction } from './CollabPostReaction'
 import { CollabTask } from './CollabTask'
 import { UserFriend } from './UserFriend'
 import { UserFriendRequest } from './UserFriendRequest'
+import { Notification } from './Notification'
 
 @DefaultScope(() => ({
   attributes: { exclude: ['password'] },
@@ -142,6 +143,9 @@ export class User extends Model<User> {
 
   @HasMany(() => CollabPostReaction)
   reactions!: CollabPostReaction[]
+
+  @HasMany(() => Notification)
+  notifications!: Notification[]
 
   getCollabs!: HasManyGetAssociationsMixin<Collab>
   addCollab!: HasManyAddAssociationMixin<Collab, string>

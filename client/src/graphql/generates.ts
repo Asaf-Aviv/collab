@@ -134,6 +134,7 @@ export type Mutation = {
   deleteWallMessage: Scalars['ID'];
   inviteMember: User;
   login: AuthPayload;
+  markAsRead: Notification;
   markPrivateMessageAsRead: Scalars['Boolean'];
   moveTaskToList: Task;
   removeCollabDiscussionThreadCommentReaction: Scalars['Boolean'];
@@ -326,6 +327,11 @@ export type MutationInviteMemberArgs = {
 
 export type MutationLoginArgs = {
   credentials: LoginArgs;
+};
+
+
+export type MutationMarkAsReadArgs = {
+  notificationId: Scalars['ID'];
 };
 
 
@@ -659,6 +665,14 @@ export type CollabWallMessagesInput = {
   offset: Scalars['Int'];
 };
 
+export type Notification = {
+   __typename?: 'Notification';
+  id: Scalars['ID'];
+  body: Scalars['String'];
+  url: Scalars['String'];
+  isRead: Scalars['Boolean'];
+};
+
 export type Subscription = {
    __typename?: 'Subscription';
   friendStatusChange: ChatUsersPayload;
@@ -837,6 +851,8 @@ export type CurrentUser = {
   id: Scalars['ID'];
   lastName: Scalars['String'];
   linkedin: Scalars['String'];
+  notifications: Array<Notification>;
+  notificationsCount: Scalars['Int'];
   tasks: Array<Task>;
   /** the user's engineering title */
   title: Scalars['String'];
@@ -1427,7 +1443,7 @@ export type GetCurrentUserQuery = (
   { __typename?: 'Query' }
   & { currentUser?: Maybe<(
     { __typename?: 'CurrentUser' }
-    & Pick<CurrentUser, 'id' | 'username' | 'avatar' | 'friendRequestsCount'>
+    & Pick<CurrentUser, 'id' | 'username' | 'avatar' | 'friendRequestsCount' | 'notificationsCount'>
   )> }
 );
 
@@ -3277,6 +3293,7 @@ export const GetCurrentUserDocument = gql`
     username
     avatar
     friendRequestsCount
+    notificationsCount
   }
 }
     `;

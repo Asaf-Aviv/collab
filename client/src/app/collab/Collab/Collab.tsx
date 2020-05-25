@@ -40,6 +40,7 @@ export const Collab = () => {
         bg="purple.600"
         color="white"
         width={250}
+        zIndex={5}
       >
         <StyledNavLink to={`${match.url}/wall`}>Wall</StyledNavLink>
         <StyledNavLink to={`${match.url}/task-board`}>Task Board</StyledNavLink>
@@ -48,7 +49,7 @@ export const Collab = () => {
           Discussions
         </StyledNavLink>
       </Flex>
-      <Box flex={1} py={8} px="2.5%">
+      <Box flex={1} py={8} px="2.5%" maxWidth="calc(100vw - 250px - 16px)">
         <Switch>
           <Route path={`${match.path}/wall`} component={Wall} />
           <Route path={`${match.path}/task-board`} component={TaskBoard} />

@@ -16,6 +16,7 @@ import { collabDiscussionThreadReactionResolver } from './CollabDiscussionThread
 import { privateMessageResolver } from './PrivateMessage'
 import { privateChatResolver } from './PrivateChat'
 import { collabWallMessageResolver } from './CollabWallMessage'
+import { notificationResolver } from './Notification'
 
 export const resolvers = mergeResolvers([
   userResolver,
@@ -35,4 +36,5 @@ export const resolvers = mergeResolvers([
   privateMessageResolver,
   privateChatResolver,
   collabWallMessageResolver,
+  notificationResolver,
 ])

@@ -5,8 +5,9 @@ import { IconButtonProps } from '@chakra-ui/core'
 
 type Props = Omit<IconButtonProps, 'aria-label'>
 
-export const CloseButton = (props: Props) => (
+export const CloseButton = ({ children, ...props }: Props) => (
   <IconButton {...props} aria-label="close">
     <CloseRoundedIcon />
+    {children}
   </IconButton>
 )

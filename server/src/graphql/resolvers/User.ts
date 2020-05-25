@@ -32,8 +32,18 @@ export const userResolver: Resolvers = {
     updateUserInfo: (root, { input }, { user }) => user!.update(input!),
     sendFriendRequest: (root, { friendId }, { models, user }) =>
       models.UserFriendRequest.createFriendRequest(friendId, user!.id),
-    acceptFriendRequest: (root, { friendId }, { models, user }) =>
-      models.UserFriend.createFriendship(friendId, user!.id),
+    acceptFriendRequest: async (root, { friendId }, { models, user }) => {
+      const { UserFriend, Notification } = models
+      const friendShip = await UserFriend.createFriendship(friendId, user!.id)
+      const notification = await Notification.newFriendNotification(
+        friendId,
+        user!.id,
+      )
+      console.log(friendShip)
+      console.log(notification)
+
+      return friendShip
+    },
     declineFriendRequest: (root, { senderId }, { models, user }) =>
       models.UserFriendRequest.deleteFriendRequest(user!.id, senderId),
     removeFriend: (root, { friendId }, { models, user }) =>
@@ -51,6 +61,12 @@ export const userResolver: Resolvers = {
     },
     conversationsPreview: ({ id }, args, { models }) =>
       models.PrivateMessage.getConversationsPreview(id),
+    notificationsCount: ({ id }, args, { models }) =>
+      models.Notification.count({
+        where: {
+          userId: id,
+        },
+      }),
     friendRequestsCount: ({ id }, args, { models }) =>
       models.UserFriendRequest.count({
         where: { receiverId: id },
@@ -83,7 +99,7 @@ export const userResolver: Resolvers = {
           },
         ],
       }),
-    collabRequests: async ({ id }, args, { models, loaders }) => {
+    collabRequests: async ({ id }, args, { models }) => {
       const requests = await models.CollabMemberRequest.findAll({
         where: { type: 'request' },
         include: [
@@ -92,7 +108,6 @@ export const userResolver: Resolvers = {
         ],
       })
 
-      console.log(requests)
       return requests
     },
     tasks: ({ id }, args, { models }) =>

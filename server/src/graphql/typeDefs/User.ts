@@ -38,6 +38,8 @@ export const userTypeDefs = gql`
     linkedin: String!
     friendRequests: [User!]!
     friendRequestsCount: Int!
+    notificationsCount: Int!
+    notifications: [Notification!]!
     friends: [User!]!
     collabs: [Collab!]!
     collabInvites: [Collab!]!

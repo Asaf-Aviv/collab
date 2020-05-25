@@ -7,10 +7,11 @@ import {
   useMoveTaskToListMutation,
   useCollabQuery,
 } from '../../../graphql/generates'
-import { Flex, IconButton, Tooltip } from '@chakra-ui/core'
+import { Flex } from '@chakra-ui/core'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
 import { NewTaskListModal } from '../NewTaskListModal'
 import { MemoizedTaskListWrapper } from '../TaskList'
+import { IconButtonWithTooltip } from '../../../components/IconButtonWithTooltip'
 
 export const TaskBoard = () => {
   const { collabId } = useParams<{ collabId: string }>()
@@ -90,7 +91,7 @@ export const TaskBoard = () => {
   const { taskList } = data
 
   return (
-    <Flex>
+    <>
       {collabData?.collab?.isOwner && (
         <>
           {isCreateTaskListModalOpen && (
@@ -98,20 +99,11 @@ export const TaskBoard = () => {
               closeModal={() => setIsCreateTaskListModalOpen(false)}
             />
           )}
-          <Tooltip
-            aria-label="create task list"
-            label="Create task list"
-            placement="bottom"
-            hasArrow
-            p={2}
-            borderRadius={4}
-          >
-            <IconButton
-              aria-label="create task list"
-              onClick={() => setIsCreateTaskListModalOpen(true)}
-              icon="add"
-            />
-          </Tooltip>
+          <IconButtonWithTooltip
+            ariaLabel="Create Tasklist"
+            icon="add"
+            onClick={() => setIsCreateTaskListModalOpen(true)}
+          />
         </>
       )}
       <DragDropContext onDragEnd={handleDragEnd}>
@@ -121,13 +113,22 @@ export const TaskBoard = () => {
           type="column"
         >
           {provided => (
-            <Flex {...provided.droppableProps} ref={provided.innerRef} flex={1}>
+            <Flex
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              flex={1}
+              overflowX="auto"
+              overflowY="hidden"
+              maxWidth="calc(100vw - 250px - 5%)"
+              height="calc(100vh - 64px - 4rem)"
+              bg="#f2f2ff"
+            >
               <MemoizedTaskListWrapper taskList={taskList} refetch={refetch} />
               {provided.placeholder}
             </Flex>
           )}
         </Droppable>
       </DragDropContext>
-    </Flex>
+    </>
   )
 }
