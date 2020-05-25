@@ -76,16 +76,12 @@ export const ReactionPanel = ({
           <Button
             key={emojiId}
             mr="px"
-            as={Flex}
-            // @ts-ignore
-            align="center"
             onClick={() => handleEmojiReactionClick(emojiId, isLiked)}
             variantColor={isLiked ? 'purple' : 'gray'}
-            cursor="pointer"
             px={2}
             borderRadius={0}
             _hover={{
-              bg: 'purple.300',
+              bg: 'purple.600',
             }}
           >
             <Emoji emoji={emojiId} size={20} />

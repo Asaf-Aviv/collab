@@ -8,6 +8,7 @@ import {
   BelongsTo,
   AllowNull,
   ForeignKey,
+  CreatedAt,
 } from 'sequelize-typescript'
 import { v4 as uuid } from 'uuid'
 import { User } from './User'
@@ -36,13 +37,19 @@ type NotificationType =
   | CollabPostNotification
   | CollabNotification
 
-@Table({ tableName: 'notifications' })
+@Table({
+  tableName: 'notifications',
+  updatedAt: false,
+})
 export class Notification extends Model<Notification> {
   @IsUUID(4)
   @Default(uuid)
   @PrimaryKey
   @Column
   id!: string
+
+  @Column
+  type!: NotificationType
 
   @Default(false)
   @Column
@@ -62,13 +69,14 @@ export class Notification extends Model<Notification> {
   @BelongsTo(() => User, { foreignKey: 'friendId', onDelete: 'cascade' })
   friend!: User
 
-  @Default(null)
-  @Column
-  postCommenId!: string
+  @CreatedAt
+  creationDate!: Date
 
-  @BelongsTo(() => CollabPostComment, {
-    foreignKey: 'friendId',
-    onDelete: 'cascade',
-  })
-  postComment!: CollabPostComment
+  static async newFriendNotification(userId: string, accepterId: string) {
+    return this.create({
+      type: 'NEW_FRIEND',
+      friendId: accepterId,
+      userId,
+    })
+  }
 }

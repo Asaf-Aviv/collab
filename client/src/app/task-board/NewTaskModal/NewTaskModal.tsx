@@ -97,6 +97,7 @@ export const NewTaskModal = ({ closeModal, taskListId }: Props) => {
             <FormLabel>Task description</FormLabel>
             <Textarea
               ref={textAreaRef}
+              autoFocus
               onChange={(e: any) => setDescription(e.target.value)}
               value={description}
               p={2}

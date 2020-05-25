@@ -18,6 +18,7 @@ import { privateMessageTypeDefs } from './PrivateMessage'
 import { scalarTypeDefs } from './Scalar'
 import { privateChatTypeDefs } from './PrivateChat'
 import { collabWallMessageTypeDefs } from './CollabWallMessage'
+import { notificationTypeDefs } from './Notification'
 
 const types = [
   scalarTypeDefs,
@@ -39,6 +40,7 @@ const types = [
   collabTaskCommentReactionTypeDefs,
   privateChatTypeDefs,
   collabWallMessageTypeDefs,
+  notificationTypeDefs,
 ]
 
 export const typeDefs = mergeTypes(types, { all: true })

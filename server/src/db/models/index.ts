@@ -22,6 +22,7 @@ import { UserFriend } from './UserFriend'
 import { UserFriendRequest } from './UserFriendRequest'
 import { PrivateMessage } from './PrivateMessage'
 import { CollabWallMessage } from './CollabWallMessage'
+import { Notification } from './Notification'
 
 export const models = {
   Language,
@@ -48,6 +49,7 @@ export const models = {
   UserFriendRequest,
   PrivateMessage,
   CollabWallMessage,
+  Notification,
 }
 
 export type Models = typeof models

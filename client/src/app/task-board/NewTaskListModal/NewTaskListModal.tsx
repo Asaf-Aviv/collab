@@ -17,6 +17,8 @@ import {
   FormLabel,
   Input,
   FormControl,
+  Box,
+  Flex,
 } from '@chakra-ui/core'
 
 type Props = {
@@ -62,6 +64,10 @@ export const NewTaskListModal = ({ closeModal }: Props) => {
     createTaskList()
   }
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+  }
+
   return (
     <Modal
       initialFocusRef={inputRef}
@@ -73,25 +79,31 @@ export const NewTaskListModal = ({ closeModal }: Props) => {
       <ModalContent borderRadius={6}>
         <ModalHeader>Add a new task list</ModalHeader>
         <ModalCloseButton size="lg" />
-        <ModalBody>
-          <FormControl mt={4}>
-            <FormLabel>Tasklist name</FormLabel>
-            <Input
-              ref={inputRef}
-              onChange={(e: any) => setTaskListName(e.target.value)}
-              value={taskListName}
-              placeholder="Tasklist name"
-            />
-          </FormControl>
+        <ModalBody pb={6}>
+          <Box as="form" onSubmit={handleSubmit} display="block">
+            <FormControl my={4}>
+              <FormLabel>Tasklist name</FormLabel>
+              <Input
+                ref={inputRef}
+                onChange={(e: any) => setTaskListName(e.target.value)}
+                value={taskListName}
+                placeholder="Tasklist name"
+              />
+            </FormControl>
+            <Flex justify="flex-end">
+              <Button variant="ghost" mr={3} onClick={() => closeModal()}>
+                Close
+              </Button>
+              <Button
+                type="submit"
+                variantColor="purple"
+                onClick={() => handleCreateTaskList()}
+              >
+                Create
+              </Button>
+            </Flex>
+          </Box>
         </ModalBody>
-        <ModalFooter>
-          <Button variant="ghost" mr={3} onClick={() => closeModal()}>
-            Close
-          </Button>
-          <Button variantColor="purple" onClick={() => handleCreateTaskList()}>
-            Create
-          </Button>
-        </ModalFooter>
       </ModalContent>
     </Modal>
   )

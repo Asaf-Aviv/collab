@@ -1,18 +1,17 @@
 import React, { useState, useRef } from 'react'
 import FocusLock from 'react-focus-lock'
-import { useUpdateTaskListNameMutation } from '../../../graphql/generates'
 import {
-  IconButton,
   ButtonGroup,
   PopoverTrigger,
   PopoverContent,
-  PopoverArrow,
   PopoverCloseButton,
   Popover,
   Button,
   Input,
   FormLabel,
 } from '@chakra-ui/core'
+import { IconButtonWithTooltip } from '../../../components/IconButtonWithTooltip'
+import { useUpdateTaskListNameMutation } from '../../../graphql/generates'
 
 type Props = {
   taskListId: string
@@ -60,32 +59,41 @@ export const EditTaskListNamePopover = ({
       closeOnBlur={false}
     >
       <PopoverTrigger>
-        <IconButton
-          ml={2}
-          aria-label="edit task list name"
-          size="sm"
-          icon="edit"
-        />
+        <IconButtonWithTooltip ariaLabel="Edit Tasklist Name" icon="edit" />
       </PopoverTrigger>
-      <PopoverContent zIndex={4} p={5} boxShadow="lg">
+      <PopoverContent
+        zIndex={4}
+        p={5}
+        boxShadow="lg"
+        style={{ margin: 0, width: 300 }}
+        position="absolute"
+        left={-65}
+        onKeyDown={(e: any) => e.stopPropagation()}
+      >
         <FocusLock>
-          <PopoverArrow bg="white" />
           <PopoverCloseButton size="md" />
-          <FormLabel mb={2}>Update tasklist name</FormLabel>
-          <Input
-            p={1}
-            mb={4}
-            ref={firstFieldRef}
-            onChange={(e: any) => setNewName(e.target.value)}
-            value={newName}
-            placeholder="New tasklist name"
-          />
-          <ButtonGroup ml="auto" justifyContent="center" size="sm">
-            <Button onClick={close}>Cancel</Button>
-            <Button variantColor="purple" onClick={handleUpdateName}>
-              Update
-            </Button>
-          </ButtonGroup>
+          <form
+            onSubmit={e => {
+              e.preventDefault()
+              handleUpdateName()
+            }}
+          >
+            <FormLabel mb={2}>Update tasklist name</FormLabel>
+            <Input
+              p={1}
+              mb={4}
+              ref={firstFieldRef}
+              onChange={(e: any) => setNewName(e.target.value)}
+              value={newName}
+              placeholder="New tasklist name"
+            />
+            <ButtonGroup ml="auto" justifyContent="center" size="sm">
+              <Button onClick={close}>Cancel</Button>
+              <Button type="submit" variantColor="purple">
+                Update
+              </Button>
+            </ButtonGroup>
+          </form>
         </FocusLock>
       </PopoverContent>
     </Popover>

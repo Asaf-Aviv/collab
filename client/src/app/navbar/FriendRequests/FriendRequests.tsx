@@ -11,6 +11,9 @@ import {
   CurrentUserFriendRequestsQuery,
 } from '../../../graphql/generates'
 import { Ballon } from '../../../components/Ballon'
+import { IconButtonWithTooltip } from '../../../components/IconButtonWithTooltip'
+import { useCurrentUser } from '../../../hooks/useCurrentUser'
+import { Badge } from '../../../components/Badge'
 
 const removeFriendRequestFromCache = (
   store: DataProxy,
@@ -36,6 +39,7 @@ const removeFriendRequestFromCache = (
 }
 
 export const FriendRequests = () => {
+  const currentUser = useCurrentUser()!
   const [acceptFriendRequest] = useAcceptFriendRequestMutation({
     update(store, { data }) {
       removeFriendRequestFromCache(store, data?.acceptFriendRequest.id)
@@ -82,8 +86,15 @@ export const FriendRequests = () => {
   return (
     <Ballon
       header="Friend Requests"
-      onTriggerClick={fetchFriendRequests}
-      triggerIcon={<GroupAddIcon />}
+      triggerIcon={
+        <Badge count={currentUser.friendRequestsCount}>
+          <IconButtonWithTooltip
+            onClick={() => fetchFriendRequests()}
+            icon={GroupAddIcon}
+            ariaLabel="Open Friend Requests"
+          />
+        </Badge>
+      }
       isLoading={loading}
     >
       <Flex direction="column">

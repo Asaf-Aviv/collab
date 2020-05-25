@@ -146,6 +146,7 @@ export type Mutation = {
   deleteWallMessage: Scalars['ID'];
   inviteMember: User;
   login: AuthPayload;
+  markAsRead: Notification;
   markPrivateMessageAsRead: Scalars['Boolean'];
   moveTaskToList: Task;
   removeCollabDiscussionThreadCommentReaction: Scalars['Boolean'];
@@ -338,6 +339,11 @@ export type MutationInviteMemberArgs = {
 
 export type MutationLoginArgs = {
   credentials: LoginArgs;
+};
+
+
+export type MutationMarkAsReadArgs = {
+  notificationId: Scalars['ID'];
 };
 
 
@@ -671,6 +677,14 @@ export type CollabWallMessagesInput = {
   offset: Scalars['Int'];
 };
 
+export type Notification = {
+   __typename?: 'Notification';
+  id: Scalars['ID'];
+  body: Scalars['String'];
+  url: Scalars['String'];
+  isRead: Scalars['Boolean'];
+};
+
 export type Subscription = {
    __typename?: 'Subscription';
   friendStatusChange: ChatUsersPayload;
@@ -849,6 +863,8 @@ export type CurrentUser = {
   id: Scalars['ID'];
   lastName: Scalars['String'];
   linkedin: Scalars['String'];
+  notifications: Array<Notification>;
+  notificationsCount: Scalars['Int'];
   tasks: Array<Task>;
   /** the user's engineering title */
   title: Scalars['String'];
@@ -1012,6 +1028,7 @@ export type ResolversTypes = ResolversObject<{
   CreateWallMessageInput: CreateWallMessageInput,
   CollabWallMessagesPayload: ResolverTypeWrapper<Omit<CollabWallMessagesPayload, 'messages'> & { messages: Array<ResolversTypes['WallMessage']> }>,
   CollabWallMessagesInput: CollabWallMessagesInput,
+  Notification: ResolverTypeWrapper<Notification>,
   Subscription: ResolverTypeWrapper<{}>,
   UserChatStatus: UserChatStatus,
   ConnectToChatPayload: ResolverTypeWrapper<Omit<ConnectToChatPayload, 'users'> & { users: Array<ResolversTypes['ChatUsersPayload']> }>,
@@ -1081,6 +1098,7 @@ export type ResolversParentTypes = ResolversObject<{
   CreateWallMessageInput: CreateWallMessageInput,
   CollabWallMessagesPayload: Omit<CollabWallMessagesPayload, 'messages'> & { messages: Array<ResolversParentTypes['WallMessage']> },
   CollabWallMessagesInput: CollabWallMessagesInput,
+  Notification: Notification,
   Subscription: {},
   UserChatStatus: UserChatStatus,
   ConnectToChatPayload: Omit<ConnectToChatPayload, 'users'> & { users: Array<ResolversParentTypes['ChatUsersPayload']> },
@@ -1168,6 +1186,7 @@ export type MutationResolvers<ContextType = CollabContext, ParentType extends Re
   deleteWallMessage?: Resolver<ResolversTypes['ID'], ParentType, ContextType, RequireFields<MutationDeleteWallMessageArgs, 'messageId'>>,
   inviteMember?: Resolver<ResolversTypes['User'], ParentType, CollabContextWithUser, RequireFields<MutationInviteMemberArgs, 'collabId' | 'memberId'>>,
   login?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'credentials'>>,
+  markAsRead?: Resolver<ResolversTypes['Notification'], ParentType, ContextType, RequireFields<MutationMarkAsReadArgs, 'notificationId'>>,
   markPrivateMessageAsRead?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMarkPrivateMessageAsReadArgs, 'messageId'>>,
   moveTaskToList?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationMoveTaskToListArgs, 'input'>>,
   removeCollabDiscussionThreadCommentReaction?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemoveCollabDiscussionThreadCommentReactionArgs, 'reaction'>>,
@@ -1304,6 +1323,14 @@ export type CollabWallMessagesPayloadResolvers<ContextType = CollabContext, Pare
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
+export type NotificationResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Notification'] = ResolversParentTypes['Notification']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  body?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  url?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  isRead?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+}>;
+
 export type SubscriptionResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
   friendStatusChange?: SubscriptionResolver<ResolversTypes['ChatUsersPayload'], "friendStatusChange", ParentType, ContextType>,
   newPrivateChatMessage?: SubscriptionResolver<ResolversTypes['PrivateChatMessage'], "newPrivateChatMessage", ParentType, ContextType>,
@@ -1413,6 +1440,8 @@ export type CurrentUserResolvers<ContextType = CollabContext, ParentType extends
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   linkedin?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  notifications?: Resolver<Array<ResolversTypes['Notification']>, ParentType, ContextType>,
+  notificationsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   tasks?: Resolver<Array<ResolversTypes['Task']>, ParentType, ContextType>,
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   twitter?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
@@ -1458,6 +1487,7 @@ export type Resolvers<ContextType = CollabContext> = ResolversObject<{
   CollabPostComment?: CollabPostCommentResolvers<ContextType>,
   WallMessage?: WallMessageResolvers<ContextType>,
   CollabWallMessagesPayload?: CollabWallMessagesPayloadResolvers<ContextType>,
+  Notification?: NotificationResolvers<ContextType>,
   Subscription?: SubscriptionResolvers<ContextType>,
   ConnectToChatPayload?: ConnectToChatPayloadResolvers<ContextType>,
   ChatUsersPayload?: ChatUsersPayloadResolvers<ContextType>,
