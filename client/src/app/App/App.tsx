@@ -4,6 +4,7 @@ import { ThemeProvider, CSSReset, theme } from '@chakra-ui/core'
 import { WindowWidthProvider } from '../../providers'
 import { Layout } from '../layout'
 import './index.css'
+import { CurrentUserNotifications } from '../notifications'
 
 export const App = hot(() => (
   <WindowWidthProvider>
@@ -21,8 +22,10 @@ export const App = hot(() => (
         },
       })}
     >
-      <CSSReset />
-      <Layout />
+      <CurrentUserNotifications>
+        <CSSReset />
+        <Layout />
+      </CurrentUserNotifications>
     </ThemeProvider>
   </WindowWidthProvider>
 ))

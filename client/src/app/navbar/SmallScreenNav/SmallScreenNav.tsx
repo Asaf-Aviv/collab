@@ -19,6 +19,7 @@ import { NavUserPanel } from '../NavUserPanel'
 import { SiteTopBar } from '../SiteTopBar'
 import { useKey } from '../../../hooks/useKey'
 import { SearchBar } from '../SearchBar'
+import { LogoutButton } from '../../current-user-profile/LogoutButton'
 
 export const SmallScreenNav = () => {
   const [isOpen, toggleIsOpen] = useReducer(prevState => !prevState, false)
@@ -33,11 +34,6 @@ export const SmallScreenNav = () => {
       menuButtonRef.current.focus()
     }
   }, [isOpen])
-
-  const logout = () => {
-    localStorage.removeItem('token')
-    client.resetStore()
-  }
 
   return (
     <>
@@ -126,12 +122,11 @@ export const SmallScreenNav = () => {
               )}
               <Divider />
               {currentUser && (
-                <Button
+                <LogoutButton
                   bg="white"
                   height="48px"
                   justifyContent="flex-start"
                   fontWeight={300}
-                  onClick={() => logout()}
                   _hover={{
                     bg: '#f3f3f3',
                   }}
@@ -146,7 +141,7 @@ export const SmallScreenNav = () => {
                   <Text ml="0.5rem" as="span">
                     Sign Out
                   </Text>
-                </Button>
+                </LogoutButton>
               )}
             </Flex>
           </FocusLock>

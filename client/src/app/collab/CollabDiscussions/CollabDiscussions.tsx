@@ -12,8 +12,6 @@ export const CollabDiscussions = () => {
     variables: { collabId },
   })
 
-  console.log(data, loading, error, variables)
-
   return (
     <Box as="main" maxWidth={900} mx="auto">
       <section>

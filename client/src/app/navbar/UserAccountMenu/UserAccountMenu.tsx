@@ -7,26 +7,17 @@ import {
   MenuList,
   MenuItem,
   MenuDivider,
-  Button,
   Avatar,
 } from '@chakra-ui/core'
-import { useApolloClient } from '@apollo/react-hooks'
 import { useCurrentUser } from '../../../hooks/useCurrentUser'
+import { LogoutButton } from '../../current-user-profile/LogoutButton'
 
 export const UserAccountMenu = () => {
-  const currentUser = useCurrentUser()
-  const client = useApolloClient()
-
-  const logout = () => {
-    localStorage.removeItem('token')
-    client.resetStore()
-  }
-
-  if (!currentUser) return null
+  const currentUser = useCurrentUser()!
 
   return (
     <Menu>
-      <MenuButton width="64px">
+      <MenuButton ml={8}>
         <Avatar
           size="sm"
           src={currentUser.avatar ?? undefined}
@@ -40,7 +31,7 @@ export const UserAccountMenu = () => {
           </Link>
         </MenuGroup>
         <MenuDivider />
-        <Button onClick={logout}>Logout</Button>
+        <LogoutButton>Logout</LogoutButton>
       </MenuList>
     </Menu>
   )

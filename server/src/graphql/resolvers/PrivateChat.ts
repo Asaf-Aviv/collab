@@ -1,4 +1,3 @@
-import { Op } from 'sequelize'
 import { PubSub, withFilter } from 'apollo-server-express'
 import { v1 as uuid } from 'uuid'
 import { Resolvers, UserChatStatus } from '../types.d'
@@ -89,8 +88,6 @@ export const privateChatResolver: Resolvers = {
   Subscription: {
     newPrivateChatMessage: {
       subscribe: (root, args, { redis, user }) => {
-        // console.log(user)
-
         const subscriptionFilter = withFilter(
           () => pubsub.asyncIterator(NEW_PRIVATE_CHAT_MESSAGE),
           ({ recipientId }) => recipientId === user!.id,

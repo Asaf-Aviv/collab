@@ -26,7 +26,7 @@ const httpLink = new HttpLink({
   uri: endpoint,
 })
 
-const wsClient = new SubscriptionClient(subscriptionEndpoint!, {
+export const wsClient = new SubscriptionClient(subscriptionEndpoint!, {
   reconnect: true,
   lazy: true,
   connectionParams: () => ({

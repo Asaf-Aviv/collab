@@ -34,7 +34,6 @@ export const UserProfile = () => {
 
   if (!data?.user) return null
 
-  console.log(data)
   const { username, avatar } = data.user
 
   return (

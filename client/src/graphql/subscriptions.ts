@@ -1,6 +1,6 @@
 import { gql } from 'apollo-boost'
 
-const NEW_NOTIFICATION = gql`
+export const NEW_NOTIFICATION = gql`
   subscription NewNotification {
     newNotification {
       id

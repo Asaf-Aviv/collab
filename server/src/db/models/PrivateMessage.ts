@@ -136,7 +136,6 @@ export class PrivateMessage extends Model<PrivateMessage> {
         type: QueryTypes.SELECT,
       },
     )
-    console.log('res', res)
     return res
   }
 }

@@ -97,7 +97,6 @@ export class CollabPost extends Model<CollabPost> {
 
   static createPost(postArgs: CollabPostArgs, userId: string) {
     return this.sequelize!.transaction(async () => {
-      console.log(postArgs)
       const collab = new Collab({
         name: postArgs.name,
         ownerId: userId,
