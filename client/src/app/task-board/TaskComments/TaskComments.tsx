@@ -39,7 +39,7 @@ export const TaskComments = ({ taskId }: { taskId: string }) => {
 
   const handleCommentSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log(commentInput)
+
     if (loading || !commentInput) return
 
     addComment()

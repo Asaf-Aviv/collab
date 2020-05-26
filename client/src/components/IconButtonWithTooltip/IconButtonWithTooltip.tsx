@@ -18,6 +18,7 @@ export const IconButtonWithTooltip = ({ ariaLabel, onClick, icon }: Props) => {
       p={2}
       borderRadius={4}
       fontSize="0.75rem"
+      zIndex={100}
     >
       <IconButton
         size="sm"

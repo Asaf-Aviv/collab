@@ -10,7 +10,6 @@ import { GQLCollabPost } from '../../db/models/CollabPost'
 export const collabPostResolver: Resolvers = {
   Query: {
     collabPosts: async (root, { offset, limit }, { models }) => {
-      console.log(offset, limit)
       const posts = await models.CollabPost.findAll({
         order: [
           ['created_at', 'desc'],

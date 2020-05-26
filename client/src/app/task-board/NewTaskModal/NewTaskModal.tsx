@@ -52,8 +52,6 @@ export const NewTaskModal = ({ closeModal, taskListId }: Props) => {
         variables: { collabId },
       })!
 
-      console.log(taskListId)
-
       const updatedTaskList = taskListData.taskList!.map(taskList => {
         if (taskList.id === taskListId) {
           return {
@@ -134,19 +132,11 @@ export const NewTaskModal = ({ closeModal, taskListId }: Props) => {
   )
 }
 
-const CustomOption = (props: any) => {
-  console.log(props)
-  return (
-    <Flex cursor="pointer" {...props.innerProps} align="center" px={2} py={1}>
-      <Avatar
-        mr={2}
-        size="sm"
-        src={props.data.avatar}
-        name={props.data.label}
-      />
-      <Text as="span" color="black">
-        {props.data.label}
-      </Text>
-    </Flex>
-  )
-}
+const CustomOption = (props: any) => (
+  <Flex cursor="pointer" {...props.innerProps} align="center" px={2} py={1}>
+    <Avatar mr={2} size="sm" src={props.data.avatar} name={props.data.label} />
+    <Text as="span" color="black">
+      {props.data.label}
+    </Text>
+  </Flex>
+)

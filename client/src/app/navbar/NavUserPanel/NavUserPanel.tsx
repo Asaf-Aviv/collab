@@ -38,7 +38,7 @@ export const NavUserPanel = () => (
 )
 
 const StyledFlex = styled(Flex)`
-  > * + * {
-    margin-left: 0.5rem;
+  > :first-child {
+    margin-right: 0.5rem;
   }
 `

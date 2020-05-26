@@ -78,7 +78,6 @@ export const SearchOptions = () => {
   }
 
   const handleLanguageChange = (values: any) => {
-    console.log(values)
     setSearchInput(prevState => ({
       ...prevState,
       languages: values.map((v: any) => v.value),

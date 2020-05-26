@@ -922,6 +922,1047 @@ export type LoginArgs = {
   password: Scalars['String'];
 };
 
+export type SignUpMutationVariables = {
+  credentials: SignUpArgs;
+};
+
+
+export type SignUpMutation = (
+  { __typename?: 'Mutation' }
+  & { signUp: (
+    { __typename?: 'AuthPayload' }
+    & Pick<AuthPayload, 'token'>
+  ) }
+);
+
+export type LoginMutationVariables = {
+  credentials: LoginArgs;
+};
+
+
+export type LoginMutation = (
+  { __typename?: 'Mutation' }
+  & { login: (
+    { __typename?: 'AuthPayload' }
+    & Pick<AuthPayload, 'token'>
+  ) }
+);
+
+export type UpdateUserInfoMutationVariables = {
+  input: UpdateUserInfoInput;
+};
+
+
+export type UpdateUserInfoMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUserInfo: (
+    { __typename?: 'CurrentUser' }
+    & Pick<CurrentUser, 'id' | 'firstName' | 'lastName' | 'title' | 'country' | 'bio'>
+  ) }
+);
+
+export type AcceptFriendRequestMutationVariables = {
+  friendId: Scalars['ID'];
+};
+
+
+export type AcceptFriendRequestMutation = (
+  { __typename?: 'Mutation' }
+  & { acceptFriendRequest: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username' | 'avatar'>
+  ) }
+);
+
+export type DeclineFriendRequestMutationVariables = {
+  senderId: Scalars['ID'];
+};
+
+
+export type DeclineFriendRequestMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'declineFriendRequest'>
+);
+
+export type SendFriendRequestMutationVariables = {
+  friendId: Scalars['ID'];
+};
+
+
+export type SendFriendRequestMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'sendFriendRequest'>
+);
+
+export type CreateCollabPostMutationVariables = {
+  post: CollabPostArgs;
+};
+
+
+export type CreateCollabPostMutation = (
+  { __typename?: 'Mutation' }
+  & { createCollabPost: (
+    { __typename?: 'CollabPost' }
+    & Pick<CollabPost, 'id'>
+  ) }
+);
+
+export type AddCollabPostCommentMutationVariables = {
+  content: Scalars['String'];
+  postId: Scalars['ID'];
+};
+
+
+export type AddCollabPostCommentMutation = (
+  { __typename?: 'Mutation' }
+  & { createComment: (
+    { __typename?: 'CollabPostComment' }
+    & Pick<CollabPostComment, 'id' | 'content'>
+    & { author: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    ) }
+  ) }
+);
+
+export type AddCollabPostReactionMutationVariables = {
+  reaction: AddCollabPostReactionInput;
+};
+
+
+export type AddCollabPostReactionMutation = (
+  { __typename?: 'Mutation' }
+  & { addCollabPostReaction: (
+    { __typename?: 'CollabPost' }
+    & Pick<CollabPost, 'id'>
+    & { reactions: Array<(
+      { __typename?: 'Reaction' }
+      & Pick<Reaction, 'emojiId' | 'count' | 'isLiked'>
+    )> }
+  ) }
+);
+
+export type RemoveCollabPostReactionMutationVariables = {
+  reaction: RemoveCollabPostReactionInput;
+};
+
+
+export type RemoveCollabPostReactionMutation = (
+  { __typename?: 'Mutation' }
+  & { removeCollabPostReaction: (
+    { __typename?: 'CollabPost' }
+    & Pick<CollabPost, 'id'>
+    & { reactions: Array<(
+      { __typename?: 'Reaction' }
+      & Pick<Reaction, 'emojiId' | 'count' | 'isLiked'>
+    )> }
+  ) }
+);
+
+export type AddCollabPostCommentReactionMutationVariables = {
+  reaction: AddCollabPostCommentReactionInput;
+};
+
+
+export type AddCollabPostCommentReactionMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'addCollabPostCommentReaction'>
+);
+
+export type RemoveCollabPostCommentReactionMutationVariables = {
+  reaction: RemoveCollabPostCommentReactionInput;
+};
+
+
+export type RemoveCollabPostCommentReactionMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'removeCollabPostCommentReaction'>
+);
+
+export type AddCollabDiscussionThreadReactionMutationVariables = {
+  reaction: AddCollabDiscussionThreadReactionInput;
+};
+
+
+export type AddCollabDiscussionThreadReactionMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'addCollabDiscussionThreadReaction'>
+);
+
+export type RemoveCollabDiscussionThreadReactionMutationVariables = {
+  reaction: RemoveCollabDiscussionThreadReactionInput;
+};
+
+
+export type RemoveCollabDiscussionThreadReactionMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'removeCollabDiscussionThreadReaction'>
+);
+
+export type AddDiscussionThreadCommentReactionMutationVariables = {
+  reaction: AddDiscussionThreadCommentReactionInput;
+};
+
+
+export type AddDiscussionThreadCommentReactionMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'addCollabDiscussionThreadCommentReaction'>
+);
+
+export type RemoveDiscussionThreadCommentReactionMutationVariables = {
+  reaction: RemoveDiscussionThreadCommentReactionInput;
+};
+
+
+export type RemoveDiscussionThreadCommentReactionMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'removeCollabDiscussionThreadCommentReaction'>
+);
+
+export type RequestToJoinMutationVariables = {
+  collabId: Scalars['ID'];
+};
+
+
+export type RequestToJoinMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'requestToJoin'>
+);
+
+export type CancelCollabRequestToJoinMutationVariables = {
+  collabId: Scalars['ID'];
+};
+
+
+export type CancelCollabRequestToJoinMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'cancelRequestToJoin'>
+);
+
+export type AcceptCollabInvitationMutationVariables = {
+  collabId: Scalars['ID'];
+};
+
+
+export type AcceptCollabInvitationMutation = (
+  { __typename?: 'Mutation' }
+  & { acceptCollabInvitation: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username' | 'avatar'>
+  ) }
+);
+
+export type DeclineCollabInvitationMutationVariables = {
+  collabId: Scalars['ID'];
+};
+
+
+export type DeclineCollabInvitationMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'declineCollabInvitation'>
+);
+
+export type DeclineCollabMemberRequestMutationVariables = {
+  collabId: Scalars['ID'];
+  memberId: Scalars['ID'];
+};
+
+
+export type DeclineCollabMemberRequestMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'declineMemberRequest'>
+);
+
+export type CreateTaskListMutationVariables = {
+  input: CreateTaskListInput;
+};
+
+
+export type CreateTaskListMutation = (
+  { __typename?: 'Mutation' }
+  & { createTaskList: (
+    { __typename?: 'TaskList' }
+    & Pick<TaskList, 'id' | 'name' | 'order'>
+  ) }
+);
+
+export type UpdateTaskListNameMutationVariables = {
+  input: UpdateTaskListNameInput;
+};
+
+
+export type UpdateTaskListNameMutation = (
+  { __typename?: 'Mutation' }
+  & { updateTaskListName: (
+    { __typename?: 'TaskList' }
+    & Pick<TaskList, 'id' | 'name'>
+  ) }
+);
+
+export type UpdateTaskListPositionMutationVariables = {
+  input: UpdateTaskListPositionInput;
+};
+
+
+export type UpdateTaskListPositionMutation = (
+  { __typename?: 'Mutation' }
+  & { updateTaskListPosition: (
+    { __typename?: 'TaskList' }
+    & Pick<TaskList, 'id'>
+  ) }
+);
+
+export type DeleteTaskListMutationVariables = {
+  taskListId: Scalars['ID'];
+};
+
+
+export type DeleteTaskListMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteTaskList'>
+);
+
+export type CreateTaskMutationVariables = {
+  input: CreateTaskInput;
+};
+
+
+export type CreateTaskMutation = (
+  { __typename?: 'Mutation' }
+  & { createTask: (
+    { __typename?: 'Task' }
+    & Pick<Task, 'id' | 'description' | 'order' | 'taskListId' | 'commentsCount'>
+    & { author: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    ), assignee?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    )>, assignedBy?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    )> }
+  ) }
+);
+
+export type DeleteTaskMutationVariables = {
+  taskId: Scalars['ID'];
+};
+
+
+export type DeleteTaskMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteTask'>
+);
+
+export type UpdateTaskMutationVariables = {
+  input: UpdateTaskInput;
+};
+
+
+export type UpdateTaskMutation = (
+  { __typename?: 'Mutation' }
+  & { updateTask: (
+    { __typename?: 'Task' }
+    & Pick<Task, 'id' | 'description'>
+    & { assignee?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    )>, assignedBy?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    )> }
+  ) }
+);
+
+export type MoveTaskToListMutationVariables = {
+  input: MoveTaskToListInput;
+};
+
+
+export type MoveTaskToListMutation = (
+  { __typename?: 'Mutation' }
+  & { moveTaskToList: (
+    { __typename?: 'Task' }
+    & Pick<Task, 'id'>
+  ) }
+);
+
+export type UpdateTaskPositionMutationVariables = {
+  input: UpdateTaskPositionInput;
+};
+
+
+export type UpdateTaskPositionMutation = (
+  { __typename?: 'Mutation' }
+  & { updateTaskPosition: (
+    { __typename?: 'Task' }
+    & Pick<Task, 'id'>
+  ) }
+);
+
+export type UpdateTaskAssigneeMutationVariables = {
+  input: UpdateTaskAssigneeInput;
+};
+
+
+export type UpdateTaskAssigneeMutation = (
+  { __typename?: 'Mutation' }
+  & { updateTaskAssignee: (
+    { __typename?: 'Task' }
+    & Pick<Task, 'id'>
+    & { assignee?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    )>, assignedBy?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    )> }
+  ) }
+);
+
+export type CreateTaskCommentMutationVariables = {
+  input: CreateTaskCommentInput;
+};
+
+
+export type CreateTaskCommentMutation = (
+  { __typename?: 'Mutation' }
+  & { createTaskComment: (
+    { __typename?: 'TaskComment' }
+    & Pick<TaskComment, 'id' | 'content'>
+    & { author?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    )>, reactions: Array<(
+      { __typename?: 'Reaction' }
+      & Pick<Reaction, 'emojiId' | 'count'>
+    )> }
+  ) }
+);
+
+export type AddTaskCommentReactionMutationVariables = {
+  reaction: AddCollabTaskCommentReactionInput;
+};
+
+
+export type AddTaskCommentReactionMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'addCollabTaskCommentReaction'>
+);
+
+export type RemoveTaskCommentReactionMutationVariables = {
+  reaction: RemoveCollabTaskCommentReactionInput;
+};
+
+
+export type RemoveTaskCommentReactionMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'removeCollabTaskCommentReaction'>
+);
+
+export type CreateDiscussionThreadCommentMutationVariables = {
+  input: CreateCollabDiscussionThreadCommentInput;
+};
+
+
+export type CreateDiscussionThreadCommentMutation = (
+  { __typename?: 'Mutation' }
+  & { createCollabDiscussionThreadComment: (
+    { __typename?: 'CollabDiscussionThreadComment' }
+    & Pick<CollabDiscussionThreadComment, 'id' | 'content'>
+    & { author: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    ), reactions: Array<(
+      { __typename?: 'Reaction' }
+      & Pick<Reaction, 'emojiId' | 'count' | 'isLiked'>
+    )> }
+  ) }
+);
+
+export type ConnectToChatMutationVariables = {
+  status: UserChatStatus;
+};
+
+
+export type ConnectToChatMutation = (
+  { __typename?: 'Mutation' }
+  & { connectToChat: (
+    { __typename?: 'ConnectToChatPayload' }
+    & { users: Array<(
+      { __typename?: 'ChatUsersPayload' }
+      & Pick<ChatUsersPayload, 'status'>
+      & { user: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'avatar'>
+      ) }
+    )> }
+  ) }
+);
+
+export type SendPrivateChatMessageMutationVariables = {
+  input: SendPrivateChatMessageInput;
+};
+
+
+export type SendPrivateChatMessageMutation = (
+  { __typename?: 'Mutation' }
+  & { sendPrivateChatMessage: (
+    { __typename?: 'PrivateChatMessage' }
+    & Pick<PrivateChatMessage, 'id' | 'authorId' | 'content' | 'creationDate'>
+  ) }
+);
+
+export type UpdateStatusMutationVariables = {
+  status: UserChatStatus;
+};
+
+
+export type UpdateStatusMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'updateStatus'>
+);
+
+export type FriendStatusChangeSubscriptionVariables = {};
+
+
+export type FriendStatusChangeSubscription = (
+  { __typename?: 'Subscription' }
+  & { friendStatusChange: (
+    { __typename?: 'ChatUsersPayload' }
+    & Pick<ChatUsersPayload, 'status'>
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    ) }
+  ) }
+);
+
+export type NewPrivateChatMessageSubscriptionVariables = {};
+
+
+export type NewPrivateChatMessageSubscription = (
+  { __typename?: 'Subscription' }
+  & { newPrivateChatMessage: (
+    { __typename?: 'PrivateChatMessage' }
+    & Pick<PrivateChatMessage, 'id' | 'authorId' | 'content' | 'creationDate'>
+  ) }
+);
+
+export type GetCurrentUserQueryVariables = {};
+
+
+export type GetCurrentUserQuery = (
+  { __typename?: 'Query' }
+  & { currentUser?: Maybe<(
+    { __typename?: 'CurrentUser' }
+    & Pick<CurrentUser, 'id' | 'username' | 'avatar' | 'friendRequestsCount' | 'notificationsCount'>
+  )> }
+);
+
+export type CurrentUserFriendsQueryVariables = {};
+
+
+export type CurrentUserFriendsQuery = (
+  { __typename?: 'Query' }
+  & { currentUser?: Maybe<(
+    { __typename?: 'CurrentUser' }
+    & Pick<CurrentUser, 'id'>
+    & { friends: Array<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    )> }
+  )> }
+);
+
+export type CurrentUserFriendRequestsQueryVariables = {};
+
+
+export type CurrentUserFriendRequestsQuery = (
+  { __typename?: 'Query' }
+  & { currentUser?: Maybe<(
+    { __typename?: 'CurrentUser' }
+    & Pick<CurrentUser, 'id'>
+    & { friendRequests: Array<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    )> }
+  )> }
+);
+
+export type GetCurrentUserInfoQueryVariables = {};
+
+
+export type GetCurrentUserInfoQuery = (
+  { __typename?: 'Query' }
+  & { currentUser?: Maybe<(
+    { __typename?: 'CurrentUser' }
+    & Pick<CurrentUser, 'id' | 'firstName' | 'lastName' | 'title' | 'country' | 'bio' | 'github' | 'twitter' | 'linkedin'>
+  )> }
+);
+
+export type CurrentUserConversationsPreviewQueryVariables = {};
+
+
+export type CurrentUserConversationsPreviewQuery = (
+  { __typename?: 'Query' }
+  & { currentUser?: Maybe<(
+    { __typename?: 'CurrentUser' }
+    & Pick<CurrentUser, 'id'>
+    & { conversationsPreview: Array<(
+      { __typename?: 'PrivateMessagePreview' }
+      & Pick<PrivateMessagePreview, 'userId' | 'username' | 'avatar' | 'content'>
+    )> }
+  )> }
+);
+
+export type CurrentUserConversationQueryVariables = {
+  userId: Scalars['ID'];
+  offset: Scalars['Int'];
+  limit: Scalars['Int'];
+};
+
+
+export type CurrentUserConversationQuery = (
+  { __typename?: 'Query' }
+  & { getConversation: (
+    { __typename?: 'GetConversationPayload' }
+    & Pick<GetConversationPayload, 'hasNextPage'>
+    & { messages: Array<(
+      { __typename?: 'PrivateMessage' }
+      & Pick<PrivateMessage, 'id' | 'content' | 'creationDate' | 'isRead'>
+      & { author?: Maybe<(
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'avatar'>
+      )>, recipient?: Maybe<(
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'avatar'>
+      )> }
+    )> }
+  ) }
+);
+
+export type GetCurrentUserCollabsQueryVariables = {};
+
+
+export type GetCurrentUserCollabsQuery = (
+  { __typename?: 'Query' }
+  & { currentUser?: Maybe<(
+    { __typename?: 'CurrentUser' }
+    & Pick<CurrentUser, 'id'>
+    & { collabs: Array<(
+      { __typename?: 'Collab' }
+      & Pick<Collab, 'id' | 'name'>
+    )> }
+  )> }
+);
+
+export type GetCurrentUserCollabInvitationsQueryVariables = {};
+
+
+export type GetCurrentUserCollabInvitationsQuery = (
+  { __typename?: 'Query' }
+  & { currentUser?: Maybe<(
+    { __typename?: 'CurrentUser' }
+    & Pick<CurrentUser, 'id'>
+    & { collabInvites: Array<(
+      { __typename?: 'Collab' }
+      & Pick<Collab, 'id' | 'name'>
+      & { owner: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'avatar'>
+      ) }
+    )> }
+  )> }
+);
+
+export type GetCurrentUserCollabRequestsQueryVariables = {};
+
+
+export type GetCurrentUserCollabRequestsQuery = (
+  { __typename?: 'Query' }
+  & { currentUser?: Maybe<(
+    { __typename?: 'CurrentUser' }
+    & Pick<CurrentUser, 'id'>
+    & { collabRequests: Array<(
+      { __typename?: 'CollabRequest' }
+      & { collab: (
+        { __typename?: 'Collab' }
+        & Pick<Collab, 'id' | 'name'>
+      ), member: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'avatar'>
+      ) }
+    )> }
+  )> }
+);
+
+export type GetCurrentUserTasksQueryVariables = {};
+
+
+export type GetCurrentUserTasksQuery = (
+  { __typename?: 'Query' }
+  & { currentUser?: Maybe<(
+    { __typename?: 'CurrentUser' }
+    & Pick<CurrentUser, 'id'>
+    & { tasks: Array<(
+      { __typename?: 'Task' }
+      & Pick<Task, 'id' | 'description'>
+      & { assignedBy?: Maybe<(
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username'>
+      )>, collab: (
+        { __typename?: 'Collab' }
+        & Pick<Collab, 'id' | 'name'>
+      ) }
+    )> }
+  )> }
+);
+
+export type UserQueryVariables = {
+  id: Scalars['ID'];
+};
+
+
+export type UserQuery = (
+  { __typename?: 'Query' }
+  & { user?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username' | 'avatar'>
+  )> }
+);
+
+export type CollabPostsQueryVariables = {
+  offset: Scalars['Int'];
+  limit: Scalars['Int'];
+};
+
+
+export type CollabPostsQuery = (
+  { __typename?: 'Query' }
+  & { collabPosts: (
+    { __typename?: 'CollabPostsPayload' }
+    & Pick<CollabPostsPayload, 'hasNextPage'>
+    & { posts: Array<(
+      { __typename?: 'CollabPost' }
+      & Pick<CollabPost, 'id' | 'title' | 'stack' | 'experience' | 'hasStarted' | 'languages' | 'createdAt' | 'isNew' | 'membersCount' | 'reactionsCount' | 'commentsCount'>
+      & { owner: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'avatar'>
+      ) }
+    )> }
+  ) }
+);
+
+export type CollabPostsByStackQueryVariables = {
+  stack: Scalars['String'];
+  offset: Scalars['Int'];
+  limit: Scalars['Int'];
+};
+
+
+export type CollabPostsByStackQuery = (
+  { __typename?: 'Query' }
+  & { collabPostsByStack: (
+    { __typename?: 'CollabPostsSearchResultsPayload' }
+    & Pick<CollabPostsSearchResultsPayload, 'hasNextPage'>
+    & { posts: Array<(
+      { __typename?: 'CollabPost' }
+      & Pick<CollabPost, 'id' | 'title' | 'stack' | 'experience' | 'hasStarted' | 'languages' | 'createdAt' | 'isNew' | 'membersCount' | 'reactionsCount' | 'commentsCount'>
+      & { owner: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'avatar'>
+      ) }
+    )> }
+  ) }
+);
+
+export type AdvancedPostsSearchQueryVariables = {
+  input: AdvancedPostsSearchInput;
+};
+
+
+export type AdvancedPostsSearchQuery = (
+  { __typename?: 'Query' }
+  & { advancedPostsSearch: (
+    { __typename?: 'CollabPostsSearchResultsPayload' }
+    & Pick<CollabPostsSearchResultsPayload, 'hasNextPage'>
+    & { posts: Array<(
+      { __typename?: 'CollabPost' }
+      & Pick<CollabPost, 'id' | 'title' | 'stack' | 'experience' | 'hasStarted' | 'languages' | 'createdAt' | 'isNew' | 'membersCount' | 'reactionsCount' | 'commentsCount'>
+      & { owner: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'avatar'>
+      ) }
+    )> }
+  ) }
+);
+
+export type SearchPostsByTitleQueryVariables = {
+  input: SearchPostsInput;
+};
+
+
+export type SearchPostsByTitleQuery = (
+  { __typename?: 'Query' }
+  & { searchPostsByTitle: (
+    { __typename?: 'CollabPostsSearchResultsPayload' }
+    & Pick<CollabPostsSearchResultsPayload, 'hasNextPage'>
+    & { posts: Array<(
+      { __typename?: 'CollabPost' }
+      & Pick<CollabPost, 'id' | 'title' | 'reactionsCount' | 'commentsCount'>
+      & { owner: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'avatar'>
+      ) }
+    )> }
+  ) }
+);
+
+export type GetCollabPostQueryVariables = {
+  postId: Scalars['ID'];
+};
+
+
+export type GetCollabPostQuery = (
+  { __typename?: 'Query' }
+  & { collabPost?: Maybe<(
+    { __typename?: 'CollabPost' }
+    & Pick<CollabPost, 'id' | 'name' | 'title' | 'description' | 'isNew' | 'collabId' | 'experience' | 'stack' | 'hasStarted' | 'languages' | 'acceptsInvites' | 'isOwner' | 'isMember' | 'invitationPending' | 'requestToJoinPending' | 'createdAt'>
+    & { owner: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    ), members: Array<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    )>, reactions: Array<(
+      { __typename?: 'Reaction' }
+      & Pick<Reaction, 'emojiId' | 'count' | 'isLiked'>
+    )> }
+  )> }
+);
+
+export type CollabPostLanguagesQueryVariables = {};
+
+
+export type CollabPostLanguagesQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'languages'>
+);
+
+export type CollabPostCommentsQueryVariables = {
+  postId: Scalars['ID'];
+};
+
+
+export type CollabPostCommentsQuery = (
+  { __typename?: 'Query' }
+  & { collabPost?: Maybe<(
+    { __typename?: 'CollabPost' }
+    & Pick<CollabPost, 'id'>
+    & { comments: Array<(
+      { __typename?: 'CollabPostComment' }
+      & Pick<CollabPostComment, 'id' | 'content'>
+      & { author: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'avatar'>
+      ), reactions: Array<(
+        { __typename?: 'Reaction' }
+        & Pick<Reaction, 'emojiId' | 'count' | 'isLiked'>
+      )> }
+    )> }
+  )> }
+);
+
+export type CollabQueryVariables = {
+  collabId: Scalars['ID'];
+};
+
+
+export type CollabQuery = (
+  { __typename?: 'Query' }
+  & { collab?: Maybe<(
+    { __typename?: 'Collab' }
+    & Pick<Collab, 'id' | 'name' | 'collabPostId' | 'acceptsInvites' | 'isOwner'>
+    & { owner: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    ), pendingInvites: Array<Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    )>>, pendingRequests: Array<Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    )>> }
+  )> }
+);
+
+export type CollabMembersQueryVariables = {
+  collabId: Scalars['ID'];
+};
+
+
+export type CollabMembersQuery = (
+  { __typename?: 'Query' }
+  & { collab?: Maybe<(
+    { __typename?: 'Collab' }
+    & Pick<Collab, 'id'>
+    & { members: Array<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'bio' | 'avatar'>
+    )> }
+  )> }
+);
+
+export type CollabWallMessagesQueryVariables = {
+  input: CollabWallMessagesInput;
+};
+
+
+export type CollabWallMessagesQuery = (
+  { __typename?: 'Query' }
+  & { collabWallMessages: (
+    { __typename?: 'CollabWallMessagesPayload' }
+    & Pick<CollabWallMessagesPayload, 'hasNextPage'>
+    & { messages: Array<(
+      { __typename?: 'WallMessage' }
+      & Pick<WallMessage, 'id' | 'content' | 'creationDate'>
+      & { author: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'bio' | 'avatar'>
+      ) }
+    )> }
+  ) }
+);
+
+export type CollabDiscussionThreadsQueryVariables = {
+  collabId: Scalars['ID'];
+};
+
+
+export type CollabDiscussionThreadsQuery = (
+  { __typename?: 'Query' }
+  & { collab?: Maybe<(
+    { __typename?: 'Collab' }
+    & Pick<Collab, 'id'>
+    & { discussionThreads: Array<(
+      { __typename?: 'CollabDiscussionThread' }
+      & Pick<CollabDiscussionThread, 'id' | 'title' | 'commentsCount' | 'reactionsCount'>
+      & { author: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'avatar'>
+      ) }
+    )> }
+  )> }
+);
+
+export type CollabThreadQueryVariables = {
+  threadId: Scalars['ID'];
+};
+
+
+export type CollabThreadQuery = (
+  { __typename?: 'Query' }
+  & { thread?: Maybe<(
+    { __typename?: 'CollabDiscussionThread' }
+    & Pick<CollabDiscussionThread, 'id' | 'title' | 'content'>
+    & { author: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    ), reactions: Array<(
+      { __typename?: 'Reaction' }
+      & Pick<Reaction, 'emojiId' | 'count' | 'isLiked'>
+    )> }
+  )> }
+);
+
+export type CollabThreadCommentsQueryVariables = {
+  threadId: Scalars['ID'];
+};
+
+
+export type CollabThreadCommentsQuery = (
+  { __typename?: 'Query' }
+  & { thread?: Maybe<(
+    { __typename?: 'CollabDiscussionThread' }
+    & Pick<CollabDiscussionThread, 'id'>
+    & { comments: Array<(
+      { __typename?: 'CollabDiscussionThreadComment' }
+      & Pick<CollabDiscussionThreadComment, 'id' | 'content'>
+      & { author: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'avatar'>
+      ), reactions: Array<(
+        { __typename?: 'Reaction' }
+        & Pick<Reaction, 'emojiId' | 'count' | 'isLiked'>
+      )> }
+    )> }
+  )> }
+);
+
+export type TaskListQueryVariables = {
+  collabId: Scalars['ID'];
+};
+
+
+export type TaskListQuery = (
+  { __typename?: 'Query' }
+  & { taskList?: Maybe<Array<(
+    { __typename?: 'TaskList' }
+    & Pick<TaskList, 'id' | 'name' | 'order'>
+    & { tasks: Array<(
+      { __typename?: 'Task' }
+      & Pick<Task, 'id' | 'description' | 'order' | 'commentsCount' | 'taskListId'>
+      & { assignee?: Maybe<(
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'avatar'>
+      )>, assignedBy?: Maybe<(
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'avatar'>
+      )>, author: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'avatar'>
+      ) }
+    )> }
+  )>> }
+);
+
+export type TaskCommentsQueryVariables = {
+  taskId: Scalars['ID'];
+};
+
+
+export type TaskCommentsQuery = (
+  { __typename?: 'Query' }
+  & { task?: Maybe<(
+    { __typename?: 'Task' }
+    & Pick<Task, 'id'>
+    & { comments: Array<(
+      { __typename?: 'TaskComment' }
+      & Pick<TaskComment, 'id' | 'content'>
+      & { author?: Maybe<(
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'avatar'>
+      )>, reactions: Array<(
+        { __typename?: 'Reaction' }
+        & Pick<Reaction, 'emojiId' | 'count' | 'isLiked'>
+      )> }
+    )> }
+  )> }
+);
+
+export type NewNotificationSubscriptionVariables = {};
+
+
+export type NewNotificationSubscription = (
+  { __typename?: 'Subscription' }
+  & { newNotification: (
+    { __typename?: 'Notification' }
+    & Pick<Notification, 'id' | 'body' | 'type' | 'isRead' | 'url'>
+  ) }
+);
+
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
 

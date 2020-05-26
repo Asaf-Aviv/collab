@@ -20,8 +20,6 @@ export const Layout = () => {
     window.scrollTo({ top: 0 })
   }, [location])
 
-  console.log('path', pathname)
-
   return (
     <>
       <NavBar />

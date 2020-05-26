@@ -28,12 +28,9 @@ export const SearchPage = () => {
   useEffect(() => {
     if (!search) return
 
-    console.log('search', search)
-
     const searchInputParams = qs.parse(search, {
       ignoreQueryPrefix: true,
     })
-    console.log(searchInputParams)
 
     fetchSearchPosts({
       variables: {

@@ -14,7 +14,6 @@ export const userResolver: Resolvers = {
   Mutation: {
     signUp: async (root, { credentials }, { models }) => {
       const user = await models.User.createUser(credentials)
-      console.log(user)
       const token = await generateToken({ userId: user.id })
       return { user, token }
     },

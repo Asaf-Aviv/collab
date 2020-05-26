@@ -20,7 +20,6 @@ export const CollabPostsByStack = () => {
   if (!data?.collabPostsByStack) return null
 
   const { posts, hasNextPage } = data.collabPostsByStack
-  console.log(data)
 
   return (
     <main>

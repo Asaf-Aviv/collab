@@ -8,14 +8,15 @@ setInterval(
   () =>
     pubsub.publish(NEW_NOTIFICATION, {
       newNotification: {
-        userId: '1',
+        userId: '6d480813-c854-40fc-a3cf-cea0944854ab',
         id: '1',
         body: 'body',
+        type: 'NEW_FRIEND',
         url: 'url',
         isRead: false,
       },
     }),
-  10000,
+  5000,
 )
 
 export const notificationResolver: Resolvers = {
