@@ -5,6 +5,7 @@ export const NEW_NOTIFICATION = gql`
     newNotification {
       id
       body
+      title
       type
       isRead
       url

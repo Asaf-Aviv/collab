@@ -14,6 +14,7 @@ export const notificationTypeDefs = gql`
     id: ID!
     type: String!
     body: String!
+    title: String!
     url: String!
     isRead: Boolean!
   }

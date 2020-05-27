@@ -59,6 +59,9 @@ export class Notification extends Model<Notification> {
   @Column
   userId!: string
 
+  @Column
+  title!: string
+
   @BelongsTo(() => User, { foreignKey: 'userId', onDelete: 'cascade' })
   user!: User
 

@@ -689,6 +689,7 @@ export type Notification = {
   body: Scalars['String'];
   id: Scalars['ID'];
   isRead: Scalars['Boolean'];
+  title: Scalars['String'];
   type: Scalars['String'];
   url: Scalars['String'];
 };
@@ -1959,7 +1960,7 @@ export type NewNotificationSubscription = (
   { __typename?: 'Subscription' }
   & { newNotification: (
     { __typename?: 'Notification' }
-    & Pick<Notification, 'id' | 'body' | 'type' | 'isRead' | 'url'>
+    & Pick<Notification, 'id' | 'body' | 'title' | 'type' | 'isRead' | 'url'>
   ) }
 );
 
@@ -2376,6 +2377,7 @@ export type NotificationResolvers<ContextType = CollabContext, ParentType extend
   body?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   isRead?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   type?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
