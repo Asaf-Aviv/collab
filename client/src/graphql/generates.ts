@@ -677,6 +677,7 @@ export type Notification = {
   body: Scalars['String'];
   id: Scalars['ID'];
   isRead: Scalars['Boolean'];
+  title: Scalars['String'];
   type: Scalars['String'];
   url: Scalars['String'];
 };
@@ -1947,7 +1948,7 @@ export type NewNotificationSubscription = (
   { __typename?: 'Subscription' }
   & { newNotification: (
     { __typename?: 'Notification' }
-    & Pick<Notification, 'id' | 'body' | 'type' | 'isRead' | 'url'>
+    & Pick<Notification, 'id' | 'body' | 'title' | 'type' | 'isRead' | 'url'>
   ) }
 );
 
@@ -4457,6 +4458,7 @@ export const NewNotificationDocument = gql`
   newNotification {
     id
     body
+    title
     type
     isRead
     url
