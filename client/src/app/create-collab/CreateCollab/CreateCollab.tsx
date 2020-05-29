@@ -101,7 +101,7 @@ export const CreateCollab = () => {
           onChange={handleInputChange}
         />
         <InputWithLabel
-          id="name"
+          id="title"
           htmlFor="title"
           name="title"
           label="Post Title"

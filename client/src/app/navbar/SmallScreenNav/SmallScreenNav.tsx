@@ -1,5 +1,5 @@
 import React, { useReducer, useRef, useEffect } from 'react'
-import { useCurrentUser } from '../../../hooks/useCurrentUser'
+import { useCurrentUser } from '../../../providers'
 import MenuRoundedIcon from '@material-ui/icons/MenuRounded'
 import MenuOpenRoundedIcon from '@material-ui/icons/MenuOpenRounded'
 import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined'
@@ -9,11 +9,10 @@ import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined'
 import SearchRoundedIcon from '@material-ui/icons/SearchRounded'
 import PostAddIcon from '@material-ui/icons/PostAdd'
 import FocusLock from 'react-focus-lock'
-import { Flex, Divider, Button, Text } from '@chakra-ui/core'
+import { Flex, Divider, Text } from '@chakra-ui/core'
 import styled from '@emotion/styled'
 import { NavLink } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { useApolloClient } from '@apollo/react-hooks'
 import { Container } from '../../../components/global'
 import { NavUserPanel } from '../NavUserPanel'
 import { SiteTopBar } from '../SiteTopBar'
@@ -24,7 +23,6 @@ import { LogoutButton } from '../../current-user-profile/LogoutButton'
 export const SmallScreenNav = () => {
   const [isOpen, toggleIsOpen] = useReducer(prevState => !prevState, false)
   const currentUser = useCurrentUser()
-  const client = useApolloClient()
   const menuButtonRef = useRef<HTMLButtonElement>(null!)
 
   useKey(['Esc', 'Escape'], toggleIsOpen, isOpen)

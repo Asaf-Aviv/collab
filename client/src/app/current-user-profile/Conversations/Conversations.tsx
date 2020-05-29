@@ -4,7 +4,6 @@ import { Box, Heading, Flex, Text, Avatar, PseudoBox } from '@chakra-ui/core'
 import { useCurrentUserConversationsPreviewQuery } from '../../../graphql/generates'
 import { Loader } from '../../../components/Loader'
 import { DisplayError } from '../../../components/DisplayError'
-import { DisplayDate } from '../../../components/DisplayDate'
 
 export const Conversations = () => {
   const {
@@ -63,27 +62,3 @@ export const Conversations = () => {
     </Box>
   )
 }
-// ;<Box as="main" flex={1} pb={4}>
-//   <section>
-//     {messages?.map(message => (
-//       <Box key={message.id} py={4} px={2} borderBottom="1px solid #e1e1e1">
-//         <Flex align="center" mb={4}>
-//           {message.author ? (
-//             <AvatarWithUsername size="sm" {...message.author} />
-//           ) : (
-//             <Text>Deleted user</Text>
-//           )}
-//           <DisplayDate ml={2} date={message.creationDate} />
-//         </Flex>
-//         <Text>{message.content}</Text>
-//       </Box>
-//     ))}
-//     {loading && <Loader />}
-//     {error && (
-//       <DisplayError
-//         message="Could not fetch conversation"
-//         onClick={() => refetch()}
-//       />
-//     )}
-//   </section>
-// </Box>

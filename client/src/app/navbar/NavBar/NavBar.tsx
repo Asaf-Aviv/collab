@@ -4,16 +4,14 @@ import { Flex, Button } from '@chakra-ui/core'
 import styled from '@emotion/styled'
 import { SmallScreenNav } from '../SmallScreenNav'
 import { NavUserPanel } from '../NavUserPanel'
-import { useGetCurrentUserQuery } from '../../../graphql/generates'
 import { Container } from '../../../components/global'
-import { useWindowWidth } from '../../../providers'
+import { useWindowWidth, useCurrentUser } from '../../../providers'
 import { SearchBar } from '../SearchBar'
 import { SiteTopBar } from '../SiteTopBar'
 
 export const NavBar = () => {
-  const { data } = useGetCurrentUserQuery()
+  const currentUser = useCurrentUser()
   const width = useWindowWidth()
-  const currentUser = data?.currentUser
 
   if (width < 768) {
     return <SmallScreenNav />

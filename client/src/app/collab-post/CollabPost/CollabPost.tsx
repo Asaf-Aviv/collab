@@ -6,7 +6,7 @@ import {
   useRemoveCollabPostReactionMutation,
   useAddCollabPostReactionMutation,
 } from '../../../graphql/generates'
-import { Text, Heading, Stack, Flex, Box, Divider } from '@chakra-ui/core'
+import { Text, Heading, Stack, Flex, Box } from '@chakra-ui/core'
 import { AvatarWithUsername } from '../../../components/AvatarWithUsername/AvatarWithUsername'
 import { Container } from '../../../components/global'
 import { COLLAB_POST_COMMENTS } from '../../../graphql/queries'

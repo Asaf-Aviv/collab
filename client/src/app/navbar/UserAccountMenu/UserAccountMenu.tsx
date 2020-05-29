@@ -9,7 +9,7 @@ import {
   MenuDivider,
   Avatar,
 } from '@chakra-ui/core'
-import { useCurrentUser } from '../../../hooks/useCurrentUser'
+import { useCurrentUser } from '../../../providers'
 import { LogoutButton } from '../../current-user-profile/LogoutButton'
 
 export const UserAccountMenu = () => {
@@ -17,7 +17,7 @@ export const UserAccountMenu = () => {
 
   return (
     <Menu>
-      <MenuButton ml={8}>
+      <MenuButton ml={4}>
         <Avatar
           size="sm"
           src={currentUser.avatar ?? undefined}

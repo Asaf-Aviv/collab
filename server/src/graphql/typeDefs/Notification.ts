@@ -17,5 +17,6 @@ export const notificationTypeDefs = gql`
     title: String!
     url: String!
     isRead: Boolean!
+    creationDate: Date!
   }
 `

@@ -1,20 +1,16 @@
 import React, { useState, FormEvent } from 'react'
-import {
-  useSignUpMutation,
-  useGetCurrentUserLazyQuery,
-} from '../../../graphql/generates'
+import { useSignUpMutation } from '../../../graphql/generates'
 import { Button, Box, Stack, Heading, Link, Text } from '@chakra-ui/core'
 import { Container } from '../../../components/global'
 import { InputWithLabel } from '../../../components/InputWithLabel/InputWithLabel'
 import { Link as RouterLink } from 'react-router-dom'
+import { useAuthActions } from '../../../providers'
 
 export const SignUp = () => {
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [getCurrentUser] = useGetCurrentUserLazyQuery({
-    fetchPolicy: 'network-only',
-  })
+  const { getCurrentUser } = useAuthActions()
   const [signup, { loading }] = useSignUpMutation({
     variables: {
       credentials: { username, email, password },

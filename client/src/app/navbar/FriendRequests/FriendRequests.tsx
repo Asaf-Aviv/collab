@@ -12,7 +12,7 @@ import {
 } from '../../../graphql/generates'
 import { Ballon } from '../../../components/Ballon'
 import { IconButtonWithTooltip } from '../../../components/IconButtonWithTooltip'
-import { useCurrentUser } from '../../../hooks/useCurrentUser'
+import { useCurrentUser } from '../../../providers'
 import { Badge } from '../../../components/Badge'
 
 const removeFriendRequestFromCache = (
@@ -113,6 +113,11 @@ export const FriendRequests = () => {
             />
           )}
         </List>
+        {!loading && !error && friendRequests.length === 0 && (
+          <Text as="h4" fontWeight={500} textAlign="center" p={4}>
+            Everything is clear captain
+          </Text>
+        )}
       </Flex>
     </Ballon>
   )

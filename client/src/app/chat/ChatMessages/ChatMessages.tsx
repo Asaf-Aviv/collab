@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Box } from '@chakra-ui/core'
 import { debounce } from 'lodash-es'
 import styled from '@emotion/styled'
-import { useCurrentUser } from '../../../hooks/useCurrentUser'
+import { useCurrentUser } from '../../../providers'
 import { RootState, messagesActions } from '../reducers'
 import { ChatMessageBubble } from '../ChatMessageBubble'
 

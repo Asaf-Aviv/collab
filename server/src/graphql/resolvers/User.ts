@@ -1,8 +1,24 @@
+import { pubsub } from './../helpers/pubsub'
 import { and } from 'graphql-shield'
 import { Op } from 'sequelize'
 import { generateToken } from '../../utils/index'
 import { isAuthenticated } from '../middleware/isAuthenticated'
 import { Resolvers, ResolversTypes, Maybe } from '../types'
+
+setInterval(
+  () =>
+    pubsub.publish('NEW_NOTIFICATION', {
+      newNotification: {
+        userId: '6d480813-c854-40fc-a3cf-cea0944854ab',
+        id: '1',
+        body: 'body',
+        type: 'NEW_FRIEND',
+        url: 'url',
+        isRead: false,
+      },
+    }),
+  5000,
+)
 
 export const userResolver: Resolvers = {
   Query: {
@@ -31,15 +47,22 @@ export const userResolver: Resolvers = {
     updateUserInfo: (root, { input }, { user }) => user!.update(input!),
     sendFriendRequest: (root, { friendId }, { models, user }) =>
       models.UserFriendRequest.createFriendRequest(friendId, user!.id),
-    acceptFriendRequest: async (root, { friendId }, { models, user }) => {
+    acceptFriendRequest: async (
+      root,
+      { friendId },
+      { models, user, pubsub },
+    ) => {
       const { UserFriend, Notification } = models
       const friendShip = await UserFriend.createFriendship(friendId, user!.id)
       const notification = await Notification.newFriendNotification(
         friendId,
         user!.id,
       )
-      console.log(friendShip)
-      console.log(notification)
+
+      pubsub.publish('NEW_NOTIFICATION', {
+        newNotification: notification.get(),
+      })
+      console.log(notification.get())
 
       return friendShip
     },

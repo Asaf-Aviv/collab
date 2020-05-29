@@ -59,9 +59,6 @@ export class Notification extends Model<Notification> {
   @Column
   userId!: string
 
-  @Column
-  title!: string
-
   @BelongsTo(() => User, { foreignKey: 'userId', onDelete: 'cascade' })
   user!: User
 
@@ -76,10 +73,13 @@ export class Notification extends Model<Notification> {
   creationDate!: Date
 
   static async newFriendNotification(userId: string, accepterId: string) {
-    return this.create({
-      type: 'NEW_FRIEND',
-      friendId: accepterId,
-      userId,
-    })
+    return this.create(
+      {
+        type: 'NEW_FRIEND',
+        friendId: accepterId,
+        userId,
+      },
+      { raw: true },
+    )
   }
 }
