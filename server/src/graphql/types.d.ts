@@ -687,6 +687,7 @@ export type Subscription = {
 export type Notification = {
    __typename?: 'Notification';
   body: Scalars['String'];
+  creationDate: Scalars['Date'];
   id: Scalars['ID'];
   isRead: Scalars['Boolean'];
   title: Scalars['String'];
@@ -1473,6 +1474,21 @@ export type CurrentUserFriendsQuery = (
     & { friends: Array<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
+    )> }
+  )> }
+);
+
+export type CurrentUserNotificationsQueryVariables = {};
+
+
+export type CurrentUserNotificationsQuery = (
+  { __typename?: 'Query' }
+  & { currentUser?: Maybe<(
+    { __typename?: 'CurrentUser' }
+    & Pick<CurrentUser, 'id'>
+    & { notifications: Array<(
+      { __typename?: 'Notification' }
+      & Pick<Notification, 'id' | 'type' | 'body' | 'title' | 'url' | 'isRead' | 'creationDate'>
     )> }
   )> }
 );
@@ -2375,6 +2391,7 @@ export type SubscriptionResolvers<ContextType = CollabContext, ParentType extend
 
 export type NotificationResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Notification'] = ResolversParentTypes['Notification']> = ResolversObject<{
   body?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  creationDate?: Resolver<ResolversTypes['Date'], ParentType, ContextType>,
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   isRead?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,

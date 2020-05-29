@@ -1,11 +1,10 @@
-import { PubSub, withFilter } from 'apollo-server-express'
+import { pubsub } from '../helpers/pubsub'
+import { withFilter } from 'apollo-server-express'
 import { v1 as uuid } from 'uuid'
 import { Resolvers, UserChatStatus } from '../types.d'
 import { isNotNull, withCancel } from '../../helpers/helpers'
 import { REDIS_CHAT_USERS } from '../../redis/redis'
 import _ from 'lodash'
-
-const pubsub = new PubSub()
 
 const NEW_PRIVATE_CHAT_MESSAGE = 'NEW_PRIVATE_CHAT_MESSAGE'
 const FRIEND_STATUS_CHANGE = 'FRIEND_STATUS_CHANGE'

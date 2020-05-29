@@ -13,7 +13,7 @@ type Props = {
   children: React.ReactNode
 }
 
-export const TokenValidatonProvider = ({ children }: Props) => {
+export const TokenValidationProvider = ({ children }: Props) => {
   const [hasBeenValidated, setHasBeenValidated] = useState(false)
 
   const tokenValidationValue = useMemo(

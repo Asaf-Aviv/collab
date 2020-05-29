@@ -675,6 +675,7 @@ export type Subscription = {
 export type Notification = {
    __typename?: 'Notification';
   body: Scalars['String'];
+  creationDate: Scalars['Date'];
   id: Scalars['ID'];
   isRead: Scalars['Boolean'];
   title: Scalars['String'];
@@ -1461,6 +1462,21 @@ export type CurrentUserFriendsQuery = (
     & { friends: Array<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
+    )> }
+  )> }
+);
+
+export type CurrentUserNotificationsQueryVariables = {};
+
+
+export type CurrentUserNotificationsQuery = (
+  { __typename?: 'Query' }
+  & { currentUser?: Maybe<(
+    { __typename?: 'CurrentUser' }
+    & Pick<CurrentUser, 'id'>
+    & { notifications: Array<(
+      { __typename?: 'Notification' }
+      & Pick<Notification, 'id' | 'type' | 'body' | 'title' | 'url' | 'isRead' | 'creationDate'>
     )> }
   )> }
 );
@@ -3373,6 +3389,47 @@ export function useCurrentUserFriendsLazyQuery(baseOptions?: ApolloReactHooks.La
 export type CurrentUserFriendsQueryHookResult = ReturnType<typeof useCurrentUserFriendsQuery>;
 export type CurrentUserFriendsLazyQueryHookResult = ReturnType<typeof useCurrentUserFriendsLazyQuery>;
 export type CurrentUserFriendsQueryResult = ApolloReactCommon.QueryResult<CurrentUserFriendsQuery, CurrentUserFriendsQueryVariables>;
+export const CurrentUserNotificationsDocument = gql`
+    query CurrentUserNotifications {
+  currentUser {
+    id
+    notifications {
+      id
+      type
+      body
+      title
+      url
+      isRead
+      creationDate
+    }
+  }
+}
+    `;
+
+/**
+ * __useCurrentUserNotificationsQuery__
+ *
+ * To run a query within a React component, call `useCurrentUserNotificationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCurrentUserNotificationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCurrentUserNotificationsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCurrentUserNotificationsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CurrentUserNotificationsQuery, CurrentUserNotificationsQueryVariables>) {
+        return ApolloReactHooks.useQuery<CurrentUserNotificationsQuery, CurrentUserNotificationsQueryVariables>(CurrentUserNotificationsDocument, baseOptions);
+      }
+export function useCurrentUserNotificationsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CurrentUserNotificationsQuery, CurrentUserNotificationsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<CurrentUserNotificationsQuery, CurrentUserNotificationsQueryVariables>(CurrentUserNotificationsDocument, baseOptions);
+        }
+export type CurrentUserNotificationsQueryHookResult = ReturnType<typeof useCurrentUserNotificationsQuery>;
+export type CurrentUserNotificationsLazyQueryHookResult = ReturnType<typeof useCurrentUserNotificationsLazyQuery>;
+export type CurrentUserNotificationsQueryResult = ApolloReactCommon.QueryResult<CurrentUserNotificationsQuery, CurrentUserNotificationsQueryVariables>;
 export const CurrentUserFriendRequestsDocument = gql`
     query CurrentUserFriendRequests {
   currentUser {

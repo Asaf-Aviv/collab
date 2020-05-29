@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { useNewNotificationSubscription } from '../../../graphql/generates'
-import { useCurrentUser } from '../../../hooks/useCurrentUser'
+import { useCurrentUser } from '../../../providers'
 import { useToast, Flex, Text, Box } from '@chakra-ui/core'
 import { CloseButton } from '../../../components/CloseButton'
 
@@ -95,7 +95,6 @@ const ToastNotification = ({
         </Text>
         <CloseButton
           size="xs"
-          bg="transparent"
           color="#7f7f7f"
           onClick={dismiss}
           mt="-10px"
@@ -109,30 +108,23 @@ const ToastNotification = ({
   )
 }
 
-const UseUserNotifications = ({ children }: Props) => {
+export const CurrentUserNotifications = ({ children }: Props) => {
+  const currentUser = useCurrentUser()
   const notify = useToastNotification()
 
   useNewNotificationSubscription({
+    skip: !currentUser,
     onSubscriptionData({ subscriptionData }) {
+      console.log(subscriptionData)
       const { newNotification } = subscriptionData.data || {}
 
       if (!newNotification) return
 
-      // notify('success', newNotification)
+      notify('success', newNotification)
 
       console.log(subscriptionData.data?.newNotification)
     },
   })
 
   return <>{children}</>
-}
-
-export const CurrentUserNotifications = ({ children }: Props) => {
-  const currentUser = useCurrentUser()
-
-  return currentUser ? (
-    <UseUserNotifications>{children}</UseUserNotifications>
-  ) : (
-    <>{children}</>
-  )
 }

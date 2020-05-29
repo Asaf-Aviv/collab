@@ -1,23 +1,8 @@
+import { withFilter } from 'apollo-server-express'
 import { Resolvers } from '../types'
-import { PubSub, withFilter } from 'apollo-server-express'
+import { pubsub } from '../helpers/pubsub'
 
 const NEW_NOTIFICATION = 'NEW_NOTIFICATION'
-const pubsub = new PubSub()
-
-setInterval(
-  () =>
-    pubsub.publish(NEW_NOTIFICATION, {
-      newNotification: {
-        userId: '6d480813-c854-40fc-a3cf-cea0944854ab',
-        id: '1',
-        body: 'body',
-        type: 'NEW_FRIEND',
-        url: 'url',
-        isRead: false,
-      },
-    }),
-  5000,
-)
 
 export const notificationResolver: Resolvers = {
   Mutation: {},
@@ -26,7 +11,11 @@ export const notificationResolver: Resolvers = {
       subscribe: (root, args, { user }) =>
         withFilter(
           () => pubsub.asyncIterator(NEW_NOTIFICATION),
-          ({ newNotification: { userId } }) => userId === user!.id,
+          ({ newNotification: { userId } }) => {
+            console.log('checking', userId, user?.id)
+            console.log(userId === user!.id)
+            return true
+          },
         )(),
     },
   },
@@ -34,6 +23,7 @@ export const notificationResolver: Resolvers = {
     notifications: async ({ id }, args, { models, loaders }) => {
       const notifications = await models.Notification.findAll({
         where: { userId: id },
+        raw: true,
       })
 
       const formatted = await Promise.all(
@@ -63,6 +53,16 @@ export const notificationResolver: Resolvers = {
       )
 
       return formatted
+    },
+  },
+  Notification: {
+    title: ({ type }) => {
+      switch (type) {
+        case 'NEW_FRIEND':
+          return 'New Friend'
+        default:
+          throw new Error(`Unknown Notification type ${type}`)
+      }
     },
   },
 }

@@ -4,11 +4,13 @@ import { Heading, Flex, Box, Text } from '@chakra-ui/core'
 import { CommentsAndReactionsCount } from '../../../components/CommentsAndReactionsCount'
 import { Paper } from '../../../components/global'
 import { useCollabDiscussionThreadsQuery } from '../../../graphql/generates'
+import { Loader } from '../../../components/Loader'
+import { DisplayError } from '../../../components/DisplayError'
 
 export const CollabDiscussions = () => {
   const { collabId } = useParams<{ collabId: string }>()
   const match = useRouteMatch()
-  const { data, loading, error, variables } = useCollabDiscussionThreadsQuery({
+  const { data, loading, error, refetch } = useCollabDiscussionThreadsQuery({
     variables: { collabId },
   })
 
@@ -44,6 +46,13 @@ export const CollabDiscussions = () => {
               </Box>
             </Paper>
           ),
+        )}
+        {loading && <Loader />}
+        {error && (
+          <DisplayError
+            message="Could not fetch discussions"
+            onClick={() => refetch()}
+          />
         )}
       </section>
     </Box>

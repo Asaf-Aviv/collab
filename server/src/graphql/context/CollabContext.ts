@@ -4,15 +4,17 @@ import { models, Models } from '../../db/models/index'
 import { decodeToken } from '../../utils/index'
 import { createLoaders, Loaders } from '../loaders/loaders'
 import { User } from '../../db/models/User'
+import { pubsub } from '../helpers/pubsub'
 
 export type CollabContext = {
   loaders: Loaders
   models: Models
   user: User | null
   redis: typeof redis
+  pubsub: typeof pubsub
 }
 
-export type CollabContextWithRedix = CollabContext & {
+export type CollabContextWithRedis = CollabContext & {
   redis: typeof redis
 }
 
@@ -24,6 +26,7 @@ export const createContext = () => ({
   models,
   redis,
   loaders: createLoaders(),
+  pubsub,
 })
 
 export const apolloContext: ApolloServerExpressConfig['context'] = async ({

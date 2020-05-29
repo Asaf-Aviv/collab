@@ -26,6 +26,23 @@ export const GET_CURRENT_USER_FRIENDS = gql`
   }
 `
 
+export const GET_CURRENT_USER_NOTIFICATIONS = gql`
+  query CurrentUserNotifications {
+    currentUser {
+      id
+      notifications {
+        id
+        type
+        body
+        title
+        url
+        isRead
+        creationDate
+      }
+    }
+  }
+`
+
 export const GET_CURRENT_FRIEND_REQUESTS = gql`
   query CurrentUserFriendRequests {
     currentUser {

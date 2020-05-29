@@ -1,15 +1,17 @@
-import React from 'react'
-import { useParams, Link } from 'react-router-dom'
+import React, { useRef } from 'react'
+import { useParams } from 'react-router-dom'
+import produce from 'immer'
 import { Box, Text, Heading, Flex, PseudoBox } from '@chakra-ui/core'
 import { useCurrentUserConversationQuery } from '../../../graphql/generates'
-import styled from '@emotion/styled'
 import { Loader } from '../../../components/Loader'
 import { DisplayError } from '../../../components/DisplayError'
 import { AvatarWithUsername } from '../../../components/AvatarWithUsername'
 import { DisplayDate } from '../../../components/DisplayDate'
+import { useOnVisibilty } from '../../../hooks/useOnVisibilty'
 
 export const Conversation = () => {
   const { userId } = useParams<{ userId: string }>()
+  const loadNextPageTriggerRef = useRef<HTMLSpanElement | null>(null)
   const {
     data,
     loading,
@@ -21,6 +23,36 @@ export const Conversation = () => {
   })
 
   const { messages, hasNextPage } = data?.getConversation || {}
+
+  const handleNextPageLoad = () => {
+    if (!messages) return
+
+    fetchMore({
+      variables: {
+        userId,
+        offset: messages.length,
+        limit: 10,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev
+
+        const { hasNextPage, messages } = fetchMoreResult.getConversation
+
+        const getConversation = produce(prev.getConversation, draft => {
+          draft.hasNextPage = hasNextPage
+          draft.messages.unshift(...messages)
+        })
+
+        return { getConversation }
+      },
+    }).catch(() => {})
+  }
+
+  useOnVisibilty(
+    loadNextPageTriggerRef,
+    handleNextPageLoad,
+    hasNextPage && !loading,
+  )
 
   return (
     <Box as="main" flex={1} pb={4}>
@@ -65,7 +97,3 @@ export const Conversation = () => {
     </Box>
   )
 }
-
-const StyledLink = styled(Link)`
-  font-weight: 600;
-`

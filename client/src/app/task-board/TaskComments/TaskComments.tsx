@@ -10,6 +10,7 @@ import { Flex, Box, Textarea, Button, Text } from '@chakra-ui/core'
 import { ReactionPanel } from '../../../components/ReactionPanel/ReactionPanel'
 import { Loader } from '../../../components/Loader'
 import { AvatarWithUsername } from '../../../components/AvatarWithUsername'
+import { DisplayError } from '../../../components/DisplayError'
 
 export const TaskComments = ({ taskId }: { taskId: string }) => {
   const { collabId } = useParams<{ collabId: string }>()
@@ -72,6 +73,12 @@ export const TaskComments = ({ taskId }: { taskId: string }) => {
   return (
     <div>
       {loading && <Loader />}
+      {error && (
+        <DisplayError
+          message="Could not fetch friends"
+          onClick={() => refetch()}
+        />
+      )}
       {comments?.map(comment => (
         <Box
           key={comment.id}

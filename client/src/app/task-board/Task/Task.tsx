@@ -4,13 +4,11 @@ import {
   Heading,
   Box,
   Text,
-  IconButton,
   Popover,
   PopoverTrigger,
   PopoverContent,
   PopoverCloseButton,
   PopoverBody,
-  Button,
   Flex,
   PopoverHeader,
 } from '@chakra-ui/core'

@@ -13,7 +13,7 @@ import {
   MenuItemProps,
   Box,
 } from '@chakra-ui/core'
-import { useCurrentUser } from '../../../hooks/useCurrentUser'
+import { useCurrentUser } from '../../../providers'
 import { ChatUserListItem } from '../ChatUserListItem'
 import { useIsFirstRender } from '../../../hooks/useIsFirstRender'
 
