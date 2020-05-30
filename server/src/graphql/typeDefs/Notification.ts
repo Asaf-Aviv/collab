@@ -6,8 +6,10 @@ export const notificationTypeDefs = gql`
   }
 
   type Mutation {
-    markAsRead(notificationId: ID!): Notification!
-    # markAllAsRead: Boolean!
+    markNotificationAsRead(notificationId: ID!): Notification!
+    markAllNotificationsAsRead: Boolean!
+    deleteNotification(notificationId: ID!): ID!
+    deleteAllNotifications: Boolean!
   }
 
   type Notification {

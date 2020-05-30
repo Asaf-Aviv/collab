@@ -13,6 +13,7 @@ import {
 } from '../../graphql/generates'
 import { wsClient } from '../../apolloClient'
 import { useApolloClient } from '@apollo/react-hooks'
+import { useTokenValidation } from '..'
 
 type CurrentUserManagerContext = {
   user: GetCurrentUserQuery['currentUser']
@@ -32,11 +33,17 @@ type Props = {
 
 export const CurrentUserManager = ({ children }: Props) => {
   const client = useApolloClient()
+  const { setHasBeenValidated } = useTokenValidation()
   const calledOnMount = useRef(false)
   const [getCurrentUser, { data }] = useGetCurrentUserLazyQuery({
     fetchPolicy: 'network-only',
     onCompleted() {
-      if (calledOnMount.current) return
+      // skip reinitializing when validating local storage token
+      if (calledOnMount.current) {
+        calledOnMount.current = false
+        setHasBeenValidated(true)
+        return
+      }
 
       wsClient.close()
       //@ts-ignore
@@ -63,8 +70,10 @@ export const CurrentUserManager = ({ children }: Props) => {
     if (localStorage.getItem('token')) {
       getCurrentUser()
       calledOnMount.current = true
+      return
     }
-  }, [getCurrentUser])
+    setHasBeenValidated(true)
+  }, [getCurrentUser, setHasBeenValidated])
 
   return (
     <CurrentUserManagerContext.Provider

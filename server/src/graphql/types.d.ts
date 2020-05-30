@@ -133,11 +133,13 @@ export type Mutation = {
   /** returns the id of the declined friend */
   declineFriendRequest: Scalars['ID'];
   declineMemberRequest: Scalars['Boolean'];
+  deleteAllNotifications: Scalars['Boolean'];
   deleteCollab: Scalars['Boolean'];
   deleteCollabDiscussionThread: Scalars['Boolean'];
   deleteCollabDiscussionThreadComment: Scalars['Boolean'];
   deleteCollabPost: Scalars['Boolean'];
   deleteComment: Scalars['Boolean'];
+  deleteNotification: Scalars['ID'];
   deletePrivateMessage: Scalars['ID'];
   deleteTask: Scalars['Boolean'];
   deleteTaskComment: Scalars['Boolean'];
@@ -146,7 +148,8 @@ export type Mutation = {
   deleteWallMessage: Scalars['ID'];
   inviteMember: User;
   login: AuthPayload;
-  markAsRead: Notification;
+  markAllNotificationsAsRead: Scalars['Boolean'];
+  markNotificationAsRead: Notification;
   markPrivateMessageAsRead: Scalars['Boolean'];
   moveTaskToList: Task;
   removeCollabDiscussionThreadCommentReaction: Scalars['Boolean'];
@@ -306,6 +309,11 @@ export type MutationDeleteCommentArgs = {
 };
 
 
+export type MutationDeleteNotificationArgs = {
+  notificationId: Scalars['ID'];
+};
+
+
 export type MutationDeletePrivateMessageArgs = {
   messageId: Scalars['ID'];
 };
@@ -342,7 +350,7 @@ export type MutationLoginArgs = {
 };
 
 
-export type MutationMarkAsReadArgs = {
+export type MutationMarkNotificationAsReadArgs = {
   notificationId: Scalars['ID'];
 };
 
@@ -961,6 +969,45 @@ export type UpdateUserInfoMutation = (
     { __typename?: 'CurrentUser' }
     & Pick<CurrentUser, 'id' | 'firstName' | 'lastName' | 'title' | 'country' | 'bio'>
   ) }
+);
+
+export type MarkNotificationAsReadMutationVariables = {
+  notificationId: Scalars['ID'];
+};
+
+
+export type MarkNotificationAsReadMutation = (
+  { __typename?: 'Mutation' }
+  & { markNotificationAsRead: (
+    { __typename?: 'Notification' }
+    & Pick<Notification, 'id' | 'isRead'>
+  ) }
+);
+
+export type MarkAllNotificationsAsReadMutationVariables = {};
+
+
+export type MarkAllNotificationsAsReadMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'markAllNotificationsAsRead'>
+);
+
+export type DeleteNotificationMutationVariables = {
+  notificationId: Scalars['ID'];
+};
+
+
+export type DeleteNotificationMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteNotification'>
+);
+
+export type DeleteAllNotificationsMutationVariables = {};
+
+
+export type DeleteAllNotificationsMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteAllNotifications'>
 );
 
 export type AcceptFriendRequestMutationVariables = {
@@ -2233,11 +2280,13 @@ export type MutationResolvers<ContextType = CollabContext, ParentType extends Re
   declineCollabInvitation?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeclineCollabInvitationArgs, 'collabId'>>,
   declineFriendRequest?: Resolver<ResolversTypes['ID'], ParentType, ContextType, RequireFields<MutationDeclineFriendRequestArgs, 'senderId'>>,
   declineMemberRequest?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeclineMemberRequestArgs, 'collabId' | 'memberId'>>,
+  deleteAllNotifications?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   deleteCollab?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeleteCollabArgs, 'collabId'>>,
   deleteCollabDiscussionThread?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteCollabDiscussionThreadArgs, 'threadId'>>,
   deleteCollabDiscussionThreadComment?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteCollabDiscussionThreadCommentArgs, 'commentId'>>,
   deleteCollabPost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteCollabPostArgs, 'postId'>>,
   deleteComment?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeleteCommentArgs, 'commentId'>>,
+  deleteNotification?: Resolver<ResolversTypes['ID'], ParentType, ContextType, RequireFields<MutationDeleteNotificationArgs, 'notificationId'>>,
   deletePrivateMessage?: Resolver<ResolversTypes['ID'], ParentType, ContextType, RequireFields<MutationDeletePrivateMessageArgs, 'messageId'>>,
   deleteTask?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeleteTaskArgs, 'taskId'>>,
   deleteTaskComment?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeleteTaskCommentArgs, 'commentId'>>,
@@ -2246,7 +2295,8 @@ export type MutationResolvers<ContextType = CollabContext, ParentType extends Re
   deleteWallMessage?: Resolver<ResolversTypes['ID'], ParentType, ContextType, RequireFields<MutationDeleteWallMessageArgs, 'messageId'>>,
   inviteMember?: Resolver<ResolversTypes['User'], ParentType, CollabContextWithUser, RequireFields<MutationInviteMemberArgs, 'collabId' | 'memberId'>>,
   login?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'credentials'>>,
-  markAsRead?: Resolver<ResolversTypes['Notification'], ParentType, ContextType, RequireFields<MutationMarkAsReadArgs, 'notificationId'>>,
+  markAllNotificationsAsRead?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  markNotificationAsRead?: Resolver<ResolversTypes['Notification'], ParentType, ContextType, RequireFields<MutationMarkNotificationAsReadArgs, 'notificationId'>>,
   markPrivateMessageAsRead?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMarkPrivateMessageAsReadArgs, 'messageId'>>,
   moveTaskToList?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationMoveTaskToListArgs, 'input'>>,
   removeCollabDiscussionThreadCommentReaction?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemoveCollabDiscussionThreadCommentReactionArgs, 'reaction'>>,

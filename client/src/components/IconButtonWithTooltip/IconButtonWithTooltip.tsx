@@ -1,13 +1,18 @@
 import React from 'react'
 import { Tooltip, IconButton, IconButtonProps } from '@chakra-ui/core'
 
-type Props = {
+type Props = Omit<IconButtonProps, 'aria-label'> & {
   ariaLabel: string
-  onClick?: () => void
   icon: IconButtonProps['icon']
 }
 
-export const IconButtonWithTooltip = ({ ariaLabel, onClick, icon }: Props) => {
+export const IconButtonWithTooltip = ({
+  ariaLabel,
+  onClick,
+  icon,
+  size = 'sm',
+  ...props
+}: Props) => {
   return (
     <Tooltip
       aria-label={ariaLabel}
@@ -21,11 +26,12 @@ export const IconButtonWithTooltip = ({ ariaLabel, onClick, icon }: Props) => {
       zIndex={100}
     >
       <IconButton
-        size="sm"
+        size={size}
         bg="transparent"
         aria-label={ariaLabel}
         onClick={onClick}
         icon={icon}
+        {...props}
       />
     </Tooltip>
   )

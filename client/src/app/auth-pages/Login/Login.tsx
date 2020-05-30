@@ -61,7 +61,6 @@ export const Login = () => {
             style={{ marginBottom: '1rem' }}
             py={2}
             mt={-4}
-            // mb="1rem !important"
             color="#7a5eb5"
             _hover={{ color: '#483277', textDecoration: 'underline' }}
             to="/forgot"
@@ -72,7 +71,7 @@ export const Login = () => {
             Login
           </Button>
           <Text>
-            Don't have an account?
+            Don&apos;t have an account?
             <Link
               //@ts-ignore
               as={RouterLink}

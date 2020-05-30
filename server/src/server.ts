@@ -1,22 +1,10 @@
-import express from 'express'
 /* eslint-disable */
 require('dotenv').config()
 import { createServer } from 'http'
-import { Sequelize, Op } from 'sequelize'
-import { User } from './db/models/User'
 import sequelize from './db/sequelize'
 import { app, apolloServer } from './app'
-import { Collab } from './db/models/Collab'
-import { CollabMember } from './db/models/CollabMember'
-import { createLoaders } from './graphql/loaders/loaders'
-import { Stack } from './db/models/Stack'
-import { CollabPostReaction } from './db/models/CollabPostReaction'
-import { CollabPost } from './db/models/CollabPost'
-import { UserFriend } from './db/models/UserFriend'
-import { PrivateMessage } from './db/models/PrivateMessage'
-import { Language } from './db/models/Language'
-import { CollabPostLanguage } from './db/models/CollabPostLanguage'
-import { subDays } from 'date-fns'
+import { models } from './db/models'
+import { pubsub } from './graphql/helpers/pubsub'
 
 const PORT = 5555
 
