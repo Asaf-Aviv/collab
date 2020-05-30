@@ -22,6 +22,7 @@ type Props = {
   rightHeaderSlot?: JSX.Element
   leftHeaderSlot?: JSX.Element
   isLoading?: boolean
+  isOpen?: boolean
 }
 
 export const Ballon = ({

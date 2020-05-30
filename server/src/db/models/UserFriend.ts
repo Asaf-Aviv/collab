@@ -6,13 +6,22 @@ import {
   PrimaryKey,
   ForeignKey,
   BelongsTo,
+  Default,
+  IsUUID,
 } from 'sequelize-typescript'
+import { v4 as uuid } from 'uuid'
 import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 import { User } from './User'
 import { UserFriendRequest } from './UserFriendRequest'
 
 @Table({ tableName: 'user_friendships', timestamps: true })
 export class UserFriend extends Model<UserFriend> {
+  @IsUUID(4)
+  @PrimaryKey
+  @Default(uuid)
+  @Column
+  id!: string
+
   @PrimaryKey
   @ForeignKey(() => User)
   @Column

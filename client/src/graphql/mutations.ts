@@ -31,6 +31,33 @@ export const UPDATE_CURRENT_USER_INFO = gql`
   }
 `
 
+export const MARK_NOTIFICATION_AS_READ = gql`
+  mutation MarkNotificationAsRead($notificationId: ID!) {
+    markNotificationAsRead(notificationId: $notificationId) {
+      id
+      isRead
+    }
+  }
+`
+
+export const MARK_ALL_NOTIFICATIONS_AS_READ = gql`
+  mutation MarkAllNotificationsAsRead {
+    markAllNotificationsAsRead
+  }
+`
+
+export const DELETE_NOTIFICATION = gql`
+  mutation DeleteNotification($notificationId: ID!) {
+    deleteNotification(notificationId: $notificationId)
+  }
+`
+
+export const DELETE_ALL_NOTIFICATIONS = gql`
+  mutation DeleteAllNotifications {
+    deleteAllNotifications
+  }
+`
+
 export const ACCEPT_FRIEND_REQUEST = gql`
   mutation AcceptFriendRequest($friendId: ID!) {
     acceptFriendRequest(friendId: $friendId) {
