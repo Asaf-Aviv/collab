@@ -29,9 +29,7 @@ export const Information = () => {
   } = useGetCurrentUserInfoQuery({
     notifyOnNetworkStatusChange: true,
   })
-  const [infoInput, setInfoInput] = useState<UpdateUserInfoInput>(
-    {} as UpdateUserInfoInput,
-  )
+  const [infoInput, setInfoInput] = useState<UpdateUserInfoInput>(null as any)
 
   const [
     updateInfo,

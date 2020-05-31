@@ -5,6 +5,7 @@ export const userTypeDefs = gql`
     users: [User!]!
     user(id: ID!): User
     currentUser: CurrentUser
+    searchFriends(input: SearchFriendsInput!): [User!]!
   }
 
   type Mutation {
@@ -60,6 +61,10 @@ export const userTypeDefs = gql`
     avatar: String
     bio: String
     collabs: [Collab!]!
+  }
+
+  input SearchFriendsInput {
+    username: String!
   }
 
   input UpdateUserInfoInput {

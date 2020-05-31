@@ -55,8 +55,10 @@ export const Task = ({
           <Popover placement="right-start">
             <PopoverTrigger>
               <Box p={2} fontSize="0.875rem">
-                <Flex position="relative">
-                  <Text pr={10}>Opened by {task.author.username}</Text>
+                <Flex position="relative" mb={4}>
+                  <Text pr={10} fontWeight={500}>
+                    Opened by {task.author.username}
+                  </Text>
                   <DotsMenu
                     ariaLabel="Open Task Options"
                     position="absolute"

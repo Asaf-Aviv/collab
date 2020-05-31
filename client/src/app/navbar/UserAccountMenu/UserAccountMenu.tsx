@@ -17,7 +17,7 @@ export const UserAccountMenu = () => {
 
   return (
     <Menu>
-      <MenuButton ml={4}>
+      <MenuButton ml={8}>
         <Avatar
           size="sm"
           src={currentUser.avatar ?? undefined}

@@ -31,7 +31,7 @@ export type Variant = keyof ToastProps
 
 export type ToastNotificationProps = {
   title: string
-  body: string
+  message: string
   variant: Variant
   dismiss: () => void
   url?: string
@@ -44,7 +44,7 @@ export const ToastNotification = ({
   variant,
   title,
   dismiss,
-  body,
+  message,
 }: ToastNotificationProps) => {
   const { borderColor, bg, titleColor } = getToastProps(variant)
 
@@ -54,8 +54,9 @@ export const ToastNotification = ({
       mb={4}
       borderLeft="5px solid"
       borderColor={borderColor}
+      minWidth={300}
       bg={bg}
-      maxWidth={400}
+      maxWidth={500}
       fontSize="0.85rem"
       borderRadius={3}
       overflow="hidden"
@@ -74,7 +75,7 @@ export const ToastNotification = ({
         />
       </Flex>
       <Text textAlign="left" pr={4}>
-        {body}
+        {message}
       </Text>
     </Box>
   )

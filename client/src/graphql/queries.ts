@@ -33,7 +33,7 @@ export const GET_CURRENT_USER_NOTIFICATIONS = gql`
       notifications {
         id
         type
-        body
+        message
         title
         url
         isRead
@@ -52,6 +52,16 @@ export const GET_CURRENT_FRIEND_REQUESTS = gql`
         username
         avatar
       }
+    }
+  }
+`
+
+export const SEARCH_FRIENDS = gql`
+  query SearchFriends($input: SearchFriendsInput!) {
+    searchFriends(input: $input) {
+      id
+      username
+      avatar
     }
   }
 `

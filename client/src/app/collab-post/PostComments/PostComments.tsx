@@ -8,6 +8,7 @@ import {
 import { Comment } from '../../../components/Comment'
 import { ReactionPanel } from '../../../components/ReactionPanel/ReactionPanel'
 import { COLLAB_POST_COMMENTS } from '../../../graphql/queries'
+import { Box } from '@chakra-ui/core'
 
 export const PostComments = () => {
   const { postId } = useParams<{ postId: string }>()
@@ -50,7 +51,7 @@ export const PostComments = () => {
   const { comments } = data.collabPost
 
   return (
-    <div>
+    <Box pb={8}>
       {comments.map(comment => (
         <Comment key={comment.id} {...comment}>
           <ReactionPanel
@@ -60,6 +61,6 @@ export const PostComments = () => {
           />
         </Comment>
       ))}
-    </div>
+    </Box>
   )
 }

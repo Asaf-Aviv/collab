@@ -4,6 +4,23 @@ import { generateToken } from '../../utils/index'
 import { isAuthenticated } from '../middleware/isAuthenticated'
 import { Resolvers, ResolversTypes, Maybe } from '../types'
 import { formatNotification } from '../helpers/formatNotification'
+import { pubsub } from '../helpers/pubsub'
+import { GQLUser } from '../../db/models/User'
+
+// setInterval(() => {
+//   pubsub.publish('NEW_NOTIFICATION', {
+//     newNotification: {
+//       id: '1',
+//       type: 'NEW_FRIEND',
+//       userId: '6d480813-c854-40fc-a3cf-cea0944854ab',
+//       title: 'New Friend',
+//       url: 'h',
+//       body: 'You and Him are now friends!',
+//       isRead: false,
+//       creationDate: '1',
+//     },
+//   })
+// }, 5000)
 
 export const userResolver: Resolvers = {
   Query: {
@@ -11,6 +28,24 @@ export const userResolver: Resolvers = {
     user: (root, { id }, { loaders }) => loaders.userLoader.load(id),
     currentUser: (root, args, { user }) =>
       user as Maybe<ResolversTypes['currentUser']>,
+    searchFriends: async (root, { input }, { user, models }) => {
+      const friends = await models.UserFriend.findAll({
+        where: { userId: user!.id },
+        attributes: ['friend.id', 'friend.avatar', 'friend.username'],
+        include: [
+          {
+            attributes: [],
+            model: models.User,
+            as: 'friend',
+            where: { username: { [Op.like]: `%${input.username}%` } },
+          },
+        ],
+        raw: true,
+        limit: 5,
+      })
+
+      return (friends as unknown) as GQLUser[]
+    },
   },
   Mutation: {
     signUp: async (root, { credentials }, { models }) => {

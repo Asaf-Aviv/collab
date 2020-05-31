@@ -4,11 +4,12 @@ export const NEW_NOTIFICATION = gql`
   subscription NewNotification {
     newNotification {
       id
-      body
+      message
       title
       type
       isRead
       url
+      creationDate
     }
   }
 `

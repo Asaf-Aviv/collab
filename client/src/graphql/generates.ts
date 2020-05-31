@@ -24,6 +24,7 @@ export type Query = {
   currentUser?: Maybe<CurrentUser>;
   getConversation: GetConversationPayload;
   languages: Array<Scalars['String']>;
+  searchFriends: Array<User>;
   searchPostsByTitle: CollabPostsSearchResultsPayload;
   task?: Maybe<Task>;
   taskList?: Maybe<Array<TaskList>>;
@@ -70,6 +71,11 @@ export type QueryGetConversationArgs = {
   limit: Scalars['Int'];
   offset: Scalars['Int'];
   userId: Scalars['ID'];
+};
+
+
+export type QuerySearchFriendsArgs = {
+  input: SearchFriendsInput;
 };
 
 
@@ -682,10 +688,10 @@ export type Subscription = {
 
 export type Notification = {
    __typename?: 'Notification';
-  body: Scalars['String'];
   creationDate: Scalars['Date'];
   id: Scalars['ID'];
   isRead: Scalars['Boolean'];
+  message: Scalars['String'];
   title: Scalars['String'];
   type: Scalars['String'];
   url: Scalars['String'];
@@ -887,6 +893,10 @@ export type User = {
   username: Scalars['String'];
 };
 
+export type SearchFriendsInput = {
+  username: Scalars['String'];
+};
+
 export type UpdateUserInfoInput = {
   bio: Scalars['String'];
   country?: Maybe<Scalars['String']>;
@@ -1009,6 +1019,36 @@ export type AcceptFriendRequestMutation = (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username' | 'avatar'>
   ) }
+);
+
+export type SendPrivateMessageMutationVariables = {
+  input: SendPrivateMessageInput;
+};
+
+
+export type SendPrivateMessageMutation = (
+  { __typename?: 'Mutation' }
+  & { sendPrivateMessage: (
+    { __typename?: 'PrivateMessage' }
+    & Pick<PrivateMessage, 'id' | 'content' | 'creationDate' | 'isRead'>
+    & { author?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    )>, recipient?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    )> }
+  ) }
+);
+
+export type DeletePrivateMessageMutationVariables = {
+  messageId: Scalars['ID'];
+};
+
+
+export type DeletePrivateMessageMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deletePrivateMessage'>
 );
 
 export type DeclineFriendRequestMutationVariables = {
@@ -1523,7 +1563,7 @@ export type CurrentUserNotificationsQuery = (
     & Pick<CurrentUser, 'id'>
     & { notifications: Array<(
       { __typename?: 'Notification' }
-      & Pick<Notification, 'id' | 'type' | 'body' | 'title' | 'url' | 'isRead' | 'creationDate'>
+      & Pick<Notification, 'id' | 'type' | 'message' | 'title' | 'url' | 'isRead' | 'creationDate'>
     )> }
   )> }
 );
@@ -1540,6 +1580,19 @@ export type CurrentUserFriendRequestsQuery = (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
     )> }
+  )> }
+);
+
+export type SearchFriendsQueryVariables = {
+  input: SearchFriendsInput;
+};
+
+
+export type SearchFriendsQuery = (
+  { __typename?: 'Query' }
+  & { searchFriends: Array<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username' | 'avatar'>
   )> }
 );
 
@@ -2011,7 +2064,7 @@ export type NewNotificationSubscription = (
   { __typename?: 'Subscription' }
   & { newNotification: (
     { __typename?: 'Notification' }
-    & Pick<Notification, 'id' | 'body' | 'title' | 'type' | 'isRead' | 'url'>
+    & Pick<Notification, 'id' | 'message' | 'title' | 'type' | 'isRead' | 'url' | 'creationDate'>
   ) }
 );
 
@@ -2272,6 +2325,81 @@ export function useAcceptFriendRequestMutation(baseOptions?: ApolloReactHooks.Mu
 export type AcceptFriendRequestMutationHookResult = ReturnType<typeof useAcceptFriendRequestMutation>;
 export type AcceptFriendRequestMutationResult = ApolloReactCommon.MutationResult<AcceptFriendRequestMutation>;
 export type AcceptFriendRequestMutationOptions = ApolloReactCommon.BaseMutationOptions<AcceptFriendRequestMutation, AcceptFriendRequestMutationVariables>;
+export const SendPrivateMessageDocument = gql`
+    mutation SendPrivateMessage($input: SendPrivateMessageInput!) {
+  sendPrivateMessage(input: $input) {
+    id
+    author {
+      id
+      username
+      avatar
+    }
+    recipient {
+      id
+      username
+      avatar
+    }
+    content
+    creationDate
+    isRead
+  }
+}
+    `;
+export type SendPrivateMessageMutationFn = ApolloReactCommon.MutationFunction<SendPrivateMessageMutation, SendPrivateMessageMutationVariables>;
+
+/**
+ * __useSendPrivateMessageMutation__
+ *
+ * To run a mutation, you first call `useSendPrivateMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendPrivateMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sendPrivateMessageMutation, { data, loading, error }] = useSendPrivateMessageMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSendPrivateMessageMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SendPrivateMessageMutation, SendPrivateMessageMutationVariables>) {
+        return ApolloReactHooks.useMutation<SendPrivateMessageMutation, SendPrivateMessageMutationVariables>(SendPrivateMessageDocument, baseOptions);
+      }
+export type SendPrivateMessageMutationHookResult = ReturnType<typeof useSendPrivateMessageMutation>;
+export type SendPrivateMessageMutationResult = ApolloReactCommon.MutationResult<SendPrivateMessageMutation>;
+export type SendPrivateMessageMutationOptions = ApolloReactCommon.BaseMutationOptions<SendPrivateMessageMutation, SendPrivateMessageMutationVariables>;
+export const DeletePrivateMessageDocument = gql`
+    mutation DeletePrivateMessage($messageId: ID!) {
+  deletePrivateMessage(messageId: $messageId)
+}
+    `;
+export type DeletePrivateMessageMutationFn = ApolloReactCommon.MutationFunction<DeletePrivateMessageMutation, DeletePrivateMessageMutationVariables>;
+
+/**
+ * __useDeletePrivateMessageMutation__
+ *
+ * To run a mutation, you first call `useDeletePrivateMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeletePrivateMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deletePrivateMessageMutation, { data, loading, error }] = useDeletePrivateMessageMutation({
+ *   variables: {
+ *      messageId: // value for 'messageId'
+ *   },
+ * });
+ */
+export function useDeletePrivateMessageMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeletePrivateMessageMutation, DeletePrivateMessageMutationVariables>) {
+        return ApolloReactHooks.useMutation<DeletePrivateMessageMutation, DeletePrivateMessageMutationVariables>(DeletePrivateMessageDocument, baseOptions);
+      }
+export type DeletePrivateMessageMutationHookResult = ReturnType<typeof useDeletePrivateMessageMutation>;
+export type DeletePrivateMessageMutationResult = ApolloReactCommon.MutationResult<DeletePrivateMessageMutation>;
+export type DeletePrivateMessageMutationOptions = ApolloReactCommon.BaseMutationOptions<DeletePrivateMessageMutation, DeletePrivateMessageMutationVariables>;
 export const DeclineFriendRequestDocument = gql`
     mutation DeclineFriendRequest($senderId: ID!) {
   declineFriendRequest(senderId: $senderId)
@@ -3564,7 +3692,7 @@ export const CurrentUserNotificationsDocument = gql`
     notifications {
       id
       type
-      body
+      message
       title
       url
       isRead
@@ -3635,6 +3763,41 @@ export function useCurrentUserFriendRequestsLazyQuery(baseOptions?: ApolloReactH
 export type CurrentUserFriendRequestsQueryHookResult = ReturnType<typeof useCurrentUserFriendRequestsQuery>;
 export type CurrentUserFriendRequestsLazyQueryHookResult = ReturnType<typeof useCurrentUserFriendRequestsLazyQuery>;
 export type CurrentUserFriendRequestsQueryResult = ApolloReactCommon.QueryResult<CurrentUserFriendRequestsQuery, CurrentUserFriendRequestsQueryVariables>;
+export const SearchFriendsDocument = gql`
+    query SearchFriends($input: SearchFriendsInput!) {
+  searchFriends(input: $input) {
+    id
+    username
+    avatar
+  }
+}
+    `;
+
+/**
+ * __useSearchFriendsQuery__
+ *
+ * To run a query within a React component, call `useSearchFriendsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchFriendsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchFriendsQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSearchFriendsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SearchFriendsQuery, SearchFriendsQueryVariables>) {
+        return ApolloReactHooks.useQuery<SearchFriendsQuery, SearchFriendsQueryVariables>(SearchFriendsDocument, baseOptions);
+      }
+export function useSearchFriendsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SearchFriendsQuery, SearchFriendsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<SearchFriendsQuery, SearchFriendsQueryVariables>(SearchFriendsDocument, baseOptions);
+        }
+export type SearchFriendsQueryHookResult = ReturnType<typeof useSearchFriendsQuery>;
+export type SearchFriendsLazyQueryHookResult = ReturnType<typeof useSearchFriendsLazyQuery>;
+export type SearchFriendsQueryResult = ApolloReactCommon.QueryResult<SearchFriendsQuery, SearchFriendsQueryVariables>;
 export const GetCurrentUserInfoDocument = gql`
     query GetCurrentUserInfo {
   currentUser {
@@ -4682,11 +4845,12 @@ export const NewNotificationDocument = gql`
     subscription NewNotification {
   newNotification {
     id
-    body
+    message
     title
     type
     isRead
     url
+    creationDate
   }
 }
     `;

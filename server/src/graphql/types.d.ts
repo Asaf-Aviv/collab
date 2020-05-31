@@ -36,6 +36,7 @@ export type Query = {
   currentUser?: Maybe<CurrentUser>;
   getConversation: GetConversationPayload;
   languages: Array<Scalars['String']>;
+  searchFriends: Array<User>;
   searchPostsByTitle: CollabPostsSearchResultsPayload;
   task?: Maybe<Task>;
   taskList?: Maybe<Array<TaskList>>;
@@ -82,6 +83,11 @@ export type QueryGetConversationArgs = {
   limit: Scalars['Int'];
   offset: Scalars['Int'];
   userId: Scalars['ID'];
+};
+
+
+export type QuerySearchFriendsArgs = {
+  input: SearchFriendsInput;
 };
 
 
@@ -694,10 +700,10 @@ export type Subscription = {
 
 export type Notification = {
    __typename?: 'Notification';
-  body: Scalars['String'];
   creationDate: Scalars['Date'];
   id: Scalars['ID'];
   isRead: Scalars['Boolean'];
+  message: Scalars['String'];
   title: Scalars['String'];
   type: Scalars['String'];
   url: Scalars['String'];
@@ -899,6 +905,10 @@ export type User = {
   username: Scalars['String'];
 };
 
+export type SearchFriendsInput = {
+  username: Scalars['String'];
+};
+
 export type UpdateUserInfoInput = {
   bio: Scalars['String'];
   country?: Maybe<Scalars['String']>;
@@ -1021,6 +1031,36 @@ export type AcceptFriendRequestMutation = (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username' | 'avatar'>
   ) }
+);
+
+export type SendPrivateMessageMutationVariables = {
+  input: SendPrivateMessageInput;
+};
+
+
+export type SendPrivateMessageMutation = (
+  { __typename?: 'Mutation' }
+  & { sendPrivateMessage: (
+    { __typename?: 'PrivateMessage' }
+    & Pick<PrivateMessage, 'id' | 'content' | 'creationDate' | 'isRead'>
+    & { author?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    )>, recipient?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    )> }
+  ) }
+);
+
+export type DeletePrivateMessageMutationVariables = {
+  messageId: Scalars['ID'];
+};
+
+
+export type DeletePrivateMessageMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deletePrivateMessage'>
 );
 
 export type DeclineFriendRequestMutationVariables = {
@@ -1535,7 +1575,7 @@ export type CurrentUserNotificationsQuery = (
     & Pick<CurrentUser, 'id'>
     & { notifications: Array<(
       { __typename?: 'Notification' }
-      & Pick<Notification, 'id' | 'type' | 'body' | 'title' | 'url' | 'isRead' | 'creationDate'>
+      & Pick<Notification, 'id' | 'type' | 'message' | 'title' | 'url' | 'isRead' | 'creationDate'>
     )> }
   )> }
 );
@@ -1552,6 +1592,19 @@ export type CurrentUserFriendRequestsQuery = (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
     )> }
+  )> }
+);
+
+export type SearchFriendsQueryVariables = {
+  input: SearchFriendsInput;
+};
+
+
+export type SearchFriendsQuery = (
+  { __typename?: 'Query' }
+  & { searchFriends: Array<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username' | 'avatar'>
   )> }
 );
 
@@ -2023,7 +2076,7 @@ export type NewNotificationSubscription = (
   { __typename?: 'Subscription' }
   & { newNotification: (
     { __typename?: 'Notification' }
-    & Pick<Notification, 'id' | 'body' | 'title' | 'type' | 'isRead' | 'url'>
+    & Pick<Notification, 'id' | 'message' | 'title' | 'type' | 'isRead' | 'url' | 'creationDate'>
   ) }
 );
 
@@ -2162,6 +2215,7 @@ export type ResolversTypes = ResolversObject<{
   TaskList: ResolverTypeWrapper<GQLCollabTaskList>,
   CurrentUser: ResolverTypeWrapper<Omit<CurrentUser, 'collabInvites' | 'collabRequests' | 'collabs' | 'friendRequests' | 'friends' | 'tasks'> & { collabInvites: Array<ResolversTypes['Collab']>, collabRequests: Array<ResolversTypes['CollabRequest']>, collabs: Array<ResolversTypes['Collab']>, friendRequests: Array<ResolversTypes['User']>, friends: Array<ResolversTypes['User']>, tasks: Array<ResolversTypes['Task']> }>,
   User: ResolverTypeWrapper<GQLUser>,
+  SearchFriendsInput: SearchFriendsInput,
   UpdateUserInfoInput: UpdateUserInfoInput,
   CollabRequest: ResolverTypeWrapper<Omit<CollabRequest, 'collab' | 'member'> & { collab: ResolversTypes['Collab'], member: ResolversTypes['User'] }>,
   AuthPayload: ResolverTypeWrapper<AuthPayload>,
@@ -2232,6 +2286,7 @@ export type ResolversParentTypes = ResolversObject<{
   TaskList: GQLCollabTaskList,
   CurrentUser: Omit<CurrentUser, 'collabInvites' | 'collabRequests' | 'collabs' | 'friendRequests' | 'friends' | 'tasks'> & { collabInvites: Array<ResolversParentTypes['Collab']>, collabRequests: Array<ResolversParentTypes['CollabRequest']>, collabs: Array<ResolversParentTypes['Collab']>, friendRequests: Array<ResolversParentTypes['User']>, friends: Array<ResolversParentTypes['User']>, tasks: Array<ResolversParentTypes['Task']> },
   User: GQLUser,
+  SearchFriendsInput: SearchFriendsInput,
   UpdateUserInfoInput: UpdateUserInfoInput,
   CollabRequest: Omit<CollabRequest, 'collab' | 'member'> & { collab: ResolversParentTypes['Collab'], member: ResolversParentTypes['User'] },
   AuthPayload: AuthPayload,
@@ -2250,6 +2305,7 @@ export type QueryResolvers<ContextType = CollabContext, ParentType extends Resol
   currentUser?: Resolver<Maybe<ResolversTypes['CurrentUser']>, ParentType, ContextType>,
   getConversation?: Resolver<ResolversTypes['GetConversationPayload'], ParentType, ContextType, RequireFields<QueryGetConversationArgs, 'limit' | 'offset' | 'userId'>>,
   languages?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>,
+  searchFriends?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QuerySearchFriendsArgs, 'input'>>,
   searchPostsByTitle?: Resolver<ResolversTypes['CollabPostsSearchResultsPayload'], ParentType, ContextType, RequireFields<QuerySearchPostsByTitleArgs, 'input'>>,
   task?: Resolver<Maybe<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<QueryTaskArgs, 'taskId'>>,
   taskList?: Resolver<Maybe<Array<ResolversTypes['TaskList']>>, ParentType, ContextType, RequireFields<QueryTaskListArgs, 'collabId'>>,
@@ -2440,10 +2496,10 @@ export type SubscriptionResolvers<ContextType = CollabContext, ParentType extend
 }>;
 
 export type NotificationResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Notification'] = ResolversParentTypes['Notification']> = ResolversObject<{
-  body?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   creationDate?: Resolver<ResolversTypes['Date'], ParentType, ContextType>,
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   isRead?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   type?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
