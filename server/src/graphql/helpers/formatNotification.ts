@@ -12,7 +12,7 @@ const formatNewFriendNotification = async (
   return {
     ...notification,
     url: `/user/${friend.id}`,
-    body: `You and ${friend.username} are now friends!`,
+    message: `You and ${friend.username} are now friends!`,
     title: 'New Friend',
   }
 }

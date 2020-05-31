@@ -6,6 +6,7 @@ import { useCurrentUser } from '../../../providers'
 import { Ballon } from '../../../components/Ballon'
 import { IconButtonWithTooltip } from '../../../components/IconButtonWithTooltip'
 import NotificationsIcon from '@material-ui/icons/Notifications'
+import { DataProxy } from 'apollo-cache'
 import { Badge } from '../../../components/Badge'
 import {
   useCurrentUserNotificationsLazyQuery,
@@ -15,10 +16,56 @@ import {
   useMarkAllNotificationsAsReadMutation,
   CurrentUserNotificationsDocument,
   CurrentUserNotificationsQuery,
+  GetCurrentUserQuery,
+  GetCurrentUserDocument,
 } from '../../../graphql/generates'
 import { DisplayError } from '../../../components/DisplayError'
 import { DisplayDate } from '../../../components/DisplayDate'
 import { useToastNotification } from '../../notifications'
+
+const removeNotificationFromCache = (
+  store: DataProxy,
+  // omit the id only when deleteAll is true
+  notificationId: string | undefined,
+  deleteAll?: boolean,
+) => {
+  const { currentUser } = store.readQuery<CurrentUserNotificationsQuery>({
+    query: CurrentUserNotificationsDocument,
+  })!
+
+  store.writeQuery({
+    query: CurrentUserNotificationsDocument,
+    data: {
+      currentUser: {
+        ...currentUser,
+        notifications: deleteAll
+          ? []
+          : currentUser!.notifications.filter(
+              ({ id }) => id !== notificationId,
+            ),
+      },
+    },
+  })
+}
+
+const decreaseUnreadNotificationsCount = (
+  store: DataProxy,
+  nextCount?: number,
+) => {
+  const { currentUser } = store.readQuery<GetCurrentUserQuery>({
+    query: GetCurrentUserDocument,
+  })!
+
+  store.writeQuery({
+    query: GetCurrentUserDocument,
+    data: {
+      currentUser: {
+        ...currentUser,
+        notificationsCount: nextCount ?? currentUser!.notificationsCount - 1,
+      },
+    },
+  })
+}
 
 export const Notifications = () => {
   const currentUser = useCurrentUser()!
@@ -28,58 +75,49 @@ export const Notifications = () => {
     { data, loading, error, refetch },
   ] = useCurrentUserNotificationsLazyQuery()
   const [markAsRead] = useMarkNotificationAsReadMutation({
+    update(store) {
+      decreaseUnreadNotificationsCount(store)
+    },
     onError() {
       notify('error', {
         title: 'Error',
-        body: 'Could not mark notification as read',
+        message: 'Could not mark notification as read',
       })
     },
   })
   const [deleteNotification] = useDeleteNotificationMutation({
     update(store, { data }) {
       if (!data) return
-
-      const notificationId = data.deleteNotification
-
-      const currentUserData = store.readQuery<CurrentUserNotificationsQuery>({
-        query: CurrentUserNotificationsDocument,
-      })
-
-      if (!currentUserData?.currentUser) return
-
-      const notificationIndex = currentUserData.currentUser.notifications.findIndex(
-        ({ id }) => id === notificationId,
-      )
-
-      if (notificationIndex === -1) return
-
-      currentUserData.currentUser.notifications.splice(notificationIndex, 1)
-
-      store.writeQuery({
-        query: CurrentUserNotificationsDocument,
-        data: currentUserData,
-      })
+      removeNotificationFromCache(store, data.deleteNotification)
+      decreaseUnreadNotificationsCount(store)
     },
     onError() {
       notify('error', {
         title: 'Error',
-        body: 'Could not delete Notification',
+        message: 'Could not delete Notification',
       })
     },
   })
   const [deleteAllNotifications] = useDeleteAllNotificationsMutation({
+    update(store) {
+      removeNotificationFromCache(store, undefined, true)
+      decreaseUnreadNotificationsCount(store, 0)
+    },
     onError() {
       notify('error', {
         title: 'Error',
-        body: 'Could not delete all Notifications',
+        message: 'Could not delete all Notifications',
       })
     },
   })
   const [markAllAsRead] = useMarkAllNotificationsAsReadMutation({
+    update(store) {
+      decreaseUnreadNotificationsCount(store, 0)
+    },
     onError() {
       notify('error', {
         title: 'Error',
-        body: 'Could not mark all Notifications as read',
+        message: 'Could not mark all Notifications as read',
       })
     },
   })

@@ -9,16 +9,15 @@ import {
   useDeclineFriendRequestMutation,
   CurrentUserFriendRequestsDocument,
   CurrentUserFriendRequestsQuery,
+  GetCurrentUserQuery,
+  GetCurrentUserDocument,
 } from '../../../graphql/generates'
 import { Ballon } from '../../../components/Ballon'
 import { IconButtonWithTooltip } from '../../../components/IconButtonWithTooltip'
 import { useCurrentUser } from '../../../providers'
 import { Badge } from '../../../components/Badge'
 
-const removeFriendRequestFromCache = (
-  store: DataProxy,
-  userId: string | undefined,
-) => {
+const removeFriendRequestFromCache = (store: DataProxy, userId: string) => {
   if (userId === undefined) return
 
   const { currentUser } = store.readQuery<CurrentUserFriendRequestsQuery>({
@@ -31,8 +30,24 @@ const removeFriendRequestFromCache = (
       currentUser: {
         ...currentUser,
         friendRequests: currentUser!.friendRequests.filter(
-          request => request.id !== userId,
+          ({ id }) => id !== userId,
         ),
+      },
+    },
+  })
+}
+
+const decreaseFriendRequestsCount = (store: DataProxy) => {
+  const { currentUser } = store.readQuery<GetCurrentUserQuery>({
+    query: GetCurrentUserDocument,
+  })!
+
+  store.writeQuery({
+    query: GetCurrentUserDocument,
+    data: {
+      currentUser: {
+        ...currentUser,
+        friendRequestsCount: currentUser!.friendRequestsCount - 1,
       },
     },
   })
@@ -42,12 +57,16 @@ export const FriendRequests = () => {
   const currentUser = useCurrentUser()!
   const [acceptFriendRequest] = useAcceptFriendRequestMutation({
     update(store, { data }) {
-      removeFriendRequestFromCache(store, data?.acceptFriendRequest.id)
+      if (!data) return
+      removeFriendRequestFromCache(store, data.acceptFriendRequest.id)
+      decreaseFriendRequestsCount(store)
     },
   })
   const [declineFriendRequest] = useDeclineFriendRequestMutation({
     update(store, { data }) {
-      removeFriendRequestFromCache(store, data?.declineFriendRequest)
+      if (!data) return
+      removeFriendRequestFromCache(store, data.declineFriendRequest)
+      decreaseFriendRequestsCount(store)
     },
   })
   const [

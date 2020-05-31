@@ -1,13 +1,14 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import produce from 'immer'
-import { Box, Text, Heading, Flex, PseudoBox } from '@chakra-ui/core'
+import { Box, Text, Heading, Flex, PseudoBox, Button } from '@chakra-ui/core'
 import { useCurrentUserConversationQuery } from '../../../graphql/generates'
 import { Loader } from '../../../components/Loader'
 import { DisplayError } from '../../../components/DisplayError'
 import { AvatarWithUsername } from '../../../components/AvatarWithUsername'
 import { DisplayDate } from '../../../components/DisplayDate'
 import { useOnVisibilty } from '../../../hooks/useOnVisibilty'
+import { SendMessageModal } from '../SendMessageModal'
 
 export const Conversation = () => {
   const { userId } = useParams<{ userId: string }>()
@@ -21,7 +22,7 @@ export const Conversation = () => {
   } = useCurrentUserConversationQuery({
     variables: { userId, offset: 0, limit: 10 },
   })
-
+  const [isSendMessageModalOpen, setIsSendMessageModalOpen] = useState(false)
   const { messages, hasNextPage } = data?.getConversation || {}
 
   const handleNextPageLoad = () => {
@@ -54,17 +55,32 @@ export const Conversation = () => {
     hasNextPage && !loading,
   )
 
+  const recipient = messages?.find(message => message.author?.id === userId)
+    ?.author
+
   return (
     <Box as="main" flex={1} pb={4}>
-      {messages && (
-        <Heading as="h1" size="md" mb={4} fontWeight={500}>
-          Conversation with{' '}
-          {
-            messages?.find(message => message.author?.id === userId)?.author
-              ?.username
-          }
-        </Heading>
-      )}
+      <Flex align="center" as="header" justify="space-between" mb={4}>
+        {messages && (
+          <>
+            <Heading as="h1" size="md" fontWeight={500}>
+              Conversation with {recipient?.username}
+            </Heading>
+            <Button
+              variantColor="purple"
+              onClick={() => setIsSendMessageModalOpen(true)}
+            >
+              Send Message
+            </Button>
+            {isSendMessageModalOpen && (
+              <SendMessageModal
+                closeModal={() => setIsSendMessageModalOpen(false)}
+                recipient={recipient ?? undefined}
+              />
+            )}
+          </>
+        )}
+      </Flex>
       <section>
         {messages?.map(message => (
           <PseudoBox

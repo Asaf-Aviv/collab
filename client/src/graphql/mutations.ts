@@ -68,6 +68,54 @@ export const ACCEPT_FRIEND_REQUEST = gql`
   }
 `
 
+export const SEND_PRIVATE_MESSAGE = gql`
+  mutation SendPrivateMessage($input: SendPrivateMessageInput!) {
+    sendPrivateMessage(input: $input) {
+      id
+      author {
+        id
+        username
+        avatar
+      }
+      recipient {
+        id
+        username
+        avatar
+      }
+      content
+      creationDate
+      isRead
+    }
+  }
+`
+
+export const DELETE_PRIVATE_MESSAGE = gql`
+  mutation DeletePrivateMessage($messageId: ID!) {
+    deletePrivateMessage(messageId: $messageId)
+  }
+`
+
+// export const READ_CONVERSATION = gql`
+//   mutation NarkPrivateMessageAsRead($input: SendPrivateMessageInput!) {
+//     sendPrivateMessage(input: $input) {
+//       id
+//       author {
+//         id
+//         username
+//         avatar
+//       }
+//       recipient {
+//         id
+//         username
+//         avatar
+//       }
+//       content
+//       creationDate
+//       isRead
+//     }
+//   }
+// `
+
 export const DECLINE_FRIEND_REQUEST = gql`
   mutation DeclineFriendRequest($senderId: ID!) {
     declineFriendRequest(senderId: $senderId)

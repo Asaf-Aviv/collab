@@ -1,9 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useRouteMatch, NavLink } from 'react-router-dom'
-import { Box, Heading, Flex, Text, Avatar, PseudoBox } from '@chakra-ui/core'
+import {
+  Box,
+  Heading,
+  Flex,
+  Text,
+  Avatar,
+  PseudoBox,
+  Button,
+} from '@chakra-ui/core'
 import { useCurrentUserConversationsPreviewQuery } from '../../../graphql/generates'
 import { Loader } from '../../../components/Loader'
 import { DisplayError } from '../../../components/DisplayError'
+import { SendMessageModal } from '../SendMessageModal'
 
 export const Conversations = () => {
   const {
@@ -12,53 +21,72 @@ export const Conversations = () => {
     error,
     refetch,
   } = useCurrentUserConversationsPreviewQuery()
+  const [isSendMessageModalOpen, setIsSendMessageModalOpen] = useState(false)
   const match = useRouteMatch()
 
   const { conversationsPreview } = data?.currentUser || {}
 
   return (
     <Box as="main" flex={1} pb={4}>
-      <Heading as="h1" size="md" mb={4} fontWeight={500}>
-        Your Conversations
-      </Heading>
-      {conversationsPreview?.map(({ userId, username, avatar, content }) => (
-        <PseudoBox
-          key={userId}
-          as={NavLink}
-          // @ts-ignore
-          to={`${match.url}/${userId}`}
-          py={4}
-          px={2}
-          _notFirst={{
-            borderTop: '1px solid #e1e1e1',
-          }}
-          display="block"
-          _hover={{
-            bg: '#EEE',
-          }}
+      <Flex align="center" as="header" justify="space-between" mb={4}>
+        <Heading as="h1" size="md" fontWeight={500}>
+          Your Conversations
+        </Heading>
+        <Button
+          variantColor="purple"
+          onClick={() => setIsSendMessageModalOpen(true)}
         >
-          {username ? (
-            <Flex align="center" mb={4}>
-              <Avatar src={avatar} name={username} size="sm" mr={2} />
-              <Text as="h3" fontWeight={500}>
-                {username}
-              </Text>
-            </Flex>
-          ) : (
-            <Text as="span">Deleted user</Text>
-          )}
-          <Text pl={10} isTruncated>
-            {content}
-          </Text>
-        </PseudoBox>
-      ))}
-      {loading && <Loader />}
-      {error && (
-        <DisplayError
-          message="Could not fetch friends"
-          onClick={() => refetch()}
-        />
-      )}
+          Send Message
+        </Button>
+        {isSendMessageModalOpen && (
+          <SendMessageModal
+            closeModal={() => setIsSendMessageModalOpen(false)}
+          />
+        )}
+      </Flex>
+      <section>
+        {conversationsPreview?.map(({ userId, username, avatar, content }) => (
+          <PseudoBox
+            key={userId}
+            as={NavLink}
+            // @ts-ignore
+            to={`${match.url}/${userId}`}
+            py={4}
+            px={2}
+            _notFirst={{
+              borderTop: '1px solid #e1e1e1',
+            }}
+            display="block"
+            _hover={{
+              bg: '#EEE',
+            }}
+            _focus={{
+              bg: '#EEE',
+            }}
+          >
+            {username ? (
+              <Flex align="center" mb={4}>
+                <Avatar src={avatar} name={username} size="sm" mr={2} />
+                <Text as="h3" fontWeight={500}>
+                  {username}
+                </Text>
+              </Flex>
+            ) : (
+              <Text as="span">Deleted user</Text>
+            )}
+            <Text pl={10} isTruncated>
+              {content}
+            </Text>
+          </PseudoBox>
+        ))}
+        {loading && <Loader />}
+        {error && (
+          <DisplayError
+            message="Could not fetch friends"
+            onClick={() => refetch()}
+          />
+        )}
+      </section>
     </Box>
   )
 }
