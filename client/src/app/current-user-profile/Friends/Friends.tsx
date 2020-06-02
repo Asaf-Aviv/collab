@@ -1,8 +1,9 @@
 import React from 'react'
-import { Box, Flex, Heading } from '@chakra-ui/core'
+import { Box, Heading } from '@chakra-ui/core'
 import { useCurrentUserFriendsQuery } from '../../../graphql/generates'
 import { Loader } from '../../../components/Loader'
 import { DisplayError } from '../../../components/DisplayError'
+import { UserCard } from '../../../components/UserCard'
 
 export const Friends = () => {
   const { data, loading, error, refetch } = useCurrentUserFriendsQuery({
@@ -17,7 +18,7 @@ export const Friends = () => {
         Your Friends
       </Heading>
       {friends?.map(friend => (
-        <Flex key={friend.id}>{friend.username}</Flex>
+        <UserCard key={friend.id} {...friend}></UserCard>
       ))}
       {loading && <Loader />}
       {error && (

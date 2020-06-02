@@ -43,7 +43,11 @@ export const ChatStatus = () => {
       <Flex bg="white" borderRadius={6} p={2} boxShadow="0 1px 1px 1px #c3c3c3">
         <Flex direction="column" flex={1}>
           <Menu>
-            <MenuButton>
+            <MenuButton
+              _focus={{ bg: 'purple.200' }}
+              borderRadius="0.25rem"
+              outline="none"
+            >
               <ChatUserListItem as="div" user={{ ...currentUser, status }} />
             </MenuButton>
             <MenuList
@@ -74,8 +78,9 @@ export const ChatStatus = () => {
 
 const StyledMenuItem = (props: MenuItemProps) => (
   <MenuItem
-    _focus={{ bg: 'purple.100' }}
-    _hover={{ bg: 'purple.100' }}
+    _hover={{ bg: 'purple.200' }}
+    _focus={{ bg: 'purple.200' }}
+    _active={{ bg: 'purple.300' }}
     {...props}
   />
 )

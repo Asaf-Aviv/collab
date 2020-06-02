@@ -117,9 +117,9 @@ export type QueryUserArgs = {
 
 export type Mutation = {
    __typename?: 'Mutation';
-  acceptCollabInvitation: User;
+  acceptCollabInvitation: Scalars['ID'];
   acceptFriendRequest: User;
-  acceptMemberRequest: Collab;
+  acceptMemberRequest: Scalars['ID'];
   addCollabDiscussionThreadCommentReaction: Scalars['Boolean'];
   addCollabDiscussionThreadReaction: Scalars['Boolean'];
   addCollabPostCommentReaction: Scalars['Boolean'];
@@ -135,10 +135,10 @@ export type Mutation = {
   createTaskComment: TaskComment;
   createTaskList: TaskList;
   createWallMessage: WallMessage;
-  declineCollabInvitation: Scalars['Boolean'];
+  declineCollabInvitation: Scalars['ID'];
   /** returns the id of the declined friend */
   declineFriendRequest: Scalars['ID'];
-  declineMemberRequest: Scalars['Boolean'];
+  declineMemberRequest: Scalars['ID'];
   deleteAllNotifications: Scalars['Boolean'];
   deleteCollab: Scalars['Boolean'];
   deleteCollabDiscussionThread: Scalars['Boolean'];
@@ -672,6 +672,7 @@ export type WallMessage = {
   content: Scalars['String'];
   creationDate: Scalars['Date'];
   id: Scalars['ID'];
+  isAuthor: Scalars['Boolean'];
 };
 
 export type CreateWallMessageInput = {
@@ -923,6 +924,7 @@ export type UpdateUserInfoInput = {
 export type CollabRequest = {
    __typename?: 'CollabRequest';
   collab: Collab;
+  id: Scalars['ID'];
   member: User;
 };
 
@@ -1235,10 +1237,7 @@ export type AcceptCollabInvitationMutationVariables = {
 
 export type AcceptCollabInvitationMutation = (
   { __typename?: 'Mutation' }
-  & { acceptCollabInvitation: (
-    { __typename?: 'User' }
-    & Pick<User, 'id' | 'username' | 'avatar'>
-  ) }
+  & Pick<Mutation, 'acceptCollabInvitation'>
 );
 
 export type DeclineCollabInvitationMutationVariables = {
@@ -1251,15 +1250,71 @@ export type DeclineCollabInvitationMutation = (
   & Pick<Mutation, 'declineCollabInvitation'>
 );
 
-export type DeclineCollabMemberRequestMutationVariables = {
+export type AcceptMemberRequestMutationVariables = {
   collabId: Scalars['ID'];
   memberId: Scalars['ID'];
 };
 
 
-export type DeclineCollabMemberRequestMutation = (
+export type AcceptMemberRequestMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'acceptMemberRequest'>
+);
+
+export type DeclineMemberRequestMutationVariables = {
+  collabId: Scalars['ID'];
+  memberId: Scalars['ID'];
+};
+
+
+export type DeclineMemberRequestMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'declineMemberRequest'>
+);
+
+export type RemoveMemberMutationVariables = {
+  collabId: Scalars['ID'];
+  memberId: Scalars['ID'];
+};
+
+
+export type RemoveMemberMutation = (
+  { __typename?: 'Mutation' }
+  & { removeMember: (
+    { __typename?: 'Collab' }
+    & Pick<Collab, 'id'>
+    & { members: Array<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    )> }
+  ) }
+);
+
+export type CreateWallMessageMutationVariables = {
+  input: CreateWallMessageInput;
+};
+
+
+export type CreateWallMessageMutation = (
+  { __typename?: 'Mutation' }
+  & { createWallMessage: (
+    { __typename?: 'WallMessage' }
+    & Pick<WallMessage, 'id' | 'content' | 'creationDate'>
+    & { author: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    ) }
+  ) }
+);
+
+export type DeleteWallMessageMutationVariables = {
+  messageId: Scalars['ID'];
+};
+
+
+export type DeleteWallMessageMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteWallMessage'>
 );
 
 export type CreateTaskListMutationVariables = {
@@ -1704,6 +1759,7 @@ export type GetCurrentUserCollabRequestsQuery = (
     & Pick<CurrentUser, 'id'>
     & { collabRequests: Array<(
       { __typename?: 'CollabRequest' }
+      & Pick<CollabRequest, 'id'>
       & { collab: (
         { __typename?: 'Collab' }
         & Pick<Collab, 'id' | 'name'>
@@ -1944,7 +2000,7 @@ export type CollabWallMessagesQuery = (
     & Pick<CollabWallMessagesPayload, 'hasNextPage'>
     & { messages: Array<(
       { __typename?: 'WallMessage' }
-      & Pick<WallMessage, 'id' | 'content' | 'creationDate'>
+      & Pick<WallMessage, 'id' | 'content' | 'creationDate' | 'isAuthor'>
       & { author: (
         { __typename?: 'User' }
         & Pick<User, 'id' | 'username' | 'bio' | 'avatar'>
@@ -2315,9 +2371,9 @@ export type QueryResolvers<ContextType = CollabContext, ParentType extends Resol
 }>;
 
 export type MutationResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
-  acceptCollabInvitation?: Resolver<ResolversTypes['User'], ParentType, CollabContextWithUser, RequireFields<MutationAcceptCollabInvitationArgs, 'collabId'>>,
+  acceptCollabInvitation?: Resolver<ResolversTypes['ID'], ParentType, CollabContextWithUser, RequireFields<MutationAcceptCollabInvitationArgs, 'collabId'>>,
   acceptFriendRequest?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationAcceptFriendRequestArgs, 'friendId'>>,
-  acceptMemberRequest?: Resolver<ResolversTypes['Collab'], ParentType, CollabContextWithUser, RequireFields<MutationAcceptMemberRequestArgs, 'collabId' | 'memberId'>>,
+  acceptMemberRequest?: Resolver<ResolversTypes['ID'], ParentType, CollabContextWithUser, RequireFields<MutationAcceptMemberRequestArgs, 'collabId' | 'memberId'>>,
   addCollabDiscussionThreadCommentReaction?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationAddCollabDiscussionThreadCommentReactionArgs, 'reaction'>>,
   addCollabDiscussionThreadReaction?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationAddCollabDiscussionThreadReactionArgs, 'reaction'>>,
   addCollabPostCommentReaction?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationAddCollabPostCommentReactionArgs, 'reaction'>>,
@@ -2333,9 +2389,9 @@ export type MutationResolvers<ContextType = CollabContext, ParentType extends Re
   createTaskComment?: Resolver<ResolversTypes['TaskComment'], ParentType, CollabContextWithUser, RequireFields<MutationCreateTaskCommentArgs, 'input'>>,
   createTaskList?: Resolver<ResolversTypes['TaskList'], ParentType, CollabContextWithUser, RequireFields<MutationCreateTaskListArgs, 'input'>>,
   createWallMessage?: Resolver<ResolversTypes['WallMessage'], ParentType, ContextType, RequireFields<MutationCreateWallMessageArgs, 'input'>>,
-  declineCollabInvitation?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeclineCollabInvitationArgs, 'collabId'>>,
+  declineCollabInvitation?: Resolver<ResolversTypes['ID'], ParentType, CollabContextWithUser, RequireFields<MutationDeclineCollabInvitationArgs, 'collabId'>>,
   declineFriendRequest?: Resolver<ResolversTypes['ID'], ParentType, ContextType, RequireFields<MutationDeclineFriendRequestArgs, 'senderId'>>,
-  declineMemberRequest?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeclineMemberRequestArgs, 'collabId' | 'memberId'>>,
+  declineMemberRequest?: Resolver<ResolversTypes['ID'], ParentType, CollabContextWithUser, RequireFields<MutationDeclineMemberRequestArgs, 'collabId' | 'memberId'>>,
   deleteAllNotifications?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   deleteCollab?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeleteCollabArgs, 'collabId'>>,
   deleteCollabDiscussionThread?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteCollabDiscussionThreadArgs, 'threadId'>>,
@@ -2480,6 +2536,7 @@ export type WallMessageResolvers<ContextType = CollabContext, ParentType extends
   content?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   creationDate?: Resolver<ResolversTypes['Date'], ParentType, ContextType>,
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  isAuthor?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
@@ -2635,6 +2692,7 @@ export type UserResolvers<ContextType = CollabContext, ParentType extends Resolv
 
 export type CollabRequestResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['CollabRequest'] = ResolversParentTypes['CollabRequest']> = ResolversObject<{
   collab?: Resolver<ResolversTypes['Collab'], ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   member?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;

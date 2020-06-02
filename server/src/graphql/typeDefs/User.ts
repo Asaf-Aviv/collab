@@ -12,8 +12,8 @@ export const userTypeDefs = gql`
     signUp(credentials: SignUpArgs!): AuthPayload!
     login(credentials: LoginArgs!): AuthPayload!
     deleteUser: Boolean!
-    acceptCollabInvitation(collabId: ID!): User!
-    declineCollabInvitation(collabId: ID!): Boolean!
+    acceptCollabInvitation(collabId: ID!): ID!
+    declineCollabInvitation(collabId: ID!): ID!
     updateUserInfo(input: UpdateUserInfoInput): CurrentUser!
     sendFriendRequest(friendId: ID!): Boolean!
     acceptFriendRequest(friendId: ID!): User!
@@ -79,6 +79,7 @@ export const userTypeDefs = gql`
   }
 
   type CollabRequest {
+    id: ID!
     collab: Collab!
     member: User!
   }

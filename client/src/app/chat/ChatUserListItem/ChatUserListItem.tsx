@@ -38,6 +38,7 @@ export const ChatUserListItem = ({ user, ...props }: Props) => {
       px={1}
       _hover={{ bg: 'purple.200' }}
       _focus={{ bg: 'purple.200' }}
+      _active={{ bg: 'purple.300' }}
       {...props}
     >
       <Box

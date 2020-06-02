@@ -24,14 +24,16 @@ export const UserAccountMenu = () => {
           name={currentUser.username}
         />
       </MenuButton>
-      <MenuList mt={0}>
+      <MenuList>
         <MenuGroup title="Profile">
           <Link to="/profile">
             <MenuItem>My Account</MenuItem>
           </Link>
         </MenuGroup>
         <MenuDivider />
-        <LogoutButton>Logout</LogoutButton>
+        <LogoutButton size="sm" width="100%" bg="transparent">
+          Logout
+        </LogoutButton>
       </MenuList>
     </Menu>
   )

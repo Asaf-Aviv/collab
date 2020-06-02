@@ -154,6 +154,7 @@ export const GET_CURRENT_USER_COLLAB_REQUESTS = gql`
     currentUser {
       id
       collabRequests {
+        id
         collab {
           id
           name
@@ -413,6 +414,7 @@ export const GET_COLLAB_WALL_MESSAGES = gql`
         id
         content
         creationDate
+        isAuthor
         author {
           id
           username

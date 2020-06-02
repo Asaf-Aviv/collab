@@ -92,20 +92,6 @@ export const TaskBoard = () => {
 
   return (
     <>
-      {collabData?.collab?.isOwner && (
-        <>
-          {isCreateTaskListModalOpen && (
-            <NewTaskListModal
-              closeModal={() => setIsCreateTaskListModalOpen(false)}
-            />
-          )}
-          <IconButtonWithTooltip
-            ariaLabel="Create Tasklist"
-            icon="add"
-            onClick={() => setIsCreateTaskListModalOpen(true)}
-          />
-        </>
-      )}
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable
           droppableId="list-columns"
@@ -123,6 +109,22 @@ export const TaskBoard = () => {
               height="calc(100vh - 64px - 4rem)"
               bg="#f2f2ff"
             >
+              {collabData?.collab?.isOwner && (
+                <>
+                  <IconButtonWithTooltip
+                    ariaLabel="Create Tasklist"
+                    icon="add"
+                    onClick={() => setIsCreateTaskListModalOpen(true)}
+                    position="absolute"
+                    left={15}
+                  />
+                  {isCreateTaskListModalOpen && (
+                    <NewTaskListModal
+                      closeModal={() => setIsCreateTaskListModalOpen(false)}
+                    />
+                  )}
+                </>
+              )}
               <MemoizedTaskListWrapper taskList={taskList} refetch={refetch} />
               {provided.placeholder}
             </Flex>

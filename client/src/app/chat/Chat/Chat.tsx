@@ -13,6 +13,7 @@ import { ChatUsersList } from '../ChatUsersList'
 import { ChatBox } from '../ChatBox/ChatBox'
 import { CloseButton } from '../../../components/CloseButton'
 import { useTypedSelector } from '../useTypedSelector'
+import styled from '@emotion/styled'
 
 type Props = {
   isMinimized: boolean
@@ -59,6 +60,36 @@ export const Chat = ({ isMinimized, toggleMinimize }: Props) => {
   return (
     <>
       <AnimatePresence>
+        {!isMinimized && (
+          <StyledChatContainer
+            key="chat"
+            initial={{ width: 0 }}
+            animate={{ width: 230 }}
+            exit={{ width: 0 }}
+            transition={{ duration: 0.8, ease: 'anticipate' }}
+          >
+            <Flex
+              direction="column"
+              flexBasis={230}
+              position="sticky"
+              bg="#eaeaea"
+              top="64px"
+              maxHeight="calc(100vh - 64px)"
+              overflowY="hidden"
+              p={2}
+            >
+              <CloseButton
+                aria-label="minimize chat"
+                onClick={toggleMinimize}
+                style={{ marginLeft: 'auto' }}
+              />
+              <ChatStatus />
+              <Divider />
+              <ChatUsersList onFriendClick={handleFriendClick} />
+              {selectedFriendId && <ChatBox />}
+            </Flex>
+          </StyledChatContainer>
+        )}
         {isMinimized && (
           <Box position="fixed" bottom={0} right="1rem">
             <Box position="relative">
@@ -94,37 +125,14 @@ export const Chat = ({ isMinimized, toggleMinimize }: Props) => {
             </Box>
           </Box>
         )}
-        {!isMinimized && (
-          <motion.div
-            key="chat"
-            initial={{ width: 0 }}
-            animate={{ width: 230 }}
-            exit={{ width: 0 }}
-            transition={{ duration: 0.8, ease: 'anticipate' }}
-          >
-            <Flex
-              direction="column"
-              flexBasis={230}
-              position="sticky"
-              bg="#eaeaea"
-              top="64px"
-              maxHeight="calc(100vh - 64px)"
-              overflowY="hidden"
-              p={2}
-            >
-              <CloseButton
-                aria-label="minimize chat"
-                onClick={toggleMinimize}
-                style={{ marginLeft: 'auto' }}
-              />
-              <ChatStatus />
-              <Divider />
-              <ChatUsersList onFriendClick={handleFriendClick} />
-              {selectedFriendId && <ChatBox />}
-            </Flex>
-          </motion.div>
-        )}
       </AnimatePresence>
     </>
   )
 }
+
+const StyledChatContainer = styled(motion.div)`
+  position: fixed;
+  right: 0;
+  top: 64px;
+  box-shadow: 0px 0px 5px #b2b2b2;
+`

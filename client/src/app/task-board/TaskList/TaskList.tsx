@@ -17,7 +17,7 @@ import styled from '@emotion/styled'
 export const MemoizedTaskListWrapper = memo(({ taskList, refetch }: any) => (
   <>
     {(taskList as any[]).map(({ tasks, ...list }: any, index) => (
-      <Column
+      <TaskList
         key={list.id}
         taskList={list}
         tasks={tasks}
@@ -31,14 +31,14 @@ export const MemoizedTaskListWrapper = memo(({ taskList, refetch }: any) => (
 MemoizedTaskListWrapper.displayName = 'MemoizedTaskListWrapper'
 
 type TaskListResult = NonNullable<TaskListQuery['taskList']>
-type ColumnProps = {
+type Props = {
   taskList: Omit<TaskListResult[number], 'tasks'>
   tasks: TaskListResult[number]['tasks']
   refetch: any
   index: number
 }
 
-const Column = ({ taskList, tasks, refetch, index }: ColumnProps) => {
+const TaskList = ({ taskList, tasks, refetch, index }: Props) => {
   const [isNewTaskModalOpen, setIsNewTaskModalOpen] = useState(false)
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null)
   const [deleteTaskList] = useDeleteTaskListMutation({
@@ -57,21 +57,21 @@ const Column = ({ taskList, tasks, refetch, index }: ColumnProps) => {
         <Box
           {...provided.draggableProps}
           ref={provided.innerRef}
-          mr={2}
           borderRadius={3}
-          border="1px solid"
           padding={2}
           bg="white"
           width={300}
           flexShrink={0}
           maxWidth={300}
           minHeight={200}
+          pb={12}
+          position="relative"
         >
           <Flex justify="space-between">
             <Heading {...provided.dragHandleProps} size="sm" mb={2} p={2}>
               {taskList.name}
             </Heading>
-            <DotsMenu ariaLabel="Open Tasklist Options">
+            <DotsMenu iconProps={{ ariaLabel: 'Open Tasklist Options' }}>
               <StyledOptionMenu>
                 <IconButtonWithTooltip
                   ariaLabel="Create Task"
@@ -101,6 +101,7 @@ const Column = ({ taskList, tasks, refetch, index }: ColumnProps) => {
               <Box
                 height="100%"
                 ref={provided.innerRef}
+                overflowY="auto"
                 {...provided.droppableProps}
               >
                 {tasks.map((task, index) => (

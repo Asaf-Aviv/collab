@@ -164,7 +164,6 @@ export const SearchBar = (props: Props) => {
         <Input
           ref={inputRef}
           px={[2, 2, 4]}
-          size={['sm', 'md', 'lg']}
           bg="#f2f2ff"
           placeholder="Search Collabs"
           borderColor="transparent"

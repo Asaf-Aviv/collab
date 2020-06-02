@@ -200,17 +200,16 @@ export class User extends Model<User> {
   }
 
   static async acceptCollabInvitation(collabId: string, memberId: string) {
+    const invite = await CollabMemberRequest.findOne({
+      where: { collabId, memberId, type: 'invitation' },
+    })
+
+    if (!invite) {
+      throw new Error('Invititation does not exist')
+    }
+
     return this.sequelize!.transaction(async () => {
-      const invite = await CollabMemberRequest.findOne({
-        where: { collabId, memberId, type: 'invitation' },
-      })
-
-      if (!invite) {
-        throw new Error('Invititation does not exist')
-      }
-
-      const [newMember] = await Promise.all([
-        this.findByPk(memberId),
+      await Promise.all([
         invite.destroy(),
         CollabMember.create({
           collabId,
@@ -218,24 +217,22 @@ export class User extends Model<User> {
         }),
       ])
 
-      return newMember!
+      return collabId
     })
   }
 
   static async declineCollabInvitation(collabId: string, memberId: string) {
-    return this.sequelize!.transaction(async () => {
-      const invite = await CollabMemberRequest.findOne({
-        where: { collabId, memberId, type: 'invitation' },
-      })
-
-      if (!invite) {
-        throw new Error('Invititation does not exist')
-      }
-
-      await invite.destroy()
-
-      return true
+    const invite = await CollabMemberRequest.findOne({
+      where: { collabId, memberId, type: 'invitation' },
     })
+
+    if (!invite) {
+      throw new Error('Invititation does not exist')
+    }
+
+    await invite.destroy()
+
+    return collabId
   }
 
   static getAllUserFriends(userId: string) {
