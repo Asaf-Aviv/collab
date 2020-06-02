@@ -105,9 +105,9 @@ export type QueryUserArgs = {
 
 export type Mutation = {
    __typename?: 'Mutation';
-  acceptCollabInvitation: User;
+  acceptCollabInvitation: Scalars['ID'];
   acceptFriendRequest: User;
-  acceptMemberRequest: Collab;
+  acceptMemberRequest: Scalars['ID'];
   addCollabDiscussionThreadCommentReaction: Scalars['Boolean'];
   addCollabDiscussionThreadReaction: Scalars['Boolean'];
   addCollabPostCommentReaction: Scalars['Boolean'];
@@ -123,10 +123,10 @@ export type Mutation = {
   createTaskComment: TaskComment;
   createTaskList: TaskList;
   createWallMessage: WallMessage;
-  declineCollabInvitation: Scalars['Boolean'];
+  declineCollabInvitation: Scalars['ID'];
   /** returns the id of the declined friend */
   declineFriendRequest: Scalars['ID'];
-  declineMemberRequest: Scalars['Boolean'];
+  declineMemberRequest: Scalars['ID'];
   deleteAllNotifications: Scalars['Boolean'];
   deleteCollab: Scalars['Boolean'];
   deleteCollabDiscussionThread: Scalars['Boolean'];
@@ -660,6 +660,7 @@ export type WallMessage = {
   content: Scalars['String'];
   creationDate: Scalars['Date'];
   id: Scalars['ID'];
+  isAuthor: Scalars['Boolean'];
 };
 
 export type CreateWallMessageInput = {
@@ -911,6 +912,7 @@ export type UpdateUserInfoInput = {
 export type CollabRequest = {
    __typename?: 'CollabRequest';
   collab: Collab;
+  id: Scalars['ID'];
   member: User;
 };
 
@@ -1223,10 +1225,7 @@ export type AcceptCollabInvitationMutationVariables = {
 
 export type AcceptCollabInvitationMutation = (
   { __typename?: 'Mutation' }
-  & { acceptCollabInvitation: (
-    { __typename?: 'User' }
-    & Pick<User, 'id' | 'username' | 'avatar'>
-  ) }
+  & Pick<Mutation, 'acceptCollabInvitation'>
 );
 
 export type DeclineCollabInvitationMutationVariables = {
@@ -1239,15 +1238,71 @@ export type DeclineCollabInvitationMutation = (
   & Pick<Mutation, 'declineCollabInvitation'>
 );
 
-export type DeclineCollabMemberRequestMutationVariables = {
+export type AcceptMemberRequestMutationVariables = {
   collabId: Scalars['ID'];
   memberId: Scalars['ID'];
 };
 
 
-export type DeclineCollabMemberRequestMutation = (
+export type AcceptMemberRequestMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'acceptMemberRequest'>
+);
+
+export type DeclineMemberRequestMutationVariables = {
+  collabId: Scalars['ID'];
+  memberId: Scalars['ID'];
+};
+
+
+export type DeclineMemberRequestMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'declineMemberRequest'>
+);
+
+export type RemoveMemberMutationVariables = {
+  collabId: Scalars['ID'];
+  memberId: Scalars['ID'];
+};
+
+
+export type RemoveMemberMutation = (
+  { __typename?: 'Mutation' }
+  & { removeMember: (
+    { __typename?: 'Collab' }
+    & Pick<Collab, 'id'>
+    & { members: Array<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    )> }
+  ) }
+);
+
+export type CreateWallMessageMutationVariables = {
+  input: CreateWallMessageInput;
+};
+
+
+export type CreateWallMessageMutation = (
+  { __typename?: 'Mutation' }
+  & { createWallMessage: (
+    { __typename?: 'WallMessage' }
+    & Pick<WallMessage, 'id' | 'content' | 'creationDate'>
+    & { author: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    ) }
+  ) }
+);
+
+export type DeleteWallMessageMutationVariables = {
+  messageId: Scalars['ID'];
+};
+
+
+export type DeleteWallMessageMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteWallMessage'>
 );
 
 export type CreateTaskListMutationVariables = {
@@ -1692,6 +1747,7 @@ export type GetCurrentUserCollabRequestsQuery = (
     & Pick<CurrentUser, 'id'>
     & { collabRequests: Array<(
       { __typename?: 'CollabRequest' }
+      & Pick<CollabRequest, 'id'>
       & { collab: (
         { __typename?: 'Collab' }
         & Pick<Collab, 'id' | 'name'>
@@ -1932,7 +1988,7 @@ export type CollabWallMessagesQuery = (
     & Pick<CollabWallMessagesPayload, 'hasNextPage'>
     & { messages: Array<(
       { __typename?: 'WallMessage' }
-      & Pick<WallMessage, 'id' | 'content' | 'creationDate'>
+      & Pick<WallMessage, 'id' | 'content' | 'creationDate' | 'isAuthor'>
       & { author: (
         { __typename?: 'User' }
         & Pick<User, 'id' | 'username' | 'bio' | 'avatar'>
@@ -2847,11 +2903,7 @@ export type CancelCollabRequestToJoinMutationResult = ApolloReactCommon.Mutation
 export type CancelCollabRequestToJoinMutationOptions = ApolloReactCommon.BaseMutationOptions<CancelCollabRequestToJoinMutation, CancelCollabRequestToJoinMutationVariables>;
 export const AcceptCollabInvitationDocument = gql`
     mutation AcceptCollabInvitation($collabId: ID!) {
-  acceptCollabInvitation(collabId: $collabId) {
-    id
-    username
-    avatar
-  }
+  acceptCollabInvitation(collabId: $collabId)
 }
     `;
 export type AcceptCollabInvitationMutationFn = ApolloReactCommon.MutationFunction<AcceptCollabInvitationMutation, AcceptCollabInvitationMutationVariables>;
@@ -2909,37 +2961,175 @@ export function useDeclineCollabInvitationMutation(baseOptions?: ApolloReactHook
 export type DeclineCollabInvitationMutationHookResult = ReturnType<typeof useDeclineCollabInvitationMutation>;
 export type DeclineCollabInvitationMutationResult = ApolloReactCommon.MutationResult<DeclineCollabInvitationMutation>;
 export type DeclineCollabInvitationMutationOptions = ApolloReactCommon.BaseMutationOptions<DeclineCollabInvitationMutation, DeclineCollabInvitationMutationVariables>;
-export const DeclineCollabMemberRequestDocument = gql`
-    mutation DeclineCollabMemberRequest($collabId: ID!, $memberId: ID!) {
-  declineMemberRequest(collabId: $collabId, memberId: $memberId)
+export const AcceptMemberRequestDocument = gql`
+    mutation AcceptMemberRequest($collabId: ID!, $memberId: ID!) {
+  acceptMemberRequest(collabId: $collabId, memberId: $memberId)
 }
     `;
-export type DeclineCollabMemberRequestMutationFn = ApolloReactCommon.MutationFunction<DeclineCollabMemberRequestMutation, DeclineCollabMemberRequestMutationVariables>;
+export type AcceptMemberRequestMutationFn = ApolloReactCommon.MutationFunction<AcceptMemberRequestMutation, AcceptMemberRequestMutationVariables>;
 
 /**
- * __useDeclineCollabMemberRequestMutation__
+ * __useAcceptMemberRequestMutation__
  *
- * To run a mutation, you first call `useDeclineCollabMemberRequestMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeclineCollabMemberRequestMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useAcceptMemberRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAcceptMemberRequestMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [declineCollabMemberRequestMutation, { data, loading, error }] = useDeclineCollabMemberRequestMutation({
+ * const [acceptMemberRequestMutation, { data, loading, error }] = useAcceptMemberRequestMutation({
  *   variables: {
  *      collabId: // value for 'collabId'
  *      memberId: // value for 'memberId'
  *   },
  * });
  */
-export function useDeclineCollabMemberRequestMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeclineCollabMemberRequestMutation, DeclineCollabMemberRequestMutationVariables>) {
-        return ApolloReactHooks.useMutation<DeclineCollabMemberRequestMutation, DeclineCollabMemberRequestMutationVariables>(DeclineCollabMemberRequestDocument, baseOptions);
+export function useAcceptMemberRequestMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AcceptMemberRequestMutation, AcceptMemberRequestMutationVariables>) {
+        return ApolloReactHooks.useMutation<AcceptMemberRequestMutation, AcceptMemberRequestMutationVariables>(AcceptMemberRequestDocument, baseOptions);
       }
-export type DeclineCollabMemberRequestMutationHookResult = ReturnType<typeof useDeclineCollabMemberRequestMutation>;
-export type DeclineCollabMemberRequestMutationResult = ApolloReactCommon.MutationResult<DeclineCollabMemberRequestMutation>;
-export type DeclineCollabMemberRequestMutationOptions = ApolloReactCommon.BaseMutationOptions<DeclineCollabMemberRequestMutation, DeclineCollabMemberRequestMutationVariables>;
+export type AcceptMemberRequestMutationHookResult = ReturnType<typeof useAcceptMemberRequestMutation>;
+export type AcceptMemberRequestMutationResult = ApolloReactCommon.MutationResult<AcceptMemberRequestMutation>;
+export type AcceptMemberRequestMutationOptions = ApolloReactCommon.BaseMutationOptions<AcceptMemberRequestMutation, AcceptMemberRequestMutationVariables>;
+export const DeclineMemberRequestDocument = gql`
+    mutation DeclineMemberRequest($collabId: ID!, $memberId: ID!) {
+  declineMemberRequest(collabId: $collabId, memberId: $memberId)
+}
+    `;
+export type DeclineMemberRequestMutationFn = ApolloReactCommon.MutationFunction<DeclineMemberRequestMutation, DeclineMemberRequestMutationVariables>;
+
+/**
+ * __useDeclineMemberRequestMutation__
+ *
+ * To run a mutation, you first call `useDeclineMemberRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeclineMemberRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [declineMemberRequestMutation, { data, loading, error }] = useDeclineMemberRequestMutation({
+ *   variables: {
+ *      collabId: // value for 'collabId'
+ *      memberId: // value for 'memberId'
+ *   },
+ * });
+ */
+export function useDeclineMemberRequestMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeclineMemberRequestMutation, DeclineMemberRequestMutationVariables>) {
+        return ApolloReactHooks.useMutation<DeclineMemberRequestMutation, DeclineMemberRequestMutationVariables>(DeclineMemberRequestDocument, baseOptions);
+      }
+export type DeclineMemberRequestMutationHookResult = ReturnType<typeof useDeclineMemberRequestMutation>;
+export type DeclineMemberRequestMutationResult = ApolloReactCommon.MutationResult<DeclineMemberRequestMutation>;
+export type DeclineMemberRequestMutationOptions = ApolloReactCommon.BaseMutationOptions<DeclineMemberRequestMutation, DeclineMemberRequestMutationVariables>;
+export const RemoveMemberDocument = gql`
+    mutation RemoveMember($collabId: ID!, $memberId: ID!) {
+  removeMember(collabId: $collabId, memberId: $memberId) {
+    id
+    members {
+      id
+      username
+      avatar
+    }
+  }
+}
+    `;
+export type RemoveMemberMutationFn = ApolloReactCommon.MutationFunction<RemoveMemberMutation, RemoveMemberMutationVariables>;
+
+/**
+ * __useRemoveMemberMutation__
+ *
+ * To run a mutation, you first call `useRemoveMemberMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveMemberMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeMemberMutation, { data, loading, error }] = useRemoveMemberMutation({
+ *   variables: {
+ *      collabId: // value for 'collabId'
+ *      memberId: // value for 'memberId'
+ *   },
+ * });
+ */
+export function useRemoveMemberMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RemoveMemberMutation, RemoveMemberMutationVariables>) {
+        return ApolloReactHooks.useMutation<RemoveMemberMutation, RemoveMemberMutationVariables>(RemoveMemberDocument, baseOptions);
+      }
+export type RemoveMemberMutationHookResult = ReturnType<typeof useRemoveMemberMutation>;
+export type RemoveMemberMutationResult = ApolloReactCommon.MutationResult<RemoveMemberMutation>;
+export type RemoveMemberMutationOptions = ApolloReactCommon.BaseMutationOptions<RemoveMemberMutation, RemoveMemberMutationVariables>;
+export const CreateWallMessageDocument = gql`
+    mutation CreateWallMessage($input: CreateWallMessageInput!) {
+  createWallMessage(input: $input) {
+    id
+    author {
+      id
+      username
+      avatar
+    }
+    content
+    creationDate
+  }
+}
+    `;
+export type CreateWallMessageMutationFn = ApolloReactCommon.MutationFunction<CreateWallMessageMutation, CreateWallMessageMutationVariables>;
+
+/**
+ * __useCreateWallMessageMutation__
+ *
+ * To run a mutation, you first call `useCreateWallMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateWallMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createWallMessageMutation, { data, loading, error }] = useCreateWallMessageMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateWallMessageMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateWallMessageMutation, CreateWallMessageMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateWallMessageMutation, CreateWallMessageMutationVariables>(CreateWallMessageDocument, baseOptions);
+      }
+export type CreateWallMessageMutationHookResult = ReturnType<typeof useCreateWallMessageMutation>;
+export type CreateWallMessageMutationResult = ApolloReactCommon.MutationResult<CreateWallMessageMutation>;
+export type CreateWallMessageMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateWallMessageMutation, CreateWallMessageMutationVariables>;
+export const DeleteWallMessageDocument = gql`
+    mutation DeleteWallMessage($messageId: ID!) {
+  deleteWallMessage(messageId: $messageId)
+}
+    `;
+export type DeleteWallMessageMutationFn = ApolloReactCommon.MutationFunction<DeleteWallMessageMutation, DeleteWallMessageMutationVariables>;
+
+/**
+ * __useDeleteWallMessageMutation__
+ *
+ * To run a mutation, you first call `useDeleteWallMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteWallMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteWallMessageMutation, { data, loading, error }] = useDeleteWallMessageMutation({
+ *   variables: {
+ *      messageId: // value for 'messageId'
+ *   },
+ * });
+ */
+export function useDeleteWallMessageMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteWallMessageMutation, DeleteWallMessageMutationVariables>) {
+        return ApolloReactHooks.useMutation<DeleteWallMessageMutation, DeleteWallMessageMutationVariables>(DeleteWallMessageDocument, baseOptions);
+      }
+export type DeleteWallMessageMutationHookResult = ReturnType<typeof useDeleteWallMessageMutation>;
+export type DeleteWallMessageMutationResult = ApolloReactCommon.MutationResult<DeleteWallMessageMutation>;
+export type DeleteWallMessageMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteWallMessageMutation, DeleteWallMessageMutationVariables>;
 export const CreateTaskListDocument = gql`
     mutation CreateTaskList($input: CreateTaskListInput!) {
   createTaskList(input: $input) {
@@ -4009,6 +4199,7 @@ export const GetCurrentUserCollabRequestsDocument = gql`
   currentUser {
     id
     collabRequests {
+      id
       collab {
         id
         name
@@ -4565,6 +4756,7 @@ export const CollabWallMessagesDocument = gql`
       id
       content
       creationDate
+      isAuthor
       author {
         id
         username

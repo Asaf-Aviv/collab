@@ -31,6 +31,7 @@ const memberInvitations = _.flatten(
   seededCollabs.map(({ id, owner_id }) =>
     _.filter(seededUsers, ({ id }) => id !== owner_id).map(
       ({ id: userId }) => ({
+        id: uuid(),
         collab_id: id,
         type: 'invitation',
         member_id: userId,
@@ -54,6 +55,7 @@ const memberRequests = _.flatten(
       ),
       _.random(2, 7),
     ).map(({ id: userId }) => ({
+      id: uuid(),
       collab_id,
       type: 'request',
       member_id: userId,

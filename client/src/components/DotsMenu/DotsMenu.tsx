@@ -6,21 +6,28 @@ import {
   PopoverBody,
   Box,
   BoxProps,
+  PopoverProps,
 } from '@chakra-ui/core'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import { IconButtonWithTooltip } from '../IconButtonWithTooltip'
 
 type Props = BoxProps & {
   children: React.ReactNode
-  ariaLabel: string
+  placement?: PopoverProps['placement']
+  iconProps: Omit<React.ComponentProps<typeof IconButtonWithTooltip>, 'icon'>
 }
 
-export const DotsMenu = ({ children, ariaLabel, ...props }: Props) => (
+export const DotsMenu = ({
+  children,
+  iconProps,
+  placement = 'bottom',
+  ...props
+}: Props) => (
   <Box {...props} onClick={e => e.stopPropagation()}>
-    <Popover placement="bottom" closeOnBlur>
+    <Popover placement={placement} closeOnBlur>
       <PopoverTrigger>
         <Box as="span">
-          <IconButtonWithTooltip ariaLabel={ariaLabel} icon={MoreVertIcon} />
+          <IconButtonWithTooltip icon={MoreVertIcon} {...iconProps} />
         </Box>
       </PopoverTrigger>
       <PopoverContent zIndex={4} width="auto">

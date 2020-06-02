@@ -21,19 +21,21 @@ import { IconButtonWithTooltip } from '../../../components/IconButtonWithTooltip
 
 type TaskListResult = NonNullable<TaskListQuery['taskList']>
 
+type Props = {
+  task: TaskListResult[0]['tasks'][0]
+  index: number
+  deleteTask: () => void
+  showComments: boolean
+  toggleComments: () => void
+}
+
 export const Task = ({
   task,
   index,
   deleteTask,
   showComments,
   toggleComments,
-}: {
-  task: TaskListResult[0]['tasks'][0]
-  index: number
-  deleteTask: () => void
-  showComments: boolean
-  toggleComments: () => void
-}) => {
+}: Props) => {
   const [isEditTaskModalOpen, setIsEditTaskModalOpen] = useState(false)
 
   return (
@@ -41,7 +43,6 @@ export const Task = ({
       {provided => (
         <Box
           {...provided.draggableProps}
-          {...provided.dragHandleProps}
           ref={provided.innerRef}
           mb={2}
           borderRadius={6}
@@ -52,15 +53,22 @@ export const Task = ({
               : '0px 2px 4px 0 rgb(216,216,216)'
           }
         >
-          <Popover placement="right-start">
+          <Popover placement="right-start" isOpen={showComments}>
             <PopoverTrigger>
               <Box p={2} fontSize="0.875rem">
-                <Flex position="relative" mb={4}>
-                  <Text pr={10} fontWeight={500}>
+                <Flex
+                  position="relative"
+                  mb={2}
+                  justify="space-between"
+                  align="center"
+                >
+                  <Text pr={10} fontWeight={500} {...provided.dragHandleProps}>
                     Opened by {task.author.username}
                   </Text>
                   <DotsMenu
-                    ariaLabel="Open Task Options"
+                    iconProps={{
+                      ariaLabel: 'Open Task Options',
+                    }}
                     position="absolute"
                     right={0}
                     top={-3}
@@ -121,6 +129,7 @@ export const Task = ({
 }
 
 const StyledOptionMenu = styled(Box)`
+  display: flex;
   > :not(:first-of-type) {
     margin-left: 0.5rem;
   }

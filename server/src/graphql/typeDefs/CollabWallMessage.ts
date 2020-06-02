@@ -17,6 +17,7 @@ export const collabWallMessageTypeDefs = gql`
     author: User!
     content: String!
     creationDate: Date!
+    isAuthor: Boolean!
   }
 
   input CreateWallMessageInput {

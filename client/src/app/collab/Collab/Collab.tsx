@@ -15,19 +15,24 @@ import { CollabMembers } from '../CollabMembers'
 import { CollabDiscussions } from '../CollabDiscussions'
 import { DiscussionThread } from '../DiscussionThread'
 import styled from '@emotion/styled'
+import { useToastNotification } from '../../notifications'
+import { DisplayError } from '../../../components/DisplayError'
 
 export const Collab = () => {
   const { collabId } = useParams<{ collabId: string }>()
+  const notify = useToastNotification()
   const match = useRouteMatch()
-  const { data, loading, error } = useCollabQuery({
+  const { error } = useCollabQuery({
     variables: { collabId },
+    onError({ message }) {
+      notify('error', {
+        title: 'Error',
+        message,
+      })
+    },
   })
 
-  if (loading) return <h1>loading</h1>
-  if (error) return <h1>Collab not found</h1>
-  if (!data?.collab) return null
-
-  // const { name, owner, isOwner, pendingInvites, pendingRequests, acceptsInvites, id, collabPostId } = data.collab
+  if (error) return <DisplayError message={error.message} />
 
   return (
     <Flex>
@@ -49,7 +54,7 @@ export const Collab = () => {
           Discussions
         </StyledNavLink>
       </Flex>
-      <Box flex={1} py={8} px="2.5%" maxWidth="calc(100vw - 250px - 16px)">
+      <Box flex={1} py={8} px="2.5%" maxWidth="calc(100vw - 250px - 5%)">
         <Switch>
           <Route path={`${match.path}/wall`} component={Wall} />
           <Route path={`${match.path}/task-board`} component={TaskBoard} />

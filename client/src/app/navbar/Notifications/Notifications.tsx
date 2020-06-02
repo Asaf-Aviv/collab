@@ -167,7 +167,7 @@ export const Notifications = () => {
           >
             <Flex>
               <Text fontSize="0.85rem" mb={1} flex={1}>
-                {notification.body}
+                {notification.message}
               </Text>
               {!notification.isRead && (
                 <IconButtonWithTooltip

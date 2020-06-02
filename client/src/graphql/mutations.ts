@@ -240,11 +240,7 @@ export const CANCEL_COLLAB_REQUEST_TO_JOIN = gql`
 
 export const ACCEPT_COLLAB_INVITATION = gql`
   mutation AcceptCollabInvitation($collabId: ID!) {
-    acceptCollabInvitation(collabId: $collabId) {
-      id
-      username
-      avatar
-    }
+    acceptCollabInvitation(collabId: $collabId)
   }
 `
 
@@ -254,9 +250,50 @@ export const DECLINE_COLLAB_INVITATION = gql`
   }
 `
 
+export const ACCEPT_COLLAB_MEMBER_REQUEST = gql`
+  mutation AcceptMemberRequest($collabId: ID!, $memberId: ID!) {
+    acceptMemberRequest(collabId: $collabId, memberId: $memberId)
+  }
+`
+
 export const DECLINE_COLLAB_MEMBER_REQUEST = gql`
-  mutation DeclineCollabMemberRequest($collabId: ID!, $memberId: ID!) {
+  mutation DeclineMemberRequest($collabId: ID!, $memberId: ID!) {
     declineMemberRequest(collabId: $collabId, memberId: $memberId)
+  }
+`
+
+export const REMOVE_COLLAB_MEMBER = gql`
+  mutation RemoveMember($collabId: ID!, $memberId: ID!) {
+    removeMember(collabId: $collabId, memberId: $memberId) {
+      id
+      members {
+        id
+        username
+        avatar
+      }
+    }
+  }
+`
+
+// Collab wall
+const CREATE_WALL_MESSAGE = gql`
+  mutation CreateWallMessage($input: CreateWallMessageInput!) {
+    createWallMessage(input: $input) {
+      id
+      author {
+        id
+        username
+        avatar
+      }
+      content
+      creationDate
+    }
+  }
+`
+
+const DELETE_WALL_MESSAGE = gql`
+  mutation DeleteWallMessage($messageId: ID!) {
+    deleteWallMessage(messageId: $messageId)
   }
 `
 

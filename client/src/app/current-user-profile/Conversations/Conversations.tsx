@@ -74,9 +74,7 @@ export const Conversations = () => {
             ) : (
               <Text as="span">Deleted user</Text>
             )}
-            <Text pl={10} isTruncated>
-              {content}
-            </Text>
+            <Text pl={10}>{content}</Text>
           </PseudoBox>
         ))}
         {loading && <Loader />}

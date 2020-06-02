@@ -8,11 +8,13 @@ import {
 import { Comment } from '../../../components/Comment'
 import { ReactionPanel } from '../../../components/ReactionPanel/ReactionPanel'
 import { COLLAB_POST_COMMENTS } from '../../../graphql/queries'
-import { Box } from '@chakra-ui/core'
+import { Box, Text } from '@chakra-ui/core'
+import { Loader } from '../../../components/Loader'
+import { DisplayError } from '../../../components/DisplayError'
 
 export const PostComments = () => {
   const { postId } = useParams<{ postId: string }>()
-  const { data, loading, error } = useCollabPostCommentsQuery({
+  const { data, loading, error, refetch } = useCollabPostCommentsQuery({
     variables: { postId },
   })
   const [addReaction] = useAddCollabPostCommentReactionMutation({
@@ -21,10 +23,6 @@ export const PostComments = () => {
   const [removeReaction] = useRemoveCollabPostCommentReactionMutation({
     refetchQueries: [{ query: COLLAB_POST_COMMENTS, variables: { postId } }],
   })
-
-  if (loading) return <h1>loading</h1>
-  if (error) return <h1>Could not fetch comments</h1>
-  if (!data?.collabPost) return null
 
   const handleAddReaction = (commentId: string) => (emojiId: string) => {
     addReaction({
@@ -48,11 +46,11 @@ export const PostComments = () => {
     })
   }
 
-  const { comments } = data.collabPost
+  const { comments } = data?.collabPost ?? {}
 
   return (
     <Box pb={8}>
-      {comments.map(comment => (
+      {comments?.map(comment => (
         <Comment key={comment.id} {...comment}>
           <ReactionPanel
             reactions={comment.reactions}
@@ -61,6 +59,14 @@ export const PostComments = () => {
           />
         </Comment>
       ))}
+      {loading && <Loader />}
+      {error && (
+        <DisplayError
+          message="Could not fetch comments"
+          onClick={() => refetch()}
+        />
+      )}
+      {comments?.length === 0 && <Text>Be the first one to comment</Text>}
     </Box>
   )
 }

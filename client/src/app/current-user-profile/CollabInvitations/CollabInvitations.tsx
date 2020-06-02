@@ -1,13 +1,38 @@
 import React from 'react'
 import { Button, Text, Box, Heading, Flex, PseudoBox } from '@chakra-ui/core'
+import { DataProxy } from 'apollo-cache'
 import {
   useGetCurrentUserCollabInvitationsQuery,
   useAcceptCollabInvitationMutation,
   useDeclineCollabInvitationMutation,
+  GetCurrentUserCollabInvitationsDocument,
+  GetCurrentUserCollabInvitationsQuery,
 } from '../../../graphql/generates'
 import { AvatarWithUsername } from '../../../components/AvatarWithUsername'
 import { Loader } from '../../../components/Loader'
 import { DisplayError } from '../../../components/DisplayError'
+
+const removeInvitationFromCache = (store: DataProxy, collabId: string) => {
+  const query = GetCurrentUserCollabInvitationsDocument
+
+  const invitationsData = store.readQuery<GetCurrentUserCollabInvitationsQuery>(
+    {
+      query,
+    },
+  )!
+
+  store.writeQuery({
+    query,
+    data: {
+      currentUser: {
+        ...invitationsData.currentUser!,
+        collabInvites: invitationsData.currentUser!.collabInvites.filter(
+          ({ id }) => id !== collabId,
+        ),
+      },
+    },
+  })
+}
 
 export const CollabInvitations = () => {
   const {
@@ -16,8 +41,18 @@ export const CollabInvitations = () => {
     error,
     refetch,
   } = useGetCurrentUserCollabInvitationsQuery()
-  const [acceptInvitation] = useAcceptCollabInvitationMutation()
-  const [declineInvitation] = useDeclineCollabInvitationMutation()
+  const [acceptInvitation] = useAcceptCollabInvitationMutation({
+    update(store, response) {
+      if (!response.data) return
+      removeInvitationFromCache(store, response.data.acceptCollabInvitation)
+    },
+  })
+  const [declineInvitation] = useDeclineCollabInvitationMutation({
+    update(store, response) {
+      if (!response.data) return
+      removeInvitationFromCache(store, response.data.declineCollabInvitation)
+    },
+  })
 
   const { collabInvites } = data?.currentUser || {}
 
@@ -56,7 +91,8 @@ export const CollabInvitations = () => {
             </Flex>
             <Button
               size="sm"
-              variant="ghost"
+              variant="outline"
+              variantColor="red"
               mr={3}
               onClick={() => {
                 declineInvitation({

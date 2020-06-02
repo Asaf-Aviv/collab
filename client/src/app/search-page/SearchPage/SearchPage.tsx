@@ -81,11 +81,11 @@ export const SearchPage = () => {
   )
 
   return (
-    <Container maxWidth={1400}>
+    <Container maxWidth={900}>
       <Box as="header">
         <SearchOptions />
       </Box>
-      <Box as="main" maxWidth={900} mx="auto" mt={8}>
+      <Box as="main" mx="auto" mt={8}>
         <SectionHorizonalHeader title="Search Results" titleTag="h2" />
         {posts && (
           <>

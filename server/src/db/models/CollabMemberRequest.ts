@@ -6,12 +6,21 @@ import {
   PrimaryKey,
   BelongsTo,
   DataType,
+  IsUUID,
+  Default,
 } from 'sequelize-typescript'
+import { v4 as uuid } from 'uuid'
 import { Collab } from './Collab'
 import { User } from './User'
 
 @Table({ tableName: 'collab_member_requests' })
 export class CollabMemberRequest extends Model<CollabMemberRequest> {
+  @IsUUID(4)
+  @PrimaryKey
+  @Default(uuid)
+  @Column
+  id!: string
+
   @PrimaryKey
   @ForeignKey(() => Collab)
   @Column

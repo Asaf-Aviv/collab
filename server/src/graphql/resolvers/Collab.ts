@@ -2,6 +2,7 @@ import { isAuthenticated } from './../middleware/isAuthenticated'
 import { and } from 'graphql-shield'
 import { Resolvers } from '../types'
 import { replaceErrorWithNull } from '../helpers/replaceErrorWithNull'
+import { GQLUser } from '../../db/models/User'
 
 export const collabResolver: Resolvers = {
   Query: {
@@ -74,7 +75,7 @@ export const collabResolver: Resolvers = {
 
       const memberIds = members.map(({ memberId }) => memberId)
       const users = await loaders.userLoader.loadMany(memberIds)
-      return users.map(replaceErrorWithNull)
+      return users.map(replaceErrorWithNull) as GQLUser[]
     },
     pendingInvites: async ({ id }, args, { models, loaders }) => {
       const pendingInviteMembers = await models.CollabMemberRequest.findAll({

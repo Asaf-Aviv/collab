@@ -36,7 +36,7 @@ export class Collab extends Model<Collab> {
   name!: string
 
   @AllowNull(false)
-  @Default(false)
+  @Default(true)
   @Column
   acceptsInvites!: boolean
 
@@ -104,45 +104,6 @@ export class Collab extends Model<Collab> {
     }
 
     return collab
-  }
-
-  static async acceptMemberRequest(
-    collabId: string,
-    ownerId: string,
-    memberId: string,
-  ) {
-    return this.sequelize!.transaction(async () => {
-      const [collab, isMember, memberRequest] = await Promise.all([
-        Collab.findByPk(collabId),
-        CollabMember.findOne({
-          where: { collabId, memberId },
-        }),
-        CollabMemberRequest.findOne({
-          where: { collabId, memberId, type: 'request' },
-        }),
-      ])
-
-      if (!collab) {
-        throw new Error('Collab not found')
-      }
-      if (ownerId !== collab.ownerId) {
-        throw new Error('You have no permissions to add members')
-      }
-      if (isMember) {
-        throw new Error('User is already a member')
-      }
-      if (!memberRequest) {
-        throw new Error('Request does not exist')
-      }
-
-      await Promise.all([
-        //
-        CollabMember.create({ collabId, memberId }),
-        memberRequest.destroy(),
-      ])
-
-      return collab
-    })
   }
 
   static async removeMember(
@@ -275,16 +236,19 @@ export class Collab extends Model<Collab> {
     return collab
   }
 
-  static async declineMemberRequest(
+  static async acceptMemberRequest(
     collabId: string,
-    memberId: string,
     ownerId: string,
+    memberId: string,
   ) {
     return this.sequelize!.transaction(async () => {
-      const [collab, requestExist] = await Promise.all([
+      const [collab, isMember, request] = await Promise.all([
         Collab.findByPk(collabId),
-        CollabMemberRequest.findOne({
+        CollabMember.findOne({
           where: { collabId, memberId },
+        }),
+        CollabMemberRequest.findOne({
+          where: { collabId, memberId, type: 'request' },
         }),
       ])
 
@@ -292,22 +256,50 @@ export class Collab extends Model<Collab> {
         throw new Error('Collab not found')
       }
       if (ownerId !== collab.ownerId) {
-        throw new Error('You have no permissions to decline this request')
+        throw new Error('You have no permissions to add members')
       }
-      if (!requestExist) {
-        throw new Error('Request does not exist anymore')
+      if (isMember) {
+        throw new Error('User is already a member')
       }
-
-      const removed = await CollabMember.destroy({
-        where: { memberId, collabId },
-      })
-
-      if (!removed) {
-        throw new Error('Something went wrong')
+      if (!request) {
+        throw new Error('Request does not exist')
       }
 
-      return true
+      await Promise.all([
+        //
+        CollabMember.create({ collabId, memberId }),
+        request.destroy(),
+      ])
+
+      return request.id
     })
+  }
+
+  static async declineMemberRequest(
+    collabId: string,
+    memberId: string,
+    ownerId: string,
+  ) {
+    const [collab, request] = await Promise.all([
+      Collab.findByPk(collabId),
+      CollabMemberRequest.findOne({
+        where: { collabId, memberId },
+      }),
+    ])
+
+    if (!collab) {
+      throw new Error('Collab not found')
+    }
+    if (ownerId !== collab.ownerId) {
+      throw new Error('You have no permissions to decline this request')
+    }
+    if (!request) {
+      throw new Error('Request does not exist anymore')
+    }
+
+    await request.destroy()
+
+    return request.id
   }
 }
 

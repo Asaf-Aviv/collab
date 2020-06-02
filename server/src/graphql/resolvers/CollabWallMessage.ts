@@ -16,5 +16,6 @@ export const collabWallMessageResolver: Resolvers = {
       const user = await loaders.userLoader.load(authorId)
       return user!
     },
+    isAuthor: ({ authorId }, args, { user }) => user?.id === authorId,
   },
 }

@@ -41,7 +41,7 @@ export const ChatUsersList = memo(function ChatUsersList({
         p={2}
         boxShadow="0 1px 1px 1px #c3c3c3"
       >
-        <Flex direction="column" as="ul" listStyleType="none">
+        <Flex direction="column" listStyleType="none">
           {sortedUsers.map(user => (
             <ChatUserListItem
               key={user.id}
