@@ -23,7 +23,7 @@ export const Layout = () => {
   return (
     <>
       <NavBar />
-      <Flex bg="bg" color="text">
+      <Box bg="bg" color="text">
         <Box flex={1}>
           <Box pt="64px" minHeight="100vh">
             {pathname !== '/' && !pathname.includes('/collab/') && (
@@ -33,15 +33,15 @@ export const Layout = () => {
           </Box>
           <Footer />
         </Box>
-        {currentUser && windowWidth >= 768 && (
-          <ChatProvider>
-            <Chat
-              isMinimized={isChatMinimized}
-              toggleMinimize={() => setIsChatMinimized(prevState => !prevState)}
-            />
-          </ChatProvider>
-        )}
-      </Flex>
+      </Box>
+      {currentUser && windowWidth >= 768 && (
+        <ChatProvider>
+          <Chat
+            isMinimized={isChatMinimized}
+            toggleMinimize={() => setIsChatMinimized(prevState => !prevState)}
+          />
+        </ChatProvider>
+      )}
     </>
   )
 }

@@ -4,7 +4,6 @@ import MenuRoundedIcon from '@material-ui/icons/MenuRounded'
 import MenuOpenRoundedIcon from '@material-ui/icons/MenuOpenRounded'
 import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
-import AccountBoxOutlinedIcon from '@material-ui/icons/AccountBoxOutlined'
 import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined'
 import SearchRoundedIcon from '@material-ui/icons/SearchRounded'
 import PostAddIcon from '@material-ui/icons/PostAdd'
@@ -98,13 +97,7 @@ export const SmallScreenNav = () => {
                 <ArrowForwardIosIcon />
               </StyledLink>
               <Divider />
-              {currentUser ? (
-                <StyledLink to="/profile">
-                  <AccountBoxOutlinedIcon />
-                  Profile
-                  <ArrowForwardIosIcon />
-                </StyledLink>
-              ) : (
+              {!currentUser && (
                 <>
                   <StyledLink to="/login">
                     <PostAddIcon />

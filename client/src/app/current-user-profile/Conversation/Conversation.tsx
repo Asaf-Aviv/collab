@@ -9,6 +9,7 @@ import { AvatarWithUsername } from '../../../components/AvatarWithUsername'
 import { DisplayDate } from '../../../components/DisplayDate'
 import { useOnVisibilty } from '../../../hooks/useOnVisibilty'
 import { SendMessageModal } from '../SendMessageModal'
+import { useWindowWidth } from '../../../providers'
 
 export const Conversation = () => {
   const { userId } = useParams<{ userId: string }>()
@@ -23,6 +24,7 @@ export const Conversation = () => {
     variables: { userId, offset: 0, limit: 10 },
   })
   const [isSendMessageModalOpen, setIsSendMessageModalOpen] = useState(false)
+  const width = useWindowWidth()
   const { messages, hasNextPage } = data?.getConversation || {}
 
   const handleNextPageLoad = () => {
@@ -60,13 +62,14 @@ export const Conversation = () => {
 
   return (
     <Box as="main" flex={1} pb={4}>
-      <Flex align="center" as="header" justify="space-between" mb={4}>
+      <Flex align="center" as="header" justify="space -between" mb={4}>
         {messages && (
           <>
             <Heading as="h1" size="md" fontWeight={500}>
-              Conversation with {recipient?.username}
+              {recipient?.username}
             </Heading>
             <Button
+              size={width >= 480 ? 'md' : 'sm'}
               variantColor="purple"
               onClick={() => setIsSendMessageModalOpen(true)}
             >
