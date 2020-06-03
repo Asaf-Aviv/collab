@@ -13,6 +13,7 @@ import { useCurrentUserConversationsPreviewQuery } from '../../../graphql/genera
 import { Loader } from '../../../components/Loader'
 import { DisplayError } from '../../../components/DisplayError'
 import { SendMessageModal } from '../SendMessageModal'
+import { useWindowWidth } from '../../../providers'
 
 export const Conversations = () => {
   const {
@@ -23,6 +24,7 @@ export const Conversations = () => {
   } = useCurrentUserConversationsPreviewQuery()
   const [isSendMessageModalOpen, setIsSendMessageModalOpen] = useState(false)
   const match = useRouteMatch()
+  const width = useWindowWidth()
 
   const { conversationsPreview } = data?.currentUser || {}
 
@@ -33,6 +35,7 @@ export const Conversations = () => {
           Your Conversations
         </Heading>
         <Button
+          size={width >= 480 ? 'md' : 'sm'}
           variantColor="purple"
           onClick={() => setIsSendMessageModalOpen(true)}
         >

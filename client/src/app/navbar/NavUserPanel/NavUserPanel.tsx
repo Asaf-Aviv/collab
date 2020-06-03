@@ -1,20 +1,25 @@
 import React from 'react'
 import { Flex } from '@chakra-ui/core'
 import styled from '@emotion/styled'
-import { FriendRequests } from '../FriendRequests'
+import { FriendRequestsBallon } from '../FriendRequestsBallon'
 import { UserAccountMenu } from '../UserAccountMenu'
 import { Notifications } from '../Notifications'
+import { useWindowWidth } from '../../../providers'
 
-export const NavUserPanel = () => (
-  <StyledFlex>
-    <Notifications />
-    <FriendRequests />
-    <UserAccountMenu />
-  </StyledFlex>
-)
+export const NavUserPanel = () => {
+  const width = useWindowWidth()
+
+  return (
+    <StyledFlex>
+      <Notifications />
+      {width >= 480 && <FriendRequestsBallon />}
+      <UserAccountMenu />
+    </StyledFlex>
+  )
+}
 
 const StyledFlex = styled(Flex)`
-  > div:first-of-type {
-    margin-right: 0.5rem;
+  > div:nth-of-type(2) {
+    margin-left: 0.5rem;
   }
 `
