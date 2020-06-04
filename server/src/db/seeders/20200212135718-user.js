@@ -4,6 +4,7 @@ const { v4: uuid } = require('uuid')
 const friendRequests = seededUsers
   .filter(user => user !== asaf)
   .map(user => ({
+    id: uuid(),
     sender_id: user.id,
     receiver_id: asaf.id,
     created_at: new Date(),

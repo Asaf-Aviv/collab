@@ -5,7 +5,10 @@ import {
   PrimaryKey,
   ForeignKey,
   BelongsTo,
+  IsUUID,
+  Default,
 } from 'sequelize-typescript'
+import { v4 as uuid } from 'uuid'
 import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 import { User } from './User'
 
@@ -14,6 +17,12 @@ import { User } from './User'
   timestamps: true,
 })
 export class UserFriendRequest extends Model<UserFriendRequest> {
+  @IsUUID(4)
+  @PrimaryKey
+  @Default(uuid)
+  @Column
+  id!: string
+
   @PrimaryKey
   @ForeignKey(() => User)
   @Column
@@ -32,8 +41,7 @@ export class UserFriendRequest extends Model<UserFriendRequest> {
 
   static async createFriendRequest(receiverId: string, senderId: string) {
     //FIXME: check if there is already a request from the receiver
-    await this.create({ receiverId, senderId })
-    return true
+    return this.create({ receiverId, senderId }, { raw: true })
   }
 
   static async deleteFriendRequest(receiverId: string, senderId: string) {

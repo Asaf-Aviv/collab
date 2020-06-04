@@ -7,10 +7,9 @@ import { collabTaskListMiddleware } from '../resolvers/TaskList'
 import { collabTaskCommentMiddleware } from '../resolvers/TaskComment'
 import { collabDiscussionThreadMiddleware } from '../resolvers/CollabDiscussionThread'
 import { collabDiscussionThreadCommentMiddleware } from '../resolvers/CollabDiscussionThreadComment'
-import _ from 'lodash'
 
 export const permissions = shield(
-  _.merge(
+  Object.assign(
     {},
     userMiddleware,
     collabMiddleware,
@@ -19,7 +18,7 @@ export const permissions = shield(
     collabTaskMiddleware,
     collabTaskCommentMiddleware,
     collabDiscussionThreadMiddleware,
-    collabDiscussionThreadCommentMiddleware
+    collabDiscussionThreadCommentMiddleware,
   ),
-  { allowExternalErrors: true }
+  { allowExternalErrors: true },
 )
