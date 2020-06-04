@@ -23,7 +23,6 @@ export class UserFriendRequest extends Model<UserFriendRequest> {
   @Column
   id!: string
 
-  @PrimaryKey
   @ForeignKey(() => User)
   @Column
   senderId!: string
@@ -31,7 +30,6 @@ export class UserFriendRequest extends Model<UserFriendRequest> {
   @BelongsTo(() => User, { foreignKey: 'senderId', onDelete: 'CASCADE' })
   sender!: User
 
-  @PrimaryKey
   @ForeignKey(() => User)
   @Column
   receiverId!: string

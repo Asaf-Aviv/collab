@@ -25,7 +25,7 @@ export type Scalars = {
 };
 
 export type Query = {
-  __typename?: 'Query';
+   __typename?: 'Query';
   advancedPostsSearch: CollabPostsSearchResultsPayload;
   collab?: Maybe<Collab>;
   collabPost?: Maybe<CollabPost>;
@@ -116,7 +116,7 @@ export type QueryUserArgs = {
 };
 
 export type Mutation = {
-  __typename?: 'Mutation';
+   __typename?: 'Mutation';
   acceptCollabInvitation: Scalars['ID'];
   acceptFriendRequest: User;
   acceptMemberRequest: Scalars['ID'];
@@ -472,7 +472,7 @@ export type MutationUpdateUserInfoArgs = {
 };
 
 export type Collab = {
-  __typename?: 'Collab';
+   __typename?: 'Collab';
   acceptsInvites: Scalars['Boolean'];
   collabPostId?: Maybe<Scalars['ID']>;
   discussionThreads: Array<CollabDiscussionThread>;
@@ -490,7 +490,7 @@ export type Collab = {
 };
 
 export type CollabDiscussionThreadComment = {
-  __typename?: 'CollabDiscussionThreadComment';
+   __typename?: 'CollabDiscussionThreadComment';
   author: User;
   collab?: Maybe<Collab>;
   content: Scalars['String'];
@@ -526,7 +526,7 @@ export type RemoveCollabDiscussionThreadReactionInput = {
 };
 
 export type CollabDiscussionThread = {
-  __typename?: 'CollabDiscussionThread';
+   __typename?: 'CollabDiscussionThread';
   author: User;
   collab?: Maybe<Collab>;
   comments: Array<CollabDiscussionThreadComment>;
@@ -555,7 +555,7 @@ export type AdvancedPostsSearchInput = {
 };
 
 export type CollabPostsSearchResultsPayload = {
-  __typename?: 'CollabPostsSearchResultsPayload';
+   __typename?: 'CollabPostsSearchResultsPayload';
   hasNextPage: Scalars['Boolean'];
   posts: Array<CollabPost>;
 };
@@ -567,14 +567,14 @@ export type SearchPostsInput = {
 };
 
 export type SearchPostsPayload = {
-  __typename?: 'SearchPostsPayload';
+   __typename?: 'SearchPostsPayload';
   hasNextPage: Scalars['Boolean'];
   posts: Array<CollabPost>;
   totalResults: Scalars['Int'];
 };
 
 export type CollabPost = {
-  __typename?: 'CollabPost';
+   __typename?: 'CollabPost';
   acceptsInvites: Scalars['Boolean'];
   collabId: Scalars['ID'];
   comments: Array<CollabPostComment>;
@@ -604,7 +604,7 @@ export type CollabPost = {
 };
 
 export type CollabPostsPayload = {
-  __typename?: 'CollabPostsPayload';
+   __typename?: 'CollabPostsPayload';
   hasNextPage: Scalars['Boolean'];
   posts: Array<CollabPost>;
 };
@@ -629,7 +629,7 @@ export enum Experience {
 }
 
 export type CollabPostComment = {
-  __typename?: 'CollabPostComment';
+   __typename?: 'CollabPostComment';
   author: User;
   content: Scalars['String'];
   id: Scalars['ID'];
@@ -667,7 +667,7 @@ export type RemoveCollabTaskCommentReactionInput = {
 };
 
 export type WallMessage = {
-  __typename?: 'WallMessage';
+   __typename?: 'WallMessage';
   author: User;
   content: Scalars['String'];
   creationDate: Scalars['Date'];
@@ -681,7 +681,7 @@ export type CreateWallMessageInput = {
 };
 
 export type CollabWallMessagesPayload = {
-  __typename?: 'CollabWallMessagesPayload';
+   __typename?: 'CollabWallMessagesPayload';
   hasNextPage: Scalars['Boolean'];
   messages: Array<WallMessage>;
 };
@@ -693,14 +693,15 @@ export type CollabWallMessagesInput = {
 };
 
 export type Subscription = {
-  __typename?: 'Subscription';
+   __typename?: 'Subscription';
   friendStatusChange: ChatUsersPayload;
+  newFriendRequest: NewFriendRequestPayload;
   newNotification: Notification;
   newPrivateChatMessage: PrivateChatMessage;
 };
 
 export type Notification = {
-  __typename?: 'Notification';
+   __typename?: 'Notification';
   creationDate: Scalars['Date'];
   id: Scalars['ID'];
   isRead: Scalars['Boolean'];
@@ -718,18 +719,18 @@ export enum UserChatStatus {
 }
 
 export type ConnectToChatPayload = {
-  __typename?: 'ConnectToChatPayload';
+   __typename?: 'ConnectToChatPayload';
   users: Array<ChatUsersPayload>;
 };
 
 export type ChatUsersPayload = {
-  __typename?: 'ChatUsersPayload';
+   __typename?: 'ChatUsersPayload';
   status: UserChatStatus;
   user: User;
 };
 
 export type PrivateChatMessage = {
-  __typename?: 'PrivateChatMessage';
+   __typename?: 'PrivateChatMessage';
   authorId: Scalars['ID'];
   content: Scalars['String'];
   creationDate: Scalars['Date'];
@@ -742,7 +743,7 @@ export type SendPrivateChatMessageInput = {
 };
 
 export type PrivateMessage = {
-  __typename?: 'PrivateMessage';
+   __typename?: 'PrivateMessage';
   author?: Maybe<User>;
   content: Scalars['String'];
   creationDate: Scalars['Date'];
@@ -752,7 +753,7 @@ export type PrivateMessage = {
 };
 
 export type PrivateMessagePreview = {
-  __typename?: 'PrivateMessagePreview';
+   __typename?: 'PrivateMessagePreview';
   avatar: Scalars['String'];
   content: Scalars['String'];
   userId: Scalars['ID'];
@@ -760,7 +761,7 @@ export type PrivateMessagePreview = {
 };
 
 export type GetConversationPayload = {
-  __typename?: 'GetConversationPayload';
+   __typename?: 'GetConversationPayload';
   hasNextPage: Scalars['Boolean'];
   messages: Array<PrivateMessage>;
 };
@@ -771,7 +772,7 @@ export type SendPrivateMessageInput = {
 };
 
 export type Reaction = {
-  __typename?: 'Reaction';
+   __typename?: 'Reaction';
   count: Scalars['Int'];
   emojiId: Scalars['ID'];
   isLiked: Scalars['Boolean'];
@@ -779,7 +780,7 @@ export type Reaction = {
 
 
 export type Task = {
-  __typename?: 'Task';
+   __typename?: 'Task';
   assignedBy?: Maybe<User>;
   assignee?: Maybe<User>;
   author: User;
@@ -825,7 +826,7 @@ export type MoveTaskToListInput = {
 };
 
 export type TaskComment = {
-  __typename?: 'TaskComment';
+   __typename?: 'TaskComment';
   author?: Maybe<User>;
   content: Scalars['String'];
   id: Scalars['ID'];
@@ -856,7 +857,7 @@ export type UpdateTaskListPositionInput = {
 };
 
 export type TaskList = {
-  __typename?: 'TaskList';
+   __typename?: 'TaskList';
   collab?: Maybe<Collab>;
   id: Scalars['ID'];
   name: Scalars['String'];
@@ -864,8 +865,13 @@ export type TaskList = {
   tasks: Array<Task>;
 };
 
+export type NewFriendRequestPayload = {
+   __typename?: 'NewFriendRequestPayload';
+  user: User;
+};
+
 export type CurrentUser = {
-  __typename?: 'CurrentUser';
+   __typename?: 'CurrentUser';
   avatar?: Maybe<Scalars['String']>;
   bio: Scalars['String'];
   collabInvites: Array<Collab>;
@@ -892,7 +898,7 @@ export type CurrentUser = {
 };
 
 export type User = {
-  __typename?: 'User';
+   __typename?: 'User';
   avatar?: Maybe<Scalars['String']>;
   bio?: Maybe<Scalars['String']>;
   canRequestFriendship: Scalars['Boolean'];
@@ -922,14 +928,14 @@ export type UpdateUserInfoInput = {
 };
 
 export type CollabRequest = {
-  __typename?: 'CollabRequest';
+   __typename?: 'CollabRequest';
   collab: Collab;
   id: Scalars['ID'];
   member: User;
 };
 
 export type AuthPayload = {
-  __typename?: 'AuthPayload';
+   __typename?: 'AuthPayload';
   token: Scalars['String'];
 };
 
@@ -2136,6 +2142,20 @@ export type NewNotificationSubscription = (
   ) }
 );
 
+export type NewFriendRequestSubscriptionVariables = {};
+
+
+export type NewFriendRequestSubscription = (
+  { __typename?: 'Subscription' }
+  & { newFriendRequest: (
+    { __typename?: 'NewFriendRequestPayload' }
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    ) }
+  ) }
+);
+
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
 
@@ -2210,528 +2230,537 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
-  String: ResolverTypeWrapper<Scalars['String']>;
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
-  Query: ResolverTypeWrapper<{}>;
-  ID: ResolverTypeWrapper<Scalars['ID']>;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
-  Mutation: ResolverTypeWrapper<{}>;
-  Collab: ResolverTypeWrapper<GQLCollab>;
-  CollabDiscussionThreadComment: ResolverTypeWrapper<GQLCollabDiscussionThreadComment>;
-  CreateCollabDiscussionThreadCommentInput: CreateCollabDiscussionThreadCommentInput;
-  AddDiscussionThreadCommentReactionInput: AddDiscussionThreadCommentReactionInput;
-  RemoveDiscussionThreadCommentReactionInput: RemoveDiscussionThreadCommentReactionInput;
-  AddCollabDiscussionThreadReactionInput: AddCollabDiscussionThreadReactionInput;
-  RemoveCollabDiscussionThreadReactionInput: RemoveCollabDiscussionThreadReactionInput;
-  CollabDiscussionThread: ResolverTypeWrapper<GQLCollabDiscussionThread>;
-  CreateThreadArgs: CreateThreadArgs;
-  AdvancedPostsSearchInput: AdvancedPostsSearchInput;
-  CollabPostsSearchResultsPayload: ResolverTypeWrapper<Omit<CollabPostsSearchResultsPayload, 'posts'> & { posts: Array<ResolversTypes['CollabPost']> }>;
-  SearchPostsInput: SearchPostsInput;
-  SearchPostsPayload: ResolverTypeWrapper<Omit<SearchPostsPayload, 'posts'> & { posts: Array<ResolversTypes['CollabPost']> }>;
-  CollabPost: ResolverTypeWrapper<GQLCollabPost>;
-  CollabPostsPayload: ResolverTypeWrapper<Omit<CollabPostsPayload, 'posts'> & { posts: Array<ResolversTypes['CollabPost']> }>;
-  CollabPostArgs: CollabPostArgs;
-  Experience: Experience;
-  CollabPostComment: ResolverTypeWrapper<GQLCollabPostComment>;
-  AddCollabPostCommentReactionInput: AddCollabPostCommentReactionInput;
-  RemoveCollabPostCommentReactionInput: RemoveCollabPostCommentReactionInput;
-  AddCollabPostReactionInput: AddCollabPostReactionInput;
-  RemoveCollabPostReactionInput: RemoveCollabPostReactionInput;
-  AddCollabTaskCommentReactionInput: AddCollabTaskCommentReactionInput;
-  RemoveCollabTaskCommentReactionInput: RemoveCollabTaskCommentReactionInput;
-  WallMessage: ResolverTypeWrapper<GQLWallMessage>;
-  CreateWallMessageInput: CreateWallMessageInput;
-  CollabWallMessagesPayload: ResolverTypeWrapper<Omit<CollabWallMessagesPayload, 'messages'> & { messages: Array<ResolversTypes['WallMessage']> }>;
-  CollabWallMessagesInput: CollabWallMessagesInput;
-  Subscription: ResolverTypeWrapper<{}>;
-  Notification: ResolverTypeWrapper<Notification>;
-  UserChatStatus: UserChatStatus;
-  ConnectToChatPayload: ResolverTypeWrapper<Omit<ConnectToChatPayload, 'users'> & { users: Array<ResolversTypes['ChatUsersPayload']> }>;
-  ChatUsersPayload: ResolverTypeWrapper<Omit<ChatUsersPayload, 'user'> & { user: ResolversTypes['User'] }>;
-  PrivateChatMessage: ResolverTypeWrapper<PrivateChatMessage>;
-  SendPrivateChatMessageInput: SendPrivateChatMessageInput;
-  PrivateMessage: ResolverTypeWrapper<GQLPrivateMessage>;
-  PrivateMessagePreview: ResolverTypeWrapper<PrivateMessagePreview>;
-  GetConversationPayload: ResolverTypeWrapper<Omit<GetConversationPayload, 'messages'> & { messages: Array<ResolversTypes['PrivateMessage']> }>;
-  SendPrivateMessageInput: SendPrivateMessageInput;
-  Reaction: ResolverTypeWrapper<Reaction>;
-  Date: ResolverTypeWrapper<Scalars['Date']>;
-  Task: ResolverTypeWrapper<GQLCollabTask>;
-  UpdateTaskInput: UpdateTaskInput;
-  CreateTaskInput: CreateTaskInput;
-  UpdateTaskAssigneeInput: UpdateTaskAssigneeInput;
-  UpdateTaskPositionInput: UpdateTaskPositionInput;
-  MoveTaskToListInput: MoveTaskToListInput;
-  TaskComment: ResolverTypeWrapper<GQLCollabTaskComment>;
-  CreateTaskCommentInput: CreateTaskCommentInput;
-  CreateTaskListInput: CreateTaskListInput;
-  UpdateTaskListNameInput: UpdateTaskListNameInput;
-  UpdateTaskListPositionInput: UpdateTaskListPositionInput;
-  TaskList: ResolverTypeWrapper<GQLCollabTaskList>;
-  CurrentUser: ResolverTypeWrapper<Omit<CurrentUser, 'collabInvites' | 'collabRequests' | 'collabs' | 'friendRequests' | 'friends' | 'tasks'> & { collabInvites: Array<ResolversTypes['Collab']>, collabRequests: Array<ResolversTypes['CollabRequest']>, collabs: Array<ResolversTypes['Collab']>, friendRequests: Array<ResolversTypes['User']>, friends: Array<ResolversTypes['User']>, tasks: Array<ResolversTypes['Task']> }>;
-  User: ResolverTypeWrapper<GQLUser>;
-  SearchFriendsInput: SearchFriendsInput;
-  UpdateUserInfoInput: UpdateUserInfoInput;
-  CollabRequest: ResolverTypeWrapper<Omit<CollabRequest, 'collab' | 'member'> & { collab: ResolversTypes['Collab'], member: ResolversTypes['User'] }>;
-  AuthPayload: ResolverTypeWrapper<AuthPayload>;
-  SignUpArgs: SignUpArgs;
-  LoginArgs: LoginArgs;
+  String: ResolverTypeWrapper<Scalars['String']>,
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
+  Query: ResolverTypeWrapper<{}>,
+  ID: ResolverTypeWrapper<Scalars['ID']>,
+  Int: ResolverTypeWrapper<Scalars['Int']>,
+  Mutation: ResolverTypeWrapper<{}>,
+  Collab: ResolverTypeWrapper<GQLCollab>,
+  CollabDiscussionThreadComment: ResolverTypeWrapper<GQLCollabDiscussionThreadComment>,
+  CreateCollabDiscussionThreadCommentInput: CreateCollabDiscussionThreadCommentInput,
+  AddDiscussionThreadCommentReactionInput: AddDiscussionThreadCommentReactionInput,
+  RemoveDiscussionThreadCommentReactionInput: RemoveDiscussionThreadCommentReactionInput,
+  AddCollabDiscussionThreadReactionInput: AddCollabDiscussionThreadReactionInput,
+  RemoveCollabDiscussionThreadReactionInput: RemoveCollabDiscussionThreadReactionInput,
+  CollabDiscussionThread: ResolverTypeWrapper<GQLCollabDiscussionThread>,
+  CreateThreadArgs: CreateThreadArgs,
+  AdvancedPostsSearchInput: AdvancedPostsSearchInput,
+  CollabPostsSearchResultsPayload: ResolverTypeWrapper<Omit<CollabPostsSearchResultsPayload, 'posts'> & { posts: Array<ResolversTypes['CollabPost']> }>,
+  SearchPostsInput: SearchPostsInput,
+  SearchPostsPayload: ResolverTypeWrapper<Omit<SearchPostsPayload, 'posts'> & { posts: Array<ResolversTypes['CollabPost']> }>,
+  CollabPost: ResolverTypeWrapper<GQLCollabPost>,
+  CollabPostsPayload: ResolverTypeWrapper<Omit<CollabPostsPayload, 'posts'> & { posts: Array<ResolversTypes['CollabPost']> }>,
+  CollabPostArgs: CollabPostArgs,
+  Experience: Experience,
+  CollabPostComment: ResolverTypeWrapper<GQLCollabPostComment>,
+  AddCollabPostCommentReactionInput: AddCollabPostCommentReactionInput,
+  RemoveCollabPostCommentReactionInput: RemoveCollabPostCommentReactionInput,
+  AddCollabPostReactionInput: AddCollabPostReactionInput,
+  RemoveCollabPostReactionInput: RemoveCollabPostReactionInput,
+  AddCollabTaskCommentReactionInput: AddCollabTaskCommentReactionInput,
+  RemoveCollabTaskCommentReactionInput: RemoveCollabTaskCommentReactionInput,
+  WallMessage: ResolverTypeWrapper<GQLWallMessage>,
+  CreateWallMessageInput: CreateWallMessageInput,
+  CollabWallMessagesPayload: ResolverTypeWrapper<Omit<CollabWallMessagesPayload, 'messages'> & { messages: Array<ResolversTypes['WallMessage']> }>,
+  CollabWallMessagesInput: CollabWallMessagesInput,
+  Subscription: ResolverTypeWrapper<{}>,
+  Notification: ResolverTypeWrapper<Notification>,
+  UserChatStatus: UserChatStatus,
+  ConnectToChatPayload: ResolverTypeWrapper<Omit<ConnectToChatPayload, 'users'> & { users: Array<ResolversTypes['ChatUsersPayload']> }>,
+  ChatUsersPayload: ResolverTypeWrapper<Omit<ChatUsersPayload, 'user'> & { user: ResolversTypes['User'] }>,
+  PrivateChatMessage: ResolverTypeWrapper<PrivateChatMessage>,
+  SendPrivateChatMessageInput: SendPrivateChatMessageInput,
+  PrivateMessage: ResolverTypeWrapper<GQLPrivateMessage>,
+  PrivateMessagePreview: ResolverTypeWrapper<PrivateMessagePreview>,
+  GetConversationPayload: ResolverTypeWrapper<Omit<GetConversationPayload, 'messages'> & { messages: Array<ResolversTypes['PrivateMessage']> }>,
+  SendPrivateMessageInput: SendPrivateMessageInput,
+  Reaction: ResolverTypeWrapper<Reaction>,
+  Date: ResolverTypeWrapper<Scalars['Date']>,
+  Task: ResolverTypeWrapper<GQLCollabTask>,
+  UpdateTaskInput: UpdateTaskInput,
+  CreateTaskInput: CreateTaskInput,
+  UpdateTaskAssigneeInput: UpdateTaskAssigneeInput,
+  UpdateTaskPositionInput: UpdateTaskPositionInput,
+  MoveTaskToListInput: MoveTaskToListInput,
+  TaskComment: ResolverTypeWrapper<GQLCollabTaskComment>,
+  CreateTaskCommentInput: CreateTaskCommentInput,
+  CreateTaskListInput: CreateTaskListInput,
+  UpdateTaskListNameInput: UpdateTaskListNameInput,
+  UpdateTaskListPositionInput: UpdateTaskListPositionInput,
+  TaskList: ResolverTypeWrapper<GQLCollabTaskList>,
+  NewFriendRequestPayload: ResolverTypeWrapper<Omit<NewFriendRequestPayload, 'user'> & { user: ResolversTypes['User'] }>,
+  CurrentUser: ResolverTypeWrapper<Omit<CurrentUser, 'collabInvites' | 'collabRequests' | 'collabs' | 'friendRequests' | 'friends' | 'tasks'> & { collabInvites: Array<ResolversTypes['Collab']>, collabRequests: Array<ResolversTypes['CollabRequest']>, collabs: Array<ResolversTypes['Collab']>, friendRequests: Array<ResolversTypes['User']>, friends: Array<ResolversTypes['User']>, tasks: Array<ResolversTypes['Task']> }>,
+  User: ResolverTypeWrapper<GQLUser>,
+  SearchFriendsInput: SearchFriendsInput,
+  UpdateUserInfoInput: UpdateUserInfoInput,
+  CollabRequest: ResolverTypeWrapper<Omit<CollabRequest, 'collab' | 'member'> & { collab: ResolversTypes['Collab'], member: ResolversTypes['User'] }>,
+  AuthPayload: ResolverTypeWrapper<AuthPayload>,
+  SignUpArgs: SignUpArgs,
+  LoginArgs: LoginArgs,
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
-  String: Scalars['String'];
-  Boolean: Scalars['Boolean'];
-  Query: {};
-  ID: Scalars['ID'];
-  Int: Scalars['Int'];
-  Mutation: {};
-  Collab: GQLCollab;
-  CollabDiscussionThreadComment: GQLCollabDiscussionThreadComment;
-  CreateCollabDiscussionThreadCommentInput: CreateCollabDiscussionThreadCommentInput;
-  AddDiscussionThreadCommentReactionInput: AddDiscussionThreadCommentReactionInput;
-  RemoveDiscussionThreadCommentReactionInput: RemoveDiscussionThreadCommentReactionInput;
-  AddCollabDiscussionThreadReactionInput: AddCollabDiscussionThreadReactionInput;
-  RemoveCollabDiscussionThreadReactionInput: RemoveCollabDiscussionThreadReactionInput;
-  CollabDiscussionThread: GQLCollabDiscussionThread;
-  CreateThreadArgs: CreateThreadArgs;
-  AdvancedPostsSearchInput: AdvancedPostsSearchInput;
-  CollabPostsSearchResultsPayload: Omit<CollabPostsSearchResultsPayload, 'posts'> & { posts: Array<ResolversParentTypes['CollabPost']> };
-  SearchPostsInput: SearchPostsInput;
-  SearchPostsPayload: Omit<SearchPostsPayload, 'posts'> & { posts: Array<ResolversParentTypes['CollabPost']> };
-  CollabPost: GQLCollabPost;
-  CollabPostsPayload: Omit<CollabPostsPayload, 'posts'> & { posts: Array<ResolversParentTypes['CollabPost']> };
-  CollabPostArgs: CollabPostArgs;
-  Experience: Experience;
-  CollabPostComment: GQLCollabPostComment;
-  AddCollabPostCommentReactionInput: AddCollabPostCommentReactionInput;
-  RemoveCollabPostCommentReactionInput: RemoveCollabPostCommentReactionInput;
-  AddCollabPostReactionInput: AddCollabPostReactionInput;
-  RemoveCollabPostReactionInput: RemoveCollabPostReactionInput;
-  AddCollabTaskCommentReactionInput: AddCollabTaskCommentReactionInput;
-  RemoveCollabTaskCommentReactionInput: RemoveCollabTaskCommentReactionInput;
-  WallMessage: GQLWallMessage;
-  CreateWallMessageInput: CreateWallMessageInput;
-  CollabWallMessagesPayload: Omit<CollabWallMessagesPayload, 'messages'> & { messages: Array<ResolversParentTypes['WallMessage']> };
-  CollabWallMessagesInput: CollabWallMessagesInput;
-  Subscription: {};
-  Notification: Notification;
-  UserChatStatus: UserChatStatus;
-  ConnectToChatPayload: Omit<ConnectToChatPayload, 'users'> & { users: Array<ResolversParentTypes['ChatUsersPayload']> };
-  ChatUsersPayload: Omit<ChatUsersPayload, 'user'> & { user: ResolversParentTypes['User'] };
-  PrivateChatMessage: PrivateChatMessage;
-  SendPrivateChatMessageInput: SendPrivateChatMessageInput;
-  PrivateMessage: GQLPrivateMessage;
-  PrivateMessagePreview: PrivateMessagePreview;
-  GetConversationPayload: Omit<GetConversationPayload, 'messages'> & { messages: Array<ResolversParentTypes['PrivateMessage']> };
-  SendPrivateMessageInput: SendPrivateMessageInput;
-  Reaction: Reaction;
-  Date: Scalars['Date'];
-  Task: GQLCollabTask;
-  UpdateTaskInput: UpdateTaskInput;
-  CreateTaskInput: CreateTaskInput;
-  UpdateTaskAssigneeInput: UpdateTaskAssigneeInput;
-  UpdateTaskPositionInput: UpdateTaskPositionInput;
-  MoveTaskToListInput: MoveTaskToListInput;
-  TaskComment: GQLCollabTaskComment;
-  CreateTaskCommentInput: CreateTaskCommentInput;
-  CreateTaskListInput: CreateTaskListInput;
-  UpdateTaskListNameInput: UpdateTaskListNameInput;
-  UpdateTaskListPositionInput: UpdateTaskListPositionInput;
-  TaskList: GQLCollabTaskList;
-  CurrentUser: Omit<CurrentUser, 'collabInvites' | 'collabRequests' | 'collabs' | 'friendRequests' | 'friends' | 'tasks'> & { collabInvites: Array<ResolversParentTypes['Collab']>, collabRequests: Array<ResolversParentTypes['CollabRequest']>, collabs: Array<ResolversParentTypes['Collab']>, friendRequests: Array<ResolversParentTypes['User']>, friends: Array<ResolversParentTypes['User']>, tasks: Array<ResolversParentTypes['Task']> };
-  User: GQLUser;
-  SearchFriendsInput: SearchFriendsInput;
-  UpdateUserInfoInput: UpdateUserInfoInput;
-  CollabRequest: Omit<CollabRequest, 'collab' | 'member'> & { collab: ResolversParentTypes['Collab'], member: ResolversParentTypes['User'] };
-  AuthPayload: AuthPayload;
-  SignUpArgs: SignUpArgs;
-  LoginArgs: LoginArgs;
+  String: Scalars['String'],
+  Boolean: Scalars['Boolean'],
+  Query: {},
+  ID: Scalars['ID'],
+  Int: Scalars['Int'],
+  Mutation: {},
+  Collab: GQLCollab,
+  CollabDiscussionThreadComment: GQLCollabDiscussionThreadComment,
+  CreateCollabDiscussionThreadCommentInput: CreateCollabDiscussionThreadCommentInput,
+  AddDiscussionThreadCommentReactionInput: AddDiscussionThreadCommentReactionInput,
+  RemoveDiscussionThreadCommentReactionInput: RemoveDiscussionThreadCommentReactionInput,
+  AddCollabDiscussionThreadReactionInput: AddCollabDiscussionThreadReactionInput,
+  RemoveCollabDiscussionThreadReactionInput: RemoveCollabDiscussionThreadReactionInput,
+  CollabDiscussionThread: GQLCollabDiscussionThread,
+  CreateThreadArgs: CreateThreadArgs,
+  AdvancedPostsSearchInput: AdvancedPostsSearchInput,
+  CollabPostsSearchResultsPayload: Omit<CollabPostsSearchResultsPayload, 'posts'> & { posts: Array<ResolversParentTypes['CollabPost']> },
+  SearchPostsInput: SearchPostsInput,
+  SearchPostsPayload: Omit<SearchPostsPayload, 'posts'> & { posts: Array<ResolversParentTypes['CollabPost']> },
+  CollabPost: GQLCollabPost,
+  CollabPostsPayload: Omit<CollabPostsPayload, 'posts'> & { posts: Array<ResolversParentTypes['CollabPost']> },
+  CollabPostArgs: CollabPostArgs,
+  Experience: Experience,
+  CollabPostComment: GQLCollabPostComment,
+  AddCollabPostCommentReactionInput: AddCollabPostCommentReactionInput,
+  RemoveCollabPostCommentReactionInput: RemoveCollabPostCommentReactionInput,
+  AddCollabPostReactionInput: AddCollabPostReactionInput,
+  RemoveCollabPostReactionInput: RemoveCollabPostReactionInput,
+  AddCollabTaskCommentReactionInput: AddCollabTaskCommentReactionInput,
+  RemoveCollabTaskCommentReactionInput: RemoveCollabTaskCommentReactionInput,
+  WallMessage: GQLWallMessage,
+  CreateWallMessageInput: CreateWallMessageInput,
+  CollabWallMessagesPayload: Omit<CollabWallMessagesPayload, 'messages'> & { messages: Array<ResolversParentTypes['WallMessage']> },
+  CollabWallMessagesInput: CollabWallMessagesInput,
+  Subscription: {},
+  Notification: Notification,
+  UserChatStatus: UserChatStatus,
+  ConnectToChatPayload: Omit<ConnectToChatPayload, 'users'> & { users: Array<ResolversParentTypes['ChatUsersPayload']> },
+  ChatUsersPayload: Omit<ChatUsersPayload, 'user'> & { user: ResolversParentTypes['User'] },
+  PrivateChatMessage: PrivateChatMessage,
+  SendPrivateChatMessageInput: SendPrivateChatMessageInput,
+  PrivateMessage: GQLPrivateMessage,
+  PrivateMessagePreview: PrivateMessagePreview,
+  GetConversationPayload: Omit<GetConversationPayload, 'messages'> & { messages: Array<ResolversParentTypes['PrivateMessage']> },
+  SendPrivateMessageInput: SendPrivateMessageInput,
+  Reaction: Reaction,
+  Date: Scalars['Date'],
+  Task: GQLCollabTask,
+  UpdateTaskInput: UpdateTaskInput,
+  CreateTaskInput: CreateTaskInput,
+  UpdateTaskAssigneeInput: UpdateTaskAssigneeInput,
+  UpdateTaskPositionInput: UpdateTaskPositionInput,
+  MoveTaskToListInput: MoveTaskToListInput,
+  TaskComment: GQLCollabTaskComment,
+  CreateTaskCommentInput: CreateTaskCommentInput,
+  CreateTaskListInput: CreateTaskListInput,
+  UpdateTaskListNameInput: UpdateTaskListNameInput,
+  UpdateTaskListPositionInput: UpdateTaskListPositionInput,
+  TaskList: GQLCollabTaskList,
+  NewFriendRequestPayload: Omit<NewFriendRequestPayload, 'user'> & { user: ResolversParentTypes['User'] },
+  CurrentUser: Omit<CurrentUser, 'collabInvites' | 'collabRequests' | 'collabs' | 'friendRequests' | 'friends' | 'tasks'> & { collabInvites: Array<ResolversParentTypes['Collab']>, collabRequests: Array<ResolversParentTypes['CollabRequest']>, collabs: Array<ResolversParentTypes['Collab']>, friendRequests: Array<ResolversParentTypes['User']>, friends: Array<ResolversParentTypes['User']>, tasks: Array<ResolversParentTypes['Task']> },
+  User: GQLUser,
+  SearchFriendsInput: SearchFriendsInput,
+  UpdateUserInfoInput: UpdateUserInfoInput,
+  CollabRequest: Omit<CollabRequest, 'collab' | 'member'> & { collab: ResolversParentTypes['Collab'], member: ResolversParentTypes['User'] },
+  AuthPayload: AuthPayload,
+  SignUpArgs: SignUpArgs,
+  LoginArgs: LoginArgs,
 }>;
 
 export type QueryResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  advancedPostsSearch?: Resolver<ResolversTypes['CollabPostsSearchResultsPayload'], ParentType, ContextType, RequireFields<QueryAdvancedPostsSearchArgs, 'input'>>;
-  collab?: Resolver<Maybe<ResolversTypes['Collab']>, ParentType, ContextType, RequireFields<QueryCollabArgs, 'collabId'>>;
-  collabPost?: Resolver<Maybe<ResolversTypes['CollabPost']>, ParentType, ContextType, RequireFields<QueryCollabPostArgs, 'postId'>>;
-  collabPosts?: Resolver<ResolversTypes['CollabPostsPayload'], ParentType, ContextType, RequireFields<QueryCollabPostsArgs, 'limit' | 'offset'>>;
-  collabPostsByStack?: Resolver<ResolversTypes['CollabPostsSearchResultsPayload'], ParentType, ContextType, RequireFields<QueryCollabPostsByStackArgs, 'limit' | 'offset' | 'stack'>>;
-  collabWallMessages?: Resolver<ResolversTypes['CollabWallMessagesPayload'], ParentType, ContextType, RequireFields<QueryCollabWallMessagesArgs, 'input'>>;
-  collabs?: Resolver<Array<ResolversTypes['Collab']>, ParentType, ContextType>;
-  currentUser?: Resolver<Maybe<ResolversTypes['CurrentUser']>, ParentType, ContextType>;
-  getConversation?: Resolver<ResolversTypes['GetConversationPayload'], ParentType, ContextType, RequireFields<QueryGetConversationArgs, 'limit' | 'offset' | 'userId'>>;
-  languages?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
-  searchFriends?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QuerySearchFriendsArgs, 'input'>>;
-  searchPostsByTitle?: Resolver<ResolversTypes['CollabPostsSearchResultsPayload'], ParentType, ContextType, RequireFields<QuerySearchPostsByTitleArgs, 'input'>>;
-  task?: Resolver<Maybe<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<QueryTaskArgs, 'taskId'>>;
-  taskList?: Resolver<Maybe<Array<ResolversTypes['TaskList']>>, ParentType, ContextType, RequireFields<QueryTaskListArgs, 'collabId'>>;
-  thread?: Resolver<Maybe<ResolversTypes['CollabDiscussionThread']>, ParentType, ContextType, RequireFields<QueryThreadArgs, 'threadId'>>;
-  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
-  users?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
+  advancedPostsSearch?: Resolver<ResolversTypes['CollabPostsSearchResultsPayload'], ParentType, ContextType, RequireFields<QueryAdvancedPostsSearchArgs, 'input'>>,
+  collab?: Resolver<Maybe<ResolversTypes['Collab']>, ParentType, ContextType, RequireFields<QueryCollabArgs, 'collabId'>>,
+  collabPost?: Resolver<Maybe<ResolversTypes['CollabPost']>, ParentType, ContextType, RequireFields<QueryCollabPostArgs, 'postId'>>,
+  collabPosts?: Resolver<ResolversTypes['CollabPostsPayload'], ParentType, ContextType, RequireFields<QueryCollabPostsArgs, 'limit' | 'offset'>>,
+  collabPostsByStack?: Resolver<ResolversTypes['CollabPostsSearchResultsPayload'], ParentType, ContextType, RequireFields<QueryCollabPostsByStackArgs, 'limit' | 'offset' | 'stack'>>,
+  collabWallMessages?: Resolver<ResolversTypes['CollabWallMessagesPayload'], ParentType, ContextType, RequireFields<QueryCollabWallMessagesArgs, 'input'>>,
+  collabs?: Resolver<Array<ResolversTypes['Collab']>, ParentType, ContextType>,
+  currentUser?: Resolver<Maybe<ResolversTypes['CurrentUser']>, ParentType, ContextType>,
+  getConversation?: Resolver<ResolversTypes['GetConversationPayload'], ParentType, ContextType, RequireFields<QueryGetConversationArgs, 'limit' | 'offset' | 'userId'>>,
+  languages?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>,
+  searchFriends?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QuerySearchFriendsArgs, 'input'>>,
+  searchPostsByTitle?: Resolver<ResolversTypes['CollabPostsSearchResultsPayload'], ParentType, ContextType, RequireFields<QuerySearchPostsByTitleArgs, 'input'>>,
+  task?: Resolver<Maybe<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<QueryTaskArgs, 'taskId'>>,
+  taskList?: Resolver<Maybe<Array<ResolversTypes['TaskList']>>, ParentType, ContextType, RequireFields<QueryTaskListArgs, 'collabId'>>,
+  thread?: Resolver<Maybe<ResolversTypes['CollabDiscussionThread']>, ParentType, ContextType, RequireFields<QueryThreadArgs, 'threadId'>>,
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>,
+  users?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>,
 }>;
 
 export type MutationResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
-  acceptCollabInvitation?: Resolver<ResolversTypes['ID'], ParentType, CollabContextWithUser, RequireFields<MutationAcceptCollabInvitationArgs, 'collabId'>>;
-  acceptFriendRequest?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationAcceptFriendRequestArgs, 'friendId'>>;
-  acceptMemberRequest?: Resolver<ResolversTypes['ID'], ParentType, CollabContextWithUser, RequireFields<MutationAcceptMemberRequestArgs, 'collabId' | 'memberId'>>;
-  addCollabDiscussionThreadCommentReaction?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationAddCollabDiscussionThreadCommentReactionArgs, 'reaction'>>;
-  addCollabDiscussionThreadReaction?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationAddCollabDiscussionThreadReactionArgs, 'reaction'>>;
-  addCollabPostCommentReaction?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationAddCollabPostCommentReactionArgs, 'reaction'>>;
-  addCollabPostReaction?: Resolver<ResolversTypes['CollabPost'], ParentType, ContextType, RequireFields<MutationAddCollabPostReactionArgs, 'reaction'>>;
-  addCollabTaskCommentReaction?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationAddCollabTaskCommentReactionArgs, 'reaction'>>;
-  cancelRequestToJoin?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCancelRequestToJoinArgs, 'collabId'>>;
-  connectToChat?: Resolver<ResolversTypes['ConnectToChatPayload'], ParentType, ContextType, RequireFields<MutationConnectToChatArgs, 'status'>>;
-  createCollabDiscussionThread?: Resolver<ResolversTypes['CollabDiscussionThread'], ParentType, ContextType, RequireFields<MutationCreateCollabDiscussionThreadArgs, 'thread'>>;
-  createCollabDiscussionThreadComment?: Resolver<ResolversTypes['CollabDiscussionThreadComment'], ParentType, ContextType, RequireFields<MutationCreateCollabDiscussionThreadCommentArgs, 'input'>>;
-  createCollabPost?: Resolver<ResolversTypes['CollabPost'], ParentType, ContextType, RequireFields<MutationCreateCollabPostArgs, 'post'>>;
-  createComment?: Resolver<ResolversTypes['CollabPostComment'], ParentType, ContextType, RequireFields<MutationCreateCommentArgs, 'content' | 'postId'>>;
-  createTask?: Resolver<ResolversTypes['Task'], ParentType, CollabContextWithUser, RequireFields<MutationCreateTaskArgs, 'input'>>;
-  createTaskComment?: Resolver<ResolversTypes['TaskComment'], ParentType, CollabContextWithUser, RequireFields<MutationCreateTaskCommentArgs, 'input'>>;
-  createTaskList?: Resolver<ResolversTypes['TaskList'], ParentType, CollabContextWithUser, RequireFields<MutationCreateTaskListArgs, 'input'>>;
-  createWallMessage?: Resolver<ResolversTypes['WallMessage'], ParentType, ContextType, RequireFields<MutationCreateWallMessageArgs, 'input'>>;
-  declineCollabInvitation?: Resolver<ResolversTypes['ID'], ParentType, CollabContextWithUser, RequireFields<MutationDeclineCollabInvitationArgs, 'collabId'>>;
-  declineFriendRequest?: Resolver<ResolversTypes['ID'], ParentType, ContextType, RequireFields<MutationDeclineFriendRequestArgs, 'senderId'>>;
-  declineMemberRequest?: Resolver<ResolversTypes['ID'], ParentType, CollabContextWithUser, RequireFields<MutationDeclineMemberRequestArgs, 'collabId' | 'memberId'>>;
-  deleteAllNotifications?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  deleteCollab?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeleteCollabArgs, 'collabId'>>;
-  deleteCollabDiscussionThread?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteCollabDiscussionThreadArgs, 'threadId'>>;
-  deleteCollabDiscussionThreadComment?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteCollabDiscussionThreadCommentArgs, 'commentId'>>;
-  deleteCollabPost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteCollabPostArgs, 'postId'>>;
-  deleteComment?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeleteCommentArgs, 'commentId'>>;
-  deleteNotification?: Resolver<ResolversTypes['ID'], ParentType, ContextType, RequireFields<MutationDeleteNotificationArgs, 'notificationId'>>;
-  deletePrivateMessage?: Resolver<ResolversTypes['ID'], ParentType, ContextType, RequireFields<MutationDeletePrivateMessageArgs, 'messageId'>>;
-  deleteTask?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeleteTaskArgs, 'taskId'>>;
-  deleteTaskComment?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeleteTaskCommentArgs, 'commentId'>>;
-  deleteTaskList?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeleteTaskListArgs, 'taskListId'>>;
-  deleteUser?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser>;
-  deleteWallMessage?: Resolver<ResolversTypes['ID'], ParentType, ContextType, RequireFields<MutationDeleteWallMessageArgs, 'messageId'>>;
-  inviteMember?: Resolver<ResolversTypes['User'], ParentType, CollabContextWithUser, RequireFields<MutationInviteMemberArgs, 'collabId' | 'memberId'>>;
-  login?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'credentials'>>;
-  markAllNotificationsAsRead?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  markNotificationAsRead?: Resolver<ResolversTypes['Notification'], ParentType, ContextType, RequireFields<MutationMarkNotificationAsReadArgs, 'notificationId'>>;
-  markPrivateMessageAsRead?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMarkPrivateMessageAsReadArgs, 'messageId'>>;
-  moveTaskToList?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationMoveTaskToListArgs, 'input'>>;
-  removeCollabDiscussionThreadCommentReaction?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemoveCollabDiscussionThreadCommentReactionArgs, 'reaction'>>;
-  removeCollabDiscussionThreadReaction?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemoveCollabDiscussionThreadReactionArgs, 'reaction'>>;
-  removeCollabPostCommentReaction?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemoveCollabPostCommentReactionArgs, 'reaction'>>;
-  removeCollabPostReaction?: Resolver<ResolversTypes['CollabPost'], ParentType, ContextType, RequireFields<MutationRemoveCollabPostReactionArgs, 'reaction'>>;
-  removeCollabTaskCommentReaction?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemoveCollabTaskCommentReactionArgs, 'reaction'>>;
-  removeFriend?: Resolver<ResolversTypes['ID'], ParentType, ContextType, RequireFields<MutationRemoveFriendArgs, 'friendId'>>;
-  removeMember?: Resolver<ResolversTypes['Collab'], ParentType, CollabContextWithUser, RequireFields<MutationRemoveMemberArgs, 'collabId' | 'memberId'>>;
-  requestToJoin?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationRequestToJoinArgs, 'collabId'>>;
-  sendFriendRequest?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationSendFriendRequestArgs, 'friendId'>>;
-  sendPrivateChatMessage?: Resolver<ResolversTypes['PrivateChatMessage'], ParentType, ContextType, RequireFields<MutationSendPrivateChatMessageArgs, 'input'>>;
-  sendPrivateMessage?: Resolver<ResolversTypes['PrivateMessage'], ParentType, ContextType, RequireFields<MutationSendPrivateMessageArgs, 'input'>>;
-  signUp?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'credentials'>>;
-  toggleAcceptInvites?: Resolver<ResolversTypes['Collab'], ParentType, CollabContextWithUser, RequireFields<MutationToggleAcceptInvitesArgs, 'collabId'>>;
-  updateStatus?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateStatusArgs, 'status'>>;
-  updateTask?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationUpdateTaskArgs, 'input'>>;
-  updateTaskAssignee?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationUpdateTaskAssigneeArgs, 'input'>>;
-  updateTaskListName?: Resolver<ResolversTypes['TaskList'], ParentType, ContextType, RequireFields<MutationUpdateTaskListNameArgs, 'input'>>;
-  updateTaskListPosition?: Resolver<ResolversTypes['TaskList'], ParentType, ContextType, RequireFields<MutationUpdateTaskListPositionArgs, 'input'>>;
-  updateTaskPosition?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationUpdateTaskPositionArgs, 'input'>>;
-  updateUserInfo?: Resolver<ResolversTypes['CurrentUser'], ParentType, ContextType, RequireFields<MutationUpdateUserInfoArgs, never>>;
+  acceptCollabInvitation?: Resolver<ResolversTypes['ID'], ParentType, CollabContextWithUser, RequireFields<MutationAcceptCollabInvitationArgs, 'collabId'>>,
+  acceptFriendRequest?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationAcceptFriendRequestArgs, 'friendId'>>,
+  acceptMemberRequest?: Resolver<ResolversTypes['ID'], ParentType, CollabContextWithUser, RequireFields<MutationAcceptMemberRequestArgs, 'collabId' | 'memberId'>>,
+  addCollabDiscussionThreadCommentReaction?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationAddCollabDiscussionThreadCommentReactionArgs, 'reaction'>>,
+  addCollabDiscussionThreadReaction?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationAddCollabDiscussionThreadReactionArgs, 'reaction'>>,
+  addCollabPostCommentReaction?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationAddCollabPostCommentReactionArgs, 'reaction'>>,
+  addCollabPostReaction?: Resolver<ResolversTypes['CollabPost'], ParentType, ContextType, RequireFields<MutationAddCollabPostReactionArgs, 'reaction'>>,
+  addCollabTaskCommentReaction?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationAddCollabTaskCommentReactionArgs, 'reaction'>>,
+  cancelRequestToJoin?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCancelRequestToJoinArgs, 'collabId'>>,
+  connectToChat?: Resolver<ResolversTypes['ConnectToChatPayload'], ParentType, ContextType, RequireFields<MutationConnectToChatArgs, 'status'>>,
+  createCollabDiscussionThread?: Resolver<ResolversTypes['CollabDiscussionThread'], ParentType, ContextType, RequireFields<MutationCreateCollabDiscussionThreadArgs, 'thread'>>,
+  createCollabDiscussionThreadComment?: Resolver<ResolversTypes['CollabDiscussionThreadComment'], ParentType, ContextType, RequireFields<MutationCreateCollabDiscussionThreadCommentArgs, 'input'>>,
+  createCollabPost?: Resolver<ResolversTypes['CollabPost'], ParentType, ContextType, RequireFields<MutationCreateCollabPostArgs, 'post'>>,
+  createComment?: Resolver<ResolversTypes['CollabPostComment'], ParentType, ContextType, RequireFields<MutationCreateCommentArgs, 'content' | 'postId'>>,
+  createTask?: Resolver<ResolversTypes['Task'], ParentType, CollabContextWithUser, RequireFields<MutationCreateTaskArgs, 'input'>>,
+  createTaskComment?: Resolver<ResolversTypes['TaskComment'], ParentType, CollabContextWithUser, RequireFields<MutationCreateTaskCommentArgs, 'input'>>,
+  createTaskList?: Resolver<ResolversTypes['TaskList'], ParentType, CollabContextWithUser, RequireFields<MutationCreateTaskListArgs, 'input'>>,
+  createWallMessage?: Resolver<ResolversTypes['WallMessage'], ParentType, ContextType, RequireFields<MutationCreateWallMessageArgs, 'input'>>,
+  declineCollabInvitation?: Resolver<ResolversTypes['ID'], ParentType, CollabContextWithUser, RequireFields<MutationDeclineCollabInvitationArgs, 'collabId'>>,
+  declineFriendRequest?: Resolver<ResolversTypes['ID'], ParentType, ContextType, RequireFields<MutationDeclineFriendRequestArgs, 'senderId'>>,
+  declineMemberRequest?: Resolver<ResolversTypes['ID'], ParentType, CollabContextWithUser, RequireFields<MutationDeclineMemberRequestArgs, 'collabId' | 'memberId'>>,
+  deleteAllNotifications?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  deleteCollab?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeleteCollabArgs, 'collabId'>>,
+  deleteCollabDiscussionThread?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteCollabDiscussionThreadArgs, 'threadId'>>,
+  deleteCollabDiscussionThreadComment?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteCollabDiscussionThreadCommentArgs, 'commentId'>>,
+  deleteCollabPost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteCollabPostArgs, 'postId'>>,
+  deleteComment?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeleteCommentArgs, 'commentId'>>,
+  deleteNotification?: Resolver<ResolversTypes['ID'], ParentType, ContextType, RequireFields<MutationDeleteNotificationArgs, 'notificationId'>>,
+  deletePrivateMessage?: Resolver<ResolversTypes['ID'], ParentType, ContextType, RequireFields<MutationDeletePrivateMessageArgs, 'messageId'>>,
+  deleteTask?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeleteTaskArgs, 'taskId'>>,
+  deleteTaskComment?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeleteTaskCommentArgs, 'commentId'>>,
+  deleteTaskList?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeleteTaskListArgs, 'taskListId'>>,
+  deleteUser?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser>,
+  deleteWallMessage?: Resolver<ResolversTypes['ID'], ParentType, ContextType, RequireFields<MutationDeleteWallMessageArgs, 'messageId'>>,
+  inviteMember?: Resolver<ResolversTypes['User'], ParentType, CollabContextWithUser, RequireFields<MutationInviteMemberArgs, 'collabId' | 'memberId'>>,
+  login?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'credentials'>>,
+  markAllNotificationsAsRead?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  markNotificationAsRead?: Resolver<ResolversTypes['Notification'], ParentType, ContextType, RequireFields<MutationMarkNotificationAsReadArgs, 'notificationId'>>,
+  markPrivateMessageAsRead?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMarkPrivateMessageAsReadArgs, 'messageId'>>,
+  moveTaskToList?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationMoveTaskToListArgs, 'input'>>,
+  removeCollabDiscussionThreadCommentReaction?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemoveCollabDiscussionThreadCommentReactionArgs, 'reaction'>>,
+  removeCollabDiscussionThreadReaction?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemoveCollabDiscussionThreadReactionArgs, 'reaction'>>,
+  removeCollabPostCommentReaction?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemoveCollabPostCommentReactionArgs, 'reaction'>>,
+  removeCollabPostReaction?: Resolver<ResolversTypes['CollabPost'], ParentType, ContextType, RequireFields<MutationRemoveCollabPostReactionArgs, 'reaction'>>,
+  removeCollabTaskCommentReaction?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemoveCollabTaskCommentReactionArgs, 'reaction'>>,
+  removeFriend?: Resolver<ResolversTypes['ID'], ParentType, ContextType, RequireFields<MutationRemoveFriendArgs, 'friendId'>>,
+  removeMember?: Resolver<ResolversTypes['Collab'], ParentType, CollabContextWithUser, RequireFields<MutationRemoveMemberArgs, 'collabId' | 'memberId'>>,
+  requestToJoin?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationRequestToJoinArgs, 'collabId'>>,
+  sendFriendRequest?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationSendFriendRequestArgs, 'friendId'>>,
+  sendPrivateChatMessage?: Resolver<ResolversTypes['PrivateChatMessage'], ParentType, ContextType, RequireFields<MutationSendPrivateChatMessageArgs, 'input'>>,
+  sendPrivateMessage?: Resolver<ResolversTypes['PrivateMessage'], ParentType, ContextType, RequireFields<MutationSendPrivateMessageArgs, 'input'>>,
+  signUp?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'credentials'>>,
+  toggleAcceptInvites?: Resolver<ResolversTypes['Collab'], ParentType, CollabContextWithUser, RequireFields<MutationToggleAcceptInvitesArgs, 'collabId'>>,
+  updateStatus?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateStatusArgs, 'status'>>,
+  updateTask?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationUpdateTaskArgs, 'input'>>,
+  updateTaskAssignee?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationUpdateTaskAssigneeArgs, 'input'>>,
+  updateTaskListName?: Resolver<ResolversTypes['TaskList'], ParentType, ContextType, RequireFields<MutationUpdateTaskListNameArgs, 'input'>>,
+  updateTaskListPosition?: Resolver<ResolversTypes['TaskList'], ParentType, ContextType, RequireFields<MutationUpdateTaskListPositionArgs, 'input'>>,
+  updateTaskPosition?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationUpdateTaskPositionArgs, 'input'>>,
+  updateUserInfo?: Resolver<ResolversTypes['CurrentUser'], ParentType, ContextType, RequireFields<MutationUpdateUserInfoArgs, never>>,
 }>;
 
 export type CollabResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Collab'] = ResolversParentTypes['Collab']> = ResolversObject<{
-  acceptsInvites?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  collabPostId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
-  discussionThreads?: Resolver<Array<ResolversTypes['CollabDiscussionThread']>, ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  invitationPending?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  isMember?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  isOwner?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  members?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  owner?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
-  pendingInvites?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType>;
-  pendingRequests?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType>;
-  requestToJoinPending?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  taskList?: Resolver<Array<ResolversTypes['TaskList']>, ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  acceptsInvites?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  collabPostId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
+  discussionThreads?: Resolver<Array<ResolversTypes['CollabDiscussionThread']>, ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  invitationPending?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  isMember?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  isOwner?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  members?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>,
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  owner?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
+  pendingInvites?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType>,
+  pendingRequests?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType>,
+  requestToJoinPending?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  taskList?: Resolver<Array<ResolversTypes['TaskList']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
 export type CollabDiscussionThreadCommentResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['CollabDiscussionThreadComment'] = ResolversParentTypes['CollabDiscussionThreadComment']> = ResolversObject<{
-  author?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
-  collab?: Resolver<Maybe<ResolversTypes['Collab']>, ParentType, ContextType>;
-  content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  reactions?: Resolver<Array<ResolversTypes['Reaction']>, ParentType, ContextType>;
-  thread?: Resolver<Maybe<ResolversTypes['CollabDiscussionThread']>, ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  author?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
+  collab?: Resolver<Maybe<ResolversTypes['Collab']>, ParentType, ContextType>,
+  content?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  reactions?: Resolver<Array<ResolversTypes['Reaction']>, ParentType, ContextType>,
+  thread?: Resolver<Maybe<ResolversTypes['CollabDiscussionThread']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
 export type CollabDiscussionThreadResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['CollabDiscussionThread'] = ResolversParentTypes['CollabDiscussionThread']> = ResolversObject<{
-  author?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
-  collab?: Resolver<Maybe<ResolversTypes['Collab']>, ParentType, ContextType>;
-  comments?: Resolver<Array<ResolversTypes['CollabDiscussionThreadComment']>, ParentType, ContextType>;
-  commentsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  reactions?: Resolver<Array<ResolversTypes['Reaction']>, ParentType, ContextType>;
-  reactionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  author?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
+  collab?: Resolver<Maybe<ResolversTypes['Collab']>, ParentType, ContextType>,
+  comments?: Resolver<Array<ResolversTypes['CollabDiscussionThreadComment']>, ParentType, ContextType>,
+  commentsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  content?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  reactions?: Resolver<Array<ResolversTypes['Reaction']>, ParentType, ContextType>,
+  reactionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
 export type CollabPostsSearchResultsPayloadResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['CollabPostsSearchResultsPayload'] = ResolversParentTypes['CollabPostsSearchResultsPayload']> = ResolversObject<{
-  hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  posts?: Resolver<Array<ResolversTypes['CollabPost']>, ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  posts?: Resolver<Array<ResolversTypes['CollabPost']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
 export type SearchPostsPayloadResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['SearchPostsPayload'] = ResolversParentTypes['SearchPostsPayload']> = ResolversObject<{
-  hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  posts?: Resolver<Array<ResolversTypes['CollabPost']>, ParentType, ContextType>;
-  totalResults?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  posts?: Resolver<Array<ResolversTypes['CollabPost']>, ParentType, ContextType>,
+  totalResults?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
 export type CollabPostResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['CollabPost'] = ResolversParentTypes['CollabPost']> = ResolversObject<{
-  acceptsInvites?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  collabId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  comments?: Resolver<Array<ResolversTypes['CollabPostComment']>, ParentType, ContextType>;
-  commentsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  experience?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  hasStarted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  invitationPending?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  isMember?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  isNew?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  isOwner?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  languages?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
-  members?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
-  membersCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  owner?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
-  pendingInvites?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
-  pendingRequests?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
-  reactions?: Resolver<Array<ResolversTypes['Reaction']>, ParentType, ContextType>;
-  reactionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  requestToJoinPending?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  stack?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
-  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  acceptsInvites?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  collabId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  comments?: Resolver<Array<ResolversTypes['CollabPostComment']>, ParentType, ContextType>,
+  commentsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  experience?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  hasStarted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  invitationPending?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  isMember?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  isNew?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  isOwner?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  languages?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>,
+  members?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>,
+  membersCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  owner?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
+  pendingInvites?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>,
+  pendingRequests?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>,
+  reactions?: Resolver<Array<ResolversTypes['Reaction']>, ParentType, ContextType>,
+  reactionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  requestToJoinPending?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  stack?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>,
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
 export type CollabPostsPayloadResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['CollabPostsPayload'] = ResolversParentTypes['CollabPostsPayload']> = ResolversObject<{
-  hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  posts?: Resolver<Array<ResolversTypes['CollabPost']>, ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  posts?: Resolver<Array<ResolversTypes['CollabPost']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
 export type CollabPostCommentResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['CollabPostComment'] = ResolversParentTypes['CollabPostComment']> = ResolversObject<{
-  author?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
-  content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  reactions?: Resolver<Array<ResolversTypes['Reaction']>, ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  author?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
+  content?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  reactions?: Resolver<Array<ResolversTypes['Reaction']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
 export type WallMessageResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['WallMessage'] = ResolversParentTypes['WallMessage']> = ResolversObject<{
-  author?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
-  content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  creationDate?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  isAuthor?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  author?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
+  content?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  creationDate?: Resolver<ResolversTypes['Date'], ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  isAuthor?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
 export type CollabWallMessagesPayloadResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['CollabWallMessagesPayload'] = ResolversParentTypes['CollabWallMessagesPayload']> = ResolversObject<{
-  hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  messages?: Resolver<Array<ResolversTypes['WallMessage']>, ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  messages?: Resolver<Array<ResolversTypes['WallMessage']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
 export type SubscriptionResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
-  friendStatusChange?: SubscriptionResolver<ResolversTypes['ChatUsersPayload'], "friendStatusChange", ParentType, ContextType>;
-  newNotification?: SubscriptionResolver<ResolversTypes['Notification'], "newNotification", ParentType, ContextType>;
-  newPrivateChatMessage?: SubscriptionResolver<ResolversTypes['PrivateChatMessage'], "newPrivateChatMessage", ParentType, ContextType>;
+  friendStatusChange?: SubscriptionResolver<ResolversTypes['ChatUsersPayload'], "friendStatusChange", ParentType, ContextType>,
+  newFriendRequest?: SubscriptionResolver<ResolversTypes['NewFriendRequestPayload'], "newFriendRequest", ParentType, ContextType>,
+  newNotification?: SubscriptionResolver<ResolversTypes['Notification'], "newNotification", ParentType, ContextType>,
+  newPrivateChatMessage?: SubscriptionResolver<ResolversTypes['PrivateChatMessage'], "newPrivateChatMessage", ParentType, ContextType>,
 }>;
 
 export type NotificationResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Notification'] = ResolversParentTypes['Notification']> = ResolversObject<{
-  creationDate?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  isRead?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  creationDate?: Resolver<ResolversTypes['Date'], ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  isRead?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  url?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
 export type ConnectToChatPayloadResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['ConnectToChatPayload'] = ResolversParentTypes['ConnectToChatPayload']> = ResolversObject<{
-  users?: Resolver<Array<ResolversTypes['ChatUsersPayload']>, ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  users?: Resolver<Array<ResolversTypes['ChatUsersPayload']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
 export type ChatUsersPayloadResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['ChatUsersPayload'] = ResolversParentTypes['ChatUsersPayload']> = ResolversObject<{
-  status?: Resolver<ResolversTypes['UserChatStatus'], ParentType, ContextType>;
-  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  status?: Resolver<ResolversTypes['UserChatStatus'], ParentType, ContextType>,
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
 export type PrivateChatMessageResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['PrivateChatMessage'] = ResolversParentTypes['PrivateChatMessage']> = ResolversObject<{
-  authorId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  creationDate?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  authorId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  content?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  creationDate?: Resolver<ResolversTypes['Date'], ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
 export type PrivateMessageResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['PrivateMessage'] = ResolversParentTypes['PrivateMessage']> = ResolversObject<{
-  author?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-  content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  creationDate?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  isRead?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  recipient?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  author?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
+  content?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  creationDate?: Resolver<ResolversTypes['Date'], ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  isRead?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  recipient?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
 export type PrivateMessagePreviewResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['PrivateMessagePreview'] = ResolversParentTypes['PrivateMessagePreview']> = ResolversObject<{
-  avatar?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  avatar?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  content?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  username?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
 export type GetConversationPayloadResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['GetConversationPayload'] = ResolversParentTypes['GetConversationPayload']> = ResolversObject<{
-  hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  messages?: Resolver<Array<ResolversTypes['PrivateMessage']>, ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  messages?: Resolver<Array<ResolversTypes['PrivateMessage']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
 export type ReactionResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Reaction'] = ResolversParentTypes['Reaction']> = ResolversObject<{
-  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  emojiId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  isLiked?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  emojiId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  isLiked?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
-  name: 'Date';
+  name: 'Date'
 }
 
 export type TaskResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Task'] = ResolversParentTypes['Task']> = ResolversObject<{
-  assignedBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-  assignee?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-  author?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
-  authorId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  collab?: Resolver<ResolversTypes['Collab'], ParentType, ContextType>;
-  comments?: Resolver<Array<ResolversTypes['TaskComment']>, ParentType, ContextType>;
-  commentsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  description?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  order?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  taskListId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  assignedBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
+  assignee?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
+  author?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
+  authorId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  collab?: Resolver<ResolversTypes['Collab'], ParentType, ContextType>,
+  comments?: Resolver<Array<ResolversTypes['TaskComment']>, ParentType, ContextType>,
+  commentsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  description?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  order?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  taskListId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
 export type TaskCommentResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['TaskComment'] = ResolversParentTypes['TaskComment']> = ResolversObject<{
-  author?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-  content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  reactions?: Resolver<Array<ResolversTypes['Reaction']>, ParentType, ContextType>;
-  task?: Resolver<Maybe<ResolversTypes['Task']>, ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  author?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
+  content?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  reactions?: Resolver<Array<ResolversTypes['Reaction']>, ParentType, ContextType>,
+  task?: Resolver<Maybe<ResolversTypes['Task']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
 export type TaskListResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['TaskList'] = ResolversParentTypes['TaskList']> = ResolversObject<{
-  collab?: Resolver<Maybe<ResolversTypes['Collab']>, ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  order?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  tasks?: Resolver<Array<ResolversTypes['Task']>, ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  collab?: Resolver<Maybe<ResolversTypes['Collab']>, ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  order?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  tasks?: Resolver<Array<ResolversTypes['Task']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+}>;
+
+export type NewFriendRequestPayloadResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['NewFriendRequestPayload'] = ResolversParentTypes['NewFriendRequestPayload']> = ResolversObject<{
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
 export type CurrentUserResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['CurrentUser'] = ResolversParentTypes['CurrentUser']> = ResolversObject<{
-  avatar?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  bio?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  collabInvites?: Resolver<Array<ResolversTypes['Collab']>, ParentType, ContextType>;
-  collabRequests?: Resolver<Array<ResolversTypes['CollabRequest']>, ParentType, ContextType>;
-  collabs?: Resolver<Array<ResolversTypes['Collab']>, ParentType, ContextType>;
-  conversationsPreview?: Resolver<Array<ResolversTypes['PrivateMessagePreview']>, ParentType, ContextType>;
-  country?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  friendRequests?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
-  friendRequestsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  friends?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
-  github?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  linkedin?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  notifications?: Resolver<Array<ResolversTypes['Notification']>, ParentType, ContextType>;
-  notificationsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  tasks?: Resolver<Array<ResolversTypes['Task']>, ParentType, ContextType>;
-  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  twitter?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  avatar?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  bio?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  collabInvites?: Resolver<Array<ResolversTypes['Collab']>, ParentType, ContextType>,
+  collabRequests?: Resolver<Array<ResolversTypes['CollabRequest']>, ParentType, ContextType>,
+  collabs?: Resolver<Array<ResolversTypes['Collab']>, ParentType, ContextType>,
+  conversationsPreview?: Resolver<Array<ResolversTypes['PrivateMessagePreview']>, ParentType, ContextType>,
+  country?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  friendRequests?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>,
+  friendRequestsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  friends?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>,
+  github?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  linkedin?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  notifications?: Resolver<Array<ResolversTypes['Notification']>, ParentType, ContextType>,
+  notificationsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  tasks?: Resolver<Array<ResolversTypes['Task']>, ParentType, ContextType>,
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  twitter?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  username?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
 export type UserResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
-  avatar?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  bio?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  canRequestFriendship?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  collabs?: Resolver<Array<ResolversTypes['Collab']>, ParentType, ContextType>;
-  firstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  isFriend?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  avatar?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  bio?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  canRequestFriendship?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  collabs?: Resolver<Array<ResolversTypes['Collab']>, ParentType, ContextType>,
+  firstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  isFriend?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  username?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
 export type CollabRequestResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['CollabRequest'] = ResolversParentTypes['CollabRequest']> = ResolversObject<{
-  collab?: Resolver<ResolversTypes['Collab'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  member?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  collab?: Resolver<ResolversTypes['Collab'], ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  member?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
 export type AuthPayloadResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['AuthPayload'] = ResolversParentTypes['AuthPayload']> = ResolversObject<{
-  token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  token?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
 export type Resolvers<ContextType = CollabContext> = ResolversObject<{
-  Query?: QueryResolvers<ContextType>;
-  Mutation?: MutationResolvers<ContextType>;
-  Collab?: CollabResolvers<ContextType>;
-  CollabDiscussionThreadComment?: CollabDiscussionThreadCommentResolvers<ContextType>;
-  CollabDiscussionThread?: CollabDiscussionThreadResolvers<ContextType>;
-  CollabPostsSearchResultsPayload?: CollabPostsSearchResultsPayloadResolvers<ContextType>;
-  SearchPostsPayload?: SearchPostsPayloadResolvers<ContextType>;
-  CollabPost?: CollabPostResolvers<ContextType>;
-  CollabPostsPayload?: CollabPostsPayloadResolvers<ContextType>;
-  CollabPostComment?: CollabPostCommentResolvers<ContextType>;
-  WallMessage?: WallMessageResolvers<ContextType>;
-  CollabWallMessagesPayload?: CollabWallMessagesPayloadResolvers<ContextType>;
-  Subscription?: SubscriptionResolvers<ContextType>;
-  Notification?: NotificationResolvers<ContextType>;
-  ConnectToChatPayload?: ConnectToChatPayloadResolvers<ContextType>;
-  ChatUsersPayload?: ChatUsersPayloadResolvers<ContextType>;
-  PrivateChatMessage?: PrivateChatMessageResolvers<ContextType>;
-  PrivateMessage?: PrivateMessageResolvers<ContextType>;
-  PrivateMessagePreview?: PrivateMessagePreviewResolvers<ContextType>;
-  GetConversationPayload?: GetConversationPayloadResolvers<ContextType>;
-  Reaction?: ReactionResolvers<ContextType>;
-  Date?: GraphQLScalarType;
-  Task?: TaskResolvers<ContextType>;
-  TaskComment?: TaskCommentResolvers<ContextType>;
-  TaskList?: TaskListResolvers<ContextType>;
-  CurrentUser?: CurrentUserResolvers<ContextType>;
-  User?: UserResolvers<ContextType>;
-  CollabRequest?: CollabRequestResolvers<ContextType>;
-  AuthPayload?: AuthPayloadResolvers<ContextType>;
+  Query?: QueryResolvers<ContextType>,
+  Mutation?: MutationResolvers<ContextType>,
+  Collab?: CollabResolvers<ContextType>,
+  CollabDiscussionThreadComment?: CollabDiscussionThreadCommentResolvers<ContextType>,
+  CollabDiscussionThread?: CollabDiscussionThreadResolvers<ContextType>,
+  CollabPostsSearchResultsPayload?: CollabPostsSearchResultsPayloadResolvers<ContextType>,
+  SearchPostsPayload?: SearchPostsPayloadResolvers<ContextType>,
+  CollabPost?: CollabPostResolvers<ContextType>,
+  CollabPostsPayload?: CollabPostsPayloadResolvers<ContextType>,
+  CollabPostComment?: CollabPostCommentResolvers<ContextType>,
+  WallMessage?: WallMessageResolvers<ContextType>,
+  CollabWallMessagesPayload?: CollabWallMessagesPayloadResolvers<ContextType>,
+  Subscription?: SubscriptionResolvers<ContextType>,
+  Notification?: NotificationResolvers<ContextType>,
+  ConnectToChatPayload?: ConnectToChatPayloadResolvers<ContextType>,
+  ChatUsersPayload?: ChatUsersPayloadResolvers<ContextType>,
+  PrivateChatMessage?: PrivateChatMessageResolvers<ContextType>,
+  PrivateMessage?: PrivateMessageResolvers<ContextType>,
+  PrivateMessagePreview?: PrivateMessagePreviewResolvers<ContextType>,
+  GetConversationPayload?: GetConversationPayloadResolvers<ContextType>,
+  Reaction?: ReactionResolvers<ContextType>,
+  Date?: GraphQLScalarType,
+  Task?: TaskResolvers<ContextType>,
+  TaskComment?: TaskCommentResolvers<ContextType>,
+  TaskList?: TaskListResolvers<ContextType>,
+  NewFriendRequestPayload?: NewFriendRequestPayloadResolvers<ContextType>,
+  CurrentUser?: CurrentUserResolvers<ContextType>,
+  User?: UserResolvers<ContextType>,
+  CollabRequest?: CollabRequestResolvers<ContextType>,
+  AuthPayload?: AuthPayloadResolvers<ContextType>,
 }>;
 
 

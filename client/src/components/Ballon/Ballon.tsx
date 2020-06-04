@@ -43,37 +43,34 @@ export const Ballon = ({
             <Box position="relative">{triggerIcon}</Box>
           </PopoverTrigger>
         </Flex>
-        <PopoverContent zIndex={4}>
-          <FocusLock>
-            <PopoverHeader
-              px={[2]}
-              py={[3]}
-              display="flex"
-              alignItems="center"
-              minHeight={50}
+          <PopoverHeader
+            px={[2]}
+            py={[3]}
+            display="flex"
+            alignItems="center"
+            minHeight={50}
+          >
+            <StyledFlex>{leftHeaderSlot}</StyledFlex>
+            <Heading
+              flexShrink={0}
+              as="h5"
+              fontWeight={500}
+              fontSize="sm"
+              textAlign="center"
+              flex={1}
+              flexBasis="auto"
             >
-              <StyledFlex>{leftHeaderSlot}</StyledFlex>
-              <Heading
-                flexShrink={0}
-                as="h5"
-                fontWeight={500}
-                fontSize="sm"
-                textAlign="center"
-                flex={1}
-                flexBasis="auto"
-              >
-                {header}
-              </Heading>
-              <StyledFlex justify="flex-end">
-                {rightHeaderSlot}
-                <PopoverCloseButton position="initial" />
-              </StyledFlex>
-            </PopoverHeader>
-            <PopoverBody p={0}>
-              {children}
-              {isLoading && <Loader />}
-            </PopoverBody>
-          </FocusLock>
+              {header}
+            </Heading>
+            <StyledFlex justify="flex-end">
+              {rightHeaderSlot}
+              <PopoverCloseButton position="initial" />
+            </StyledFlex>
+          </PopoverHeader>
+          <PopoverBody p={0}>
+            {children}
+            {isLoading && <Loader />}
+          </PopoverBody>
         </PopoverContent>
       </Box>
     </Popover>

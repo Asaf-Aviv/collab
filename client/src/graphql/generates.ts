@@ -13,7 +13,7 @@ export type Scalars = {
 };
 
 export type Query = {
-  __typename?: 'Query';
+   __typename?: 'Query';
   advancedPostsSearch: CollabPostsSearchResultsPayload;
   collab?: Maybe<Collab>;
   collabPost?: Maybe<CollabPost>;
@@ -104,7 +104,7 @@ export type QueryUserArgs = {
 };
 
 export type Mutation = {
-  __typename?: 'Mutation';
+   __typename?: 'Mutation';
   acceptCollabInvitation: Scalars['ID'];
   acceptFriendRequest: User;
   acceptMemberRequest: Scalars['ID'];
@@ -460,7 +460,7 @@ export type MutationUpdateUserInfoArgs = {
 };
 
 export type Collab = {
-  __typename?: 'Collab';
+   __typename?: 'Collab';
   acceptsInvites: Scalars['Boolean'];
   collabPostId?: Maybe<Scalars['ID']>;
   discussionThreads: Array<CollabDiscussionThread>;
@@ -478,7 +478,7 @@ export type Collab = {
 };
 
 export type CollabDiscussionThreadComment = {
-  __typename?: 'CollabDiscussionThreadComment';
+   __typename?: 'CollabDiscussionThreadComment';
   author: User;
   collab?: Maybe<Collab>;
   content: Scalars['String'];
@@ -514,7 +514,7 @@ export type RemoveCollabDiscussionThreadReactionInput = {
 };
 
 export type CollabDiscussionThread = {
-  __typename?: 'CollabDiscussionThread';
+   __typename?: 'CollabDiscussionThread';
   author: User;
   collab?: Maybe<Collab>;
   comments: Array<CollabDiscussionThreadComment>;
@@ -543,7 +543,7 @@ export type AdvancedPostsSearchInput = {
 };
 
 export type CollabPostsSearchResultsPayload = {
-  __typename?: 'CollabPostsSearchResultsPayload';
+   __typename?: 'CollabPostsSearchResultsPayload';
   hasNextPage: Scalars['Boolean'];
   posts: Array<CollabPost>;
 };
@@ -555,14 +555,14 @@ export type SearchPostsInput = {
 };
 
 export type SearchPostsPayload = {
-  __typename?: 'SearchPostsPayload';
+   __typename?: 'SearchPostsPayload';
   hasNextPage: Scalars['Boolean'];
   posts: Array<CollabPost>;
   totalResults: Scalars['Int'];
 };
 
 export type CollabPost = {
-  __typename?: 'CollabPost';
+   __typename?: 'CollabPost';
   acceptsInvites: Scalars['Boolean'];
   collabId: Scalars['ID'];
   comments: Array<CollabPostComment>;
@@ -592,7 +592,7 @@ export type CollabPost = {
 };
 
 export type CollabPostsPayload = {
-  __typename?: 'CollabPostsPayload';
+   __typename?: 'CollabPostsPayload';
   hasNextPage: Scalars['Boolean'];
   posts: Array<CollabPost>;
 };
@@ -617,7 +617,7 @@ export enum Experience {
 }
 
 export type CollabPostComment = {
-  __typename?: 'CollabPostComment';
+   __typename?: 'CollabPostComment';
   author: User;
   content: Scalars['String'];
   id: Scalars['ID'];
@@ -655,7 +655,7 @@ export type RemoveCollabTaskCommentReactionInput = {
 };
 
 export type WallMessage = {
-  __typename?: 'WallMessage';
+   __typename?: 'WallMessage';
   author: User;
   content: Scalars['String'];
   creationDate: Scalars['Date'];
@@ -669,7 +669,7 @@ export type CreateWallMessageInput = {
 };
 
 export type CollabWallMessagesPayload = {
-  __typename?: 'CollabWallMessagesPayload';
+   __typename?: 'CollabWallMessagesPayload';
   hasNextPage: Scalars['Boolean'];
   messages: Array<WallMessage>;
 };
@@ -681,14 +681,15 @@ export type CollabWallMessagesInput = {
 };
 
 export type Subscription = {
-  __typename?: 'Subscription';
+   __typename?: 'Subscription';
   friendStatusChange: ChatUsersPayload;
+  newFriendRequest: NewFriendRequestPayload;
   newNotification: Notification;
   newPrivateChatMessage: PrivateChatMessage;
 };
 
 export type Notification = {
-  __typename?: 'Notification';
+   __typename?: 'Notification';
   creationDate: Scalars['Date'];
   id: Scalars['ID'];
   isRead: Scalars['Boolean'];
@@ -706,18 +707,18 @@ export enum UserChatStatus {
 }
 
 export type ConnectToChatPayload = {
-  __typename?: 'ConnectToChatPayload';
+   __typename?: 'ConnectToChatPayload';
   users: Array<ChatUsersPayload>;
 };
 
 export type ChatUsersPayload = {
-  __typename?: 'ChatUsersPayload';
+   __typename?: 'ChatUsersPayload';
   status: UserChatStatus;
   user: User;
 };
 
 export type PrivateChatMessage = {
-  __typename?: 'PrivateChatMessage';
+   __typename?: 'PrivateChatMessage';
   authorId: Scalars['ID'];
   content: Scalars['String'];
   creationDate: Scalars['Date'];
@@ -730,7 +731,7 @@ export type SendPrivateChatMessageInput = {
 };
 
 export type PrivateMessage = {
-  __typename?: 'PrivateMessage';
+   __typename?: 'PrivateMessage';
   author?: Maybe<User>;
   content: Scalars['String'];
   creationDate: Scalars['Date'];
@@ -740,7 +741,7 @@ export type PrivateMessage = {
 };
 
 export type PrivateMessagePreview = {
-  __typename?: 'PrivateMessagePreview';
+   __typename?: 'PrivateMessagePreview';
   avatar: Scalars['String'];
   content: Scalars['String'];
   userId: Scalars['ID'];
@@ -748,7 +749,7 @@ export type PrivateMessagePreview = {
 };
 
 export type GetConversationPayload = {
-  __typename?: 'GetConversationPayload';
+   __typename?: 'GetConversationPayload';
   hasNextPage: Scalars['Boolean'];
   messages: Array<PrivateMessage>;
 };
@@ -759,7 +760,7 @@ export type SendPrivateMessageInput = {
 };
 
 export type Reaction = {
-  __typename?: 'Reaction';
+   __typename?: 'Reaction';
   count: Scalars['Int'];
   emojiId: Scalars['ID'];
   isLiked: Scalars['Boolean'];
@@ -767,7 +768,7 @@ export type Reaction = {
 
 
 export type Task = {
-  __typename?: 'Task';
+   __typename?: 'Task';
   assignedBy?: Maybe<User>;
   assignee?: Maybe<User>;
   author: User;
@@ -813,7 +814,7 @@ export type MoveTaskToListInput = {
 };
 
 export type TaskComment = {
-  __typename?: 'TaskComment';
+   __typename?: 'TaskComment';
   author?: Maybe<User>;
   content: Scalars['String'];
   id: Scalars['ID'];
@@ -844,7 +845,7 @@ export type UpdateTaskListPositionInput = {
 };
 
 export type TaskList = {
-  __typename?: 'TaskList';
+   __typename?: 'TaskList';
   collab?: Maybe<Collab>;
   id: Scalars['ID'];
   name: Scalars['String'];
@@ -852,8 +853,13 @@ export type TaskList = {
   tasks: Array<Task>;
 };
 
+export type NewFriendRequestPayload = {
+   __typename?: 'NewFriendRequestPayload';
+  user: User;
+};
+
 export type CurrentUser = {
-  __typename?: 'CurrentUser';
+   __typename?: 'CurrentUser';
   avatar?: Maybe<Scalars['String']>;
   bio: Scalars['String'];
   collabInvites: Array<Collab>;
@@ -880,7 +886,7 @@ export type CurrentUser = {
 };
 
 export type User = {
-  __typename?: 'User';
+   __typename?: 'User';
   avatar?: Maybe<Scalars['String']>;
   bio?: Maybe<Scalars['String']>;
   canRequestFriendship: Scalars['Boolean'];
@@ -910,14 +916,14 @@ export type UpdateUserInfoInput = {
 };
 
 export type CollabRequest = {
-  __typename?: 'CollabRequest';
+   __typename?: 'CollabRequest';
   collab: Collab;
   id: Scalars['ID'];
   member: User;
 };
 
 export type AuthPayload = {
-  __typename?: 'AuthPayload';
+   __typename?: 'AuthPayload';
   token: Scalars['String'];
 };
 
@@ -2121,6 +2127,20 @@ export type NewNotificationSubscription = (
   & { newNotification: (
     { __typename?: 'Notification' }
     & Pick<Notification, 'id' | 'message' | 'title' | 'type' | 'isRead' | 'url' | 'creationDate'>
+  ) }
+);
+
+export type NewFriendRequestSubscriptionVariables = {};
+
+
+export type NewFriendRequestSubscription = (
+  { __typename?: 'Subscription' }
+  & { newFriendRequest: (
+    { __typename?: 'NewFriendRequestPayload' }
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    ) }
   ) }
 );
 
@@ -5067,3 +5087,35 @@ export function useNewNotificationSubscription(baseOptions?: ApolloReactHooks.Su
       }
 export type NewNotificationSubscriptionHookResult = ReturnType<typeof useNewNotificationSubscription>;
 export type NewNotificationSubscriptionResult = ApolloReactCommon.SubscriptionResult<NewNotificationSubscription>;
+export const NewFriendRequestDocument = gql`
+    subscription NewFriendRequest {
+  newFriendRequest {
+    user {
+      id
+      username
+      avatar
+    }
+  }
+}
+    `;
+
+/**
+ * __useNewFriendRequestSubscription__
+ *
+ * To run a query within a React component, call `useNewFriendRequestSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useNewFriendRequestSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNewFriendRequestSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useNewFriendRequestSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<NewFriendRequestSubscription, NewFriendRequestSubscriptionVariables>) {
+        return ApolloReactHooks.useSubscription<NewFriendRequestSubscription, NewFriendRequestSubscriptionVariables>(NewFriendRequestDocument, baseOptions);
+      }
+export type NewFriendRequestSubscriptionHookResult = ReturnType<typeof useNewFriendRequestSubscription>;
+export type NewFriendRequestSubscriptionResult = ApolloReactCommon.SubscriptionResult<NewFriendRequestSubscription>;

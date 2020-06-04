@@ -6,17 +6,18 @@ import {
   IsUUID,
   Default,
   BelongsTo,
-  AllowNull,
   ForeignKey,
   CreatedAt,
 } from 'sequelize-typescript'
 import { v4 as uuid } from 'uuid'
 import { User } from './User'
-import { CollabPostComment } from './CollabPostComment'
 import { UserFriend } from './UserFriend'
 import { UserFriendRequest } from './UserFriendRequest'
+import { CollabPostReaction } from './CollabPostReaction'
+import { CollabPost } from './CollabPost'
+import { CollabPostComment } from './CollabPostComment'
 
-type FriendNotification = 'NEW_FRIEND' | 'FRIEND_REQUEST'
+type FriendNotification = 'NEW_FRIEND' | 'NEW_FRIEND_REQUEST'
 
 type CollabPostNotification =
   | 'COLLAB_POST_REACTION'
@@ -72,6 +73,17 @@ export class Notification extends Model<Notification> {
   @CreatedAt
   creationDate!: Date
 
+  // shared between notification types
+  @ForeignKey(() => CollabPost)
+  @Column
+  postId!: string
+
+  @BelongsTo(() => CollabPost, {
+    foreignKey: 'postId',
+    onDelete: 'CASCADE',
+  })
+  post!: CollabPost
+
   // new friend
   @ForeignKey(() => User)
   @Column
@@ -82,10 +94,10 @@ export class Notification extends Model<Notification> {
 
   @ForeignKey(() => UserFriend)
   @Column
-  friendShipId!: string
+  friendshipId!: string
 
   @BelongsTo(() => UserFriend, {
-    foreignKey: 'friendShipId',
+    foreignKey: 'friendshipId',
     onDelete: 'CASCADE',
   })
   friendship!: UserFriend
@@ -110,6 +122,33 @@ export class Notification extends Model<Notification> {
     onDelete: 'CASCADE',
   })
   friendRequest!: UserFriendRequest
+
+  // collab post reaction
+  @ForeignKey(() => CollabPostReaction)
+  @Column
+  reactionId!: string
+
+  @BelongsTo(() => CollabPostReaction, {
+    foreignKey: 'reactionId',
+    onDelete: 'CASCADE',
+  })
+  reaction!: CollabPostReaction
+
+  @BelongsTo(() => CollabPostReaction, {
+    foreignKey: 'reactionId',
+    onDelete: 'CASCADE',
+  })
+
+  // collab post comment
+  @ForeignKey(() => CollabPostComment)
+  @Column
+  commentId!: string
+
+  @BelongsTo(() => CollabPostComment, {
+    foreignKey: 'commentId',
+    onDelete: 'CASCADE',
+  })
+  comment!: CollabPostComment
 
   static async newFriendNotification(
     userId: string,
@@ -141,17 +180,31 @@ export class Notification extends Model<Notification> {
     return notification.get() as typeof notification
   }
 
-  // collab post reaction
   static async newCollabPostReactionNotification(
-    collabId: string,
-    reacterId: string,
+    userId: string,
+    postId: string,
     reactionId: string,
   ) {
     const notification = await this.create({
       type: 'COLLAB_POST_REACTION',
-      collabId,
-      reacterId,
+      userId,
+      postId,
       reactionId,
+    })
+
+    return notification.get() as typeof notification
+  }
+
+  static async newCollabPostCommentNotification(
+    userId: string,
+    postId: string,
+    commentId: string,
+  ) {
+    const notification = await this.create({
+      type: 'COLLAB_POST_COMMENT',
+      userId,
+      postId,
+      commentId,
     })
 
     return notification.get() as typeof notification

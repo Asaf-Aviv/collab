@@ -25,7 +25,7 @@ import { useToastNotification } from '../../notifications'
 
 const removeNotificationFromCache = (
   store: DataProxy,
-  // omit the id only when deleteAll is true
+  // id is ignored when deleteAll is true
   notificationId: string | undefined,
   deleteAll?: boolean,
 ) => {

@@ -23,6 +23,14 @@ export const userTypeDefs = gql`
     removeFriend(friendId: ID!): ID!
   }
 
+  type Subscription {
+    newFriendRequest: NewFriendRequestPayload!
+  }
+
+  type NewFriendRequestPayload {
+    user: User!
+  }
+
   type CurrentUser {
     id: ID!
     username: String!

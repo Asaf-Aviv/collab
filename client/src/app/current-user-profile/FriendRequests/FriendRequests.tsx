@@ -8,7 +8,7 @@ import {
   PseudoBox,
 } from '@chakra-ui/core'
 import { useCurrentUserFriendRequestsQuery } from '../../../graphql/generates'
-import { useFriendRequestActions } from './useFriendRequestActions'
+import { useFriendRequestActions } from './friendRequestActions'
 import { Loader } from '../../../components/Loader'
 import { DisplayError } from '../../../components/DisplayError'
 

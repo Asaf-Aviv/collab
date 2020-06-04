@@ -42,17 +42,17 @@ module.exports = {
   up: queryInterface =>
     queryInterface
       .bulkInsert({ tableName: 'users' }, seededUsers)
-      .then(
-        () =>
-          queryInterface.bulkInsert(
-            { tableName: 'user_friendship_requests' },
-            friendRequests,
-          ),
-        // queryInterface.bulkInsert({ tableName: 'user_friendships' }, friends),
-      )
-      .then(() =>
-        queryInterface.bulkInsert({ tableName: 'private_messages' }, messages),
-      )
+      // .then(
+      //   () =>
+      //     queryInterface.bulkInsert(
+      //       { tableName: 'user_friendship_requests' },
+      //       friendRequests,
+      //     ),
+      //   // queryInterface.bulkInsert({ tableName: 'user_friendships' }, friends),
+      // )
+      // .then(() =>
+      //   queryInterface.bulkInsert({ tableName: 'private_messages' }, messages),
+      // )
       .catch(err => {
         console.log(err)
       }),
