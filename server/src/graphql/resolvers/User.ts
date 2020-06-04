@@ -65,8 +65,26 @@ export const userResolver: Resolvers = {
     declineCollabInvitation: (root, { collabId }, { user, models }) =>
       models.User.declineCollabInvitation(collabId, user.id),
     updateUserInfo: (root, { input }, { user }) => user!.update(input!),
-    sendFriendRequest: (root, { friendId }, { models, user }) =>
-      models.UserFriendRequest.createFriendRequest(friendId, user!.id),
+    sendFriendRequest: async (root, { friendId }, { models, user }) => {
+      const { UserFriendRequest, Notification } = models
+      const request = await UserFriendRequest.createFriendRequest(
+        friendId,
+        user!.id,
+      )
+
+      Notification.newFriendRequestNotification(friendId, user!.id, request.id)
+        .then(formatNotification)
+        .then(notification => {
+          pubsub.publish('NEW_NOTIFICATION', {
+            newNotification: notification,
+          })
+        })
+        .catch(err => {
+          console.error('Could not send newFriendNotification', err)
+        })
+
+      return true
+    },
     acceptFriendRequest: async (
       root,
       { friendId },

@@ -14,6 +14,7 @@ import { v4 as uuid } from 'uuid'
 import { User } from './User'
 import { CollabPostComment } from './CollabPostComment'
 import { UserFriend } from './UserFriend'
+import { UserFriendRequest } from './UserFriendRequest'
 
 type FriendNotification = 'NEW_FRIEND' | 'FRIEND_REQUEST'
 
@@ -68,12 +69,16 @@ export class Notification extends Model<Notification> {
   @BelongsTo(() => User, { foreignKey: 'userId', onDelete: 'CASCADE' })
   user!: User
 
-  @Default(null)
+  @CreatedAt
+  creationDate!: Date
+
+  // new friend
+  @ForeignKey(() => User)
   @Column
-  friendId!: string
+  newFriendId!: string
 
   @BelongsTo(() => User, { foreignKey: 'friendId', onDelete: 'CASCADE' })
-  friend!: User
+  newFriend!: User
 
   @ForeignKey(() => UserFriend)
   @Column
@@ -85,8 +90,26 @@ export class Notification extends Model<Notification> {
   })
   friendship!: UserFriend
 
-  @CreatedAt
-  creationDate!: Date
+  // new friend request
+  @ForeignKey(() => User)
+  @Column
+  friendRequesterId!: string
+
+  @BelongsTo(() => User, {
+    foreignKey: 'friendRequesterId',
+    onDelete: 'CASCADE',
+  })
+  friendRequester!: User
+
+  @ForeignKey(() => UserFriendRequest)
+  @Column
+  friendRequestId!: string
+
+  @BelongsTo(() => UserFriendRequest, {
+    foreignKey: 'friendRequestId',
+    onDelete: 'CASCADE',
+  })
+  friendRequest!: UserFriendRequest
 
   static async newFriendNotification(
     userId: string,
@@ -95,9 +118,40 @@ export class Notification extends Model<Notification> {
   ) {
     const notification = await this.create({
       type: 'NEW_FRIEND',
-      friendId: accepterId,
       userId,
+      newFriendId: accepterId,
       friendshipId,
+    })
+
+    return notification.get() as typeof notification
+  }
+
+  static async newFriendRequestNotification(
+    userId: string,
+    friendRequesterId: string,
+    friendRequestId: string,
+  ) {
+    const notification = await this.create({
+      type: 'NEW_FRIEND_REQUEST',
+      userId,
+      friendRequesterId,
+      friendRequestId,
+    })
+
+    return notification.get() as typeof notification
+  }
+
+  // collab post reaction
+  static async newCollabPostReactionNotification(
+    collabId: string,
+    reacterId: string,
+    reactionId: string,
+  ) {
+    const notification = await this.create({
+      type: 'COLLAB_POST_REACTION',
+      collabId,
+      reacterId,
+      reactionId,
     })
 
     return notification.get() as typeof notification
