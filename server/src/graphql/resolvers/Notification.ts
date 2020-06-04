@@ -1,6 +1,5 @@
 import { withFilter } from 'apollo-server-express'
 import { Resolvers } from '../types'
-import { pubsub } from '../helpers/pubsub'
 import { formatNotification } from '../helpers/formatNotification'
 
 const NEW_NOTIFICATION = 'NEW_NOTIFICATION'
@@ -34,7 +33,7 @@ export const notificationResolver: Resolvers = {
   },
   Subscription: {
     newNotification: {
-      subscribe: (root, args, { user }) =>
+      subscribe: (root, args, { user, pubsub }) =>
         withFilter(
           () => pubsub.asyncIterator(NEW_NOTIFICATION),
           ({ newNotification: { userId } }) => userId === user!.id,

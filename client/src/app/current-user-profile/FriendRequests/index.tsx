@@ -1,2 +1,2 @@
 export * from './FriendRequests'
-export * from './useFriendRequestActions'
+export * from './friendRequestActions'

@@ -6,6 +6,7 @@ import { Resolvers, ResolversTypes, Maybe } from '../types'
 import { formatNotification } from '../helpers/formatNotification'
 import { pubsub } from '../helpers/pubsub'
 import { GQLUser } from '../../db/models/User'
+import { withFilter } from 'apollo-server-express'
 
 // setInterval(() => {
 //   pubsub.publish('NEW_NOTIFICATION', {
@@ -65,7 +66,7 @@ export const userResolver: Resolvers = {
     declineCollabInvitation: (root, { collabId }, { user, models }) =>
       models.User.declineCollabInvitation(collabId, user.id),
     updateUserInfo: (root, { input }, { user }) => user!.update(input!),
-    sendFriendRequest: async (root, { friendId }, { models, user }) => {
+    sendFriendRequest: async (root, { friendId }, { models, user, pubsub }) => {
       const { UserFriendRequest, Notification } = models
       const request = await UserFriendRequest.createFriendRequest(
         friendId,
@@ -83,6 +84,13 @@ export const userResolver: Resolvers = {
           console.error('Could not send newFriendNotification', err)
         })
 
+      pubsub.publish('NEW_FRIEND_REQUEST', {
+        recipientId: friendId,
+        newFriendRequest: {
+          user,
+        },
+      })
+
       return true
     },
     acceptFriendRequest: async (
@@ -91,9 +99,9 @@ export const userResolver: Resolvers = {
       { models, user, pubsub },
     ) => {
       const { UserFriend, Notification } = models
-      const friendShip = await UserFriend.createFriendship(friendId, user!.id)
+      const friendship = await UserFriend.createFriendship(friendId, user!.id)
 
-      Notification.newFriendNotification(friendId, user!.id, friendShip.id)
+      Notification.newFriendNotification(friendId, user!.id, friendship.id)
         .then(formatNotification)
         .then(notification => {
           pubsub.publish('NEW_NOTIFICATION', {
@@ -104,17 +112,26 @@ export const userResolver: Resolvers = {
           console.error('Could not send newFriendNotification', err)
         })
 
-      return friendShip
+      return friendship
     },
     declineFriendRequest: (root, { senderId }, { models, user }) =>
       models.UserFriendRequest.deleteFriendRequest(user!.id, senderId),
     removeFriend: (root, { friendId }, { models, user }) =>
       models.UserFriend.deleteFriendship(friendId, user!.id),
   },
+  Subscription: {
+    newFriendRequest: {
+      subscribe: (root, args, { user, pubsub }) =>
+        withFilter(
+          () => pubsub.asyncIterator('NEW_FRIEND_REQUEST'),
+          ({ recipientId }) => recipientId === user!.id,
+        )(),
+    },
+  },
   CurrentUser: {
-    friends: async ({ id }, args, { models, user }) => {
+    friends: async ({ id }, args, { models }) => {
       const friends = await models.UserFriend.findAll({
-        where: { userId: user!.id },
+        where: { userId: id },
         include: [{ model: models.User, as: 'friend' }],
       })
 

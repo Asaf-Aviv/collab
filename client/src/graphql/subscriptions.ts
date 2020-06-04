@@ -13,3 +13,15 @@ export const NEW_NOTIFICATION = gql`
     }
   }
 `
+
+export const NEW_FRIEND_REQUEST = gql`
+  subscription NewFriendRequest {
+    newFriendRequest {
+      user {
+        id
+        username
+        avatar
+      }
+    }
+  }
+`

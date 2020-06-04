@@ -32,7 +32,7 @@ export const UserAccountMenu = () => {
         </MenuGroup>
         <MenuDivider />
         <LogoutButton size="sm" width="100%" bg="transparent">
-          Logout
+          Sign Out
         </LogoutButton>
       </MenuList>
     </Menu>
