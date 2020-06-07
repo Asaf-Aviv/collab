@@ -22,8 +22,7 @@ export class CollabPostCommentReaction extends Reaction {
   static async addReaction(
     reaction: AddCollabPostCommentReactionInput & { userId: string },
   ) {
-    await this.create(reaction)
-    return true
+    return this.create(reaction)
   }
 
   static async deleteReaction(

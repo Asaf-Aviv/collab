@@ -11,7 +11,6 @@ import {
   PopoverCloseButton,
 } from '@chakra-ui/core'
 import styled from '@emotion/styled'
-import FocusLock from 'react-focus-lock'
 import { Loader } from '../Loader'
 import { IconButton } from '../global'
 
@@ -43,6 +42,7 @@ export const Ballon = ({
             <Box position="relative">{triggerIcon}</Box>
           </PopoverTrigger>
         </Flex>
+        <PopoverContent>
           <PopoverHeader
             px={[2]}
             py={[3]}

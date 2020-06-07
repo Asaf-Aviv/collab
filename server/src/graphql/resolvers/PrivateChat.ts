@@ -92,7 +92,7 @@ export const privateChatResolver: Resolvers = {
           ({ recipientId }) => recipientId === user!.id,
         )
 
-        return withCancel(subscriptionFilter(), () => console.log('cancel'))
+        return withCancel(subscriptionFilter(), () => {})
       },
     },
     friendStatusChange: {
