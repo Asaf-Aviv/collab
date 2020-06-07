@@ -4,24 +4,8 @@ import { generateToken } from '../../utils/index'
 import { isAuthenticated } from '../middleware/isAuthenticated'
 import { Resolvers, ResolversTypes, Maybe } from '../types'
 import { formatNotification } from '../helpers/formatNotification'
-import { pubsub } from '../helpers/pubsub'
 import { GQLUser } from '../../db/models/User'
 import { withFilter } from 'apollo-server-express'
-
-// setInterval(() => {
-//   pubsub.publish('NEW_NOTIFICATION', {
-//     newNotification: {
-//       id: '1',
-//       type: 'NEW_FRIEND',
-//       userId: '6d480813-c854-40fc-a3cf-cea0944854ab',
-//       title: 'New Friend',
-//       url: 'h',
-//       body: 'You and Him are now friends!',
-//       isRead: false,
-//       creationDate: '1',
-//     },
-//   })
-// }, 5000)
 
 export const userResolver: Resolvers = {
   Query: {
@@ -135,7 +119,6 @@ export const userResolver: Resolvers = {
         include: [{ model: models.User, as: 'friend' }],
       })
 
-      console.log(friends)
       return friends.map(f => f.friend)
     },
     conversationsPreview: ({ id }, args, { models }) =>

@@ -18,6 +18,7 @@ const seededCollabs = seededUsers.map(user => generageCollab(user.id))
 exports.seededCollabs = seededCollabs
 
 const collabOwners = seededCollabs.map(({ id, owner_id }) => ({
+  id: uuid(),
   collab_id: id,
   is_owner: true,
   member_id: owner_id,

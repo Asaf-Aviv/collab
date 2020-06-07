@@ -3,11 +3,44 @@ import { isAuthenticated } from '../middleware/isAuthenticated'
 import { and } from 'graphql-shield'
 import { Resolvers } from '../types'
 import { Sequelize } from 'sequelize-typescript'
+import { formatNotification } from '../helpers/formatNotification'
 
 export const collabPostCommentResolver: Resolvers = {
   Mutation: {
-    createComment: (root, { content, postId }, { user, models }) =>
-      models.CollabPostComment.createComment(content, user!.id, postId),
+    createComment: async (
+      root,
+      { content, postId },
+      { user, models, pubsub },
+    ) => {
+      const { CollabPostComment, Notification, CollabPost } = models
+      const comment = await CollabPostComment.createComment(
+        content,
+        user!.id,
+        postId,
+      )
+      const post = await CollabPost.findByPk(postId, {
+        attributes: ['ownerId'],
+      })
+
+      if (post!.ownerId !== user!.id) {
+        Notification.newCollabPostCommentNotification(
+          post!.ownerId,
+          postId,
+          comment.id,
+        )
+          .then(formatNotification)
+          .then(newNotification => {
+            pubsub.publish('NEW_NOTIFICATION', {
+              newNotification,
+            })
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      }
+
+      return comment
+    },
     deleteComment: (root, { commentId }, { user, models }) =>
       models.CollabPostComment.deleteComment(commentId, user.id),
   },

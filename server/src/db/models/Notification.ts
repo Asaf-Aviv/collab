@@ -16,6 +16,11 @@ import { UserFriendRequest } from './UserFriendRequest'
 import { CollabPostReaction } from './CollabPostReaction'
 import { CollabPost } from './CollabPost'
 import { CollabPostComment } from './CollabPostComment'
+import { CollabPostCommentReaction } from './CollabPostCommentReaction'
+import { PrivateMessage } from './PrivateMessage'
+import { CollabMember } from './CollabMember'
+import { CollabMemberRequest } from './CollabMemberRequest'
+import { Collab } from './Collab'
 
 type FriendNotification = 'NEW_FRIEND' | 'NEW_FRIEND_REQUEST'
 
@@ -33,7 +38,7 @@ type CollabNotification =
   | 'COLLAB_DISCUSSION_THREAD_COMMENT_REACTION'
   | 'COLLAB_TASK_ASSIGNEE'
 
-type PrivateMessageNotification = 'NEW_PRIVATE_MESSAGE'
+type PrivateMessageNotification = 'PRIVATE_MESSAGE'
 
 type NotificationType =
   | FriendNotification
@@ -84,6 +89,16 @@ export class Notification extends Model<Notification> {
   })
   post!: CollabPost
 
+  @ForeignKey(() => Collab)
+  @Column
+  collabId!: string
+
+  @BelongsTo(() => Collab, {
+    foreignKey: 'collabId',
+    onDelete: 'CASCADE',
+  })
+  collab!: Collab
+
   // new friend
   @ForeignKey(() => User)
   @Column
@@ -126,29 +141,68 @@ export class Notification extends Model<Notification> {
   // collab post reaction
   @ForeignKey(() => CollabPostReaction)
   @Column
-  reactionId!: string
+  collabPostReactionId!: string
 
   @BelongsTo(() => CollabPostReaction, {
-    foreignKey: 'reactionId',
+    foreignKey: 'collabPostReactionId',
     onDelete: 'CASCADE',
   })
-  reaction!: CollabPostReaction
-
-  @BelongsTo(() => CollabPostReaction, {
-    foreignKey: 'reactionId',
-    onDelete: 'CASCADE',
-  })
+  collabPostReaction!: CollabPostReaction
 
   // collab post comment
   @ForeignKey(() => CollabPostComment)
   @Column
-  commentId!: string
+  collabPostCommentId!: string
 
   @BelongsTo(() => CollabPostComment, {
-    foreignKey: 'commentId',
+    foreignKey: 'collabPostCommentId',
     onDelete: 'CASCADE',
   })
-  comment!: CollabPostComment
+  collabPostComment!: CollabPostComment
+
+  // collab post comment reaction
+  @ForeignKey(() => CollabPostComment)
+  @Column
+  collabPostCommentReactionId!: string
+
+  @BelongsTo(() => CollabPostCommentReaction, {
+    foreignKey: 'collabPostCommentReactionId',
+    onDelete: 'CASCADE',
+  })
+  collabPostCommentReaction!: CollabPostCommentReaction
+
+  // private message
+  @ForeignKey(() => PrivateMessage)
+  @Column
+  privateMessageId!: string
+
+  @BelongsTo(() => PrivateMessage, {
+    foreignKey: 'privateMessageId',
+    onDelete: 'CASCADE',
+  })
+  privateMessage!: PrivateMessage
+
+  // collab member request to join
+  @ForeignKey(() => CollabMemberRequest)
+  @Column
+  collabMemberRequestId!: string
+
+  @BelongsTo(() => CollabMemberRequest, {
+    foreignKey: 'collabMemberRequestId',
+    onDelete: 'CASCADE',
+  })
+  collabMemberRequest!: CollabMemberRequest
+
+  // collab member
+  // the id in CollabMember and not the user id
+  @ForeignKey(() => CollabMember)
+  collabMemberId!: string
+
+  @BelongsTo(() => CollabMember, {
+    foreignKey: 'collabMemberId',
+    onDelete: 'CASCADE',
+  })
+  collabMember!: CollabMember
 
   static async newFriendNotification(
     userId: string,
@@ -183,13 +237,13 @@ export class Notification extends Model<Notification> {
   static async newCollabPostReactionNotification(
     userId: string,
     postId: string,
-    reactionId: string,
+    collabPostReactionId: string,
   ) {
     const notification = await this.create({
       type: 'COLLAB_POST_REACTION',
       userId,
       postId,
-      reactionId,
+      collabPostReactionId,
     })
 
     return notification.get() as typeof notification
@@ -198,16 +252,90 @@ export class Notification extends Model<Notification> {
   static async newCollabPostCommentNotification(
     userId: string,
     postId: string,
-    commentId: string,
+    collabPostCommentId: string,
   ) {
     const notification = await this.create({
       type: 'COLLAB_POST_COMMENT',
       userId,
       postId,
-      commentId,
+      collabPostCommentId,
+    })
+
+    console.log(notification)
+
+    return notification.get() as typeof notification
+  }
+
+  static async newCollabPostCommentReactionNotification(
+    userId: string,
+    collabPostCommentReactionId: string,
+  ) {
+    const notification = await this.create({
+      type: 'COLLAB_POST_COMMENT_REACTION',
+      userId,
+      collabPostCommentReactionId,
     })
 
     return notification.get() as typeof notification
+  }
+
+  static async newPrivateMessageNotification(
+    userId: string,
+    privateMessageId: string,
+  ) {
+    const notification = await this.create({
+      type: 'PRIVATE_MESSAGE',
+      userId,
+      privateMessageId,
+    })
+
+    return notification.get() as typeof notification
+  }
+
+  static async newCollabMemberRequestNotification(
+    userId: string,
+    collabMemberRequestId: string,
+  ) {
+    const notification = await this.create({
+      type: 'COLLAB_MEMBER_REQUEST',
+      userId,
+      collabMemberRequestId,
+    })
+
+    return notification.get() as typeof notification
+  }
+
+  static async newCollabMemberNotification(memberId: string, collabId: string) {
+    const collabMember = await CollabMember.findOne({
+      where: { memberId, collabId },
+      include: [User],
+    })
+    const members = await CollabMember.findAll({
+      where: { collabId },
+      include: [User],
+    })
+
+    console.log(collabMember, members)
+
+    if (!collabMember) {
+      throw new Error('Collab member not found')
+    }
+
+    if (!members) {
+      throw new Error('Collab not found')
+    }
+
+    const withoutNewMember = members.filter(
+      ({ member }) => member.id !== memberId,
+    )
+
+    return (withoutNewMember.map(({ member }) =>
+      this.create({
+        type: 'NEW_COLLAB_MEMBER',
+        userId: member.id,
+        collabMemberId: collabMember.id,
+      }).then(n => n.get()),
+    ) as unknown) as Notification[]
   }
 
   static async markAsRead(notificationId: string, userId: string) {
