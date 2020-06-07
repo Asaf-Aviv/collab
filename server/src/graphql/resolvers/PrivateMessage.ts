@@ -1,5 +1,6 @@
 import { Resolvers } from '../types'
 import { Op } from 'sequelize'
+import { formatNotification } from '../helpers/formatNotification'
 
 export const privateMessageResolver: Resolvers = {
   Query: {
@@ -26,8 +27,20 @@ export const privateMessageResolver: Resolvers = {
     },
   },
   Mutation: {
-    sendPrivateMessage: (root, { input }, { user, models }) =>
-      models.PrivateMessage.createMessage(input, user!.id),
+    sendPrivateMessage: async (root, { input }, { user, models, pubsub }) => {
+      const { PrivateMessage, Notification } = models
+      const message = await PrivateMessage.createMessage(input, user!.id)
+
+      Notification.newPrivateMessageNotification(input.recipientId, message.id)
+        .then(formatNotification)
+        .then(newNotification => {
+          pubsub.publish('NEW_NOTIFICATION', {
+            newNotification,
+          })
+        })
+
+      return message
+    },
     markPrivateMessageAsRead: (root, { messageId }, { user, models }) =>
       models.PrivateMessage.markAsRead(messageId, user!.id),
     deletePrivateMessage: (root, { messageId }, { user, models }) =>

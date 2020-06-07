@@ -200,9 +200,7 @@ export class Collab extends Model<Collab> {
       )
     }
 
-    await CollabMemberRequest.create({ collabId, memberId, type: 'request' })
-
-    return true
+    return CollabMemberRequest.create({ collabId, memberId, type: 'request' })
   }
 
   static async cancelRequestToJoin(collabId: string, memberId: string) {

@@ -68,7 +68,6 @@ export const SmallScreenNav = () => {
               as="nav"
               direction="column"
               bg="white"
-              zIndex={10}
               onClick={() => toggleIsOpen()}
             >
               <StyledLink exact to="/">
@@ -149,7 +148,7 @@ const StyledMotion = styled(motion.div)`
   left: 0;
   right: 0;
   background-color: white;
-  z-index: 3;
+  z-index: 10;
 `
 
 const IconButton = styled.button`

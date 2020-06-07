@@ -174,7 +174,10 @@ export const collabPostResolver: Resolvers = {
     },
     isNew: ({ createdAt }) => differenceInDays(new Date(), createdAt) <= 7,
     comments: ({ id }, args, { models }) =>
-      models.CollabPostComment.findAll({ where: { postId: id } }),
+      models.CollabPostComment.findAll({
+        where: { postId: id },
+        order: [['createdAt', 'DESC']],
+      }),
     pendingInvites: async ({ collabId }, args, { models, loaders }) => {
       const pendingInviteMembers = await models.CollabMemberRequest.findAll({
         where: { collabId, type: 'invitation' },
