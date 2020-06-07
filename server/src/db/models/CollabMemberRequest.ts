@@ -21,7 +21,9 @@ export class CollabMemberRequest extends Model<CollabMemberRequest> {
   @Column
   id!: string
 
-  @PrimaryKey
+  @Column(DataType.ENUM('request', 'invitation'))
+  type!: 'request' | 'invitation'
+
   @ForeignKey(() => Collab)
   @Column
   collabId!: string
@@ -29,14 +31,10 @@ export class CollabMemberRequest extends Model<CollabMemberRequest> {
   @BelongsTo(() => Collab, { foreignKey: 'collabId', onDelete: 'CASCADE' })
   collab!: Collab
 
-  @PrimaryKey
   @ForeignKey(() => User)
   @Column
   memberId!: string
 
   @BelongsTo(() => User, { foreignKey: 'memberId', onDelete: 'CASCADE' })
   member!: User
-
-  @Column(DataType.ENUM('request', 'invitation'))
-  type!: 'request' | 'invitation'
 }

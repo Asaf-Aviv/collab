@@ -3,6 +3,7 @@ import { and } from 'graphql-shield'
 import { Resolvers } from '../types'
 import { replaceErrorWithNull } from '../helpers/replaceErrorWithNull'
 import { GQLUser } from '../../db/models/User'
+import { formatNotification } from '../helpers/formatNotification'
 
 export const collabResolver: Resolvers = {
   Query: {
@@ -13,14 +14,61 @@ export const collabResolver: Resolvers = {
   Mutation: {
     deleteCollab: (root, { collabId }, { models }) =>
       models.Collab.deleteCollab(collabId),
-    acceptMemberRequest: (root, { collabId, memberId }, { user, models }) =>
-      models.Collab.acceptMemberRequest(collabId, user.id, memberId),
+    acceptMemberRequest: async (
+      root,
+      { collabId, memberId },
+      { user, models, pubsub },
+    ) => {
+      const { Collab, Notification } = models
+      const requestId = await Collab.acceptMemberRequest(
+        collabId,
+        user.id,
+        memberId,
+      )
+
+      console.log('accepted')
+
+      Notification.newCollabMemberNotification(memberId, collabId)
+        .then(notifications =>
+          Promise.all(notifications.map(formatNotification)),
+        )
+        .then(notifications => {
+          notifications.forEach(newNotification => {
+            console.log('publishing', newNotification)
+            pubsub.publish('NEW_NOTIFICATION', {
+              newNotification,
+            })
+          })
+        })
+
+      return requestId
+    },
     removeMember: (root, { collabId, memberId }, { user, models }) =>
       models.Collab.removeMember(collabId, user.id, memberId),
     inviteMember: (root, { collabId, memberId }, { user, models }) =>
       models.Collab.inviteMember(user.id, memberId, collabId),
-    requestToJoin: (root, { collabId }, { user, models }) =>
-      models.Collab.requestToJoin(collabId, user.id),
+    requestToJoin: async (root, { collabId }, { user, models, pubsub }) => {
+      const { Collab, Notification } = models
+      const request = await Collab.requestToJoin(collabId, user.id)
+      const collab = await Collab.findByPk(request.collabId)
+
+      if (!collab) {
+        throw new Error('Collab not found')
+      }
+
+      Notification.newCollabMemberRequestNotification(
+        collab.ownerId,
+        request.id,
+      )
+        .then(formatNotification)
+        .then(newNotification => {
+          pubsub.publish('NEW_NOTIFICATION', {
+            newNotification,
+          })
+        })
+
+      return true
+    },
     toggleAcceptInvites: (root, { collabId }, { user, models }) =>
       models.Collab.toggleAcceptInvites(collabId, user.id),
     declineMemberRequest: (root, { collabId, memberId }, { user, models }) =>

@@ -75,14 +75,12 @@ export const useSubscribeToFriendRequests = ({ skip = false }) => {
   const data = useNewFriendRequestSubscription({
     skip,
     onSubscriptionData({ client, subscriptionData: { data } }) {
-      console.log(data)
       if (!data) return
       updateFriendRequestsCount(client, 1)
       addFriendRequestToCache(client, data.newFriendRequest.user)
     },
   })
   console.log(data)
-  console.log('hello')
 }
 
 export const useFriendRequestActions = () => {

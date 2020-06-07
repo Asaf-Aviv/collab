@@ -26,7 +26,6 @@ export const apolloServer = new ApolloServer({
   context: apolloContext,
   subscriptions: {
     onConnect: async connectionParams => {
-      console.log('clinet connected', connectionParams)
       //@ts-ignore
       const { Authorization } = connectionParams
 
