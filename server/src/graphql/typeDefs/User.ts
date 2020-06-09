@@ -5,7 +5,8 @@ export const userTypeDefs = gql`
     users: [User!]!
     user(id: ID!): User
     currentUser: CurrentUser
-    searchFriends(input: SearchFriendsInput!): [User!]!
+    searchFriends(input: SearchUsersInput!): [User!]!
+    searchUsers(input: SearchUsersInput!): [User!]!
   }
 
   type Mutation {
@@ -71,7 +72,7 @@ export const userTypeDefs = gql`
     collabs: [Collab!]!
   }
 
-  input SearchFriendsInput {
+  input SearchUsersInput {
     username: String!
   }
 

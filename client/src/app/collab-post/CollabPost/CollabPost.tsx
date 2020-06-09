@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react'
+import React from 'react'
 import { useParams, Link } from 'react-router-dom'
 import {
   useGetCollabPostQuery,
@@ -24,10 +24,8 @@ export const CollabPost = () => {
   const { data, loading, error } = useGetCollabPostQuery({
     variables: { postId },
   })
-  const [commentInput, setCommentInput] = useState('')
   const [addComment] = useAddCollabPostCommentMutation({
     refetchQueries: [{ query: COLLAB_POST_COMMENTS, variables: { postId } }],
-    onCompleted: () => setCommentInput(''),
   })
   const [addReaction] = useAddCollabPostReactionMutation()
   const [removeReaction] = useRemoveCollabPostReactionMutation()
@@ -36,12 +34,11 @@ export const CollabPost = () => {
   if (error) return <h1>Could not fetch post</h1>
   if (!data?.collabPost) return null
 
-  const handleCommentSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const handleCommentSubmit = (content: string) => {
     addComment({
       variables: {
         postId: data.collabPost!.id,
-        content: commentInput,
+        content,
       },
     })
   }
@@ -151,11 +148,7 @@ export const CollabPost = () => {
           <MemberInvitationActions {...memberRequestsInfo} />
         </Flex>
         <section>
-          <CommentForm
-            onSubmit={handleCommentSubmit}
-            value={commentInput}
-            onChange={setCommentInput}
-          />
+          <CommentForm onSubmit={handleCommentSubmit} />
         </section>
         <section>
           <SectionHorizonalHeader title="Comments" titleTag="h4" />

@@ -29,16 +29,18 @@ type CollabPostNotification =
   | 'COLLAB_POST_COMMENT'
   | 'COLLAB_POST_COMMENT_REACTION'
 
+type PrivateMessageNotification = 'PRIVATE_MESSAGE'
+
 type CollabNotification =
   | 'NEW_COLLAB_MEMBER'
   | 'COLLAB_MEMBER_REQUEST'
+  | 'COLLAB_REQUEST_TO_JOIN_APPROVED'
+  | 'COLLAB_MEMBER_INVITATION'
   | 'COLLAB_DISCUSSION_THREAD'
   | 'COLLAB_DISCUSSION_THREAD_REACTION'
   | 'COLLAB_DISCUSSION_THREAD_COMMENT'
   | 'COLLAB_DISCUSSION_THREAD_COMMENT_REACTION'
   | 'COLLAB_TASK_ASSIGNEE'
-
-type PrivateMessageNotification = 'PRIVATE_MESSAGE'
 
 type NotificationType =
   | FriendNotification
@@ -182,7 +184,7 @@ export class Notification extends Model<Notification> {
   })
   privateMessage!: PrivateMessage
 
-  // collab member request to join
+  // collab member request to join and invitation
   @ForeignKey(() => CollabMemberRequest)
   @Column
   collabMemberRequestId!: string
@@ -196,6 +198,7 @@ export class Notification extends Model<Notification> {
   // collab member
   // the id in CollabMember and not the user id
   @ForeignKey(() => CollabMember)
+  @Column
   collabMemberId!: string
 
   @BelongsTo(() => CollabMember, {
@@ -203,6 +206,28 @@ export class Notification extends Model<Notification> {
     onDelete: 'CASCADE',
   })
   collabMember!: CollabMember
+
+  // // COLLAB_TASK_ASSIGNEE
+  // @ForeignKey(() => CollabTask)
+  // @Column
+  // taskId!: string
+
+  // @BelongsTo(() => CollabTask, {
+  //   foreignKey: 'taskId',
+  //   onDelete: 'CASCADE',
+  // })
+  // task!: CollabTask
+
+  // @ForeignKey(() => User)
+  // @Column
+  // taskAssigneeId!: string
+
+  // @BelongsTo(() => CollabTask, {
+  //   foreignKey: 'taskAssigneeId',
+  //   onUpdate: 'CASCADE',
+  //   targetKey: 'assigneeId',
+  // })
+  // taskAssignee!: User
 
   static async newFriendNotification(
     userId: string,
@@ -261,8 +286,6 @@ export class Notification extends Model<Notification> {
       collabPostCommentId,
     })
 
-    console.log(notification)
-
     return notification.get() as typeof notification
   }
 
@@ -305,6 +328,30 @@ export class Notification extends Model<Notification> {
     return notification.get() as typeof notification
   }
 
+  static async newCollabMemberInvitationNotification(
+    collabId: string,
+    userId: string,
+  ) {
+    const invitation = await CollabMemberRequest.findOne({
+      where: {
+        collabId,
+        memberId: userId,
+      },
+    })
+
+    if (!invitation) {
+      throw new Error('Collab member invitation not found')
+    }
+
+    const notification = await this.create({
+      type: 'COLLAB_MEMBER_INVITATION',
+      userId,
+      collabMemberRequestId: invitation.id,
+    })
+
+    return notification.get() as typeof notification
+  }
+
   static async newCollabMemberNotification(memberId: string, collabId: string) {
     const collabMember = await CollabMember.findOne({
       where: { memberId, collabId },
@@ -314,8 +361,6 @@ export class Notification extends Model<Notification> {
       where: { collabId },
       include: [User],
     })
-
-    console.log(collabMember, members)
 
     if (!collabMember) {
       throw new Error('Collab member not found')
@@ -329,13 +374,36 @@ export class Notification extends Model<Notification> {
       ({ member }) => member.id !== memberId,
     )
 
-    return (withoutNewMember.map(({ member }) =>
-      this.create({
-        type: 'NEW_COLLAB_MEMBER',
-        userId: member.id,
-        collabMemberId: collabMember.id,
-      }).then(n => n.get()),
-    ) as unknown) as Notification[]
+    return Promise.all<Notification>(
+      withoutNewMember.map(({ member }) =>
+        this.create({
+          type: 'NEW_COLLAB_MEMBER',
+          userId: member.id,
+          collabMemberId: collabMember.id,
+        }).then(n => n.get()),
+      ),
+    )
+  }
+
+  static async newMemberRequestApprovedNotification(
+    userId: string,
+    collabId: string,
+  ) {
+    const collabMember = await CollabMember.findOne({
+      where: { memberId: userId, collabId },
+    })
+
+    if (!collabMember) {
+      throw new Error('Collab member not found')
+    }
+
+    const notification = await this.create({
+      type: 'COLLAB_REQUEST_TO_JOIN_APPROVED',
+      userId,
+      collabMemberId: collabMember.id,
+    })
+
+    return notification.get() as typeof notification
   }
 
   static async markAsRead(notificationId: string, userId: string) {

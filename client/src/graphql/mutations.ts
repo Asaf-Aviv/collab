@@ -226,6 +226,16 @@ export const REMOVE_DISCUSSION_THREAD_COMMENT_REACTION = gql`
 `
 
 // Collab Member Actions
+export const INVITE_MEMBER = gql`
+  mutation InviteMember($collabId: ID!, $memberId: ID!) {
+    inviteMember(collabId: $collabId, memberId: $memberId) {
+      id
+      username
+      avatar
+    }
+  }
+`
+
 export const REQUEST_TO_JOIN_COLLAB = gql`
   mutation RequestToJoin($collabId: ID!) {
     requestToJoin(collabId: $collabId)

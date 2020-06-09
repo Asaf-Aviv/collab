@@ -38,6 +38,7 @@ export type Query = {
   languages: Array<Scalars['String']>;
   searchFriends: Array<User>;
   searchPostsByTitle: CollabPostsSearchResultsPayload;
+  searchUsers: Array<User>;
   task?: Maybe<Task>;
   taskList?: Maybe<Array<TaskList>>;
   thread?: Maybe<CollabDiscussionThread>;
@@ -87,12 +88,17 @@ export type QueryGetConversationArgs = {
 
 
 export type QuerySearchFriendsArgs = {
-  input: SearchFriendsInput;
+  input: SearchUsersInput;
 };
 
 
 export type QuerySearchPostsByTitleArgs = {
   input: SearchPostsInput;
+};
+
+
+export type QuerySearchUsersArgs = {
+  input: SearchUsersInput;
 };
 
 
@@ -912,7 +918,7 @@ export type User = {
   username: Scalars['String'];
 };
 
-export type SearchFriendsInput = {
+export type SearchUsersInput = {
   username: Scalars['String'];
 };
 
@@ -948,6 +954,10 @@ export type SignUpArgs = {
 export type LoginArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type SearchFriendsInput = {
+  username: Scalars['String'];
 };
 
 export type SignUpMutationVariables = {
@@ -1214,6 +1224,20 @@ export type RemoveDiscussionThreadCommentReactionMutationVariables = {
 export type RemoveDiscussionThreadCommentReactionMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'removeCollabDiscussionThreadCommentReaction'>
+);
+
+export type InviteMemberMutationVariables = {
+  collabId: Scalars['ID'];
+  memberId: Scalars['ID'];
+};
+
+
+export type InviteMemberMutation = (
+  { __typename?: 'Mutation' }
+  & { inviteMember: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username' | 'avatar'>
+  ) }
 );
 
 export type RequestToJoinMutationVariables = {
@@ -1657,13 +1681,26 @@ export type CurrentUserFriendRequestsQuery = (
 );
 
 export type SearchFriendsQueryVariables = {
-  input: SearchFriendsInput;
+  input: SearchUsersInput;
 };
 
 
 export type SearchFriendsQuery = (
   { __typename?: 'Query' }
   & { searchFriends: Array<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username' | 'avatar'>
+  )> }
+);
+
+export type SearchUsersQueryVariables = {
+  input: SearchUsersInput;
+};
+
+
+export type SearchUsersQuery = (
+  { __typename?: 'Query' }
+  & { searchUsers: Array<(
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username' | 'avatar'>
   )> }
@@ -2292,12 +2329,13 @@ export type ResolversTypes = ResolversObject<{
   NewFriendRequestPayload: ResolverTypeWrapper<Omit<NewFriendRequestPayload, 'user'> & { user: ResolversTypes['User'] }>,
   CurrentUser: ResolverTypeWrapper<Omit<CurrentUser, 'collabInvites' | 'collabRequests' | 'collabs' | 'friendRequests' | 'friends' | 'tasks'> & { collabInvites: Array<ResolversTypes['Collab']>, collabRequests: Array<ResolversTypes['CollabRequest']>, collabs: Array<ResolversTypes['Collab']>, friendRequests: Array<ResolversTypes['User']>, friends: Array<ResolversTypes['User']>, tasks: Array<ResolversTypes['Task']> }>,
   User: ResolverTypeWrapper<GQLUser>,
-  SearchFriendsInput: SearchFriendsInput,
+  SearchUsersInput: SearchUsersInput,
   UpdateUserInfoInput: UpdateUserInfoInput,
   CollabRequest: ResolverTypeWrapper<Omit<CollabRequest, 'collab' | 'member'> & { collab: ResolversTypes['Collab'], member: ResolversTypes['User'] }>,
   AuthPayload: ResolverTypeWrapper<AuthPayload>,
   SignUpArgs: SignUpArgs,
   LoginArgs: LoginArgs,
+  SearchFriendsInput: SearchFriendsInput,
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -2364,12 +2402,13 @@ export type ResolversParentTypes = ResolversObject<{
   NewFriendRequestPayload: Omit<NewFriendRequestPayload, 'user'> & { user: ResolversParentTypes['User'] },
   CurrentUser: Omit<CurrentUser, 'collabInvites' | 'collabRequests' | 'collabs' | 'friendRequests' | 'friends' | 'tasks'> & { collabInvites: Array<ResolversParentTypes['Collab']>, collabRequests: Array<ResolversParentTypes['CollabRequest']>, collabs: Array<ResolversParentTypes['Collab']>, friendRequests: Array<ResolversParentTypes['User']>, friends: Array<ResolversParentTypes['User']>, tasks: Array<ResolversParentTypes['Task']> },
   User: GQLUser,
-  SearchFriendsInput: SearchFriendsInput,
+  SearchUsersInput: SearchUsersInput,
   UpdateUserInfoInput: UpdateUserInfoInput,
   CollabRequest: Omit<CollabRequest, 'collab' | 'member'> & { collab: ResolversParentTypes['Collab'], member: ResolversParentTypes['User'] },
   AuthPayload: AuthPayload,
   SignUpArgs: SignUpArgs,
   LoginArgs: LoginArgs,
+  SearchFriendsInput: SearchFriendsInput,
 }>;
 
 export type QueryResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
@@ -2385,6 +2424,7 @@ export type QueryResolvers<ContextType = CollabContext, ParentType extends Resol
   languages?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>,
   searchFriends?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QuerySearchFriendsArgs, 'input'>>,
   searchPostsByTitle?: Resolver<ResolversTypes['CollabPostsSearchResultsPayload'], ParentType, ContextType, RequireFields<QuerySearchPostsByTitleArgs, 'input'>>,
+  searchUsers?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QuerySearchUsersArgs, 'input'>>,
   task?: Resolver<Maybe<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<QueryTaskArgs, 'taskId'>>,
   taskList?: Resolver<Maybe<Array<ResolversTypes['TaskList']>>, ParentType, ContextType, RequireFields<QueryTaskListArgs, 'collabId'>>,
   thread?: Resolver<Maybe<ResolversTypes['CollabDiscussionThread']>, ParentType, ContextType, RequireFields<QueryThreadArgs, 'threadId'>>,

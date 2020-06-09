@@ -57,8 +57,18 @@ export const GET_CURRENT_FRIEND_REQUESTS = gql`
 `
 
 export const SEARCH_FRIENDS = gql`
-  query SearchFriends($input: SearchFriendsInput!) {
+  query SearchFriends($input: SearchUsersInput!) {
     searchFriends(input: $input) {
+      id
+      username
+      avatar
+    }
+  }
+`
+
+export const SEARCH_USERS = gql`
+  query SearchUsers($input: SearchUsersInput!) {
+    searchUsers(input: $input) {
       id
       username
       avatar

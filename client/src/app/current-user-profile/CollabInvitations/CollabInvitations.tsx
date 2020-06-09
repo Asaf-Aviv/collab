@@ -74,13 +74,13 @@ export const CollabInvitations = () => {
               bg: '#EEE',
             }}
           >
-            <Flex align="center" mb={4}>
+            <Box mb={4}>
               <AvatarWithUsername
                 id={owner.id}
                 avatar={owner.avatar ?? undefined}
                 username={owner.username}
                 size="sm"
-                mr={2}
+                mb={2}
               />
               <Text>
                 invited you to join{' '}
@@ -88,7 +88,7 @@ export const CollabInvitations = () => {
                   {name}
                 </Text>
               </Text>
-            </Flex>
+            </Box>
             <Button
               size="sm"
               variant="outline"

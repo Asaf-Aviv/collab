@@ -51,7 +51,7 @@ export class CollabTask extends Model<CollabTask> {
   @Column
   assigneeId!: string
 
-  @BelongsTo(() => User, { foreignKey: 'assigneeId' })
+  @BelongsTo(() => User, { foreignKey: 'assigneeId', onDelete: 'SET NULL' })
   assignee!: User
 
   @ForeignKey(() => User)

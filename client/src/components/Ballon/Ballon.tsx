@@ -67,7 +67,7 @@ export const Ballon = ({
               <PopoverCloseButton position="initial" />
             </StyledFlex>
           </PopoverHeader>
-          <PopoverBody p={0}>
+          <PopoverBody p={0} maxHeight="70vh">
             {children}
             {isLoading && <Loader />}
           </PopoverBody>

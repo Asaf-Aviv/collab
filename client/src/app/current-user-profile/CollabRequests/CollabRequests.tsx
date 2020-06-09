@@ -74,16 +74,17 @@ export const CollabRequests = () => {
               bg: '#EEE',
             }}
           >
-            <Flex align="center" mb={4}>
+            <Box mb={4}>
               <AvatarWithUsername
                 id={member.id}
                 avatar={member.avatar ?? undefined}
                 username={member.username}
                 size="sm"
                 mr={2}
+                mb={2}
               />
               <Text>wants to join {collab.name}</Text>
-            </Flex>
+            </Box>
             <Button
               size="sm"
               variant="outline"

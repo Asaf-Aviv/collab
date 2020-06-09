@@ -26,18 +26,23 @@ export const collabResolver: Resolvers = {
         memberId,
       )
 
-      console.log('accepted')
-
       Notification.newCollabMemberNotification(memberId, collabId)
         .then(notifications =>
           Promise.all(notifications.map(formatNotification)),
         )
         .then(notifications => {
           notifications.forEach(newNotification => {
-            console.log('publishing', newNotification)
             pubsub.publish('NEW_NOTIFICATION', {
               newNotification,
             })
+          })
+        })
+
+      Notification.newMemberRequestApprovedNotification(memberId, collabId)
+        .then(formatNotification)
+        .then(newNotification => {
+          pubsub.publish('NEW_NOTIFICATION', {
+            newNotification,
           })
         })
 
@@ -45,8 +50,24 @@ export const collabResolver: Resolvers = {
     },
     removeMember: (root, { collabId, memberId }, { user, models }) =>
       models.Collab.removeMember(collabId, user.id, memberId),
-    inviteMember: (root, { collabId, memberId }, { user, models }) =>
-      models.Collab.inviteMember(user.id, memberId, collabId),
+    inviteMember: async (
+      root,
+      { collabId, memberId },
+      { user, models, pubsub },
+    ) => {
+      const { Collab, Notification } = models
+      const member = await Collab.inviteMember(user.id, memberId, collabId)
+
+      Notification.newCollabMemberInvitationNotification(collabId, memberId)
+        .then(formatNotification)
+        .then(newNotification => {
+          pubsub.publish('NEW_NOTIFICATION', {
+            newNotification,
+          })
+        })
+
+      return member
+    },
     requestToJoin: async (root, { collabId }, { user, models, pubsub }) => {
       const { Collab, Notification } = models
       const request = await Collab.requestToJoin(collabId, user.id)

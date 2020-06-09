@@ -25,14 +25,14 @@ export class CollabMemberRequest extends Model<CollabMemberRequest> {
   type!: 'request' | 'invitation'
 
   @ForeignKey(() => Collab)
-  @Column
+  @Column({ unique: 'unique_invitation' })
   collabId!: string
 
   @BelongsTo(() => Collab, { foreignKey: 'collabId', onDelete: 'CASCADE' })
   collab!: Collab
 
   @ForeignKey(() => User)
-  @Column
+  @Column({ unique: 'unique_invitation' })
   memberId!: string
 
   @BelongsTo(() => User, { foreignKey: 'memberId', onDelete: 'CASCADE' })
