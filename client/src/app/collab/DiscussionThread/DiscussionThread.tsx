@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react'
+import React from 'react'
 import { useParams } from 'react-router-dom'
 import {
   useCollabThreadQuery,
@@ -30,18 +30,9 @@ export const DiscussionThread = () => {
   const { data: commentsData, refetch } = useCollabThreadCommentsQuery({
     variables: { threadId },
   })
-  const [commentInput, setCommentInput] = useState('')
   const [addComment] = useCreateDiscussionThreadCommentMutation({
-    variables: {
-      input: {
-        collabId,
-        threadId,
-        content: commentInput,
-      },
-    },
     onCompleted: () => {
       refetch()
-      setCommentInput('')
     },
   })
   const [addThreadReaction] = useAddCollabDiscussionThreadReactionMutation({
@@ -69,9 +60,16 @@ export const DiscussionThread = () => {
 
   if (!threadData?.thread) return null
 
-  const handleCommentSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    addComment()
+  const handleCommentSubmit = (content: string) => {
+    addComment({
+      variables: {
+        input: {
+          collabId,
+          threadId,
+          content,
+        },
+      },
+    })
   }
 
   const handleAddThreadReaction = (emojiId: string) => {
@@ -141,11 +139,7 @@ export const DiscussionThread = () => {
         </Paper>
       </section>
       <section>
-        <CommentForm
-          onSubmit={handleCommentSubmit}
-          onChange={setCommentInput}
-          value={commentInput}
-        />
+        <CommentForm onSubmit={handleCommentSubmit} />
       </section>
       <section>
         <SectionHorizonalHeader title="Comments" titleTag="h3" />

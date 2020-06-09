@@ -87,8 +87,23 @@ export const Wall = () => {
   )
 
   return (
-    <Flex as="main" height="calc(100vh - 64px - 4rem)" direction="column">
-      <Box as="section" flex={1} minHeight="0px" overflowY="auto">
+    <Flex
+      as="main"
+      height={[
+        'calc(100vh - 64px - 50px)',
+        'calc(100vh - 64px - 50px)',
+        'calc(100vh - 64px - 4rem)',
+      ]}
+      direction="column"
+    >
+      <Box
+        as="section"
+        flex={1}
+        minHeight="0px"
+        overflowY="auto"
+        bg="#f2f2ff"
+        borderRadius={6}
+      >
         {messages?.map(message => (
           <PseudoBox
             as="article"

@@ -23,31 +23,6 @@ import { DisplayError } from '../../../components/DisplayError'
 import { DisplayDate } from '../../../components/DisplayDate'
 import { useToastNotification } from '../../notifications'
 
-const removeNotificationFromCache = (
-  store: DataProxy,
-  // id is ignored when deleteAll is true
-  notificationId: string | undefined,
-  deleteAll?: boolean,
-) => {
-  const { currentUser } = store.readQuery<CurrentUserNotificationsQuery>({
-    query: CurrentUserNotificationsDocument,
-  })!
-
-  store.writeQuery({
-    query: CurrentUserNotificationsDocument,
-    data: {
-      currentUser: {
-        ...currentUser,
-        notifications: deleteAll
-          ? []
-          : currentUser!.notifications.filter(
-              ({ id }) => id !== notificationId,
-            ),
-      },
-    },
-  })
-}
-
 const decreaseUnreadNotificationsCount = (
   store: DataProxy,
   nextCount?: number,
@@ -62,6 +37,40 @@ const decreaseUnreadNotificationsCount = (
       currentUser: {
         ...currentUser,
         notificationsCount: nextCount ?? currentUser!.notificationsCount - 1,
+      },
+    },
+  })
+}
+
+const removeNotificationFromCache = (
+  store: DataProxy,
+  // id is ignored when deleteAll is true
+  notificationId: string | undefined,
+  deleteAll?: boolean,
+) => {
+  const { currentUser } = store.readQuery<CurrentUserNotificationsQuery>({
+    query: CurrentUserNotificationsDocument,
+  })!
+
+  if (!deleteAll) {
+    const notification = currentUser?.notifications.find(
+      n => n.id === notificationId,
+    )
+    if (!notification!.isRead) {
+      decreaseUnreadNotificationsCount(store, 0)
+    }
+  }
+
+  store.writeQuery({
+    query: CurrentUserNotificationsDocument,
+    data: {
+      currentUser: {
+        ...currentUser,
+        notifications: deleteAll
+          ? []
+          : currentUser!.notifications.filter(
+              ({ id }) => id !== notificationId,
+            ),
       },
     },
   })
@@ -89,7 +98,6 @@ export const Notifications = () => {
     update(store, { data }) {
       if (!data) return
       removeNotificationFromCache(store, data.deleteNotification)
-      decreaseUnreadNotificationsCount(store)
     },
     onError() {
       notify('error', {
@@ -126,7 +134,6 @@ export const Notifications = () => {
 
   return (
     <Ballon
-      isOpen
       header="Notifications"
       triggerIcon={
         <Badge count={currentUser.notificationsCount}>

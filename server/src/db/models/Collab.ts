@@ -170,6 +170,17 @@ export class Collab extends Model<Collab> {
       throw new Error('User not found')
     }
 
+    const request = await CollabMemberRequest.findOne({
+      where: {
+        collabId,
+        memberId,
+      },
+    })
+
+    if (request) {
+      throw new Error('Request or Invitation already exists')
+    }
+
     await CollabMemberRequest.create({ collabId, memberId, type: 'invitation' })
 
     return newMember

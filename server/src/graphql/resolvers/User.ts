@@ -1,3 +1,4 @@
+import { GQLUser } from './../../db/models/User'
 import { and } from 'graphql-shield'
 import { Op } from 'sequelize'
 import { generateToken } from '../../utils/index'
@@ -31,25 +32,62 @@ export const userResolver: Resolvers = {
 
       return (friends as unknown) as GQLUser[]
     },
+    searchUsers: async (root, { input }, { user, models }) => {
+      const users = await models.User.findAll({
+        where: {
+          [Op.and]: {
+            username: {
+              [Op.like]: `%${input.username}%`,
+            },
+            id: { [Op.ne]: user?.id },
+          },
+        },
+        raw: true,
+        limit: 5,
+      })
+
+      return (users as unknown) as GQLUser[]
+    },
   },
   Mutation: {
     signUp: async (root, { credentials }, { models }) => {
       const user = await models.User.createUser(credentials)
       const token = await generateToken({ userId: user.id })
-      return { user, token }
+      return { token }
     },
     login: async (root, { credentials }, { models }) => {
       const user = await models.User.login(credentials)
       const token = await generateToken({ userId: user.id })
-      return { user, token }
+      return { token }
     },
     deleteUser: (root, args, { user, models }) =>
       models.User.deleteUser(user.id),
-    acceptCollabInvitation: (root, { collabId }, { user, models }) =>
-      models.User.acceptCollabInvitation(collabId, user.id),
+    acceptCollabInvitation: async (
+      root,
+      { collabId },
+      { user, models, pubsub },
+    ) => {
+      const { User, Notification } = models
+      await User.acceptCollabInvitation(collabId, user.id)
+
+      Notification.newCollabMemberNotification(user.id, collabId)
+        .then(notifications =>
+          Promise.all(notifications.map(formatNotification)),
+        )
+        .then(notifications => {
+          notifications.forEach(newNotification => {
+            pubsub.publish('NEW_NOTIFICATION', {
+              newNotification,
+            })
+          })
+        })
+
+      return collabId
+    },
     declineCollabInvitation: (root, { collabId }, { user, models }) =>
       models.User.declineCollabInvitation(collabId, user.id),
-    updateUserInfo: (root, { input }, { user }) => user!.update(input!),
+    updateUserInfo: (root, { input }, { user }) =>
+      (user!.update(input!) as unknown) as typeof user,
     sendFriendRequest: async (root, { friendId }, { models, user, pubsub }) => {
       const { UserFriendRequest, Notification } = models
       const request = await UserFriendRequest.createFriendRequest(

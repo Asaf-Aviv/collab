@@ -26,6 +26,7 @@ export type Query = {
   languages: Array<Scalars['String']>;
   searchFriends: Array<User>;
   searchPostsByTitle: CollabPostsSearchResultsPayload;
+  searchUsers: Array<User>;
   task?: Maybe<Task>;
   taskList?: Maybe<Array<TaskList>>;
   thread?: Maybe<CollabDiscussionThread>;
@@ -75,12 +76,17 @@ export type QueryGetConversationArgs = {
 
 
 export type QuerySearchFriendsArgs = {
-  input: SearchFriendsInput;
+  input: SearchUsersInput;
 };
 
 
 export type QuerySearchPostsByTitleArgs = {
   input: SearchPostsInput;
+};
+
+
+export type QuerySearchUsersArgs = {
+  input: SearchUsersInput;
 };
 
 
@@ -900,7 +906,7 @@ export type User = {
   username: Scalars['String'];
 };
 
-export type SearchFriendsInput = {
+export type SearchUsersInput = {
   username: Scalars['String'];
 };
 
@@ -936,6 +942,10 @@ export type SignUpArgs = {
 export type LoginArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type SearchFriendsInput = {
+  username: Scalars['String'];
 };
 
 export type SignUpMutationVariables = {
@@ -1202,6 +1212,20 @@ export type RemoveDiscussionThreadCommentReactionMutationVariables = {
 export type RemoveDiscussionThreadCommentReactionMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'removeCollabDiscussionThreadCommentReaction'>
+);
+
+export type InviteMemberMutationVariables = {
+  collabId: Scalars['ID'];
+  memberId: Scalars['ID'];
+};
+
+
+export type InviteMemberMutation = (
+  { __typename?: 'Mutation' }
+  & { inviteMember: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username' | 'avatar'>
+  ) }
 );
 
 export type RequestToJoinMutationVariables = {
@@ -1645,13 +1669,26 @@ export type CurrentUserFriendRequestsQuery = (
 );
 
 export type SearchFriendsQueryVariables = {
-  input: SearchFriendsInput;
+  input: SearchUsersInput;
 };
 
 
 export type SearchFriendsQuery = (
   { __typename?: 'Query' }
   & { searchFriends: Array<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username' | 'avatar'>
+  )> }
+);
+
+export type SearchUsersQueryVariables = {
+  input: SearchUsersInput;
+};
+
+
+export type SearchUsersQuery = (
+  { __typename?: 'Query' }
+  & { searchUsers: Array<(
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username' | 'avatar'>
   )> }
@@ -2861,6 +2898,41 @@ export function useRemoveDiscussionThreadCommentReactionMutation(baseOptions?: A
 export type RemoveDiscussionThreadCommentReactionMutationHookResult = ReturnType<typeof useRemoveDiscussionThreadCommentReactionMutation>;
 export type RemoveDiscussionThreadCommentReactionMutationResult = ApolloReactCommon.MutationResult<RemoveDiscussionThreadCommentReactionMutation>;
 export type RemoveDiscussionThreadCommentReactionMutationOptions = ApolloReactCommon.BaseMutationOptions<RemoveDiscussionThreadCommentReactionMutation, RemoveDiscussionThreadCommentReactionMutationVariables>;
+export const InviteMemberDocument = gql`
+    mutation InviteMember($collabId: ID!, $memberId: ID!) {
+  inviteMember(collabId: $collabId, memberId: $memberId) {
+    id
+    username
+    avatar
+  }
+}
+    `;
+export type InviteMemberMutationFn = ApolloReactCommon.MutationFunction<InviteMemberMutation, InviteMemberMutationVariables>;
+
+/**
+ * __useInviteMemberMutation__
+ *
+ * To run a mutation, you first call `useInviteMemberMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInviteMemberMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [inviteMemberMutation, { data, loading, error }] = useInviteMemberMutation({
+ *   variables: {
+ *      collabId: // value for 'collabId'
+ *      memberId: // value for 'memberId'
+ *   },
+ * });
+ */
+export function useInviteMemberMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<InviteMemberMutation, InviteMemberMutationVariables>) {
+        return ApolloReactHooks.useMutation<InviteMemberMutation, InviteMemberMutationVariables>(InviteMemberDocument, baseOptions);
+      }
+export type InviteMemberMutationHookResult = ReturnType<typeof useInviteMemberMutation>;
+export type InviteMemberMutationResult = ApolloReactCommon.MutationResult<InviteMemberMutation>;
+export type InviteMemberMutationOptions = ApolloReactCommon.BaseMutationOptions<InviteMemberMutation, InviteMemberMutationVariables>;
 export const RequestToJoinDocument = gql`
     mutation RequestToJoin($collabId: ID!) {
   requestToJoin(collabId: $collabId)
@@ -3974,7 +4046,7 @@ export type CurrentUserFriendRequestsQueryHookResult = ReturnType<typeof useCurr
 export type CurrentUserFriendRequestsLazyQueryHookResult = ReturnType<typeof useCurrentUserFriendRequestsLazyQuery>;
 export type CurrentUserFriendRequestsQueryResult = ApolloReactCommon.QueryResult<CurrentUserFriendRequestsQuery, CurrentUserFriendRequestsQueryVariables>;
 export const SearchFriendsDocument = gql`
-    query SearchFriends($input: SearchFriendsInput!) {
+    query SearchFriends($input: SearchUsersInput!) {
   searchFriends(input: $input) {
     id
     username
@@ -4008,6 +4080,41 @@ export function useSearchFriendsLazyQuery(baseOptions?: ApolloReactHooks.LazyQue
 export type SearchFriendsQueryHookResult = ReturnType<typeof useSearchFriendsQuery>;
 export type SearchFriendsLazyQueryHookResult = ReturnType<typeof useSearchFriendsLazyQuery>;
 export type SearchFriendsQueryResult = ApolloReactCommon.QueryResult<SearchFriendsQuery, SearchFriendsQueryVariables>;
+export const SearchUsersDocument = gql`
+    query SearchUsers($input: SearchUsersInput!) {
+  searchUsers(input: $input) {
+    id
+    username
+    avatar
+  }
+}
+    `;
+
+/**
+ * __useSearchUsersQuery__
+ *
+ * To run a query within a React component, call `useSearchUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchUsersQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSearchUsersQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SearchUsersQuery, SearchUsersQueryVariables>) {
+        return ApolloReactHooks.useQuery<SearchUsersQuery, SearchUsersQueryVariables>(SearchUsersDocument, baseOptions);
+      }
+export function useSearchUsersLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SearchUsersQuery, SearchUsersQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<SearchUsersQuery, SearchUsersQueryVariables>(SearchUsersDocument, baseOptions);
+        }
+export type SearchUsersQueryHookResult = ReturnType<typeof useSearchUsersQuery>;
+export type SearchUsersLazyQueryHookResult = ReturnType<typeof useSearchUsersLazyQuery>;
+export type SearchUsersQueryResult = ApolloReactCommon.QueryResult<SearchUsersQuery, SearchUsersQueryVariables>;
 export const GetCurrentUserInfoDocument = gql`
     query GetCurrentUserInfo {
   currentUser {

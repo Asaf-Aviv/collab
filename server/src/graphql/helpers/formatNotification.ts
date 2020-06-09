@@ -163,6 +163,33 @@ const formatCollabMemberRequestNotification = async (
   }
 }
 
+const formatCollabMemberInvitationNotification = async (
+  notification: InstanceType<typeof models.Notification>,
+) => {
+  const invitation = await models.CollabMemberRequest.findByPk(
+    notification.collabMemberRequestId,
+    {
+      include: [
+        {
+          model: models.Collab,
+          include: [{ model: models.User, as: 'owner' }],
+        },
+      ],
+    },
+  )
+
+  if (!invitation) {
+    throw new Error('Invitation not found')
+  }
+
+  return {
+    ...notification,
+    title: 'New Collab Invitation',
+    url: ``,
+    message: `${invitation.collab.owner.username} invited you to join ${invitation.collab.name}`,
+  }
+}
+
 const formatNewCollabMemberNotification = async (
   notification: InstanceType<typeof models.Notification>,
 ) => {
@@ -180,6 +207,26 @@ const formatNewCollabMemberNotification = async (
     title: 'New Collab Member',
     url: ``,
     message: `${collabMember.member.username} joined ${collabMember.collab.name}`,
+  }
+}
+
+const formatRequestToJoinApprovedNotification = async (
+  notification: InstanceType<typeof models.Notification>,
+) => {
+  const collabMember = await models.CollabMember.findByPk(
+    notification.collabMemberId,
+    { include: [models.Collab] },
+  )
+
+  if (!collabMember) {
+    throw new Error('Collab member not found')
+  }
+
+  return {
+    ...notification,
+    title: 'Request To Join Approved',
+    url: ``,
+    message: `You are now a member of ${collabMember.collab.name}`,
   }
 }
 
@@ -201,8 +248,12 @@ export const formatNotification = async (
       return formatPrivateMessageNotification(notification)
     case 'COLLAB_MEMBER_REQUEST':
       return formatCollabMemberRequestNotification(notification)
+    case 'COLLAB_MEMBER_INVITATION':
+      return formatCollabMemberInvitationNotification(notification)
     case 'NEW_COLLAB_MEMBER':
       return formatNewCollabMemberNotification(notification)
+    case 'COLLAB_REQUEST_TO_JOIN_APPROVED':
+      return formatRequestToJoinApprovedNotification(notification)
 
     default:
       throw new Error(`Unknown notification type ${notification.type}`)
