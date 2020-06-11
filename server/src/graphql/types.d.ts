@@ -22,6 +22,7 @@ export type Scalars = {
   Int: number;
   Float: number;
   Date: any;
+  Upload: any;
 };
 
 export type Query = {
@@ -185,6 +186,7 @@ export type Mutation = {
   updateTaskListPosition: TaskList;
   updateTaskPosition: Task;
   updateUserInfo: CurrentUser;
+  uploadAvatar: Scalars['Boolean'];
 };
 
 
@@ -475,6 +477,11 @@ export type MutationUpdateTaskPositionArgs = {
 
 export type MutationUpdateUserInfoArgs = {
   input?: Maybe<UpdateUserInfoInput>;
+};
+
+
+export type MutationUploadAvatarArgs = {
+  avatar: Scalars['Upload'];
 };
 
 export type Collab = {
@@ -871,6 +878,7 @@ export type TaskList = {
   tasks: Array<Task>;
 };
 
+
 export type NewFriendRequestPayload = {
    __typename?: 'NewFriendRequestPayload';
   user: User;
@@ -954,10 +962,6 @@ export type SignUpArgs = {
 export type LoginArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
-};
-
-export type SearchFriendsInput = {
-  username: Scalars['String'];
 };
 
 export type SignUpMutationVariables = {
@@ -2326,6 +2330,7 @@ export type ResolversTypes = ResolversObject<{
   UpdateTaskListNameInput: UpdateTaskListNameInput,
   UpdateTaskListPositionInput: UpdateTaskListPositionInput,
   TaskList: ResolverTypeWrapper<GQLCollabTaskList>,
+  Upload: ResolverTypeWrapper<Scalars['Upload']>,
   NewFriendRequestPayload: ResolverTypeWrapper<Omit<NewFriendRequestPayload, 'user'> & { user: ResolversTypes['User'] }>,
   CurrentUser: ResolverTypeWrapper<Omit<CurrentUser, 'collabInvites' | 'collabRequests' | 'collabs' | 'friendRequests' | 'friends' | 'tasks'> & { collabInvites: Array<ResolversTypes['Collab']>, collabRequests: Array<ResolversTypes['CollabRequest']>, collabs: Array<ResolversTypes['Collab']>, friendRequests: Array<ResolversTypes['User']>, friends: Array<ResolversTypes['User']>, tasks: Array<ResolversTypes['Task']> }>,
   User: ResolverTypeWrapper<GQLUser>,
@@ -2335,7 +2340,6 @@ export type ResolversTypes = ResolversObject<{
   AuthPayload: ResolverTypeWrapper<AuthPayload>,
   SignUpArgs: SignUpArgs,
   LoginArgs: LoginArgs,
-  SearchFriendsInput: SearchFriendsInput,
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -2399,6 +2403,7 @@ export type ResolversParentTypes = ResolversObject<{
   UpdateTaskListNameInput: UpdateTaskListNameInput,
   UpdateTaskListPositionInput: UpdateTaskListPositionInput,
   TaskList: GQLCollabTaskList,
+  Upload: Scalars['Upload'],
   NewFriendRequestPayload: Omit<NewFriendRequestPayload, 'user'> & { user: ResolversParentTypes['User'] },
   CurrentUser: Omit<CurrentUser, 'collabInvites' | 'collabRequests' | 'collabs' | 'friendRequests' | 'friends' | 'tasks'> & { collabInvites: Array<ResolversParentTypes['Collab']>, collabRequests: Array<ResolversParentTypes['CollabRequest']>, collabs: Array<ResolversParentTypes['Collab']>, friendRequests: Array<ResolversParentTypes['User']>, friends: Array<ResolversParentTypes['User']>, tasks: Array<ResolversParentTypes['Task']> },
   User: GQLUser,
@@ -2408,7 +2413,6 @@ export type ResolversParentTypes = ResolversObject<{
   AuthPayload: AuthPayload,
   SignUpArgs: SignUpArgs,
   LoginArgs: LoginArgs,
-  SearchFriendsInput: SearchFriendsInput,
 }>;
 
 export type QueryResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
@@ -2493,6 +2497,7 @@ export type MutationResolvers<ContextType = CollabContext, ParentType extends Re
   updateTaskListPosition?: Resolver<ResolversTypes['TaskList'], ParentType, ContextType, RequireFields<MutationUpdateTaskListPositionArgs, 'input'>>,
   updateTaskPosition?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationUpdateTaskPositionArgs, 'input'>>,
   updateUserInfo?: Resolver<ResolversTypes['CurrentUser'], ParentType, ContextType, RequireFields<MutationUpdateUserInfoArgs, never>>,
+  uploadAvatar?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUploadAvatarArgs, 'avatar'>>,
 }>;
 
 export type CollabResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Collab'] = ResolversParentTypes['Collab']> = ResolversObject<{
@@ -2713,6 +2718,10 @@ export type TaskListResolvers<ContextType = CollabContext, ParentType extends Re
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
+export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
+  name: 'Upload'
+}
+
 export type NewFriendRequestPayloadResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['NewFriendRequestPayload'] = ResolversParentTypes['NewFriendRequestPayload']> = ResolversObject<{
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
@@ -2796,6 +2805,7 @@ export type Resolvers<ContextType = CollabContext> = ResolversObject<{
   Task?: TaskResolvers<ContextType>,
   TaskComment?: TaskCommentResolvers<ContextType>,
   TaskList?: TaskListResolvers<ContextType>,
+  Upload?: GraphQLScalarType,
   NewFriendRequestPayload?: NewFriendRequestPayloadResolvers<ContextType>,
   CurrentUser?: CurrentUserResolvers<ContextType>,
   User?: UserResolvers<ContextType>,

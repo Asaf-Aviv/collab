@@ -20,7 +20,10 @@ export const collabDiscussionThreadResolver: Resolvers = {
     collab: ({ collabId }, args, { loaders }) =>
       loaders.collabLoader.load(collabId),
     comments: ({ id }, args, { models }) =>
-      models.CollabDiscussionThreadComment.findAll({ where: { threadId: id } }),
+      models.CollabDiscussionThreadComment.findAll({
+        where: { threadId: id },
+        order: [['createdAt', 'DESC']],
+      }),
     commentsCount: ({ id }, args, { models }) =>
       models.CollabDiscussionThreadComment.count({ where: { threadId: id } }),
     reactions: ({ id }, args, { models, user }) =>

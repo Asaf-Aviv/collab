@@ -4,6 +4,7 @@ import { ThemeProvider, CSSReset, theme } from '@chakra-ui/core'
 import { Layout } from '../layout'
 import './index.css'
 import { CurrentUserNotifications } from '../notifications'
+import { UploadAvatar } from '../current-user-profile/UploadAvatar'
 
 export const App = hot(() => (
   <ThemeProvider
@@ -21,6 +22,7 @@ export const App = hot(() => (
     })}
   >
     <CurrentUserNotifications>
+      <UploadAvatar />
       <CSSReset />
       <Layout />
     </CurrentUserNotifications>

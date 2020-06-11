@@ -1,6 +1,8 @@
 import { gql } from 'apollo-server-express'
 
 export const userTypeDefs = gql`
+  scalar Upload
+
   type Query {
     users: [User!]!
     user(id: ID!): User
@@ -22,6 +24,7 @@ export const userTypeDefs = gql`
     declineFriendRequest(senderId: ID!): ID!
     "returns the id of the removed friend"
     removeFriend(friendId: ID!): ID!
+    uploadAvatar(avatar: Upload!): Boolean!
   }
 
   type Subscription {

@@ -38,7 +38,7 @@ export const Collab = () => {
   if (error) return <DisplayError message={error.message} />
 
   return (
-    <Flex wrap="wrap">
+    <Flex wrap={['wrap', 'wrap', 'nowrap']}>
       {width > 767 ? (
         <Flex
           as="nav"

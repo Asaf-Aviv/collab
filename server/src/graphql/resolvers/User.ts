@@ -1,11 +1,12 @@
-import { GQLUser } from './../../db/models/User'
+import path from 'path'
+import { createWriteStream } from 'fs'
 import { and } from 'graphql-shield'
 import { Op } from 'sequelize'
 import { generateToken } from '../../utils/index'
+import { GQLUser } from './../../db/models/User'
 import { isAuthenticated } from '../middleware/isAuthenticated'
 import { Resolvers, ResolversTypes, Maybe } from '../types'
 import { formatNotification } from '../helpers/formatNotification'
-import { GQLUser } from '../../db/models/User'
 import { withFilter } from 'apollo-server-express'
 
 export const userResolver: Resolvers = {
@@ -59,6 +60,21 @@ export const userResolver: Resolvers = {
       const user = await models.User.login(credentials)
       const token = await generateToken({ userId: user.id })
       return { token }
+    },
+    uploadAvatar: async (root, { avatar }, { models, user }) => {
+      const { createReadStream, filename } = await avatar
+      console.log(createReadStream, filename)
+
+      // await new Promise(res =>
+      //   createReadStream().pipe(
+      //     createWriteStream(path.join(__dirname, '../../public/avatars')).on(
+      //       'close',
+      //       res,
+      //     ),
+      //   ),
+      // )
+
+      return true
     },
     deleteUser: (root, args, { user, models }) =>
       models.User.deleteUser(user.id),
