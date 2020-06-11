@@ -10,6 +10,7 @@ export type Scalars = {
   Int: number;
   Float: number;
   Date: any;
+  Upload: any;
 };
 
 export type Query = {
@@ -173,6 +174,7 @@ export type Mutation = {
   updateTaskListPosition: TaskList;
   updateTaskPosition: Task;
   updateUserInfo: CurrentUser;
+  uploadAvatar: Scalars['Boolean'];
 };
 
 
@@ -463,6 +465,11 @@ export type MutationUpdateTaskPositionArgs = {
 
 export type MutationUpdateUserInfoArgs = {
   input?: Maybe<UpdateUserInfoInput>;
+};
+
+
+export type MutationUploadAvatarArgs = {
+  avatar: Scalars['Upload'];
 };
 
 export type Collab = {
@@ -859,6 +866,7 @@ export type TaskList = {
   tasks: Array<Task>;
 };
 
+
 export type NewFriendRequestPayload = {
    __typename?: 'NewFriendRequestPayload';
   user: User;
@@ -942,10 +950,6 @@ export type SignUpArgs = {
 export type LoginArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
-};
-
-export type SearchFriendsInput = {
-  username: Scalars['String'];
 };
 
 export type SignUpMutationVariables = {

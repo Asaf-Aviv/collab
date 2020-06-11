@@ -1,14 +1,14 @@
 import { ApolloClient } from 'apollo-client'
 import { WebSocketLink } from 'apollo-link-ws'
 import { ApolloLink, split } from 'apollo-link'
-import { HttpLink } from 'apollo-link-http'
 import { getMainDefinition } from 'apollo-utilities'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { setContext } from 'apollo-link-context'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
+import { createUploadLink } from 'apollo-upload-client'
 
-const endpoint = process.env.REACT_APP_GRAPHQL_URI
-const subscriptionEndpoint = process.env.REACT_APP_GRAPHQL_SUBSCRIPTION_URI
+const endpoint = process.env.REACT_APP_GRAPHQL_URI!
+const subscriptionEndpoint = process.env.REACT_APP_GRAPHQL_SUBSCRIPTION_URI!
 
 const getToken = () => {
   const token = localStorage.getItem('token')
@@ -22,16 +22,17 @@ const authLink = setContext((_, { headers }) => ({
   },
 }))
 
-const httpLink = new HttpLink({
-  uri: endpoint,
-})
-
 export const wsClient = new SubscriptionClient(subscriptionEndpoint!, {
   reconnect: true,
   lazy: true,
   connectionParams: () => ({
     Authorization: getToken(),
   }),
+})
+
+// upload link replace the normal http link
+const uploadLink = createUploadLink({
+  uri: endpoint,
 })
 
 const wsLink = new WebSocketLink(wsClient)
@@ -46,11 +47,11 @@ const terminatingLink = split(
   },
   // order matters ws before http.
   wsLink,
-  httpLink,
+  uploadLink,
 )
 
 // order matters, httpLink needs to read headers from auth
-const link = ApolloLink.from([authLink, terminatingLink])
+const link = ApolloLink.from([authLink, terminatingLink, uploadLink])
 
 const cache = new InMemoryCache()
 

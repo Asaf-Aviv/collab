@@ -105,7 +105,6 @@ export const TaskBoard = () => {
               flex={1}
               overflowX="auto"
               overflowY="hidden"
-              maxWidth="calc(100vw - 250px)"
               height="calc(100vh - 64px - 4rem)"
               bg="#f2f2ff"
             >

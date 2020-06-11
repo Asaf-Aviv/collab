@@ -149,7 +149,7 @@ export const SendMessageModal = ({ closeModal, recipient }: Props) => {
                     ? friendsOptionsById[recipientId]
                     : null
                 }
-                placeholder="Type the recipient username"
+                placeholder="Filter friends as you type"
                 isClearable
                 onChange={(option: any) =>
                   setRecipientId(option?.value ?? null)
