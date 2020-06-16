@@ -7,8 +7,7 @@
     "server": "cd server && npm run dev",
     "client": "cd client && npm start",
     "seed": "cd server && npm run seed",
-    "dev": "concurrently \"npm:server\" \"npm:client\"",
-    "copy": "xcopy . F:\\collab /EXCLUDE:exclude.txt /E /I /S /Y > nul"
+    "dev": "concurrently \"npm:server\" \"npm:client\""
   },
   "repository": {
     "type": "git",

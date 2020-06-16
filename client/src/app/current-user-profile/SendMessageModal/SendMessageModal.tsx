@@ -23,6 +23,7 @@ import {
 import Select from 'react-select'
 import { debounce } from 'lodash-es'
 import { useToastNotification } from '../../notifications'
+import { getAvatarUrl } from '../../../utils'
 
 type Props = {
   closeModal: () => void
@@ -192,17 +193,17 @@ export const SendMessageModal = ({ closeModal, recipient }: Props) => {
   )
 }
 
-const CustomOption = (props: any) => {
+const CustomOption = ({ innerProps, data }: any) => {
   return (
-    <Flex cursor="pointer" {...props.innerProps} align="center" px={2} py={1}>
+    <Flex cursor="pointer" {...innerProps} align="center" px={2} py={1}>
       <Avatar
         mr={2}
         size="sm"
-        src={props.data.avatar}
-        name={props.data.label}
+        src={getAvatarUrl(data.avatar)}
+        name={data.label}
       />
       <Text as="span" color="black">
-        {props.data.label}
+        {data.label}
       </Text>
     </Flex>
   )

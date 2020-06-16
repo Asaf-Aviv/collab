@@ -14,6 +14,7 @@ import {
 import { wsClient } from '../../apolloClient'
 import { useApolloClient } from '@apollo/react-hooks'
 import { useTokenValidation } from '..'
+import { CurrentUserSubscriptionsManager } from '../../app/current-user-subscriptions'
 
 type CurrentUserManagerContext = {
   user: GetCurrentUserQuery['currentUser']
@@ -83,7 +84,9 @@ export const CurrentUserManager = ({ children }: Props) => {
         logout,
       }}
     >
-      {children}
+      <CurrentUserSubscriptionsManager>
+        {children}
+      </CurrentUserSubscriptionsManager>
     </CurrentUserManagerContext.Provider>
   )
 }

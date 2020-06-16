@@ -11,18 +11,15 @@ import {
 } from '@chakra-ui/core'
 import { useCurrentUser } from '../../../providers'
 import { LogoutButton } from '../../current-user-profile/LogoutButton'
+import { getAvatarUrl } from '../../../utils'
 
 export const UserAccountMenu = () => {
-  const currentUser = useCurrentUser()!
+  const { username, avatar } = useCurrentUser()!
 
   return (
     <Menu>
       <MenuButton ml={4}>
-        <Avatar
-          size="sm"
-          src={currentUser.avatar ?? undefined}
-          name={currentUser.username}
-        />
+        <Avatar size="sm" src={getAvatarUrl(avatar)} name={username} />
       </MenuButton>
       <MenuList>
         <MenuGroup title="Profile">

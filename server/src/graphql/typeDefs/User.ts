@@ -24,7 +24,7 @@ export const userTypeDefs = gql`
     declineFriendRequest(senderId: ID!): ID!
     "returns the id of the removed friend"
     removeFriend(friendId: ID!): ID!
-    uploadAvatar(avatar: Upload!): Boolean!
+    uploadAvatar(avatar: Upload!): CurrentUser!
   }
 
   type Subscription {

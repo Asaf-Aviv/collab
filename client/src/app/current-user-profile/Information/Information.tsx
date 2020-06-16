@@ -30,7 +30,6 @@ export const Information = () => {
     notifyOnNetworkStatusChange: true,
   })
   const [infoInput, setInfoInput] = useState<UpdateUserInfoInput>(null as any)
-
   const [
     updateInfo,
     { loading: updateInfoLoading /*  error: updateInfoError */ },

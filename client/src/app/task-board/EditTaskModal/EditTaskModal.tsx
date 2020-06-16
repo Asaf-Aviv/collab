@@ -22,6 +22,7 @@ import {
 } from '@chakra-ui/core'
 import Select from 'react-select'
 import { TaskListQuery } from '../../../graphql/generates'
+import { getAvatarUrl } from '../../../utils'
 
 type TaskListResult = NonNullable<TaskListQuery['taskList']>
 
@@ -129,7 +130,7 @@ const CustomOption = (props: any) => {
       <Avatar
         mr={2}
         size="sm"
-        src={props.data.avatar}
+        src={getAvatarUrl(props.data.avatar)}
         name={props.data.label}
       />
       <Text as="span" color="black">

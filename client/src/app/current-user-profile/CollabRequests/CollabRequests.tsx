@@ -11,6 +11,7 @@ import {
 import { AvatarWithUsername } from '../../../components/AvatarWithUsername'
 import { Loader } from '../../../components/Loader'
 import { DisplayError } from '../../../components/DisplayError'
+import { getAvatarUrl } from '../../../utils'
 
 const removeRequestFromCache = (store: DataProxy, requestId: string) => {
   const query = GetCurrentUserCollabRequestsDocument
@@ -77,7 +78,7 @@ export const CollabRequests = () => {
             <Box mb={4}>
               <AvatarWithUsername
                 id={member.id}
-                avatar={member.avatar ?? undefined}
+                avatar={getAvatarUrl(member.avatar)}
                 username={member.username}
                 size="sm"
                 mr={2}

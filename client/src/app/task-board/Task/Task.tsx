@@ -27,6 +27,7 @@ type Props = {
   deleteTask: () => void
   showComments: boolean
   toggleComments: () => void
+  isDraggable?: boolean
 }
 
 export const Task = ({
@@ -35,11 +36,16 @@ export const Task = ({
   deleteTask,
   showComments,
   toggleComments,
+  isDraggable,
 }: Props) => {
   const [isEditTaskModalOpen, setIsEditTaskModalOpen] = useState(false)
 
   return (
-    <Draggable draggableId={task.id} index={index}>
+    <Draggable
+      draggableId={task.id}
+      index={index}
+      isDragDisabled={!isDraggable}
+    >
       {provided => (
         <Box
           {...provided.draggableProps}

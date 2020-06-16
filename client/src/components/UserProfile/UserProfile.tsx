@@ -6,6 +6,7 @@ import {
 } from '../../graphql/generates'
 import { Container } from '../global'
 import { Flex, Avatar, Heading, Icon, Button } from '@chakra-ui/core'
+import { getAvatarUrl } from '../../utils'
 
 type Props = {
   userId: string
@@ -47,7 +48,7 @@ export const UserProfile = () => {
           boxShadow="md"
           align="center"
         >
-          <Avatar mb={4} size="lg" src={avatar!} name={username} />
+          <Avatar mb={4} size="lg" src={getAvatarUrl(avatar)} name={username} />
           <Heading as="h1" size="sm">
             {username}
           </Heading>

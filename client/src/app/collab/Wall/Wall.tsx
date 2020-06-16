@@ -95,6 +95,7 @@ export const Wall = () => {
         'calc(100vh - 64px - 4rem)',
       ]}
       direction="column"
+      pb={4}
     >
       <Box
         as="section"

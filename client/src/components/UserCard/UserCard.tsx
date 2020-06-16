@@ -12,6 +12,7 @@ import styled from '@emotion/styled'
 import { Link } from 'react-router-dom'
 import { User } from '../../graphql/generates'
 import { Paper } from '../global'
+import { getAvatarUrl } from '../../utils'
 
 type Props = PseudoBoxProps &
   Pick<User, 'id' | 'avatar' | 'username' | 'bio'> & {
@@ -41,7 +42,7 @@ export const UserCard = ({
           </Box>
         )}
         <Avatar
-          src={avatar ?? undefined}
+          src={getAvatarUrl(avatar)}
           name={username}
           size="lg"
           mb={3}

@@ -4,6 +4,7 @@ import {
   TaskListQuery,
   useDeleteTaskListMutation,
   useDeleteTaskMutation,
+  useCollabQuery,
 } from '../../../graphql/generates'
 import { Heading, Box, Flex } from '@chakra-ui/core'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
@@ -13,6 +14,7 @@ import { EditTaskListNamePopover } from '../EditTaskListNamePopover'
 import { DotsMenu } from '../../../components/DotsMenu/Index'
 import { IconButtonWithTooltip } from '../../../components/IconButtonWithTooltip'
 import styled from '@emotion/styled'
+import { useParams } from 'react-router-dom'
 
 export const MemoizedTaskListWrapper = memo(({ taskList, refetch }: any) => (
   <>
@@ -40,6 +42,9 @@ type Props = {
 
 const TaskList = ({ taskList, tasks, refetch, index }: Props) => {
   const [isNewTaskModalOpen, setIsNewTaskModalOpen] = useState(false)
+  const { data: collabData } = useCollabQuery({
+    variables: useParams<{ collabId: string }>(),
+  })
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null)
   const [deleteTaskList] = useDeleteTaskListMutation({
     variables: {
@@ -52,7 +57,11 @@ const TaskList = ({ taskList, tasks, refetch, index }: Props) => {
   })
 
   return (
-    <Draggable draggableId={taskList.id} index={index}>
+    <Draggable
+      draggableId={taskList.id}
+      index={index}
+      isDragDisabled={!collabData?.collab?.isOwner}
+    >
       {provided => (
         <Box
           {...provided.draggableProps}
@@ -106,6 +115,7 @@ const TaskList = ({ taskList, tasks, refetch, index }: Props) => {
               >
                 {tasks.map((task, index) => (
                   <Task
+                    isDraggable={collabData?.collab?.isOwner}
                     showComments={selectedTaskId === task.id}
                     toggleComments={() =>
                       setSelectedTaskId(prevState =>

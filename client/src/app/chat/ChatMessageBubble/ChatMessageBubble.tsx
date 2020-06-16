@@ -1,5 +1,6 @@
 import React from 'react'
 import { PseudoBox, Flex, Avatar, Heading, Text } from '@chakra-ui/core'
+import { getAvatarUrl } from '../../../utils'
 
 export const ChatMessageBubble = ({ message, author, isAuthor }: any) => (
   <PseudoBox
@@ -16,7 +17,7 @@ export const ChatMessageBubble = ({ message, author, isAuthor }: any) => (
   >
     <Flex align="center" mb={1}>
       <Avatar
-        src={author.avatar ?? undefined}
+        src={getAvatarUrl(author.avatar)}
         name={author.username}
         size="xs"
         mr={2}

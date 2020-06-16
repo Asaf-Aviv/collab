@@ -2,6 +2,7 @@ import React from 'react'
 import { Box, Button, Avatar, ButtonProps } from '@chakra-ui/core'
 import { User } from '../../../graphql/generates'
 import { useTypedSelector } from '../useTypedSelector'
+import { getAvatarUrl } from '../../../utils'
 
 const USER_CHAT_STATUS = {
   ONLINE: 'Online',
@@ -48,7 +49,7 @@ export const ChatUserListItem = ({ user, ...props }: Props) => {
         bg={STATUS_CIRCLE_COLOR[user.status]}
       />
       <Avatar
-        src={user.avatar ?? undefined}
+        src={getAvatarUrl(user.avatar)}
         name={user.username}
         size="xs"
         mx={1}
