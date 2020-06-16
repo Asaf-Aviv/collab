@@ -1,6 +1,6 @@
 import React from 'react'
-import { useCurrentUser } from '../../providers'
-import { useSubscribeToFriendRequests } from '../current-user-profile/FriendRequests'
+import { useCurrentUser } from '../../../providers'
+import { useSubscribeToFriendRequests } from '../../current-user-profile/FriendRequests'
 
 type Props = {
   children: React.ReactNode

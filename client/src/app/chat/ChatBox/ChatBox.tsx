@@ -7,6 +7,7 @@ import { RootState, messagesActions } from '../reducers'
 import { Flex, Heading, Avatar } from '@chakra-ui/core'
 import { CloseButton } from '../../../components/CloseButton'
 import { useKey } from '../../../hooks/useKey'
+import { getAvatarUrl } from '../../../utils'
 
 export const ChatBox = () => {
   const friend = useSelector(
@@ -42,7 +43,7 @@ export const ChatBox = () => {
         >
           <Flex align="center">
             <Avatar
-              src={friend.avatar ?? undefined}
+              src={getAvatarUrl(friend.avatar)}
               name={friend.username}
               size="xs"
               mr={2}

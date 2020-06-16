@@ -51,7 +51,7 @@ const terminatingLink = split(
 )
 
 // order matters, httpLink needs to read headers from auth
-const link = ApolloLink.from([authLink, terminatingLink, uploadLink])
+const link = ApolloLink.from([authLink, terminatingLink])
 
 const cache = new InMemoryCache()
 

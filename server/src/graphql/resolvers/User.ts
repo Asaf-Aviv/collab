@@ -1,4 +1,6 @@
 import path from 'path'
+import { promises as fs } from 'fs'
+import { v4 as uuid } from 'uuid'
 import { createWriteStream } from 'fs'
 import { and } from 'graphql-shield'
 import { Op } from 'sequelize'
@@ -61,20 +63,27 @@ export const userResolver: Resolvers = {
       const token = await generateToken({ userId: user.id })
       return { token }
     },
-    uploadAvatar: async (root, { avatar }, { models, user }) => {
-      const { createReadStream, filename } = await avatar
-      console.log(createReadStream, filename)
+    uploadAvatar: async (root, { avatar }, { user }) => {
+      const { createReadStream } = await avatar
+      const filename = `${uuid()}.jpg`
 
-      // await new Promise(res =>
-      //   createReadStream().pipe(
-      //     createWriteStream(path.join(__dirname, '../../public/avatars')).on(
-      //       'close',
-      //       res,
-      //     ),
-      //   ),
-      // )
-
-      return true
+      return new Promise(res =>
+        createReadStream().pipe(
+          createWriteStream(
+            path.join(__dirname, '../../public/avatars', filename),
+          ).on('close', async () => {
+            if (user!.avatar) {
+              fs.unlink(
+                `${__dirname}../../../public/avatars/${user!.avatar}`,
+              ).catch(err => {
+                console.log(`Could not delete old avatar ${user!.avatar}`, err)
+              })
+            }
+            const updatedUser = await user!.update({ avatar: filename })
+            res(updatedUser as ResolversTypes['currentUser'])
+          }),
+        ),
+      )
     },
     deleteUser: (root, args, { user, models }) =>
       models.User.deleteUser(user.id),
@@ -167,6 +176,7 @@ export const userResolver: Resolvers = {
     },
   },
   CurrentUser: {
+    avatar: ({ avatar }) => (avatar ? `/static/avatars/${avatar}` : null),
     friends: async ({ id }, args, { models }) => {
       const friends = await models.UserFriend.findAll({
         where: { userId: id },
@@ -231,6 +241,7 @@ export const userResolver: Resolvers = {
       models.CollabTask.findAll({ where: { assigneeId: id } }),
   },
   User: {
+    avatar: ({ avatar }) => (avatar ? `/static/avatars/${avatar}` : null),
     collabs: ({ id }, args, { models }) =>
       models.Collab.findAll({ where: { ownerId: id } }),
     isFriend: async ({ id }, args, { models, user }) => {

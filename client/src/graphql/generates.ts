@@ -174,7 +174,7 @@ export type Mutation = {
   updateTaskListPosition: TaskList;
   updateTaskPosition: Task;
   updateUserInfo: CurrentUser;
-  uploadAvatar: Scalars['Boolean'];
+  uploadAvatar: CurrentUser;
 };
 
 

@@ -14,6 +14,7 @@ import { Loader } from '../../../components/Loader'
 import { DisplayError } from '../../../components/DisplayError'
 import { SendMessageModal } from '../SendMessageModal'
 import { useWindowWidth } from '../../../providers'
+import { getAvatarUrl } from '../../../utils'
 
 export const Conversations = () => {
   const {
@@ -69,7 +70,12 @@ export const Conversations = () => {
           >
             {username ? (
               <Flex align="center" mb={4}>
-                <Avatar src={avatar} name={username} size="sm" mr={2} />
+                <Avatar
+                  src={getAvatarUrl(avatar)}
+                  name={username}
+                  size="sm"
+                  mr={2}
+                />
                 <Text as="h3" fontWeight={500}>
                   {username}
                 </Text>

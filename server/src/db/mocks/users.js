@@ -14,7 +14,7 @@ const generageUser = (__, i) => ({
   password: bcrypt.hashSync('test1234', 12),
   updated_at: new Date(),
   created_at: new Date(),
-  avatar: 'https://randomuser.me/api/portraits/women/82.jpg',
+  avatar: null,
 })
 
 const asaf = {
@@ -25,7 +25,7 @@ const asaf = {
   password: bcrypt.hashSync('test1234', 12),
   updated_at: new Date(),
   created_at: new Date(),
-  avatar: 'https://randomuser.me/api/portraits/women/82.jpg',
+  avatar: null,
 }
 
 const seededUsers = [...Array(50)].map(generageUser).concat(asaf)

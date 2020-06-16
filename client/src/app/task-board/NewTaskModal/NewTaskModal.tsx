@@ -23,6 +23,7 @@ import {
   Textarea,
 } from '@chakra-ui/core'
 import Select from 'react-select'
+import { getAvatarUrl } from '../../../utils'
 
 type Props = {
   closeModal: () => void
@@ -134,7 +135,12 @@ export const NewTaskModal = ({ closeModal, taskListId }: Props) => {
 
 const CustomOption = (props: any) => (
   <Flex cursor="pointer" {...props.innerProps} align="center" px={2} py={1}>
-    <Avatar mr={2} size="sm" src={props.data.avatar} name={props.data.label} />
+    <Avatar
+      mr={2}
+      size="sm"
+      src={getAvatarUrl(props.data.avatar)}
+      name={props.data.label}
+    />
     <Text as="span" color="black">
       {props.data.label}
     </Text>

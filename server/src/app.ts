@@ -1,4 +1,5 @@
 import express from 'express'
+import path from 'path'
 import { ApolloServer, makeExecutableSchema } from 'apollo-server-express'
 import { applyMiddleware } from 'graphql-middleware'
 import { typeDefs } from './graphql/typeDefs'
@@ -12,6 +13,10 @@ export const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(
+  '/static/avatars',
+  express.static(path.join(__dirname, './public/avatars')),
+)
 
 const schema = applyMiddleware(
   makeExecutableSchema({

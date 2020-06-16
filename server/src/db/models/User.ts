@@ -84,6 +84,7 @@ export class User extends Model<User> {
   @Column
   password!: string
 
+  @Default(null)
   @Column
   avatar!: string
 

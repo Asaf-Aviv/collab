@@ -19,6 +19,7 @@ import { Conversations } from '../Conversations'
 import { Conversation } from '../Conversation'
 import { useWindowWidth } from '../../../providers'
 import { FriendRequests } from '../FriendRequests'
+import { UploadAvatar } from '../UploadAvatar'
 
 export const MyProfile = () => {
   const { path } = useRouteMatch()
@@ -78,6 +79,7 @@ const SideBar = () => {
       mr={8}
       border="1px solid #e1e1e1"
     >
+      <UploadAvatar />
       <StyledNavLink exact to={`${path}/info`}>
         Info
       </StyledNavLink>

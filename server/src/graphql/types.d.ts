@@ -186,7 +186,7 @@ export type Mutation = {
   updateTaskListPosition: TaskList;
   updateTaskPosition: Task;
   updateUserInfo: CurrentUser;
-  uploadAvatar: Scalars['Boolean'];
+  uploadAvatar: CurrentUser;
 };
 
 
@@ -2497,7 +2497,7 @@ export type MutationResolvers<ContextType = CollabContext, ParentType extends Re
   updateTaskListPosition?: Resolver<ResolversTypes['TaskList'], ParentType, ContextType, RequireFields<MutationUpdateTaskListPositionArgs, 'input'>>,
   updateTaskPosition?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationUpdateTaskPositionArgs, 'input'>>,
   updateUserInfo?: Resolver<ResolversTypes['CurrentUser'], ParentType, ContextType, RequireFields<MutationUpdateUserInfoArgs, never>>,
-  uploadAvatar?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUploadAvatarArgs, 'avatar'>>,
+  uploadAvatar?: Resolver<ResolversTypes['CurrentUser'], ParentType, ContextType, RequireFields<MutationUploadAvatarArgs, 'avatar'>>,
 }>;
 
 export type CollabResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Collab'] = ResolversParentTypes['Collab']> = ResolversObject<{

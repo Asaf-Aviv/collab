@@ -11,6 +11,7 @@ import {
 import { AvatarWithUsername } from '../../../components/AvatarWithUsername'
 import { Loader } from '../../../components/Loader'
 import { DisplayError } from '../../../components/DisplayError'
+import { getAvatarUrl } from '../../../utils'
 
 const removeInvitationFromCache = (store: DataProxy, collabId: string) => {
   const query = GetCurrentUserCollabInvitationsDocument
@@ -77,7 +78,7 @@ export const CollabInvitations = () => {
             <Box mb={4}>
               <AvatarWithUsername
                 id={owner.id}
-                avatar={owner.avatar ?? undefined}
+                avatar={getAvatarUrl(owner.avatar)}
                 username={owner.username}
                 size="sm"
                 mb={2}
