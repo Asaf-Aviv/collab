@@ -111,8 +111,10 @@ export const userResolver: Resolvers = {
     },
     declineCollabInvitation: (root, { collabId }, { user, models }) =>
       models.User.declineCollabInvitation(collabId, user.id),
-    updateUserInfo: (root, { input }, { user }) =>
-      (user!.update(input!) as unknown) as typeof user,
+    updateUserInfo: async (root, { input }, { user }) => {
+      const updatedUser = await user!.update(input!)
+      return updatedUser as ResolversTypes['currentUser']
+    },
     sendFriendRequest: async (root, { friendId }, { models, user, pubsub }) => {
       const { UserFriendRequest, Notification } = models
       const request = await UserFriendRequest.createFriendRequest(
@@ -185,8 +187,11 @@ export const userResolver: Resolvers = {
 
       return friends.map(f => f.friend)
     },
-    conversationsPreview: ({ id }, args, { models }) =>
-      models.PrivateMessage.getConversationsPreview(id),
+    conversationsPreview: async ({ id }, args, { models }) => {
+      const { PrivateMessage } = models
+      const messagesPreview = await PrivateMessage.getConversationsPreview(id)
+      return messagesPreview as ResolversTypes['conversationsPreview']
+    },
     notificationsCount: ({ id }, args, { models }) =>
       models.Notification.count({
         where: {
