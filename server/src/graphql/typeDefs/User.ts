@@ -43,7 +43,7 @@ export const userTypeDefs = gql`
     firstName: String!
     lastName: String!
     "the user's engineering title"
-    title: String!
+    title: String
     country: String
     bio: String!
     github: String!
@@ -69,6 +69,7 @@ export const userTypeDefs = gql`
     "the user's engineering title"
     title: String
     isFriend: Boolean!
+    country: String
     canRequestFriendship: Boolean!
     avatar: String
     bio: String

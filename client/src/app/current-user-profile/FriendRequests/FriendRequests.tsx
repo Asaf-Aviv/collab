@@ -6,6 +6,7 @@ import {
   ButtonGroup,
   Text,
   PseudoBox,
+  Heading,
 } from '@chakra-ui/core'
 import { useCurrentUserFriendRequestsQuery } from '../../../graphql/generates'
 import { useFriendRequestActions } from './friendRequestActions'
@@ -39,7 +40,10 @@ export const FriendRequests = () => {
   const friendRequests = data?.currentUser?.friendRequests ?? []
 
   return (
-    <Box as="main" flex={1} pb={8}>
+    <Box as="main" flex={1} pb={4}>
+      <Heading as="h1" size="md" mb={4} fontWeight={500}>
+        Friend Requests
+      </Heading>
       <Flex direction="column">
         {friendRequests.map(user => (
           <PseudoBox

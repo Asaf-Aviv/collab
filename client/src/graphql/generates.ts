@@ -16,22 +16,22 @@ export type Scalars = {
 export type Query = {
    __typename?: 'Query';
   advancedPostsSearch: CollabPostsSearchResultsPayload;
-  collab?: Maybe<Collab>;
-  collabPost?: Maybe<CollabPost>;
+  collab: Maybe<Collab>;
+  collabPost: Maybe<CollabPost>;
   collabPosts: CollabPostsPayload;
   collabPostsByStack: CollabPostsSearchResultsPayload;
   collabWallMessages: CollabWallMessagesPayload;
   collabs: Array<Collab>;
-  currentUser?: Maybe<CurrentUser>;
+  currentUser: Maybe<CurrentUser>;
   getConversation: GetConversationPayload;
   languages: Array<Scalars['String']>;
   searchFriends: Array<User>;
   searchPostsByTitle: CollabPostsSearchResultsPayload;
   searchUsers: Array<User>;
-  task?: Maybe<Task>;
-  taskList?: Maybe<Array<TaskList>>;
-  thread?: Maybe<CollabDiscussionThread>;
-  user?: Maybe<User>;
+  task: Maybe<Task>;
+  taskList: Maybe<Array<TaskList>>;
+  thread: Maybe<CollabDiscussionThread>;
+  user: Maybe<User>;
   users: Array<User>;
 };
 
@@ -464,7 +464,7 @@ export type MutationUpdateTaskPositionArgs = {
 
 
 export type MutationUpdateUserInfoArgs = {
-  input?: Maybe<UpdateUserInfoInput>;
+  input: Maybe<UpdateUserInfoInput>;
 };
 
 
@@ -475,7 +475,7 @@ export type MutationUploadAvatarArgs = {
 export type Collab = {
    __typename?: 'Collab';
   acceptsInvites: Scalars['Boolean'];
-  collabPostId?: Maybe<Scalars['ID']>;
+  collabPostId: Maybe<Scalars['ID']>;
   discussionThreads: Array<CollabDiscussionThread>;
   id: Scalars['ID'];
   invitationPending: Scalars['Boolean'];
@@ -493,11 +493,11 @@ export type Collab = {
 export type CollabDiscussionThreadComment = {
    __typename?: 'CollabDiscussionThreadComment';
   author: User;
-  collab?: Maybe<Collab>;
+  collab: Maybe<Collab>;
   content: Scalars['String'];
   id: Scalars['ID'];
   reactions: Array<Reaction>;
-  thread?: Maybe<CollabDiscussionThread>;
+  thread: Maybe<CollabDiscussionThread>;
 };
 
 export type CreateCollabDiscussionThreadCommentInput = {
@@ -529,7 +529,7 @@ export type RemoveCollabDiscussionThreadReactionInput = {
 export type CollabDiscussionThread = {
    __typename?: 'CollabDiscussionThread';
   author: User;
-  collab?: Maybe<Collab>;
+  collab: Maybe<Collab>;
   comments: Array<CollabDiscussionThreadComment>;
   commentsCount: Scalars['Int'];
   content: Scalars['String'];
@@ -546,13 +546,13 @@ export type CreateThreadArgs = {
 };
 
 export type AdvancedPostsSearchInput = {
-  experience?: Maybe<Experience>;
-  hasStarted?: Maybe<Scalars['Boolean']>;
-  isNew?: Maybe<Scalars['Boolean']>;
-  languages?: Maybe<Array<Scalars['String']>>;
+  experience: Maybe<Experience>;
+  hasStarted: Maybe<Scalars['Boolean']>;
+  isNew: Maybe<Scalars['Boolean']>;
+  languages: Maybe<Array<Scalars['String']>>;
   limit: Scalars['Int'];
   offset: Scalars['Int'];
-  stack?: Maybe<Array<Scalars['String']>>;
+  stack: Maybe<Array<Scalars['String']>>;
 };
 
 export type CollabPostsSearchResultsPayload = {
@@ -745,12 +745,12 @@ export type SendPrivateChatMessageInput = {
 
 export type PrivateMessage = {
    __typename?: 'PrivateMessage';
-  author?: Maybe<User>;
+  author: Maybe<User>;
   content: Scalars['String'];
   creationDate: Scalars['Date'];
   id: Scalars['ID'];
   isRead: Scalars['Boolean'];
-  recipient?: Maybe<User>;
+  recipient: Maybe<User>;
 };
 
 export type PrivateMessagePreview = {
@@ -782,8 +782,8 @@ export type Reaction = {
 
 export type Task = {
    __typename?: 'Task';
-  assignedBy?: Maybe<User>;
-  assignee?: Maybe<User>;
+  assignedBy: Maybe<User>;
+  assignee: Maybe<User>;
   author: User;
   authorId: Scalars['ID'];
   collab: Collab;
@@ -796,13 +796,13 @@ export type Task = {
 };
 
 export type UpdateTaskInput = {
-  assigneeId?: Maybe<Scalars['ID']>;
+  assigneeId: Maybe<Scalars['ID']>;
   description: Scalars['String'];
   taskId: Scalars['ID'];
 };
 
 export type CreateTaskInput = {
-  assigneeId?: Maybe<Scalars['ID']>;
+  assigneeId: Maybe<Scalars['ID']>;
   collabId: Scalars['ID'];
   description: Scalars['String'];
   taskListId: Scalars['ID'];
@@ -828,11 +828,11 @@ export type MoveTaskToListInput = {
 
 export type TaskComment = {
    __typename?: 'TaskComment';
-  author?: Maybe<User>;
+  author: Maybe<User>;
   content: Scalars['String'];
   id: Scalars['ID'];
   reactions: Array<Reaction>;
-  task?: Maybe<Task>;
+  task: Maybe<Task>;
 };
 
 export type CreateTaskCommentInput = {
@@ -859,7 +859,7 @@ export type UpdateTaskListPositionInput = {
 
 export type TaskList = {
    __typename?: 'TaskList';
-  collab?: Maybe<Collab>;
+  collab: Maybe<Collab>;
   id: Scalars['ID'];
   name: Scalars['String'];
   order: Scalars['Int'];
@@ -874,13 +874,13 @@ export type NewFriendRequestPayload = {
 
 export type CurrentUser = {
    __typename?: 'CurrentUser';
-  avatar?: Maybe<Scalars['String']>;
+  avatar: Maybe<Scalars['String']>;
   bio: Scalars['String'];
   collabInvites: Array<Collab>;
   collabRequests: Array<CollabRequest>;
   collabs: Array<Collab>;
   conversationsPreview: Array<PrivateMessagePreview>;
-  country?: Maybe<Scalars['String']>;
+  country: Maybe<Scalars['String']>;
   email: Scalars['String'];
   firstName: Scalars['String'];
   friendRequests: Array<User>;
@@ -901,16 +901,17 @@ export type CurrentUser = {
 
 export type User = {
    __typename?: 'User';
-  avatar?: Maybe<Scalars['String']>;
-  bio?: Maybe<Scalars['String']>;
+  avatar: Maybe<Scalars['String']>;
+  bio: Maybe<Scalars['String']>;
   canRequestFriendship: Scalars['Boolean'];
   collabs: Array<Collab>;
-  firstName?: Maybe<Scalars['String']>;
+  country: Maybe<Scalars['String']>;
+  firstName: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   isFriend: Scalars['Boolean'];
-  lastName?: Maybe<Scalars['String']>;
+  lastName: Maybe<Scalars['String']>;
   /** the user's engineering title */
-  title?: Maybe<Scalars['String']>;
+  title: Maybe<Scalars['String']>;
   username: Scalars['String'];
 };
 
@@ -920,7 +921,7 @@ export type SearchUsersInput = {
 
 export type UpdateUserInfoInput = {
   bio: Scalars['String'];
-  country?: Maybe<Scalars['String']>;
+  country: Maybe<Scalars['String']>;
   firstName: Scalars['String'];
   github: Scalars['String'];
   lastName: Scalars['String'];
@@ -1053,10 +1054,10 @@ export type SendPrivateMessageMutation = (
   & { sendPrivateMessage: (
     { __typename?: 'PrivateMessage' }
     & Pick<PrivateMessage, 'id' | 'content' | 'creationDate' | 'isRead'>
-    & { author?: Maybe<(
+    & { author: Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
-    )>, recipient?: Maybe<(
+    )>, recipient: Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
     )> }
@@ -1401,10 +1402,10 @@ export type CreateTaskMutation = (
     & { author: (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
-    ), assignee?: Maybe<(
+    ), assignee: Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
-    )>, assignedBy?: Maybe<(
+    )>, assignedBy: Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
     )> }
@@ -1431,10 +1432,10 @@ export type UpdateTaskMutation = (
   & { updateTask: (
     { __typename?: 'Task' }
     & Pick<Task, 'id' | 'description'>
-    & { assignee?: Maybe<(
+    & { assignee: Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
-    )>, assignedBy?: Maybe<(
+    )>, assignedBy: Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
     )> }
@@ -1477,10 +1478,10 @@ export type UpdateTaskAssigneeMutation = (
   & { updateTaskAssignee: (
     { __typename?: 'Task' }
     & Pick<Task, 'id'>
-    & { assignee?: Maybe<(
+    & { assignee: Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
-    )>, assignedBy?: Maybe<(
+    )>, assignedBy: Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
     )> }
@@ -1497,7 +1498,7 @@ export type CreateTaskCommentMutation = (
   & { createTaskComment: (
     { __typename?: 'TaskComment' }
     & Pick<TaskComment, 'id' | 'content'>
-    & { author?: Maybe<(
+    & { author: Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
     )>, reactions: Array<(
@@ -1621,7 +1622,7 @@ export type GetCurrentUserQueryVariables = {};
 
 export type GetCurrentUserQuery = (
   { __typename?: 'Query' }
-  & { currentUser?: Maybe<(
+  & { currentUser: Maybe<(
     { __typename?: 'CurrentUser' }
     & Pick<CurrentUser, 'id' | 'username' | 'avatar' | 'friendRequestsCount' | 'notificationsCount'>
   )> }
@@ -1632,7 +1633,7 @@ export type CurrentUserFriendsQueryVariables = {};
 
 export type CurrentUserFriendsQuery = (
   { __typename?: 'Query' }
-  & { currentUser?: Maybe<(
+  & { currentUser: Maybe<(
     { __typename?: 'CurrentUser' }
     & Pick<CurrentUser, 'id'>
     & { friends: Array<(
@@ -1647,7 +1648,7 @@ export type CurrentUserNotificationsQueryVariables = {};
 
 export type CurrentUserNotificationsQuery = (
   { __typename?: 'Query' }
-  & { currentUser?: Maybe<(
+  & { currentUser: Maybe<(
     { __typename?: 'CurrentUser' }
     & Pick<CurrentUser, 'id'>
     & { notifications: Array<(
@@ -1662,7 +1663,7 @@ export type CurrentUserFriendRequestsQueryVariables = {};
 
 export type CurrentUserFriendRequestsQuery = (
   { __typename?: 'Query' }
-  & { currentUser?: Maybe<(
+  & { currentUser: Maybe<(
     { __typename?: 'CurrentUser' }
     & Pick<CurrentUser, 'id'>
     & { friendRequests: Array<(
@@ -1703,7 +1704,7 @@ export type GetCurrentUserInfoQueryVariables = {};
 
 export type GetCurrentUserInfoQuery = (
   { __typename?: 'Query' }
-  & { currentUser?: Maybe<(
+  & { currentUser: Maybe<(
     { __typename?: 'CurrentUser' }
     & Pick<CurrentUser, 'id' | 'firstName' | 'lastName' | 'title' | 'country' | 'bio' | 'github' | 'twitter' | 'linkedin'>
   )> }
@@ -1714,7 +1715,7 @@ export type CurrentUserConversationsPreviewQueryVariables = {};
 
 export type CurrentUserConversationsPreviewQuery = (
   { __typename?: 'Query' }
-  & { currentUser?: Maybe<(
+  & { currentUser: Maybe<(
     { __typename?: 'CurrentUser' }
     & Pick<CurrentUser, 'id'>
     & { conversationsPreview: Array<(
@@ -1739,10 +1740,10 @@ export type CurrentUserConversationQuery = (
     & { messages: Array<(
       { __typename?: 'PrivateMessage' }
       & Pick<PrivateMessage, 'id' | 'content' | 'creationDate' | 'isRead'>
-      & { author?: Maybe<(
+      & { author: Maybe<(
         { __typename?: 'User' }
         & Pick<User, 'id' | 'username' | 'avatar'>
-      )>, recipient?: Maybe<(
+      )>, recipient: Maybe<(
         { __typename?: 'User' }
         & Pick<User, 'id' | 'username' | 'avatar'>
       )> }
@@ -1755,7 +1756,7 @@ export type GetCurrentUserCollabsQueryVariables = {};
 
 export type GetCurrentUserCollabsQuery = (
   { __typename?: 'Query' }
-  & { currentUser?: Maybe<(
+  & { currentUser: Maybe<(
     { __typename?: 'CurrentUser' }
     & Pick<CurrentUser, 'id'>
     & { collabs: Array<(
@@ -1770,7 +1771,7 @@ export type GetCurrentUserCollabInvitationsQueryVariables = {};
 
 export type GetCurrentUserCollabInvitationsQuery = (
   { __typename?: 'Query' }
-  & { currentUser?: Maybe<(
+  & { currentUser: Maybe<(
     { __typename?: 'CurrentUser' }
     & Pick<CurrentUser, 'id'>
     & { collabInvites: Array<(
@@ -1789,7 +1790,7 @@ export type GetCurrentUserCollabRequestsQueryVariables = {};
 
 export type GetCurrentUserCollabRequestsQuery = (
   { __typename?: 'Query' }
-  & { currentUser?: Maybe<(
+  & { currentUser: Maybe<(
     { __typename?: 'CurrentUser' }
     & Pick<CurrentUser, 'id'>
     & { collabRequests: Array<(
@@ -1811,13 +1812,13 @@ export type GetCurrentUserTasksQueryVariables = {};
 
 export type GetCurrentUserTasksQuery = (
   { __typename?: 'Query' }
-  & { currentUser?: Maybe<(
+  & { currentUser: Maybe<(
     { __typename?: 'CurrentUser' }
     & Pick<CurrentUser, 'id'>
     & { tasks: Array<(
       { __typename?: 'Task' }
       & Pick<Task, 'id' | 'description'>
-      & { assignedBy?: Maybe<(
+      & { assignedBy: Maybe<(
         { __typename?: 'User' }
         & Pick<User, 'id' | 'username'>
       )>, collab: (
@@ -1835,9 +1836,9 @@ export type UserQueryVariables = {
 
 export type UserQuery = (
   { __typename?: 'Query' }
-  & { user?: Maybe<(
+  & { user: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'username' | 'avatar'>
+    & Pick<User, 'id' | 'username' | 'avatar' | 'bio' | 'title' | 'country'>
   )> }
 );
 
@@ -1935,7 +1936,7 @@ export type GetCollabPostQueryVariables = {
 
 export type GetCollabPostQuery = (
   { __typename?: 'Query' }
-  & { collabPost?: Maybe<(
+  & { collabPost: Maybe<(
     { __typename?: 'CollabPost' }
     & Pick<CollabPost, 'id' | 'name' | 'title' | 'description' | 'isNew' | 'collabId' | 'experience' | 'stack' | 'hasStarted' | 'languages' | 'acceptsInvites' | 'isOwner' | 'isMember' | 'invitationPending' | 'requestToJoinPending' | 'createdAt'>
     & { owner: (
@@ -1966,7 +1967,7 @@ export type CollabPostCommentsQueryVariables = {
 
 export type CollabPostCommentsQuery = (
   { __typename?: 'Query' }
-  & { collabPost?: Maybe<(
+  & { collabPost: Maybe<(
     { __typename?: 'CollabPost' }
     & Pick<CollabPost, 'id'>
     & { comments: Array<(
@@ -1990,7 +1991,7 @@ export type CollabQueryVariables = {
 
 export type CollabQuery = (
   { __typename?: 'Query' }
-  & { collab?: Maybe<(
+  & { collab: Maybe<(
     { __typename?: 'Collab' }
     & Pick<Collab, 'id' | 'name' | 'collabPostId' | 'acceptsInvites' | 'isOwner'>
     & { owner: (
@@ -2013,7 +2014,7 @@ export type CollabMembersQueryVariables = {
 
 export type CollabMembersQuery = (
   { __typename?: 'Query' }
-  & { collab?: Maybe<(
+  & { collab: Maybe<(
     { __typename?: 'Collab' }
     & Pick<Collab, 'id'>
     & { members: Array<(
@@ -2051,7 +2052,7 @@ export type CollabDiscussionThreadsQueryVariables = {
 
 export type CollabDiscussionThreadsQuery = (
   { __typename?: 'Query' }
-  & { collab?: Maybe<(
+  & { collab: Maybe<(
     { __typename?: 'Collab' }
     & Pick<Collab, 'id'>
     & { discussionThreads: Array<(
@@ -2072,7 +2073,7 @@ export type CollabThreadQueryVariables = {
 
 export type CollabThreadQuery = (
   { __typename?: 'Query' }
-  & { thread?: Maybe<(
+  & { thread: Maybe<(
     { __typename?: 'CollabDiscussionThread' }
     & Pick<CollabDiscussionThread, 'id' | 'title' | 'content'>
     & { author: (
@@ -2092,7 +2093,7 @@ export type CollabThreadCommentsQueryVariables = {
 
 export type CollabThreadCommentsQuery = (
   { __typename?: 'Query' }
-  & { thread?: Maybe<(
+  & { thread: Maybe<(
     { __typename?: 'CollabDiscussionThread' }
     & Pick<CollabDiscussionThread, 'id'>
     & { comments: Array<(
@@ -2116,16 +2117,16 @@ export type TaskListQueryVariables = {
 
 export type TaskListQuery = (
   { __typename?: 'Query' }
-  & { taskList?: Maybe<Array<(
+  & { taskList: Maybe<Array<(
     { __typename?: 'TaskList' }
     & Pick<TaskList, 'id' | 'name' | 'order'>
     & { tasks: Array<(
       { __typename?: 'Task' }
       & Pick<Task, 'id' | 'description' | 'order' | 'commentsCount' | 'taskListId'>
-      & { assignee?: Maybe<(
+      & { assignee: Maybe<(
         { __typename?: 'User' }
         & Pick<User, 'id' | 'username' | 'avatar'>
-      )>, assignedBy?: Maybe<(
+      )>, assignedBy: Maybe<(
         { __typename?: 'User' }
         & Pick<User, 'id' | 'username' | 'avatar'>
       )>, author: (
@@ -2143,13 +2144,13 @@ export type TaskCommentsQueryVariables = {
 
 export type TaskCommentsQuery = (
   { __typename?: 'Query' }
-  & { task?: Maybe<(
+  & { task: Maybe<(
     { __typename?: 'Task' }
     & Pick<Task, 'id'>
     & { comments: Array<(
       { __typename?: 'TaskComment' }
       & Pick<TaskComment, 'id' | 'content'>
-      & { author?: Maybe<(
+      & { author: Maybe<(
         { __typename?: 'User' }
         & Pick<User, 'id' | 'username' | 'avatar'>
       )>, reactions: Array<(
@@ -4419,6 +4420,9 @@ export const UserDocument = gql`
     id
     username
     avatar
+    bio
+    title
+    country
   }
 }
     `;

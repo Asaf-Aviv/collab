@@ -206,6 +206,9 @@ export const GET_USER = gql`
       id
       username
       avatar
+      bio
+      title
+      country
     }
   }
 `

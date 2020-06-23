@@ -14,8 +14,8 @@ import { User } from '../../graphql/generates'
 import { Paper } from '../global'
 import { getAvatarUrl } from '../../utils'
 
-type Props = PseudoBoxProps &
-  Pick<User, 'id' | 'avatar' | 'username' | 'bio'> & {
+type Props = Omit<PseudoBoxProps, 'title'> &
+  Pick<User, 'id' | 'avatar' | 'username' | 'bio' | 'title' | 'country'> & {
     dotsMenu?: React.ReactNode
   }
 
@@ -25,6 +25,8 @@ export const UserCard = ({
   username,
   bio,
   dotsMenu,
+  title,
+  country,
   ...props
 }: Props) => {
   return (
@@ -33,6 +35,7 @@ export const UserCard = ({
       bg="#2f1e50"
       flex={1}
       position="relative"
+      display="inline-block"
       {...props}
     >
       <Flex p={4} direction="column" align="center" width="100%">
@@ -50,17 +53,17 @@ export const UserCard = ({
         />
         <Stack spacing={2} textAlign="center">
           <Box>
-            <Link to={`/users/${id}`} style={{ display: 'block' }}>
+            <Link to={`/user/${id}`} style={{ display: 'block' }}>
               <Heading color="white" as="h3" size="sm" letterSpacing={1}>
                 {username}
               </Heading>
             </Link>
           </Box>
           <HeadingSubTitle as="span" color="#f49cff">
-            Designer
+            {title}
           </HeadingSubTitle>
           <HeadingSubTitle as="span" color="white">
-            Haifa, Israel
+            {country}
           </HeadingSubTitle>
         </Stack>
       </Flex>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Text, Box, Heading, Flex, PseudoBox } from '@chakra-ui/core'
+import { Button, Text, Box, Heading, PseudoBox } from '@chakra-ui/core'
 import { DataProxy } from 'apollo-cache'
 import {
   useGetCurrentUserCollabInvitationsQuery,
