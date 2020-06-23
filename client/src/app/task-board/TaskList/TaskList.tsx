@@ -63,18 +63,18 @@ const TaskList = ({ taskList, tasks, refetch, index }: Props) => {
       isDragDisabled={!collabData?.collab?.isOwner}
     >
       {provided => (
-        <Box
-          {...provided.draggableProps}
+        <Flex
           ref={provided.innerRef}
+          {...provided.draggableProps}
+          position="relative"
+          direction="column"
           borderRadius={3}
           padding={2}
           bg="white"
           width={300}
           flexShrink={0}
-          maxWidth={300}
           minHeight={200}
-          pb={12}
-          position="relative"
+          mr={2}
         >
           <Flex justify="space-between">
             <Heading {...provided.dragHandleProps} size="sm" mb={2} p={2}>
@@ -108,10 +108,10 @@ const TaskList = ({ taskList, tasks, refetch, index }: Props) => {
           <Droppable droppableId={taskList.id} type="task">
             {provided => (
               <Box
-                height="100%"
                 ref={provided.innerRef}
-                overflowY="auto"
                 {...provided.droppableProps}
+                flex={1}
+                overflowY="auto"
               >
                 {tasks.map((task, index) => (
                   <Task
@@ -134,7 +134,7 @@ const TaskList = ({ taskList, tasks, refetch, index }: Props) => {
               </Box>
             )}
           </Droppable>
-        </Box>
+        </Flex>
       )}
     </Draggable>
   )

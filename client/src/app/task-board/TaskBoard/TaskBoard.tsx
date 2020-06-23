@@ -12,10 +12,14 @@ import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
 import { NewTaskListModal } from '../NewTaskListModal'
 import { MemoizedTaskListWrapper } from '../TaskList'
 import { IconButtonWithTooltip } from '../../../components/IconButtonWithTooltip'
+import { Loader } from '../../../components/Loader'
+import { DisplayError } from '../../../components/DisplayError'
 
 export const TaskBoard = () => {
   const { collabId } = useParams<{ collabId: string }>()
-  const { data, refetch } = useTaskListQuery({ variables: { collabId } })
+  const { data, loading, error, refetch } = useTaskListQuery({
+    variables: { collabId },
+  })
   const [isCreateTaskListModalOpen, setIsCreateTaskListModalOpen] = useState(
     false,
   )
@@ -29,8 +33,6 @@ export const TaskBoard = () => {
     onCompleted: () => refetch(),
   })
   const { data: collabData } = useCollabQuery({ variables: { collabId } })
-
-  if (!data?.taskList) return null
 
   const handleDragEnd = (result: DropResult) => {
     const { source, destination, type /* draggableId */ } = result
@@ -88,7 +90,7 @@ export const TaskBoard = () => {
     })
   }
 
-  const { taskList } = data
+  const taskList = data?.taskList || []
 
   return (
     <>
@@ -102,10 +104,12 @@ export const TaskBoard = () => {
             <Flex
               {...provided.droppableProps}
               ref={provided.innerRef}
+              padding={2}
+              borderRadius={6}
               flex={1}
               overflowX="auto"
               overflowY="hidden"
-              height="calc(100vh - 64px - 4rem)"
+              height="calc(100vh - 64px - 2rem)"
               bg="#f2f2ff"
             >
               {collabData?.collab?.isOwner && (
@@ -126,6 +130,13 @@ export const TaskBoard = () => {
               )}
               <MemoizedTaskListWrapper taskList={taskList} refetch={refetch} />
               {provided.placeholder}
+              {loading && <Loader />}
+              {error && (
+                <DisplayError
+                  onClick={() => refetch()}
+                  message="Could not fetch task board"
+                />
+              )}
             </Flex>
           )}
         </Droppable>

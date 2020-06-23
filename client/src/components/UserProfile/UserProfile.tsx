@@ -1,62 +1,40 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import {
-  useUserQuery,
-  useSendFriendRequestMutation,
-} from '../../graphql/generates'
+import { useUserQuery } from '../../graphql/generates'
 import { Container } from '../global'
-import { Flex, Avatar, Heading, Icon, Button } from '@chakra-ui/core'
-import { getAvatarUrl } from '../../utils'
+import { Heading } from '@chakra-ui/core'
+import { UserCard } from '../UserCard'
+import { Loader } from '../Loader'
+import { DisplayError } from '../DisplayError'
 
 type Props = {
   userId: string
   onCompleted?: (friendId: string) => void
 }
 
-const AddFriendButton = ({ userId, onCompleted }: Props) => {
-  const [sendFriendRequest] = useSendFriendRequestMutation({
-    variables: { friendId: userId },
-    onCompleted: () => {
-      onCompleted && onCompleted(userId)
-    },
-  })
-
-  return (
-    <Button size="sm" variantColor="purple" onClick={() => sendFriendRequest()}>
-      <Icon name="add" aria-label="add friend" mr={2} />
-      Add Friend
-    </Button>
-  )
-}
-
 export const UserProfile = () => {
   const { userId } = useParams<{ userId: string }>()
-  const { data } = useUserQuery({ variables: { id: userId } })
+  const { data, loading, error, refetch } = useUserQuery({
+    variables: { id: userId },
+  })
 
-  if (!data?.user) return null
-
-  const { username, avatar } = data.user
+  const user = data?.user
 
   return (
     <Container>
-      <Flex>
-        <Flex
-          direction="column"
-          bg="white"
-          p={8}
-          borderRadius={6}
-          boxShadow="md"
-          align="center"
-        >
-          <Avatar mb={4} size="lg" src={getAvatarUrl(avatar)} name={username} />
-          <Heading as="h1" size="sm">
-            {username}
-          </Heading>
-        </Flex>
-        <Flex flex={1}>
-          <AddFriendButton userId={userId} />
-        </Flex>
-      </Flex>
+      {user === null && (
+        <Heading textAlign="center" size="md" as="h1" py={4}>
+          User not found
+        </Heading>
+      )}
+      {user && <UserCard {...user} mx="auto" maxWidth={350} />}
+      {loading && <Loader />}
+      {error && (
+        <DisplayError
+          onClick={() => refetch()}
+          message="Could not fetch user"
+        />
+      )}
     </Container>
   )
 }

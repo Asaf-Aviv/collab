@@ -11,15 +11,14 @@ import { IconButtonWithTooltip } from '../../../components/IconButtonWithTooltip
 import { useCurrentUser } from '../../../providers'
 import { Badge } from '../../../components/Badge'
 import { useFriendRequestActions } from '../../current-user-profile/FriendRequests'
+import { DisplayError } from '../../../components/DisplayError'
 
 export const FriendRequestsBallon = () => {
   const currentUser = useCurrentUser()!
   const [
     fetchFriendRequests,
-    { data, loading, error },
+    { data, loading, error, refetch },
   ] = useCurrentUserFriendRequestsLazyQuery()
-
-  if (error) return <span>Could not fetch friend requests</span>
 
   const friendRequests = data?.currentUser?.friendRequests ?? []
 
@@ -54,6 +53,12 @@ export const FriendRequestsBallon = () => {
           </Text>
         )}
       </Flex>
+      {error && (
+        <DisplayError
+          onClick={() => refetch()}
+          message="Could not fetch friend requests"
+        />
+      )}
     </Ballon>
   )
 }

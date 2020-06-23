@@ -61,3 +61,4 @@ generates:
       withHooks: true
       withHOC: false
       withComponent: false
+      avoidOptionals: true

@@ -917,6 +917,7 @@ export type User = {
   bio?: Maybe<Scalars['String']>;
   canRequestFriendship: Scalars['Boolean'];
   collabs: Array<Collab>;
+  country?: Maybe<Scalars['String']>;
   firstName?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   isFriend: Scalars['Boolean'];
@@ -1849,7 +1850,7 @@ export type UserQuery = (
   { __typename?: 'Query' }
   & { user?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'username' | 'avatar'>
+    & Pick<User, 'id' | 'username' | 'avatar' | 'bio' | 'title' | 'country'>
   )> }
 );
 
@@ -2758,6 +2759,7 @@ export type UserResolvers<ContextType = CollabContext, ParentType extends Resolv
   bio?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   canRequestFriendship?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   collabs?: Resolver<Array<ResolversTypes['Collab']>, ParentType, ContextType>,
+  country?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   firstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   isFriend?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
