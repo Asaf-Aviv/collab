@@ -22,7 +22,7 @@ import { IconButtonWithTooltip } from '../../../components/IconButtonWithTooltip
 type TaskListResult = NonNullable<TaskListQuery['taskList']>
 
 type Props = {
-  task: TaskListResult[0]['tasks'][0]
+  task: TaskListResult['taskList'][0]['tasks'][0]
   index: number
   deleteTask: () => void
   showComments: boolean

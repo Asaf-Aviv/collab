@@ -2,7 +2,7 @@ import { gql } from 'apollo-server-express'
 
 export const taskListTypeDefs = gql`
   type Query {
-    taskList(collabId: ID!): [TaskList!]
+    taskList(collabId: ID!): TaskListPayload!
   }
 
   type Mutation {
@@ -28,11 +28,15 @@ export const taskListTypeDefs = gql`
     newTaskListPosition: Int!
   }
 
+  type TaskListPayload {
+    taskList: [TaskList!]!
+  }
+
   type TaskList {
     id: ID!
     name: String!
     order: Int!
     tasks: [Task!]!
-    collab: Collab
+    collab: Collab!
   }
 `
