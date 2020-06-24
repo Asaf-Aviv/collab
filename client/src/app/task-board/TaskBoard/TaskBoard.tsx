@@ -29,7 +29,7 @@ export const TaskBoard = () => {
     false,
   )
   const [updateTaskPosition] = useUpdateTaskPositionMutation({
-    onCompleted: () => refetch(),
+    onError: () => refetch(),
   })
   const [updateTaskListPosition] = useUpdateTaskListPositionMutation({
     onError: () => refetch(),
@@ -75,14 +75,30 @@ export const TaskBoard = () => {
       })!
 
       const updatedTaskList = produce(taskListData, draft => {
-        const oldTaskList = draft.taskList.taskList[oldTaskListPosition]
-        const destTaskList = draft.taskList.taskList[newTaskListPosition]
+        const modifiedTaskList = draft.taskList.taskList.find(
+          ({ order }) => order === oldTaskListPosition,
+        )
 
-        oldTaskList.order = newTaskListPosition
-        destTaskList.order = oldTaskListPosition
+        draft.taskList.taskList.forEach(tasklist => {
+          if (oldTaskListPosition < newTaskListPosition) {
+            if (
+              tasklist.order <= newTaskListPosition &&
+              tasklist.order > oldTaskListPosition
+            ) {
+              tasklist.order -= 1
+            }
+          } else {
+            if (
+              tasklist.order >= newTaskListPosition &&
+              tasklist.order < oldTaskListPosition
+            ) {
+              tasklist.order += 1
+            }
+          }
+        })
 
-        draft.taskList.taskList[oldTaskListPosition] = destTaskList
-        draft.taskList.taskList[newTaskListPosition] = oldTaskList
+        modifiedTaskList!.order = newTaskListPosition
+        draft.taskList.taskList.sort((a, b) => a.order - b.order)
       })
 
       client.writeQuery({
@@ -96,15 +112,64 @@ export const TaskBoard = () => {
 
     // if a task has been reordered in the same task list
     if (destination.droppableId === source.droppableId) {
+      const tasklistId = destination.droppableId
+      const oldTaskPosition = source.index
+      const newTaskPosition = destination.index
+
       updateTaskPosition({
         variables: {
           input: {
-            oldTaskPosition: source.index,
-            newTaskPosition: destination.index,
+            oldTaskPosition,
+            newTaskPosition,
             taskListId: source.droppableId,
           },
         },
       })
+
+      const taskListData = client.readQuery<TaskListQuery>({
+        query: TaskListDocument,
+        variables: { collabId },
+      })!
+
+      console.log(
+        taskListData.taskList.taskList.find(({ id }) => id === tasklistId),
+      )
+
+      const updatedTaskList = produce(taskListData, draft => {
+        const tasklist = draft.taskList.taskList.find(
+          ({ id }) => id === tasklistId,
+        )
+
+        const modifiedTask = tasklist?.tasks.find(
+          ({ order }) => order === oldTaskPosition,
+        )
+
+        tasklist!.tasks.forEach(task => {
+          if (oldTaskPosition < newTaskPosition) {
+            if (task.order <= newTaskPosition && task.order > oldTaskPosition) {
+              task.order -= 1
+            }
+          } else {
+            if (task.order >= newTaskPosition && task.order < oldTaskPosition) {
+              task.order += 1
+            }
+          }
+        })
+
+        modifiedTask!.order = newTaskPosition
+        tasklist!.tasks.sort((a, b) => a.order - b.order)
+      })
+
+      console.log(
+        updatedTaskList.taskList.taskList.find(({ id }) => id === tasklistId),
+      )
+
+      client.writeQuery({
+        query: TaskListDocument,
+        variables: { collabId },
+        data: updatedTaskList,
+      })
+
       return
     }
 
@@ -150,7 +215,7 @@ export const TaskBoard = () => {
                     icon="add"
                     onClick={() => setIsCreateTaskListModalOpen(true)}
                     position="absolute"
-                    left={15}
+                    left="247px"
                   />
                   {isCreateTaskListModalOpen && (
                     <NewTaskListModal
