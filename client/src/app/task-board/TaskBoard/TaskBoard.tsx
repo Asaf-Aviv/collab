@@ -6,7 +6,10 @@ import {
   useUpdateTaskListPositionMutation,
   useMoveTaskToListMutation,
   useCollabQuery,
+  TaskListQuery,
+  TaskListDocument,
 } from '../../../graphql/generates'
+import produce from 'immer'
 import { Flex } from '@chakra-ui/core'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
 import { NewTaskListModal } from '../NewTaskListModal'
@@ -14,9 +17,11 @@ import { MemoizedTaskListWrapper } from '../TaskList'
 import { IconButtonWithTooltip } from '../../../components/IconButtonWithTooltip'
 import { Loader } from '../../../components/Loader'
 import { DisplayError } from '../../../components/DisplayError'
+import { useApolloClient } from '@apollo/react-hooks'
 
 export const TaskBoard = () => {
   const { collabId } = useParams<{ collabId: string }>()
+  const client = useApolloClient()
   const { data, loading, error, refetch } = useTaskListQuery({
     variables: { collabId },
   })
@@ -27,7 +32,7 @@ export const TaskBoard = () => {
     onCompleted: () => refetch(),
   })
   const [updateTaskListPosition] = useUpdateTaskListPositionMutation({
-    onCompleted: () => refetch(),
+    onError: () => refetch(),
   })
   const [moveTaskToList] = useMoveTaskToListMutation({
     onCompleted: () => refetch(),
@@ -51,15 +56,41 @@ export const TaskBoard = () => {
 
     // if a task list has been reordered
     if (type === 'column') {
+      const oldTaskListPosition = source.index
+      const newTaskListPosition = destination.index
+
       updateTaskListPosition({
         variables: {
           input: {
             collabId,
-            oldTaskListPosition: source.index,
-            newTaskListPosition: destination.index,
+            oldTaskListPosition,
+            newTaskListPosition,
           },
         },
       })
+
+      const taskListData = client.readQuery<TaskListQuery>({
+        query: TaskListDocument,
+        variables: { collabId },
+      })!
+
+      const updatedTaskList = produce(taskListData, draft => {
+        const oldTaskList = draft.taskList.taskList[oldTaskListPosition]
+        const destTaskList = draft.taskList.taskList[newTaskListPosition]
+
+        oldTaskList.order = newTaskListPosition
+        destTaskList.order = oldTaskListPosition
+
+        draft.taskList.taskList[oldTaskListPosition] = destTaskList
+        draft.taskList.taskList[newTaskListPosition] = oldTaskList
+      })
+
+      client.writeQuery({
+        query: TaskListDocument,
+        variables: { collabId },
+        data: updatedTaskList,
+      })
+
       return
     }
 
@@ -90,7 +121,7 @@ export const TaskBoard = () => {
     })
   }
 
-  const taskList = data?.taskList || []
+  const taskList = data?.taskList?.taskList || []
 
   return (
     <>

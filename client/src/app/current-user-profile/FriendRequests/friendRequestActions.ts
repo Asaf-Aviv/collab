@@ -80,7 +80,6 @@ export const useSubscribeToFriendRequests = ({ skip = false }) => {
       addFriendRequestToCache(client, data.newFriendRequest.user)
     },
   })
-  console.log(data)
 }
 
 export const useFriendRequestActions = () => {

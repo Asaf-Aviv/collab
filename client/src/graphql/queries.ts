@@ -503,29 +503,31 @@ export const GET_COLLAB_DISCUSSION_THREAD_COMMENTS = gql`
 export const GET_COLLAB_TASK_BOARD = gql`
   query TaskList($collabId: ID!) {
     taskList(collabId: $collabId) {
-      id
-      name
-      order
-      tasks {
+      taskList {
         id
-        description
+        name
         order
-        commentsCount
-        taskListId
-        assignee {
+        tasks {
           id
-          username
-          avatar
-        }
-        assignedBy {
-          id
-          username
-          avatar
-        }
-        author {
-          id
-          username
-          avatar
+          description
+          order
+          commentsCount
+          taskListId
+          assignee {
+            id
+            username
+            avatar
+          }
+          assignedBy {
+            id
+            username
+            avatar
+          }
+          author {
+            id
+            username
+            avatar
+          }
         }
       }
     }

@@ -9,5 +9,3 @@ export const formatDate = (date: string) =>
 
 export const getAvatarUrl = (avatar: string | null | undefined) =>
   avatar ? process.env.REACT_APP_URL + avatar : undefined
-
-console.log(process.env)

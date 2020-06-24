@@ -1,5 +1,4 @@
 import React, { useState, memo } from 'react'
-// import { useParams } from 'react-router-dom'
 import {
   TaskListQuery,
   useDeleteTaskListMutation,
@@ -9,12 +8,12 @@ import {
 import { Heading, Box, Flex } from '@chakra-ui/core'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
 import { NewTaskModal } from '../NewTaskModal'
-import { Task } from '../Task/Task'
 import { EditTaskListNamePopover } from '../EditTaskListNamePopover'
 import { DotsMenu } from '../../../components/DotsMenu/Index'
 import { IconButtonWithTooltip } from '../../../components/IconButtonWithTooltip'
 import styled from '@emotion/styled'
 import { useParams } from 'react-router-dom'
+import { MemoizedTasksWrapper } from '../MemoizedTasksWrapper'
 
 export const MemoizedTaskListWrapper = memo(({ taskList, refetch }: any) => (
   <>
@@ -34,8 +33,8 @@ MemoizedTaskListWrapper.displayName = 'MemoizedTaskListWrapper'
 
 type TaskListResult = NonNullable<TaskListQuery['taskList']>
 type Props = {
-  taskList: Omit<TaskListResult[number], 'tasks'>
-  tasks: TaskListResult[number]['tasks']
+  taskList: Omit<TaskListResult['taskList'][number], 'tasks'>
+  tasks: TaskListResult['taskList'][number]['tasks']
   refetch: any
   index: number
 }
@@ -113,23 +112,13 @@ const TaskList = ({ taskList, tasks, refetch, index }: Props) => {
                 flex={1}
                 overflowY="auto"
               >
-                {tasks.map((task, index) => (
-                  <Task
-                    isDraggable={collabData?.collab?.isOwner}
-                    showComments={selectedTaskId === task.id}
-                    toggleComments={() =>
-                      setSelectedTaskId(prevState =>
-                        prevState === task.id ? null : task.id,
-                      )
-                    }
-                    key={task.id}
-                    task={task}
-                    index={index}
-                    deleteTask={() =>
-                      deleteTask({ variables: { taskId: task.id } })
-                    }
-                  />
-                ))}
+                <MemoizedTasksWrapper
+                  tasks={tasks}
+                  deleteTask={deleteTask}
+                  selectedTaskId={selectedTaskId}
+                  isDraggable={Boolean(collabData?.collab?.isOwner)}
+                  setSelectedTaskId={setSelectedTaskId}
+                />
                 {provided.placeholder}
               </Box>
             )}

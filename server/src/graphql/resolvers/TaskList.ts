@@ -4,8 +4,13 @@ import { Resolvers } from '../types'
 
 export const collabTaskListResolver: Resolvers = {
   Query: {
-    taskList: async (root, { collabId }, { models }) =>
-      models.CollabTaskList.findAll({ where: { collabId }, order: ['order'] }),
+    taskList: async (root, { collabId }, { models }) => {
+      const taskList = await models.CollabTaskList.findAll({
+        where: { collabId },
+        order: ['order'],
+      })
+      return { taskList }
+    },
   },
   Mutation: {
     createTaskList: (root, { input }, { user, models }) =>
@@ -23,8 +28,10 @@ export const collabTaskListResolver: Resolvers = {
         where: { taskListId: id },
         order: ['order'],
       }),
-    collab: ({ collabId }, args, { loaders }) =>
-      loaders.collabLoader.load(collabId),
+    collab: async ({ collabId }, args, { loaders }) => {
+      const collab = await loaders.collabLoader.load(collabId)
+      return collab!
+    },
   },
 }
 
