@@ -69,6 +69,11 @@ export class CollabTask extends Model<CollabTask> {
   @Column
   collabId!: string
 
+  @BelongsTo(() => Collab, {
+    foreignKey: 'collabId',
+  })
+  collab!: Collab
+
   @BelongsTo(() => CollabTaskList, {
     foreignKey: 'taskListId',
     onDelete: 'CASCADE',
@@ -85,10 +90,9 @@ export class CollabTask extends Model<CollabTask> {
       where: { collabId, memberId: userId },
     })
 
-    //@FIXME:
-    // if (!isMember) {
-    //   throw new Error('You are not a member of this Collab')
-    // }
+    if (!isMember) {
+      throw new Error('You are not a member of this Collab')
+    }
 
     const taskPosition = await this.count({ where: { taskListId } })
 
@@ -112,7 +116,10 @@ export class CollabTask extends Model<CollabTask> {
     if (!task) {
       throw new Error('Task not found')
     }
-    //FIXME: validate
+
+    if (task.authorId !== userId) {
+      throw new Error('You are not the author of this Task')
+    }
 
     return task.update({
       description,
@@ -127,13 +134,21 @@ export class CollabTask extends Model<CollabTask> {
   ) {
     const { taskId, assigneeId } = input
 
-    const task = await this.findByPk(taskId)
+    const task = await this.findByPk(taskId, {
+      include: [
+        {
+          model: Collab,
+          where: {
+            ownerId: userId,
+          },
+        },
+      ],
+    })
 
     if (!task) {
-      throw new Error('Task not found')
+      throw new Error('Task not found or you are not the owner of this Collab')
     }
 
-    //FIXME: add validation
     return task.update({ assignedById: userId, assigneeId })
   }
 
@@ -144,11 +159,21 @@ export class CollabTask extends Model<CollabTask> {
     const { taskListId, oldTaskPosition, newTaskPosition } = input
 
     const task = await this.findOne({
-      where: { taskListId, order: oldTaskPosition },
+      where: {
+        where: { taskListId, order: oldTaskPosition },
+      },
+      include: [
+        {
+          model: Collab,
+          where: {
+            ownerId: userId,
+          },
+        },
+      ],
     })
 
     if (!task) {
-      throw new Error('Task not found')
+      throw new Error('Task not found or you are not the owner of this Collab')
     }
 
     return this.sequelize!.transaction(async () => {
@@ -225,16 +250,13 @@ export class CollabTask extends Model<CollabTask> {
   }
 
   static async deleteTask(taskId: string, userId: string) {
-    const task = await this.findByPk(taskId)
+    const task = await this.findByPk(taskId, {
+      include: [{ model: Collab, where: { ownerId: userId } }],
+    })
 
     if (!task) {
-      throw new Error('Task not found')
+      throw new Error('Task not found or you are not the owner of this collab')
     }
-
-    //FIXME:
-    // if (task.authorId !== userId) {
-    //   throw new Error('You are not the author of this Task')
-    // }
 
     return this.sequelize!.transaction(async () => {
       await task.destroy()

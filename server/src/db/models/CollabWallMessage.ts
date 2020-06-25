@@ -18,6 +18,7 @@ import {
   CollabWallMessagesInput,
 } from '../../graphql/types'
 import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
+import { CollabMember } from './CollabMember'
 
 @Table({ tableName: 'collab_wall_messages', updatedAt: false })
 export class CollabWallMessage extends Model<CollabWallMessage> {
@@ -49,7 +50,13 @@ export class CollabWallMessage extends Model<CollabWallMessage> {
   creationDate!: Date
 
   static async createMessage(input: CreateWallMessageInput, authorId: string) {
-    //  check if is a member of the collab
+    const isMember = await CollabMember.findOne({
+      where: { collabId: input.collabId, memberId: authorId },
+    })
+
+    if (!isMember) {
+      throw new Error('You are not a member of this collab')
+    }
 
     return this.create({ ...input, authorId })
   }
@@ -66,13 +73,6 @@ export class CollabWallMessage extends Model<CollabWallMessage> {
 
   static async getMessages(input: CollabWallMessagesInput, userId: string) {
     const { collabId, offset, limit } = input
-
-    // FIXME: uncomment validation
-    // const isMember = await CollabMember.findOne({ where: { collabId, memberId: userId}})
-
-    // if (!isMember) {
-    //   throw new Error('You are not a member of this collab')
-    // }
 
     const messages = await this.findAll({
       where: {

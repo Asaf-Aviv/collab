@@ -31,7 +31,6 @@ export class CollabTaskList extends Model<CollabTaskList> {
   @Column
   name!: string
 
-  //FIXME: figure out how to update unique order
   @Column
   order!: number
 
@@ -52,14 +51,13 @@ export class CollabTaskList extends Model<CollabTaskList> {
       throw new Error('Collab not found')
     }
 
-    //FIXME:
-    // if (ownerId !== collab.ownerId) {
-    //   throw new Error('You have no permissions to create a task list')
-    // }
+    if (ownerId !== collab.ownerId) {
+      throw new Error('You have no permissions to create a Tasklist')
+    }
+
     const nextPosition = await this.count({
       where: { collabId: input.collabId },
     })
-    input.name += nextPosition
 
     return CollabTaskList.create({
       ...input,
@@ -71,16 +69,19 @@ export class CollabTaskList extends Model<CollabTaskList> {
     { taskListId, name }: UpdateTaskListNameInput,
     userId: string,
   ) {
-    const taskList = await this.findByPk(taskListId)
+    const taskList = await this.findByPk(taskListId, {
+      attributes: [],
+      include: [
+        {
+          model: Collab,
+          where: { ownerId: userId },
+        },
+      ],
+    })
 
     if (!taskList) {
-      throw new Error('Task list not found')
+      throw new Error('Tasklist not found')
     }
-
-    //FIXME:
-    // if (ownerId !== collab.ownerId) {
-    //   throw new Error('You have no permissions to create a task list')
-    // }
 
     return taskList.update({ name })
   }
@@ -97,10 +98,15 @@ export class CollabTaskList extends Model<CollabTaskList> {
       attributes: ['ownerId'],
     })
 
-    //FIXME:
-    // if (collab.ownerId !== userId) {
-    //   throw new Error('You have no permissionsto edit the order of the tasks list')
-    // }
+    if (!collab) {
+      throw new Error('Collab not found')
+    }
+
+    if (collab.ownerId !== userId) {
+      throw new Error(
+        'You have no permissionsto edit the order of the tasklists',
+      )
+    }
 
     const taskList = await this.findOne({
       where: { collabId, order: oldTaskListPosition },
@@ -145,13 +151,12 @@ export class CollabTaskList extends Model<CollabTaskList> {
   static async deleteTaskList(taskListId: string, ownerId: string) {
     const taskList = await CollabTaskList.findByPk(taskListId, {
       attributes: ['id', 'order', 'collabId'],
-      //FIXME: dont forget to uncomment
-      // include: [
-      //   {
-      //     model: Collab,
-      //     where: { ownerId },
-      //   },
-      // ],
+      include: [
+        {
+          model: Collab,
+          where: { ownerId },
+        },
+      ],
     })
 
     if (!taskList) {

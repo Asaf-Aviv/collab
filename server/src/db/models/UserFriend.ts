@@ -8,6 +8,7 @@ import {
   BelongsTo,
   Default,
   IsUUID,
+  Index,
 } from 'sequelize-typescript'
 import { v4 as uuid } from 'uuid'
 import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
@@ -22,7 +23,7 @@ export class UserFriend extends Model<UserFriend> {
   @Column
   id!: string
 
-  @PrimaryKey
+  @Index
   @ForeignKey(() => User)
   @Column
   userId!: string
@@ -30,7 +31,6 @@ export class UserFriend extends Model<UserFriend> {
   @BelongsTo(() => User, { foreignKey: 'userId', onDelete: 'CASCADE' })
   user!: User
 
-  @PrimaryKey
   @ForeignKey(() => User)
   @Column
   friendId!: string
@@ -39,7 +39,12 @@ export class UserFriend extends Model<UserFriend> {
   friend!: User
 
   static async createFriendship(friendId: string, userId: string) {
-    //FIXME: add validation
+    const exist = this.findOne({ where: { userId, friendId } })
+
+    if (exist) {
+      throw new Error('Friendship exist already')
+    }
+
     return this.sequelize!.transaction(async () => {
       await UserFriendRequest.deleteFriendRequest(userId, friendId)
       // creates a row for each side of the friendship
@@ -56,8 +61,6 @@ export class UserFriend extends Model<UserFriend> {
   }
 
   static async deleteFriendship(friendId: string, userId: string) {
-    //FIXME: add validation
-    // delete both rows of the friendship
     await this.destroy({
       where: {
         [Op.or]: [
