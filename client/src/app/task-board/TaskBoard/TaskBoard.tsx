@@ -110,7 +110,7 @@ export const TaskBoard = () => {
       return
     }
 
-    // if a task has been reordered in the same task list
+    // if a task has been reordered in the same tasklist
     if (destination.droppableId === source.droppableId) {
       const tasklistId = destination.droppableId
       const oldTaskPosition = source.index
@@ -174,15 +174,51 @@ export const TaskBoard = () => {
     }
 
     // task has been moved to another task list
+    const oldTaskListId = source.droppableId
+    const newTaskListId = destination.droppableId
+    const oldTaskPosition = source.index
+    const newTaskPosition = destination.index
+
     moveTaskToList({
       variables: {
         input: {
-          oldTaskListId: source.droppableId,
-          newTaskListId: destination.droppableId,
-          oldTaskPosition: source.index,
-          newTaskPosition: destination.index,
+          oldTaskListId,
+          newTaskListId,
+          oldTaskPosition,
+          newTaskPosition,
         },
       },
+    })
+
+    const taskListData = client.readQuery<TaskListQuery>({
+      query: TaskListDocument,
+      variables: { collabId },
+    })!
+
+    const updatedTaskList = produce(taskListData, draft => {
+      const oldTasklist = draft.taskList.taskList.find(
+        ({ id }) => id === oldTaskListId,
+      )
+      const task = oldTasklist!.tasks.splice(oldTaskPosition, 1)[0]
+
+      oldTasklist!.tasks.forEach((task, i) => {
+        task.order = i
+      })
+
+      const newTasklist = draft.taskList.taskList.find(
+        ({ id }) => id === newTaskListId,
+      )
+      newTasklist!.tasks.splice(newTaskPosition, 0, task)
+
+      newTasklist!.tasks.forEach((task, i) => {
+        task.order = i
+      })
+    })
+
+    client.writeQuery({
+      query: TaskListDocument,
+      variables: { collabId },
+      data: updatedTaskList,
     })
   }
 

@@ -71,27 +71,29 @@ export const Task = ({
                   <Text pr={10} fontWeight={500} {...provided.dragHandleProps}>
                     Opened by {task.author.username}
                   </Text>
-                  <DotsMenu
-                    iconProps={{
-                      ariaLabel: 'Open Task Options',
-                    }}
-                    position="absolute"
-                    right={0}
-                    top={-3}
-                  >
-                    <StyledOptionMenu>
-                      <IconButtonWithTooltip
-                        ariaLabel="Edit Task"
-                        onClick={() => setIsEditTaskModalOpen(true)}
-                        icon="edit"
-                      />
-                      <IconButtonWithTooltip
-                        ariaLabel="Delete Task"
-                        onClick={() => deleteTask()}
-                        icon="delete"
-                      />
-                    </StyledOptionMenu>
-                  </DotsMenu>
+                  {isDraggable && (
+                    <DotsMenu
+                      iconProps={{
+                        ariaLabel: 'Open Task Options',
+                      }}
+                      position="absolute"
+                      right={0}
+                      top={-3}
+                    >
+                      <StyledOptionMenu>
+                        <IconButtonWithTooltip
+                          ariaLabel="Edit Task"
+                          onClick={() => setIsEditTaskModalOpen(true)}
+                          icon="edit"
+                        />
+                        <IconButtonWithTooltip
+                          ariaLabel="Delete Task"
+                          onClick={() => deleteTask()}
+                          icon="delete"
+                        />
+                      </StyledOptionMenu>
+                    </DotsMenu>
+                  )}
                 </Flex>
                 {task.assignee && (
                   <Heading mt={2} size="sm" fontWeight={500}>
