@@ -8,6 +8,7 @@ import {
   IsUUID,
   Default,
 } from 'sequelize-typescript'
+import { Op } from 'sequelize'
 import { v4 as uuid } from 'uuid'
 import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 import { User } from './User'
@@ -38,7 +39,22 @@ export class UserFriendRequest extends Model<UserFriendRequest> {
   receiver!: User
 
   static async createFriendRequest(receiverId: string, senderId: string) {
-    //FIXME: check if there is already a request from the receiver
+    const exist = await this.findOne({
+      where: {
+        [Op.or]: [
+          {
+            senderId,
+            receiverId,
+          },
+          { senderId: receiverId, receiverId: senderId },
+        ],
+      },
+    })
+
+    if (exist) {
+      throw new Error('There is already a request pending')
+    }
+
     return this.create({ receiverId, senderId }, { raw: true })
   }
 

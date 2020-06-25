@@ -13,6 +13,7 @@ import { DisplayDate } from '../../../components/DisplayDate'
 import { Loader } from '../../../components/Loader'
 import { useOnVisibilty } from '../../../hooks/useOnVisibilty'
 import { DotsMenu } from '../../../components/DotsMenu/Index'
+import { useToastNotification } from '../../notifications'
 
 export const Wall = () => {
   const { collabId } = useParams<{ collabId: string }>()
@@ -34,6 +35,7 @@ export const Wall = () => {
   })
   const loadNextPageTriggerRef = useRef<HTMLSpanElement | null>(null)
   const [messageInput, setMessageInput] = useState('')
+  const notify = useToastNotification()
   const [createMessage] = useCreateWallMessageMutation({
     variables: {
       input: {
@@ -44,6 +46,12 @@ export const Wall = () => {
     onCompleted() {
       refetch()
       setMessageInput('')
+    },
+    onError({ message }) {
+      notify('error', {
+        title: 'Error',
+        message,
+      })
     },
   })
   const [deleteMessage] = useDeleteWallMessageMutation({
@@ -126,11 +134,12 @@ export const Wall = () => {
                   mr={2}
                   {...message.author}
                 />
-                <DisplayDate date={message.creationDate} />
+                <DisplayDate lineHeight={2} date={message.creationDate} />
               </Flex>
               {message.isAuthor && (
                 <DotsMenu iconProps={{ ariaLabel: 'Message Options' }}>
                   <Button
+                    size="sm"
                     onClick={() =>
                       deleteMessage({ variables: { messageId: message.id } })
                     }

@@ -63,10 +63,9 @@ export class CollabDiscussionThreadComment extends Model<
       where: { collabId, memberId: authorId },
     })
 
-    //FIXME:
-    // if (!isMember) {
-    //   throw new Error('You are not a member of this Collab')
-    // }
+    if (!isMember) {
+      throw new Error('You are not a member of this Collab')
+    }
 
     return this.create({
       ...input,
