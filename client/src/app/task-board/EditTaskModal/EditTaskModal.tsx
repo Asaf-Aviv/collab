@@ -28,7 +28,7 @@ type TaskListResult = NonNullable<TaskListQuery['taskList']>
 
 type Props = {
   closeModal: () => void
-  task: TaskListResult[0]['tasks'][0]
+  task: TaskListResult['taskList'][0]['tasks'][0]
 }
 
 export const EditTaskModal = ({ closeModal, task }: Props) => {

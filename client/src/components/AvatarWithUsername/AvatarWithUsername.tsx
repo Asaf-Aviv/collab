@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom'
 import { getAvatarUrl } from '../../utils'
 
 type Props = BoxProps &
-  Pick<User, 'id' | 'username' | 'avatar'> & {
+  Pick<User, 'id' | 'username'> & {
+    avatar: string | null | undefined
     fontSize?: string
     size?: AvatarProps['size']
     className?: string
@@ -13,8 +14,8 @@ type Props = BoxProps &
 
 export const AvatarWithUsername = ({
   id,
-  avatar,
   username,
+  avatar,
   fontSize = '1rem',
   size = 'md',
   ...props

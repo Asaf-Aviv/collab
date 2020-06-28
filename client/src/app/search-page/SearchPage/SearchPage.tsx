@@ -35,6 +35,8 @@ export const SearchPage = () => {
     fetchSearchPosts({
       variables: {
         input: {
+          languages: [],
+          stack: [],
           ...searchInputParams,
           experience: searchInputParams.experience as Experience,
           isNew: searchInputParams.isNew === 'true',

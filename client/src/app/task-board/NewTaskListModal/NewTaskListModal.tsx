@@ -41,7 +41,7 @@ export const NewTaskListModal = ({ closeModal }: Props) => {
         variables: { collabId },
       })!
 
-      const updatedTaskList = taskListData.taskList!.concat({
+      const updatedTaskList = taskListData.taskList!.taskList.concat({
         ...data!.createTaskList,
         tasks: [],
       })

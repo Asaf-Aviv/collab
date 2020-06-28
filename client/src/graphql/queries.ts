@@ -21,6 +21,12 @@ export const GET_CURRENT_USER_FRIENDS = gql`
         id
         username
         avatar
+        bio
+        title
+        country
+        isSelf
+        isFriend
+        canRequestFriendship
       }
     }
   }
@@ -209,6 +215,9 @@ export const GET_USER = gql`
       bio
       title
       country
+      isSelf
+      isFriend
+      canRequestFriendship
     }
   }
 `
@@ -414,6 +423,11 @@ export const GET_COLLAB_MEMBERS = gql`
         username
         bio
         avatar
+        title
+        country
+        isSelf
+        canRequestFriendship
+        isFriend
       }
     }
   }

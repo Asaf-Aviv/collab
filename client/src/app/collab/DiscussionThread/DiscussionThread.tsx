@@ -20,6 +20,7 @@ import { Paper } from '../../../components/global'
 import { PostAuthorHeader } from '../../../components/PostAuthorHeader/PostAuthorHeader'
 import { CommentForm } from '../../../components/CommentForm/CommentForm'
 import { SectionHorizonalHeader } from '../../../components/SectionHorizonalHeader/SectionHorizonalHeader'
+import { useToastNotification } from '../../notifications'
 
 export const DiscussionThread = () => {
   const { collabId, threadId } = useParams<{
@@ -30,15 +31,22 @@ export const DiscussionThread = () => {
   const { data: commentsData, refetch } = useCollabThreadCommentsQuery({
     variables: { threadId },
   })
+  const notify = useToastNotification()
   const [addComment] = useCreateDiscussionThreadCommentMutation({
     onCompleted: () => {
       refetch()
+    },
+    onError: ({ message }) => {
+      notify('error', { title: 'Error', message })
     },
   })
   const [addThreadReaction] = useAddCollabDiscussionThreadReactionMutation({
     refetchQueries: [
       { query: GET_COLLAB_DISCUSSION_THREAD, variables: { threadId } },
     ],
+    onError: ({ message }) => {
+      notify('error', { title: 'Error', message })
+    },
   })
   const [
     removeThreadReaction,
@@ -46,16 +54,25 @@ export const DiscussionThread = () => {
     refetchQueries: [
       { query: GET_COLLAB_DISCUSSION_THREAD, variables: { threadId } },
     ],
+    onError: ({ message }) => {
+      notify('error', { title: 'Error', message })
+    },
   })
   const [addReaction] = useAddDiscussionThreadCommentReactionMutation({
     refetchQueries: [
       { query: GET_COLLAB_DISCUSSION_THREAD_COMMENTS, variables: { threadId } },
     ],
+    onError: ({ message }) => {
+      notify('error', { title: 'Error', message })
+    },
   })
   const [removeReaction] = useRemoveDiscussionThreadCommentReactionMutation({
     refetchQueries: [
       { query: GET_COLLAB_DISCUSSION_THREAD_COMMENTS, variables: { threadId } },
     ],
+    onError: ({ message }) => {
+      notify('error', { title: 'Error', message })
+    },
   })
 
   if (!threadData?.thread) return null

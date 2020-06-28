@@ -20,7 +20,7 @@ import {
 } from '../../../graphql/generates'
 
 type Props = {
-  task: NonNullable<NonNullable<TaskListQuery>['taskList']>[0]
+  task: NonNullable<NonNullable<TaskListQuery>['taskList']['taskList']>[0]
   closeModal: () => void
 }
 
@@ -41,7 +41,7 @@ export const NewTaskListModal = ({ closeModal, task }: Props) => {
         variables: { collabId },
       })!
 
-      const updatedTaskList = taskListData.taskList!.concat({
+      const updatedTaskList = taskListData.taskList!.taskList.concat({
         ...data!.createTaskList,
         tasks: [],
       })

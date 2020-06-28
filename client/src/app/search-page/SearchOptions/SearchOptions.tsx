@@ -103,6 +103,7 @@ export const SearchOptions = () => {
             placeholder=""
             isSearchable
             autoFocus
+            menuIsOpen
             hideSelectedOptions
             value={searchInput.languages!.map(selectedLanguage => ({
               label: selectedLanguage,
@@ -114,9 +115,26 @@ export const SearchOptions = () => {
               label: name,
             }))}
             styles={{
+              control: (base: any, state: any) => ({
+                ...base,
+                borderWidth: 2,
+                '&:hover': {
+                  borderColor: '#cab3ff',
+                },
+                backgroundColor: '#f2f2ff',
+                borderColor:
+                  state.isFocused || state.menuIsOpen
+                    ? '#805ad5 !important'
+                    : 'transparent',
+                boxShadow: 'none',
+              }),
               multiValue: provided => ({
                 ...provided,
                 display: 'none',
+              }),
+              option: (base: any, state) => ({
+                ...base,
+                backgroundColor: state.isFocused ? '#d6bcfa' : 'transparent',
               }),
             }}
           />
@@ -167,6 +185,19 @@ export const SearchOptions = () => {
               Menu: () => null,
             }}
             styles={{
+              control: (base: any, state: any) => ({
+                ...base,
+                borderWidth: 2,
+                '&:hover': {
+                  borderColor: '#cab3ff',
+                },
+                backgroundColor: '#f2f2ff',
+                borderColor:
+                  state.isFocused || state.menuIsOpen
+                    ? '#805ad5 !important'
+                    : 'transparent',
+                boxShadow: 'none',
+              }),
               multiValue: provided => ({
                 ...provided,
                 display: 'none',

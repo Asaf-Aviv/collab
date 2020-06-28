@@ -30,7 +30,7 @@ export const FriendRequestsBallon = () => {
           <IconButtonWithTooltip
             onClick={() => fetchFriendRequests()}
             icon={GroupAddIcon}
-            ariaLabel="Open Friend Requests"
+            ariaLabel="Friend Requests"
           />
         </Badge>
       }

@@ -15,7 +15,7 @@ import { Paper } from '../global'
 import { getAvatarUrl } from '../../utils'
 
 type Props = Omit<PseudoBoxProps, 'title'> &
-  Pick<User, 'id' | 'avatar' | 'username' | 'bio' | 'title' | 'country'> & {
+  Omit<User, 'firstName' | 'lastName' | 'collabs'> & {
     dotsMenu?: React.ReactNode
   }
 
@@ -27,6 +27,9 @@ export const UserCard = ({
   dotsMenu,
   title,
   country,
+  isSelf,
+  canRequestFriendship,
+  isFriend,
   ...props
 }: Props) => {
   return (

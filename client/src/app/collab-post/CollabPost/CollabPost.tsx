@@ -18,10 +18,12 @@ import { PostComments } from '../PostComments'
 import { MemberInvitationActions } from '../MemberInvitationActions'
 import { Paper } from '../../../components/global'
 import { SectionHorizonalHeader } from '../../../components/SectionHorizonalHeader/SectionHorizonalHeader'
+import { Loader } from '../../../components/Loader'
+import { DisplayError } from '../../../components/DisplayError'
 
 export const CollabPost = () => {
   const { postId } = useParams<{ postId: string }>()
-  const { data, loading, error } = useGetCollabPostQuery({
+  const { data, loading, error, refetch } = useGetCollabPostQuery({
     variables: { postId },
   })
   const [addComment] = useAddCollabPostCommentMutation({
@@ -30,9 +32,24 @@ export const CollabPost = () => {
   const [addReaction] = useAddCollabPostReactionMutation()
   const [removeReaction] = useRemoveCollabPostReactionMutation()
 
-  if (loading) return <h1>loading</h1>
-  if (error) return <h1>Could not fetch post</h1>
-  if (!data?.collabPost) return null
+  if (loading)
+    return (
+      <Container maxWidth={900}>
+        <Loader />
+      </Container>
+    )
+
+  if (error)
+    return (
+      <DisplayError message="Could not fetch post" onClick={() => refetch()} />
+    )
+
+  if (!data?.collabPost)
+    return (
+      <Text textAlign="center" py={2} fontWeight={500}>
+        Post not found
+      </Text>
+    )
 
   const handleCommentSubmit = (content: string) => {
     addComment({
@@ -144,7 +161,6 @@ export const CollabPost = () => {
               </Flex>
             ))}
           </Box>
-          {/* <CollabMembers members={members} /> */}
           <MemberInvitationActions {...memberRequestsInfo} />
         </Flex>
         <section>
