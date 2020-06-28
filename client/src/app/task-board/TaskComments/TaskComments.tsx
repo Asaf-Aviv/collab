@@ -11,15 +11,23 @@ import { ReactionPanel } from '../../../components/ReactionPanel/ReactionPanel'
 import { Loader } from '../../../components/Loader'
 import { AvatarWithUsername } from '../../../components/AvatarWithUsername'
 import { DisplayError } from '../../../components/DisplayError'
+import { useToastNotification } from '../../notifications'
 
 export const TaskComments = ({ taskId }: { taskId: string }) => {
   const { collabId } = useParams<{ collabId: string }>()
+  const notify = useToastNotification()
   const [commentInput, setCommentInput] = useState('')
   const { data, loading, error, refetch } = useTaskCommentsQuery({
     variables: { taskId },
   })
   const [addReaction] = useAddTaskCommentReactionMutation({
     onCompleted: () => refetch(),
+    onError: ({ message }) => {
+      notify('error', {
+        title: 'Error',
+        message,
+      })
+    },
   })
   const [removeReaction] = useRemoveTaskCommentReactionMutation({
     onCompleted: () => refetch(),
@@ -35,6 +43,12 @@ export const TaskComments = ({ taskId }: { taskId: string }) => {
     onCompleted: () => {
       refetch()
       setCommentInput('')
+    },
+    onError: ({ message }) => {
+      notify('error', {
+        title: 'Error',
+        message,
+      })
     },
   })
 

@@ -139,7 +139,7 @@ export const Notifications = () => {
         <Badge count={currentUser.notificationsCount}>
           <IconButtonWithTooltip
             onClick={() => fetchNotifications()}
-            ariaLabel="Open Notifications"
+            ariaLabel="Notifications"
             icon={NotificationsIcon}
           />
         </Badge>

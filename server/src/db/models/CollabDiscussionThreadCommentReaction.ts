@@ -6,6 +6,8 @@ import { Table, ForeignKey, Column, BelongsTo } from 'sequelize-typescript'
 import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 import { Reaction } from './Reaction'
 import { CollabDiscussionThreadComment } from './CollabDiscussionThreadComment'
+import { Collab } from './Collab'
+import { CollabMember } from './CollabMember'
 
 @Table({
   tableName: 'collab_discussion_thread_comment_reactions',
@@ -27,22 +29,40 @@ export class CollabDiscussionThreadCommentReaction extends Reaction {
       userId: string
     },
   ) {
+    const comment = await CollabDiscussionThreadComment.findByPk(
+      reaction.commentId,
+    )
+
+    if (!comment) {
+      throw new Error('Comment not found')
+    }
+
+    const isMember = await CollabMember.findOne({
+      where: { collabId: comment.collabId, memberId: reaction.userId },
+    })
+
+    if (!isMember) {
+      throw new Error('You are not a member of this Collab')
+    }
+
     await this.create(reaction)
     return true
   }
 
   static async deleteReaction(
-    reaction: RemoveDiscussionThreadCommentReactionInput & {
+    reactionInput: RemoveDiscussionThreadCommentReactionInput & {
       userId: string
     },
   ) {
-    const isDeleted = await this.destroy({
-      where: reaction,
+    const reaction = await this.findOne({
+      where: reactionInput,
     })
 
-    if (!isDeleted) {
-      throw new Error('Unable to delete reaction')
+    if (!reaction) {
+      throw new Error('Reaction not found')
     }
+
+    await reaction.destroy()
 
     return true
   }

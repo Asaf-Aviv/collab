@@ -102,7 +102,7 @@ export const Chat = ({ isMinimized, toggleMinimize }: Props) => {
                 icon="chat"
                 roundedBottom={0}
               />
-              {totalUnreadCount > -1 && (
+              {totalUnreadCount > 0 && (
                 <Flex
                   align="center"
                   justify="center"
@@ -118,7 +118,7 @@ export const Chat = ({ isMinimized, toggleMinimize }: Props) => {
                   bg="#c70707"
                 >
                   <Text as="span" userSelect="none">
-                    4
+                    {totalUnreadCount}
                   </Text>
                 </Flex>
               )}

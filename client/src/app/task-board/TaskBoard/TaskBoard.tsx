@@ -131,10 +131,6 @@ export const TaskBoard = () => {
         variables: { collabId },
       })!
 
-      console.log(
-        taskListData.taskList.taskList.find(({ id }) => id === tasklistId),
-      )
-
       const updatedTaskList = produce(taskListData, draft => {
         const tasklist = draft.taskList.taskList.find(
           ({ id }) => id === tasklistId,
@@ -159,10 +155,6 @@ export const TaskBoard = () => {
         modifiedTask!.order = newTaskPosition
         tasklist!.tasks.sort((a, b) => a.order - b.order)
       })
-
-      console.log(
-        updatedTaskList.taskList.taskList.find(({ id }) => id === tasklistId),
-      )
 
       client.writeQuery({
         query: TaskListDocument,

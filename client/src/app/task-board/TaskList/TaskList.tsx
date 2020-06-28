@@ -55,11 +55,13 @@ const TaskList = ({ taskList, tasks, refetch, index }: Props) => {
     onCompleted: () => refetch(),
   })
 
+  const isOwner = collabData?.collab?.isOwner
+
   return (
     <Draggable
       draggableId={taskList.id}
       index={index}
-      isDragDisabled={!collabData?.collab?.isOwner}
+      isDragDisabled={!isOwner}
     >
       {provided => (
         <Flex
@@ -79,29 +81,33 @@ const TaskList = ({ taskList, tasks, refetch, index }: Props) => {
             <Heading {...provided.dragHandleProps} size="sm" mb={2} p={2}>
               {taskList.name}
             </Heading>
-            <DotsMenu iconProps={{ ariaLabel: 'Open Tasklist Options' }}>
-              <StyledOptionMenu>
-                <IconButtonWithTooltip
-                  ariaLabel="Create Task"
-                  onClick={() => setIsNewTaskModalOpen(true)}
-                  icon="add"
-                />
-                <IconButtonWithTooltip
-                  ariaLabel="Delete Tasklist"
-                  onClick={() => deleteTaskList()}
-                  icon="delete"
-                />
-                <EditTaskListNamePopover
-                  taskListId={taskList.id}
-                  taskListName={taskList.name}
-                />
-              </StyledOptionMenu>
-            </DotsMenu>
-            {isNewTaskModalOpen && (
-              <NewTaskModal
-                closeModal={() => setIsNewTaskModalOpen(false)}
-                taskListId={taskList.id}
-              />
+            {isOwner && (
+              <>
+                <DotsMenu iconProps={{ ariaLabel: 'Tasklist Options' }}>
+                  <StyledOptionMenu>
+                    <IconButtonWithTooltip
+                      ariaLabel="Create Task"
+                      onClick={() => setIsNewTaskModalOpen(true)}
+                      icon="add"
+                    />
+                    <IconButtonWithTooltip
+                      ariaLabel="Delete Tasklist"
+                      onClick={() => deleteTaskList()}
+                      icon="delete"
+                    />
+                    <EditTaskListNamePopover
+                      taskListId={taskList.id}
+                      taskListName={taskList.name}
+                    />
+                  </StyledOptionMenu>
+                </DotsMenu>
+                {isNewTaskModalOpen && (
+                  <NewTaskModal
+                    closeModal={() => setIsNewTaskModalOpen(false)}
+                    taskListId={taskList.id}
+                  />
+                )}
+              </>
             )}
           </Flex>
           <Droppable droppableId={taskList.id} type="task">

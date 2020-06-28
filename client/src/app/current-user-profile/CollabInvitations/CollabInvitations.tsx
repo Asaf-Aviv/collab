@@ -43,15 +43,15 @@ export const CollabInvitations = () => {
     refetch,
   } = useGetCurrentUserCollabInvitationsQuery()
   const [acceptInvitation] = useAcceptCollabInvitationMutation({
-    update(store, response) {
-      if (!response.data) return
-      removeInvitationFromCache(store, response.data.acceptCollabInvitation)
+    update(store, { data }) {
+      if (!data) return
+      removeInvitationFromCache(store, data.acceptCollabInvitation)
     },
   })
   const [declineInvitation] = useDeclineCollabInvitationMutation({
-    update(store, response) {
-      if (!response.data) return
-      removeInvitationFromCache(store, response.data.declineCollabInvitation)
+    update(store, { data }) {
+      if (!data) return
+      removeInvitationFromCache(store, data.declineCollabInvitation)
     },
   })
 

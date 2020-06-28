@@ -160,7 +160,8 @@ export class CollabTask extends Model<CollabTask> {
 
     const task = await this.findOne({
       where: {
-        where: { taskListId, order: oldTaskPosition },
+        taskListId,
+        order: oldTaskPosition,
       },
       include: [
         {

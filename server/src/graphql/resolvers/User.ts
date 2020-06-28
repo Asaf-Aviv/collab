@@ -258,9 +258,9 @@ export const userResolver: Resolvers = {
       }
       return false
     },
+    isSelf: ({ id }, args, { user }) => user?.id === id,
     canRequestFriendship: async ({ id }, args, { models, user }) => {
-      if (!user) return true
-      if (user.id === id) return false
+      if (!user || user?.id === id) return false
 
       const friendRequest = await models.UserFriendRequest.findOne({
         where: {
@@ -270,13 +270,10 @@ export const userResolver: Resolvers = {
           ],
         },
       })
+
       return !friendRequest
     },
   },
-  // CollabRequest: {
-  //   member: {},
-  //   collab:: {}
-  // },
 }
 
 export const userMiddleware = {

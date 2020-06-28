@@ -79,7 +79,7 @@ export const CurrentUserManager = ({ children }: Props) => {
   return (
     <CurrentUserManagerContext.Provider
       value={{
-        user: data?.currentUser,
+        user: data?.currentUser ?? null,
         getCurrentUser,
         logout,
       }}

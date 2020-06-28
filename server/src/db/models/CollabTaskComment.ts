@@ -51,13 +51,13 @@ export class CollabTaskComment extends Model<CollabTaskComment> {
       CollabMember.findOne({ where: { collabId, memberId: userId } }),
     ])
 
-    // if (!task) {
-    //   throw new Error('Task not found')
-    // }
+    if (!task) {
+      throw new Error('Task not found')
+    }
 
-    // if (!isMemberOfCollab) {
-    //   throw new Error('You are not a member of this Collab')
-    // }
+    if (!isMemberOfCollab) {
+      throw new Error('You are not a member of this Collab')
+    }
 
     return this.create({
       taskId,

@@ -74,7 +74,7 @@ export const Task = ({
                   {isDraggable && (
                     <DotsMenu
                       iconProps={{
-                        ariaLabel: 'Open Task Options',
+                        ariaLabel: 'Task Options',
                       }}
                       position="absolute"
                       right={0}
@@ -108,7 +108,7 @@ export const Task = ({
                   />
                 )}
                 <CommentsButton
-                  aria-label="Open Comments"
+                  aria-label="Comments"
                   onClick={() => toggleComments()}
                 >
                   {task.commentsCount} Comments
