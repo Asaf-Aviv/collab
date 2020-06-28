@@ -10,7 +10,7 @@ import {
   Box,
   PopoverCloseButton,
 } from '@chakra-ui/core'
-import styled from '@emotion/styled'
+import styled from '@emotion/styled/macro'
 import { Loader } from '../Loader'
 import { IconButton } from '../global'
 

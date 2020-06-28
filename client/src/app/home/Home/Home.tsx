@@ -53,7 +53,7 @@ export const Home = () => {
           </Box>
         </Flex>
       </Container>
-      <StyledBox>
+      <Box>
         <Container>
           <FeatureSection
             title="Task Board"
@@ -61,7 +61,7 @@ export const Home = () => {
             svg={TaskBoardSvg}
           />
         </Container>
-        <Container>
+        <Container bg="#582398">
           <FeatureSection
             title="Make Friends"
             text="Make new friends from all around the world!"
@@ -76,7 +76,7 @@ export const Home = () => {
             svg={FeedbackSvg}
           />
         </Container>
-        <Container>
+        <Container bg="#582398">
           <FeatureSection
             title="Showcase"
             text="Launch your app and show the community what you have built together!"
@@ -114,7 +114,7 @@ export const Home = () => {
             </Button>
           </Flex>
         </Container>
-      </StyledBox>
+      </Box>
     </>
   )
 }
@@ -132,7 +132,7 @@ const FeatureSection = ({
   text,
   textColor,
 }: Props) => (
-  <StyledSection maxWidth={900} m="0 auto" h={['auto', 'auto', 400]}>
+  <Box maxWidth={900} m="0 auto" h={['auto', 'auto', 400]}>
     <StyledFlex
       py={8}
       direction={['column', 'column', 'row']}
@@ -157,14 +157,8 @@ const FeatureSection = ({
       </Stack>
       <SvgComponent />
     </StyledFlex>
-  </StyledSection>
+  </Box>
 )
-
-const StyledBox = styled.div`
-  ${Container}:nth-of-type(even) {
-    background-color: #582398;
-  }
-`
 
 const StyledTriangle = styled.svg<{ [k: string]: any }>`
   clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
@@ -193,23 +187,10 @@ const Circle = styled.div<{ [k: string]: any }>`
   border-radius: 50%;
 `
 
-const StyledSection = styled(Box)`
-  /* background: #fff;
-  box-shadow: 2px 6px 15px 0 rgba(219, 195, 255, 0.38);
-  padding: 2.5rem;
-  border-top: 5px solid #964cff;
-  border-radius: 6px;
-  &:not(:first-of-type) {
-    margin-top: 2.5rem;
-  } */
-`
-
 const StyledFlex = styled(Flex)`
   align-items: center;
   flex-direction: column;
   > svg {
     flex: 1;
-    /* height: 100%; */
-    /* width: 30%; */
   }
 `
