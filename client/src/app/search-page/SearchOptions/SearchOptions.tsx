@@ -103,7 +103,6 @@ export const SearchOptions = () => {
             placeholder=""
             isSearchable
             autoFocus
-            menuIsOpen
             hideSelectedOptions
             value={searchInput.languages!.map(selectedLanguage => ({
               label: selectedLanguage,
