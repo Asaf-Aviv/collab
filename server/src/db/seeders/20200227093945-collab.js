@@ -1,4 +1,4 @@
-const uuid = require('uuid/v4')
+const { v4: uuid } = require('uuid')
 const faker = require('faker')
 const {
   seededCollabs,
@@ -13,54 +13,58 @@ const createTaskList = (index, collabId) => ({
   id: uuid(),
   collab_id: collabId,
   name: faker.random.words(_.random(1, 3)),
-  order: index + 1,
+  order: index,
 })
 
 const createRandomTaskListLength = collabId =>
   [...Array(_.random(1, 6)).keys()].map(index =>
-    createTaskList(index, collabId)
+    createTaskList(index, collabId),
   )
 
 const collabTaskLists = _.flatten(
-  seededCollabs.map(({ id }) => createRandomTaskListLength(id))
+  seededCollabs.map(({ id }) => createRandomTaskListLength(id)),
 )
 
-const createCollabTask = listId => ({
+const createCollabTask = (listId, collabId, index) => ({
   id: uuid(),
   task_list_id: listId,
+  collab_id: collabId,
   author_id: seededCollabs.find(
-    x => x.id === collabTaskLists.find(x => x.id === listId).collab_id
+    x => x.id === collabTaskLists.find(x => x.id === listId).collab_id,
   ).owner_id,
   description: faker.random.words(_.random(5, 15)),
   updated_at: new Date(),
   created_at: new Date(),
+  order: index,
 })
 
-const createRandomTaskLength = listId =>
-  [...Array(_.random(3, 12))].map(() => createCollabTask(listId))
+const createRandomTaskLength = (listId, collabId) =>
+  [...Array(_.random(3, 12))].map((_, i) =>
+    createCollabTask(listId, collabId, i),
+  )
 
 const collabTasks = _.flatten(
-  collabTaskLists.map(({ id }) => createRandomTaskLength(id))
+  collabTaskLists.map(({ id, collab_id }) =>
+    createRandomTaskLength(id, collab_id),
+  ),
 )
 
-const createTaskComment = (collab_task_id, author_id) => ({
+const createTaskComment = (task_id, author_id) => ({
   id: uuid(),
-  collab_task_id,
+  task_id,
   author_id,
   content: faker.random.words(_.random(4, 10)),
   updated_at: new Date(),
   created_at: new Date(),
 })
 
-const createRandomTaskCommentLength = (collab_task_id, author_id) =>
-  [...Array(_.random(2, 6))].map(() =>
-    createTaskComment(collab_task_id, author_id)
-  )
+const createRandomTaskCommentLength = (task_id, author_id) =>
+  [...Array(_.random(2, 6))].map(() => createTaskComment(task_id, author_id))
 
 const collabTaskComments = _.flatten(
   collabTasks.map(({ id, author_id }) =>
-    createRandomTaskCommentLength(id, author_id)
-  )
+    createRandomTaskCommentLength(id, author_id),
+  ),
 )
 
 module.exports = {
@@ -68,40 +72,43 @@ module.exports = {
     queryInterface
       .bulkInsert({ tableName: 'collabs' }, seededCollabs)
       .then(() =>
-        queryInterface.bulkInsert({ tableName: 'collab_members' }, collabOwners)
+        queryInterface.bulkInsert(
+          { tableName: 'collab_members' },
+          collabOwners,
+        ),
       )
       .then(() =>
         queryInterface.bulkInsert(
           { tableName: 'collab_member_requests' },
-          allInvites
-        )
+          allInvites,
+        ),
       )
       .then(() =>
         queryInterface.bulkInsert(
           { tableName: 'collab_task_list' },
-          collabTaskLists
-        )
+          collabTaskLists,
+        ),
       )
       .then(() =>
-        queryInterface.bulkInsert({ tableName: 'collab_tasks' }, collabTasks)
+        queryInterface.bulkInsert({ tableName: 'collab_tasks' }, collabTasks),
       )
       .then(() =>
         queryInterface.bulkInsert(
           { tableName: 'collab_task_comments' },
-          collabTaskComments
-        )
+          collabTaskComments,
+        ),
       )
       .then(() =>
         queryInterface.bulkInsert(
           { tableName: 'collab_discussion_threads' },
-          collabThreads
-        )
+          collabThreads,
+        ),
       )
       .then(() =>
         queryInterface.bulkInsert(
           { tableName: 'collab_discussion_thread_comments' },
-          threadComments
-        )
+          threadComments,
+        ),
       )
       .catch(err => {
         console.log(err.message)

@@ -1,11 +1,15 @@
 schema: ./src/graphql/typeDefs/*.ts
-documents: '../client/src/components/**/*.tsx'
+documents:
+  - '../client/src/graphql/queries.ts'
+  - '../client/src/graphql/mutations.ts'
+  - '../client/src/graphql/subscriptions.ts'
 watch: true
 require: ts-node/register/transpile-only
 generates:
   ./src/graphql/types.d.ts:
     plugins:
       - typescript
+      - typescript-operations
       - typescript-resolvers:
     config:
       mappers:
@@ -18,6 +22,8 @@ generates:
         TaskComment: '../db/models/CollabTaskComment#GQLCollabTaskComment'
         TaskList: '../db/models/CollabTaskList#GQLCollabTaskList'
         User: '../db/models/User#GQLUser'
+        PrivateMessage: '../db/models/PrivateMessage#GQLPrivateMessage'
+        WallMessage: '../db/models/CollabWallMessage#GQLWallMessage'
       useIndexSignature: true
       contextType: ./context/CollabContext#CollabContext
       fieldContextTypes:
@@ -55,3 +61,4 @@ generates:
       withHooks: true
       withHOC: false
       withComponent: false
+      avoidOptionals: true

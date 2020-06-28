@@ -15,9 +15,10 @@ import {
   Validate,
   BeforeValidate,
 } from 'sequelize-typescript'
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid'
 import bcrypt from 'bcrypt'
 import {
+  Op,
   HasManyGetAssociationsMixin,
   HasManyAddAssociationMixin,
   HasManyHasAssociationMixin,
@@ -29,12 +30,21 @@ import { Collab } from './Collab'
 import { passwordRegex } from '../../utils'
 import { CollabMemberRequest } from './CollabMemberRequest'
 import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
+import { CollabPostReaction } from './CollabPostReaction'
+import { CollabTask } from './CollabTask'
+import { UserFriend } from './UserFriend'
+import { UserFriendRequest } from './UserFriendRequest'
+import { Notification } from './Notification'
 
 @DefaultScope(() => ({
   attributes: { exclude: ['password'] },
 }))
 @Table({ tableName: 'users', timestamps: true })
 export class User extends Model<User> {
+  // GQL computed fields
+  isFriend!: boolean
+  canRequestFriendship!: boolean
+
   @IsUUID(4)
   @PrimaryKey
   @Default(uuid)
@@ -59,6 +69,10 @@ export class User extends Model<User> {
   @Column(DataType.CITEXT)
   username!: string
 
+  @Default('')
+  @Column
+  bio!: string
+
   @Validate({
     is: {
       args: passwordRegex,
@@ -70,8 +84,37 @@ export class User extends Model<User> {
   @Column
   password!: string
 
+  @Default(null)
   @Column
   avatar!: string
+
+  @Default('')
+  @Column
+  firstName!: string
+
+  @Default('')
+  @Column
+  lastName!: string
+
+  // the users engineering title
+  @Default('')
+  @Column
+  title!: string
+
+  @Column
+  country!: string
+
+  @Default('')
+  @Column
+  github!: string
+
+  @Default('')
+  @Column
+  twitter!: string
+
+  @Default('')
+  @Column
+  linkedin!: string
 
   @Unique({
     msg: 'Email is already taken',
@@ -84,11 +127,26 @@ export class User extends Model<User> {
   @HasMany(() => Collab)
   collabs!: Collab[]
 
+  @HasMany(() => CollabTask, { foreignKey: 'assigneeId' })
+  tasks!: CollabTask[]
+
   @HasMany(() => CollabMemberRequest)
   collabInvites!: Collab[]
 
   @HasMany(() => CollabMemberRequest)
   collabRequests!: CollabMemberRequest[]
+
+  @HasMany(() => UserFriendRequest, { foreignKey: 'receiverId' })
+  friendRequests!: User[]
+
+  @HasMany(() => UserFriend, { foreignKey: 'userId' })
+  friends!: User[]
+
+  @HasMany(() => CollabPostReaction)
+  reactions!: CollabPostReaction[]
+
+  @HasMany(() => Notification)
+  notifications!: Notification[]
 
   getCollabs!: HasManyGetAssociationsMixin<Collab>
   addCollab!: HasManyAddAssociationMixin<Collab, string>
@@ -116,6 +174,7 @@ export class User extends Model<User> {
     const user = await this.findOne({
       where: { email: email.toLowerCase() },
       attributes: { include: ['password'] },
+      raw: true,
     })
 
     if (!user) {
@@ -142,17 +201,16 @@ export class User extends Model<User> {
   }
 
   static async acceptCollabInvitation(collabId: string, memberId: string) {
+    const invite = await CollabMemberRequest.findOne({
+      where: { collabId, memberId, type: 'invitation' },
+    })
+
+    if (!invite) {
+      throw new Error('Invititation does not exist')
+    }
+
     return this.sequelize!.transaction(async () => {
-      const invite = await CollabMemberRequest.findOne({
-        where: { collabId, memberId, type: 'invitation' },
-      })
-
-      if (!invite) {
-        throw new Error('Invititation does not exist')
-      }
-
-      const [newMember] = await Promise.all([
-        this.findByPk(memberId),
+      await Promise.all([
         invite.destroy(),
         CollabMember.create({
           collabId,
@@ -160,28 +218,52 @@ export class User extends Model<User> {
         }),
       ])
 
-      return newMember!
+      return collabId
     })
   }
 
   static async declineCollabInvitation(collabId: string, memberId: string) {
-    return this.sequelize!.transaction(async () => {
-      const invite = await CollabMemberRequest.findOne({
-        where: { collabId, memberId, type: 'invitation' },
-      })
+    const invite = await CollabMemberRequest.findOne({
+      where: { collabId, memberId, type: 'invitation' },
+    })
 
-      if (!invite) {
-        throw new Error('Invititation does not exist')
-      }
+    if (!invite) {
+      throw new Error('Invititation does not exist')
+    }
 
-      await invite.destroy()
+    await invite.destroy()
 
-      return true
+    return collabId
+  }
+
+  static getAllUserFriends(userId: string) {
+    return this.findAll({
+      where: { id: { [Op.ne]: userId } },
+      include: [
+        {
+          attributes: [],
+          on: {
+            friend_id: { [Op.col]: 'User.id' },
+            user_id: userId,
+          },
+          model: UserFriend,
+        },
+      ],
+      raw: true,
     })
   }
 }
 
 export type GQLUser = GQLResolverTypes<
   User,
-  'collabInvites' | 'collabRequests' | 'collabs'
->
+  | 'collabInvites'
+  | 'collabRequests'
+  | 'collabs'
+  | 'friendRequests'
+  | 'friends'
+  | 'tasks'
+  | 'reactions'
+> & {
+  isFriend: boolean
+  canRequestFriendship: boolean
+}

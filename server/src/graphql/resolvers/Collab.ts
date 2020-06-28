@@ -2,6 +2,8 @@ import { isAuthenticated } from './../middleware/isAuthenticated'
 import { and } from 'graphql-shield'
 import { Resolvers } from '../types'
 import { replaceErrorWithNull } from '../helpers/replaceErrorWithNull'
+import { GQLUser } from '../../db/models/User'
+import { formatNotification } from '../helpers/formatNotification'
 
 export const collabResolver: Resolvers = {
   Query: {
@@ -12,41 +14,94 @@ export const collabResolver: Resolvers = {
   Mutation: {
     deleteCollab: (root, { collabId }, { models }) =>
       models.Collab.deleteCollab(collabId),
-    acceptMemberRequest: (root, { collabId, memberId }, { user, models }) =>
-      models.Collab.acceptMemberRequest(collabId, user.id, memberId),
+    acceptMemberRequest: async (
+      root,
+      { collabId, memberId },
+      { user, models, pubsub },
+    ) => {
+      const { Collab, Notification } = models
+      const requestId = await Collab.acceptMemberRequest(
+        collabId,
+        user.id,
+        memberId,
+      )
+
+      Notification.newCollabMemberNotification(memberId, collabId)
+        .then(notifications =>
+          Promise.all(notifications.map(formatNotification)),
+        )
+        .then(notifications => {
+          notifications.forEach(newNotification => {
+            pubsub.publish('NEW_NOTIFICATION', {
+              newNotification,
+            })
+          })
+        })
+
+      Notification.newMemberRequestApprovedNotification(memberId, collabId)
+        .then(formatNotification)
+        .then(newNotification => {
+          pubsub.publish('NEW_NOTIFICATION', {
+            newNotification,
+          })
+        })
+
+      return requestId
+    },
     removeMember: (root, { collabId, memberId }, { user, models }) =>
       models.Collab.removeMember(collabId, user.id, memberId),
-    inviteMember: (root, { collabId, memberId }, { user, models }) =>
-      models.Collab.inviteMember(user.id, memberId, collabId),
-    requestToJoin: (root, { collabId }, { user, models }) =>
-      models.Collab.requestToJoin(collabId, user.id),
+    inviteMember: async (
+      root,
+      { collabId, memberId },
+      { user, models, pubsub },
+    ) => {
+      const { Collab, Notification } = models
+      const member = await Collab.inviteMember(user.id, memberId, collabId)
+
+      Notification.newCollabMemberInvitationNotification(collabId, memberId)
+        .then(formatNotification)
+        .then(newNotification => {
+          pubsub.publish('NEW_NOTIFICATION', {
+            newNotification,
+          })
+        })
+
+      return member
+    },
+    requestToJoin: async (root, { collabId }, { user, models, pubsub }) => {
+      const { Collab, Notification } = models
+      const request = await Collab.requestToJoin(collabId, user.id)
+      const collab = await Collab.findByPk(request.collabId)
+
+      if (!collab) {
+        throw new Error('Collab not found')
+      }
+
+      Notification.newCollabMemberRequestNotification(
+        collab.ownerId,
+        request.id,
+      )
+        .then(formatNotification)
+        .then(newNotification => {
+          pubsub.publish('NEW_NOTIFICATION', {
+            newNotification,
+          })
+        })
+
+      return true
+    },
     toggleAcceptInvites: (root, { collabId }, { user, models }) =>
       models.Collab.toggleAcceptInvites(collabId, user.id),
     declineMemberRequest: (root, { collabId, memberId }, { user, models }) =>
       models.Collab.declineMemberRequest(collabId, memberId, user.id),
-    createTaskList: (root, { collabId, name, order }, { user, models }) =>
-      models.Collab.createTaskList(collabId, name, order, user.id),
-    deleteTaskList: (root, { taskListId }, { user, models }) =>
-      models.Collab.deleteTaskList(taskListId, user.id),
-    createTaskComment: (
-      root,
-      { collabId, content, taskId },
-      { user, models }
-    ) =>
-      models.CollabTaskComment.createComment(
-        collabId,
-        content,
-        user.id,
-        taskId
-      ),
-    deleteTaskComment: (root, { commentId }, { user, models }) =>
-      models.CollabTaskComment.deleteComment(commentId, user.id),
     cancelRequestToJoin: (root, { collabId }, { user, models }) =>
       models.Collab.cancelRequestToJoin(collabId, user!.id),
   },
   Collab: {
-    owner: async ({ ownerId }, args, { loaders }) =>
-      loaders.userLoader.load(ownerId),
+    owner: async ({ ownerId }, args, { loaders }) => {
+      const collabOwner = await loaders.userLoader.load(ownerId)
+      return collabOwner!
+    },
     isOwner: ({ ownerId }, args, { user }) => user?.id === ownerId,
     isMember: async ({ id }, args, { user, models }) => {
       if (!user?.id) {
@@ -89,7 +144,7 @@ export const collabResolver: Resolvers = {
 
       const memberIds = members.map(({ memberId }) => memberId)
       const users = await loaders.userLoader.loadMany(memberIds)
-      return users.map(replaceErrorWithNull)
+      return users.map(replaceErrorWithNull) as GQLUser[]
     },
     pendingInvites: async ({ id }, args, { models, loaders }) => {
       const pendingInviteMembers = await models.CollabMemberRequest.findAll({
@@ -127,7 +182,5 @@ export const collabMiddleware = {
     requestToJoin: and(isAuthenticated),
     toggleAcceptInvites: and(isAuthenticated),
     declineMemberRequest: and(isAuthenticated),
-    createTaskList: and(isAuthenticated),
-    deleteTaskList: and(isAuthenticated),
   },
 }

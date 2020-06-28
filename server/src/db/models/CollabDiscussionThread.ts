@@ -1,3 +1,4 @@
+import { CreateThreadArgs } from './../../graphql/types.d'
 import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 import {
   Model,
@@ -10,7 +11,7 @@ import {
   IsUUID,
   HasMany,
 } from 'sequelize-typescript'
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid'
 import { Collab } from './Collab'
 import { User } from './User'
 import { CollabMember } from './CollabMember'
@@ -26,6 +27,9 @@ export class CollabDiscussionThread extends Model<CollabDiscussionThread> {
 
   @Column
   title!: string
+
+  @Column
+  content!: string
 
   @ForeignKey(() => Collab)
   @Column
@@ -44,7 +48,8 @@ export class CollabDiscussionThread extends Model<CollabDiscussionThread> {
   @HasMany(() => CollabDiscussionThreadComment)
   comments!: CollabDiscussionThreadComment[]
 
-  static async createThread(title: string, authorId: string, collabId: string) {
+  static async createThread(threadInput: CreateThreadArgs, authorId: string) {
+    const { collabId } = threadInput
     const isMember = await CollabMember.findOne({
       where: { collabId, memberId: authorId },
     })
@@ -53,11 +58,7 @@ export class CollabDiscussionThread extends Model<CollabDiscussionThread> {
       throw new Error('You are not a member of this Collab')
     }
 
-    return this.create({
-      title,
-      authorId,
-      collabId,
-    })
+    return this.create(threadInput)
   }
 
   static async deleteThread(threadId: string, authorId: string) {

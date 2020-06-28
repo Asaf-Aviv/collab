@@ -1,6 +1,6 @@
-const uuid = require('uuid/v4')
+const { v4: uuid } = require('uuid')
 const faker = require('faker')
-const { asaf, seededUsers } = require('../mocks/users')
+const { seededUsers } = require('../mocks/users')
 const _ = require('lodash')
 
 const generageCollab = owner_id => ({
@@ -18,6 +18,7 @@ const seededCollabs = seededUsers.map(user => generageCollab(user.id))
 exports.seededCollabs = seededCollabs
 
 const collabOwners = seededCollabs.map(({ id, owner_id }) => ({
+  id: uuid(),
   collab_id: id,
   is_owner: true,
   member_id: owner_id,
@@ -31,14 +32,15 @@ const memberInvitations = _.flatten(
   seededCollabs.map(({ id, owner_id }) =>
     _.filter(seededUsers, ({ id }) => id !== owner_id).map(
       ({ id: userId }) => ({
+        id: uuid(),
         collab_id: id,
         type: 'invitation',
         member_id: userId,
         updated_at: new Date(),
         created_at: new Date(),
-      })
-    )
-  )
+      }),
+    ),
+  ),
 )
 
 const memberRequests = _.flatten(
@@ -49,18 +51,19 @@ const memberRequests = _.flatten(
         ({ id }) =>
           id !== owner_id &&
           !memberInvitations.find(
-            invite => invite.collab_id === collab_id && invite.member_id === id
-          )
+            invite => invite.collab_id === collab_id && invite.member_id === id,
+          ),
       ),
-      _.random(2, 7)
+      _.random(2, 7),
     ).map(({ id: userId }) => ({
+      id: uuid(),
       collab_id,
       type: 'request',
       member_id: userId,
       updated_at: new Date(),
       created_at: new Date(),
-    }))
-  )
+    })),
+  ),
 )
 
 const allInvites = memberInvitations.concat(memberRequests)
@@ -71,6 +74,7 @@ const createDiscussionThread = (author_id, collab_id) => ({
   title: faker.random.words(_.random(3, 7)),
   author_id,
   collab_id,
+  content: faker.random.words(_.random(10, 20)),
   updated_at: new Date(),
   created_at: new Date(),
 })
@@ -78,9 +82,9 @@ const createDiscussionThread = (author_id, collab_id) => ({
 const collabThreads = _.flatten(
   seededCollabs.map(({ id, owner_id }) =>
     _.take([...Array(_.random(2, 10))]).map(() =>
-      createDiscussionThread(owner_id, id)
-    )
-  )
+      createDiscussionThread(owner_id, id),
+    ),
+  ),
 )
 
 exports.collabThreads = collabThreads
@@ -97,8 +101,8 @@ const createThreadComment = (thread_id, author_id, collab_id) => ({
 
 const threadComments = _.flatten(
   collabThreads.map(({ id, author_id, collab_id }) =>
-    createThreadComment(id, author_id, collab_id)
-  )
+    createThreadComment(id, author_id, collab_id),
+  ),
 )
 
 exports.threadComments = threadComments

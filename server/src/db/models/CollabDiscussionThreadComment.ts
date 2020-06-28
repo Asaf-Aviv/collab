@@ -9,11 +9,12 @@ import {
   BelongsTo,
   IsUUID,
 } from 'sequelize-typescript'
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid'
 import { Collab } from './Collab'
 import { User } from './User'
 import { CollabMember } from './CollabMember'
 import { CollabDiscussionThread } from './CollabDiscussionThread'
+import { AddDiscussionThreadCommentInput } from '../../graphql/types'
 
 @Table({ tableName: 'collab_discussion_thread_comments' })
 export class CollabDiscussionThreadComment extends Model<
@@ -53,11 +54,11 @@ export class CollabDiscussionThreadComment extends Model<
   author!: User
 
   static async createComment(
-    content: string,
+    input: AddDiscussionThreadCommentInput,
     authorId: string,
-    collabId: string,
-    threadId: string
   ) {
+    const { collabId } = input
+
     const isMember = await CollabMember.findOne({
       where: { collabId, memberId: authorId },
     })
@@ -67,10 +68,8 @@ export class CollabDiscussionThreadComment extends Model<
     }
 
     return this.create({
-      content,
+      ...input,
       authorId,
-      threadId,
-      collabId,
     })
   }
 

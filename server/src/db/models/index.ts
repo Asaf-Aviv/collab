@@ -9,12 +9,32 @@ import { CollabTaskComment } from './CollabTaskComment'
 import { CollabMemberRequest } from './CollabMemberRequest'
 import { CollabDiscussionThread } from './CollabDiscussionThread'
 import { CollabDiscussionThreadComment } from './CollabDiscussionThreadComment'
+import { Language } from './Language'
+import { Stack } from './Stack'
+import { CollabPostStack } from './CollabPostStack'
+import { CollabPostLanguage } from './CollabPostLanguage'
+import { CollabPostReaction } from './CollabPostReaction'
+import { CollabPostCommentReaction } from './CollabPostCommentReaction'
+import { CollabDiscussionThreadReaction } from './CollabDiscussionThreadReaction'
+import { CollabDiscussionThreadCommentReaction } from './CollabDiscussionThreadCommentReaction'
+import { CollabTaskCommentReaction } from './CollabTaskCommentReaction'
+import { UserFriend } from './UserFriend'
+import { UserFriendRequest } from './UserFriendRequest'
+import { PrivateMessage } from './PrivateMessage'
+import { CollabWallMessage } from './CollabWallMessage'
+import { Notification } from './Notification'
 
 export const models = {
+  Language,
+  CollabPostLanguage,
   User,
-  Collab,
+  Stack,
+  CollabPostStack,
   CollabPost,
+  Collab,
+  CollabPostReaction,
   CollabPostComment,
+  CollabPostCommentReaction,
   CollabMember,
   CollabTaskList,
   CollabTask,
@@ -22,6 +42,14 @@ export const models = {
   CollabMemberRequest,
   CollabDiscussionThread,
   CollabDiscussionThreadComment,
+  CollabDiscussionThreadReaction,
+  CollabDiscussionThreadCommentReaction,
+  CollabTaskCommentReaction,
+  UserFriend,
+  UserFriendRequest,
+  PrivateMessage,
+  CollabWallMessage,
+  Notification,
 }
 
 export type Models = typeof models

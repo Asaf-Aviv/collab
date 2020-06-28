@@ -9,15 +9,19 @@ import {
   Default,
   ForeignKey,
   BelongsTo,
+  CreatedAt,
+  UpdatedAt,
   HasMany,
   AllowNull,
 } from 'sequelize-typescript'
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid'
 import { CollabMember } from './CollabMember'
 import { User } from './User'
 import { CollabTaskList } from './CollabTaskList'
 import { CollabDiscussionThreadComment } from './CollabDiscussionThreadComment'
 import { CollabPost } from './CollabPost'
+import { CollabPostStack } from './CollabPostStack'
+import { CollabWallMessage } from './CollabWallMessage'
 
 @Table({ tableName: 'collabs' })
 export class Collab extends Model<Collab> {
@@ -32,7 +36,7 @@ export class Collab extends Model<Collab> {
   name!: string
 
   @AllowNull(false)
-  @Default(false)
+  @Default(true)
   @Column
   acceptsInvites!: boolean
 
@@ -45,6 +49,14 @@ export class Collab extends Model<Collab> {
   @AllowNull(false)
   @Column
   ownerId!: string
+
+  @CreatedAt
+  @Column
+  createdAt!: Date
+
+  @UpdatedAt
+  @Column
+  updatedAt!: Date
 
   @BelongsTo(() => User, { foreignKey: 'ownerId', onDelete: 'cascade' })
   owner!: User
@@ -60,6 +72,12 @@ export class Collab extends Model<Collab> {
 
   @HasMany(() => CollabTaskList)
   taskList!: CollabTaskList[]
+
+  @HasMany(() => CollabPostStack)
+  stack!: CollabPostStack[]
+
+  @HasMany(() => CollabWallMessage)
+  wall!: CollabWallMessage[]
 
   @HasMany(() => CollabDiscussionThreadComment)
   discussionComments!: CollabDiscussionThreadComment[]
@@ -88,49 +106,10 @@ export class Collab extends Model<Collab> {
     return collab
   }
 
-  static async acceptMemberRequest(
-    collabId: string,
-    ownerId: string,
-    memberId: string
-  ) {
-    return this.sequelize!.transaction(async () => {
-      const [collab, isMember, memberRequest] = await Promise.all([
-        Collab.findByPk(collabId),
-        CollabMember.findOne({
-          where: { collabId, memberId },
-        }),
-        CollabMemberRequest.findOne({
-          where: { collabId, memberId, type: 'request' },
-        }),
-      ])
-
-      if (!collab) {
-        throw new Error('Collab not found')
-      }
-      if (ownerId !== collab.ownerId) {
-        throw new Error('You have no permissions to add members')
-      }
-      if (isMember) {
-        throw new Error('User is already a member')
-      }
-      if (!memberRequest) {
-        throw new Error('Request does not exist')
-      }
-
-      await Promise.all([
-        //
-        CollabMember.create({ collabId, memberId }),
-        memberRequest.destroy(),
-      ])
-
-      return collab
-    })
-  }
-
   static async removeMember(
     collabId: string,
     ownerId: string,
-    memberId: string
+    memberId: string,
   ) {
     return this.sequelize!.transaction(async () => {
       const collab = await Collab.findByPk(collabId, { raw: false })
@@ -173,7 +152,7 @@ export class Collab extends Model<Collab> {
   static async inviteMember(
     ownerId: string,
     memberId: string,
-    collabId: string
+    collabId: string,
   ) {
     const collab = await this.findByPk(collabId)
 
@@ -189,6 +168,17 @@ export class Collab extends Model<Collab> {
 
     if (!newMember) {
       throw new Error('User not found')
+    }
+
+    const request = await CollabMemberRequest.findOne({
+      where: {
+        collabId,
+        memberId,
+      },
+    })
+
+    if (request) {
+      throw new Error('Request or Invitation already exists')
     }
 
     await CollabMemberRequest.create({ collabId, memberId, type: 'invitation' })
@@ -217,13 +207,11 @@ export class Collab extends Model<Collab> {
 
     if (invitation && invitation.type === 'invitation') {
       throw new Error(
-        'The owner of this collab already invited you to join, please check your invitations'
+        'The owner of this collab already invited you to join, please check your invitations',
       )
     }
 
-    await CollabMemberRequest.create({ collabId, memberId, type: 'request' })
-
-    return true
+    return CollabMemberRequest.create({ collabId, memberId, type: 'request' })
   }
 
   static async cancelRequestToJoin(collabId: string, memberId: string) {
@@ -257,16 +245,19 @@ export class Collab extends Model<Collab> {
     return collab
   }
 
-  static async declineMemberRequest(
+  static async acceptMemberRequest(
     collabId: string,
+    ownerId: string,
     memberId: string,
-    ownerId: string
   ) {
     return this.sequelize!.transaction(async () => {
-      const [collab, requestExist] = await Promise.all([
+      const [collab, isMember, request] = await Promise.all([
         Collab.findByPk(collabId),
-        CollabMemberRequest.findOne({
+        CollabMember.findOne({
           where: { collabId, memberId },
+        }),
+        CollabMemberRequest.findOne({
+          where: { collabId, memberId, type: 'request' },
         }),
       ])
 
@@ -274,63 +265,50 @@ export class Collab extends Model<Collab> {
         throw new Error('Collab not found')
       }
       if (ownerId !== collab.ownerId) {
-        throw new Error('You have no permissions to decline this request')
+        throw new Error('You have no permissions to add members')
       }
-      if (!requestExist) {
-        throw new Error('Request does not exist anymore')
+      if (isMember) {
+        throw new Error('User is already a member')
       }
-
-      const removed = await CollabMember.destroy({
-        where: { memberId, collabId },
-      })
-
-      if (!removed) {
-        throw new Error('Something went wrong')
+      if (!request) {
+        throw new Error('Request does not exist')
       }
 
-      return true
+      await Promise.all([
+        //
+        CollabMember.create({ collabId, memberId }),
+        request.destroy(),
+      ])
+
+      return request.id
     })
   }
 
-  static async createTaskList(
+  static async declineMemberRequest(
     collabId: string,
-    name: string,
-    order: number,
-    ownerId: string
+    memberId: string,
+    ownerId: string,
   ) {
-    const collab = await this.findByPk(collabId)
+    const [collab, request] = await Promise.all([
+      Collab.findByPk(collabId),
+      CollabMemberRequest.findOne({
+        where: { collabId, memberId },
+      }),
+    ])
 
     if (!collab) {
       throw new Error('Collab not found')
     }
     if (ownerId !== collab.ownerId) {
-      throw new Error('You have no permissions to create a task list')
+      throw new Error('You have no permissions to decline this request')
+    }
+    if (!request) {
+      throw new Error('Request does not exist anymore')
     }
 
-    return CollabTaskList.create({
-      collabId,
-      name,
-      order,
-    })
-  }
+    await request.destroy()
 
-  static async deleteTaskList(taskListId: string, ownerId: string) {
-    const taskList = await CollabTaskList.findByPk(taskListId, {
-      include: [
-        {
-          model: Collab,
-          where: { ownerId },
-        },
-      ],
-    })
-
-    if (!taskList) {
-      throw new Error('Task list not found')
-    }
-
-    await taskList.destroy()
-
-    return true
+    return request.id
   }
 }
 

@@ -1,33 +1,67 @@
-import React from 'react'
-import { gql } from 'apollo-boost'
+import React, { useRef } from 'react'
+import produce from 'immer'
+import { Container } from '../global'
 import { useCollabPostsQuery } from '../../graphql/generates'
-import { Link } from 'react-router-dom'
-
-export const GET_COLLAB_POSTS = gql`
-  query CollabPosts {
-    collabPosts {
-      id
-      title
-    }
-  }
-`
+import { CollabPostCard } from '../CollabPostCard'
+import { Loader } from '../Loader'
+import { DisplayError } from '../DisplayError'
+import { useOnVisibilty } from '../../hooks/useOnVisibilty'
 
 export const CollabPosts = () => {
-  const { data, loading, error } = useCollabPostsQuery()
+  const { data, loading, error, fetchMore, refetch } = useCollabPostsQuery({
+    variables: {
+      offset: 0,
+      limit: 10,
+    },
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'cache-and-network',
+  })
+  const loadNextPageTriggerRef = useRef<HTMLSpanElement | null>(null)
 
-  if (loading) return <h1>loading</h1>
-  if (error) return <h1>Could not fetch Collabs</h1>
-  if (!data) return null
+  const { posts, hasNextPage } = data?.collabPosts ?? {}
 
-  const { collabPosts } = data
+  const handleNextPageLoad = () => {
+    if (!posts) return
+
+    fetchMore({
+      variables: {
+        offset: posts.length,
+        limit: 10,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev
+
+        const { hasNextPage, posts } = fetchMoreResult.collabPosts
+
+        const collabPosts = produce(prev.collabPosts, draft => {
+          draft.hasNextPage = hasNextPage
+          draft.posts.push(...posts)
+        })
+
+        return { collabPosts }
+      },
+    }).catch(() => {})
+  }
+
+  useOnVisibilty(
+    loadNextPageTriggerRef,
+    handleNextPageLoad,
+    hasNextPage && !loading,
+  )
 
   return (
-    <div>
-      {collabPosts.map(post => (
-        <Link key={post.id} to={`/collabs/posts/${post.id}`}>
-          <h3>{post.title}</h3>
-        </Link>
+    <Container as="main" maxWidth={900} pb={4}>
+      {posts?.map(post => (
+        <CollabPostCard key={post.id} {...post} mb={8} />
       ))}
-    </div>
+      {error && (
+        <DisplayError
+          message="Could not fetch collabs"
+          onClick={() => refetch()}
+        />
+      )}
+      {loading && <Loader />}
+      {!error && <span ref={loadNextPageTriggerRef} />}
+    </Container>
   )
 }

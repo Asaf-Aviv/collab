@@ -1,10 +1,13 @@
 import { gql } from 'apollo-server-express'
 
 export const collabDiscussionThreadTypeDefs = gql`
+  type Query {
+    thread(threadId: ID!): CollabDiscussionThread
+  }
+
   type Mutation {
     createCollabDiscussionThread(
-      title: String!
-      collabId: ID!
+      thread: CreateThreadArgs!
     ): CollabDiscussionThread!
     deleteCollabDiscussionThread(threadId: ID!): Boolean!
   }
@@ -12,8 +15,18 @@ export const collabDiscussionThreadTypeDefs = gql`
   type CollabDiscussionThread {
     id: ID!
     title: String!
-    author: User
-    comments: [CollabDiscussionThreadComment!]!
+    content: String!
+    author: User!
     collab: Collab
+    comments: [CollabDiscussionThreadComment!]!
+    commentsCount: Int!
+    reactions: [Reaction!]!
+    reactionsCount: Int!
+  }
+
+  input CreateThreadArgs {
+    title: String!
+    content: String!
+    collabId: ID!
   }
 `

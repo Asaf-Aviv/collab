@@ -8,9 +8,22 @@ import { taskCommentTypeDefs } from './TaskComment'
 import { collabPostCommentTypeDefs } from './CollabPostComment'
 import { collabDiscussionThreadTypeDefs } from './CollabDisussionThread'
 import { collabDiscussionThreadCommentTypeDefs } from './CollabDiscussionThreadComment'
+import { ReactionTypeDefs } from './Reaction'
+import { collabPostReactionTypeDefs } from './CollabPostReaction'
+import { collabPostCommentReactionTypeDefs } from './CollabPostCommentReaction'
+import { collabDiscussionThreadReactionTypeDefs } from './CollabDiscussionThreadReaction'
+import { collabDiscussionThreadCommentReactionTypeDefs } from './CollabDiscussionThreadCommentReaction'
+import { collabTaskCommentReactionTypeDefs } from './CollabTaskCommentReaction'
+import { privateMessageTypeDefs } from './PrivateMessage'
+import { scalarTypeDefs } from './Scalar'
+import { privateChatTypeDefs } from './PrivateChat'
+import { collabWallMessageTypeDefs } from './CollabWallMessage'
+import { notificationTypeDefs } from './Notification'
 
 const types = [
+  scalarTypeDefs,
   userTypeDefs,
+  privateMessageTypeDefs,
   collabTypeDefs,
   collabPostCommentTypeDefs,
   collabPostTypeDefs,
@@ -19,6 +32,15 @@ const types = [
   taskCommentTypeDefs,
   collabDiscussionThreadTypeDefs,
   collabDiscussionThreadCommentTypeDefs,
+  ReactionTypeDefs,
+  collabPostReactionTypeDefs,
+  collabPostCommentReactionTypeDefs,
+  collabDiscussionThreadReactionTypeDefs,
+  collabDiscussionThreadCommentReactionTypeDefs,
+  collabTaskCommentReactionTypeDefs,
+  privateChatTypeDefs,
+  collabWallMessageTypeDefs,
+  notificationTypeDefs,
 ]
 
 export const typeDefs = mergeTypes(types, { all: true })
