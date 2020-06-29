@@ -1,19 +1,21 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import produce from 'immer'
 import {
   useCollabWallMessagesQuery,
-  useCreateWallMessageMutation,
   useDeleteWallMessageMutation,
+  CollabWallMessagesDocument,
+  CollabWallMessagesQuery,
 } from '../../../graphql/generates'
 import { useParams } from 'react-router-dom'
 import { AvatarWithUsername } from '../../../components/AvatarWithUsername'
-import { Text, Box, Flex, PseudoBox, Button, Textarea } from '@chakra-ui/core'
+import { Text, Box, Flex, PseudoBox, Button } from '@chakra-ui/core'
 import { DisplayError } from '../../../components/DisplayError'
 import { DisplayDate } from '../../../components/DisplayDate'
 import { Loader } from '../../../components/Loader'
 import { useOnVisibilty } from '../../../hooks/useOnVisibilty'
 import { DotsMenu } from '../../../components/DotsMenu/Index'
 import { useToastNotification } from '../../notifications'
+import { AddWallMessageForm } from '../AddWallMessageForm'
 
 export const Wall = () => {
   const { collabId } = useParams<{ collabId: string }>()
@@ -34,29 +36,47 @@ export const Wall = () => {
     notifyOnNetworkStatusChange: true,
   })
   const loadNextPageTriggerRef = useRef<HTMLSpanElement | null>(null)
-  const [messageInput, setMessageInput] = useState('')
   const notify = useToastNotification()
-  const [createMessage] = useCreateWallMessageMutation({
-    variables: {
-      input: {
-        collabId,
-        content: messageInput,
-      },
-    },
-    onCompleted() {
-      refetch()
-      setMessageInput('')
+
+  const [deleteMessage] = useDeleteWallMessageMutation({
+    update(store, { data }) {
+      console.log(data)
+      if (!data) return
+
+      const messagesData = store.readQuery<CollabWallMessagesQuery>({
+        query: CollabWallMessagesDocument,
+        variables: {
+          input: { collabId, offset: 0, limit: 10 },
+        },
+      })!
+
+      const updatedMessagesData = produce(messagesData, draft => {
+        const indexOfMessage = draft.collabWallMessages.messages.findIndex(
+          ({ id }) => id === data.deleteWallMessage,
+        )
+
+        if (indexOfMessage === -1) return
+
+        draft.collabWallMessages.messages.splice(indexOfMessage, 1)
+      })
+
+      store.writeQuery<CollabWallMessagesQuery>({
+        query: CollabWallMessagesDocument,
+        variables: {
+          input: {
+            collabId,
+            offset: 0,
+            limit: 10,
+          },
+        },
+        data: updatedMessagesData,
+      })
     },
     onError({ message }) {
       notify('error', {
         title: 'Error',
         message,
       })
-    },
-  })
-  const [deleteMessage] = useDeleteWallMessageMutation({
-    onCompleted() {
-      refetch()
     },
   })
 
@@ -161,29 +181,7 @@ export const Wall = () => {
           />
         )}
       </Box>
-      <Box as="form" onSubmit={e => e.preventDefault()} mt={4}>
-        <Textarea
-          bg="#f2f2ff"
-          placeholder="Add a message to the wall"
-          p={2}
-          mb={4}
-          _hover={{ borderColor: '#cab3ff' }}
-          _focus={{ borderColor: '#805ad5' }}
-          value={messageInput}
-          onChange={(e: any) => setMessageInput(e.target.value)}
-          height={100}
-          resize="none"
-        />
-        <Button
-          ml="auto"
-          display="block"
-          variantColor="purple"
-          type="submit"
-          onClick={() => createMessage()}
-        >
-          Post Message
-        </Button>
-      </Box>
+      <AddWallMessageForm />
     </Flex>
   )
 }

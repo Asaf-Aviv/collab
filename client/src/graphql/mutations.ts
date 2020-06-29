@@ -290,13 +290,14 @@ const CREATE_WALL_MESSAGE = gql`
   mutation CreateWallMessage($input: CreateWallMessageInput!) {
     createWallMessage(input: $input) {
       id
+      content
+      creationDate
+      isAuthor
       author {
         id
         username
         avatar
       }
-      content
-      creationDate
     }
   }
 `

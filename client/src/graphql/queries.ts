@@ -445,7 +445,6 @@ export const GET_COLLAB_WALL_MESSAGES = gql`
         author {
           id
           username
-          bio
           avatar
         }
       }
