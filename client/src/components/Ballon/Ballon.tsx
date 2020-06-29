@@ -12,7 +12,6 @@ import {
 } from '@chakra-ui/core'
 import styled from '@emotion/styled/macro'
 import { Loader } from '../Loader'
-import { IconButton } from '../global'
 
 type Props = {
   triggerIcon: JSX.Element
@@ -79,9 +78,7 @@ export const Ballon = ({
 
 const StyledFlex = styled(Flex)`
   flex: 1;
-  ${IconButton} {
-    + ${IconButton} {
-      margin-left: 0.5rem;
-    }
+  button + button {
+    margin-left: 0.5rem;
   }
 `

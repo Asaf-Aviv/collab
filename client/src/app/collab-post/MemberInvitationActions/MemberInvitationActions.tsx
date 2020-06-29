@@ -9,6 +9,7 @@ import {
 import { Text, Flex, Button, FlexProps } from '@chakra-ui/core'
 import styled from '@emotion/styled'
 import { GET_COLLAB_POST } from '../../../graphql/queries'
+import { useToastNotification } from '../../notifications'
 
 type Props = FlexProps & {
   collabId: string
@@ -28,21 +29,46 @@ export const MemberInvitationActions = ({
 }: Props) => {
   const { postId } = useParams<{ postId: string }>()
   const variables = { collabId }
+  const notify = useToastNotification()
   const [requestToJoin] = useRequestToJoinMutation({
     variables,
     refetchQueries: [{ query: GET_COLLAB_POST, variables: { postId } }],
+    onError({ message }) {
+      notify('error', {
+        title: 'Error',
+        message,
+      })
+    },
   })
   const [declineCollabInvitation] = useDeclineCollabInvitationMutation({
     variables,
     refetchQueries: [{ query: GET_COLLAB_POST, variables: { postId } }],
+    onError({ message }) {
+      notify('error', {
+        title: 'Error',
+        message,
+      })
+    },
   })
   const [acceptCollabInvitation] = useAcceptCollabInvitationMutation({
     variables,
     refetchQueries: [{ query: GET_COLLAB_POST, variables: { postId } }],
+    onError({ message }) {
+      notify('error', {
+        title: 'Error',
+        message,
+      })
+    },
   })
   const [cancelRequestToJoin] = useCancelCollabRequestToJoinMutation({
     variables,
     refetchQueries: [{ query: GET_COLLAB_POST, variables: { postId } }],
+    onError({ message }) {
+      notify('error', {
+        title: 'Error',
+        message,
+      })
+    },
   })
 
   return (

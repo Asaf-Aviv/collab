@@ -1,17 +1,21 @@
 import { shield } from 'graphql-shield'
-import { collabMiddleware } from './../resolvers/Collab'
-import { userMiddleware } from './../resolvers/User'
+import { merge } from 'lodash'
+import { collabMiddleware } from '../resolvers/Collab'
+import { collabPostReactionMiddleware } from '../resolvers/CollabPostReaction'
+import { userMiddleware } from '../resolvers/User'
 import { collabPostCommentMiddleware } from '../resolvers/CollabPostComment'
 import { collabTaskMiddleware } from '../resolvers/Task'
 import { collabTaskListMiddleware } from '../resolvers/TaskList'
 import { collabTaskCommentMiddleware } from '../resolvers/TaskComment'
 import { collabDiscussionThreadMiddleware } from '../resolvers/CollabDiscussionThread'
 import { collabDiscussionThreadCommentMiddleware } from '../resolvers/CollabDiscussionThreadComment'
+import { collabPostMiddleware } from '../resolvers/CollabPost'
 
 export const permissions = shield(
-  Object.assign(
-    {},
+  merge(
     userMiddleware,
+    collabPostMiddleware,
+    collabPostReactionMiddleware,
     collabMiddleware,
     collabPostCommentMiddleware,
     collabTaskListMiddleware,

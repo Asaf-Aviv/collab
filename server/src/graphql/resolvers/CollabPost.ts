@@ -178,32 +178,30 @@ export const collabPostResolver: Resolvers = {
         where: { postId: id },
         order: [['createdAt', 'DESC']],
       }),
-    pendingInvites: async ({ collabId }, args, { models, loaders }) => {
+    pendingInvites: async ({ collabId }, args, { models }) => {
       const pendingInviteMembers = await models.CollabMemberRequest.findAll({
         where: { collabId, type: 'invitation' },
-        attributes: ['memberId'],
+        include: [models.User],
+        attributes: ['user'],
       })
 
-      const memberIds = pendingInviteMembers.map(({ memberId }) => memberId)
-      const users = await loaders.userLoader.loadMany(memberIds)
-      return users.map(replaceErrorWithNull)
+      return pendingInviteMembers.map(p => p.member)
     },
-    pendingRequests: async ({ collabId }, args, { loaders, models }) => {
-      const pendingInviteMembers = await models.CollabMemberRequest.findAll({
+    pendingRequests: async ({ collabId }, args, { models }) => {
+      const pendingRequestsMembers = await models.CollabMemberRequest.findAll({
         where: { collabId, type: 'request' },
-        attributes: ['memberId'],
+        include: [models.User],
+        attributes: ['user'],
       })
-      const memberIds = pendingInviteMembers.map(({ memberId }) => memberId)
-      const users = await loaders.userLoader.loadMany(memberIds)
 
-      return users.map(replaceErrorWithNull)
+      return pendingRequestsMembers.map(p => p.member)
     },
   },
 }
 
-export const collabMiddleware = {
+export const collabPostMiddleware = {
   Mutation: {
-    createCollab: and(isAuthenticated),
+    createCollabPost: and(isAuthenticated),
     deleteCollab: and(isAuthenticated),
     removeMember: and(isAuthenticated),
     inviteMember: and(isAuthenticated),

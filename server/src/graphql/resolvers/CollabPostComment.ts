@@ -45,8 +45,10 @@ export const collabPostCommentResolver: Resolvers = {
       models.CollabPostComment.deleteComment(commentId, user.id),
   },
   CollabPostComment: {
-    author: ({ authorId }, args, { loaders }) =>
-      loaders.userLoader.load(authorId),
+    author: async ({ authorId }, args, { loaders }) => {
+      const user = await loaders.userLoader.load(authorId)
+      return user!
+    },
     reactions: ({ id }, args, { models, user }) =>
       (models.CollabPostCommentReaction.findAll({
         where: { commentId: id },

@@ -5,11 +5,13 @@ import { Container } from '../../../components/global'
 import { InputWithLabel } from '../../../components/InputWithLabel/InputWithLabel'
 import { Link as RouterLink } from 'react-router-dom'
 import { useAuthActions } from '../../../providers'
+import { useToastNotification } from '../../notifications'
 
 export const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const { getCurrentUser } = useAuthActions()
+  const notify = useToastNotification()
   const [login, { loading }] = useLoginMutation({
     variables: {
       credentials: { email, password },
@@ -17,6 +19,12 @@ export const Login = () => {
     onCompleted: async ({ login }) => {
       localStorage.setItem('token', login.token)
       getCurrentUser()
+    },
+    onError({ message }) {
+      notify('error', {
+        title: 'Error',
+        message,
+      })
     },
   })
 
@@ -36,6 +44,7 @@ export const Login = () => {
         <Stack spacing={8}>
           <Box>
             <InputWithLabel
+              isRequired
               label="Email address"
               htmlFor="email"
               id="email"
@@ -46,6 +55,7 @@ export const Login = () => {
           </Box>
           <Box>
             <InputWithLabel
+              isRequired
               label="Password"
               htmlFor="password"
               id="password"

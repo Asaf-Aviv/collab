@@ -1,5 +1,7 @@
 import { Resolvers } from '../types'
 import { formatNotification } from '../helpers/formatNotification'
+import { and } from 'graphql-shield'
+import { isAuthenticated } from '../middleware/isAuthenticated'
 
 export const collabPostReactionResolver: Resolvers = {
   Mutation: {
@@ -50,5 +52,12 @@ export const collabPostReactionResolver: Resolvers = {
 
       return collab!
     },
+  },
+}
+
+export const collabPostReactionMiddleware = {
+  Mutation: {
+    addCollabPostReaction: and(isAuthenticated),
+    removeCollabPostReaction: and(isAuthenticated),
   },
 }

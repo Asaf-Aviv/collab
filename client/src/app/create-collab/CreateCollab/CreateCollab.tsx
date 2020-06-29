@@ -26,6 +26,7 @@ import {
 import { Option } from 'react-select/src/filters'
 import { InputWithLabel } from '../../../components/InputWithLabel'
 import styled from '@emotion/styled'
+import { useToastNotification } from '../../notifications'
 
 const experienceOptions = [
   'ALL',
@@ -40,10 +41,10 @@ export const CreateCollab = () => {
   const [postInput, setPostInput] = useState<
     Omit<CollabPostArgs, 'languages' | 'stack'>
   >({
-    name: 'Collabbbb',
-    title: 'React TypeScript next level app',
-    experience: 'MID' as Experience,
-    description: 'Our first Collab!',
+    name: '',
+    title: '',
+    experience: 'ALL' as Experience,
+    description: '',
     hasStarted: false,
   })
   const [selectedLanguages, setSelectedLanguages] = useState<
@@ -54,9 +55,16 @@ export const CreateCollab = () => {
   >([])
   const { data } = useCollabPostLanguagesQuery()
   const history = useHistory()
+  const notify = useToastNotification()
   const [createCollabPost] = useCreateCollabPostMutation({
     onCompleted: ({ createCollabPost }) => {
       history.push(`/collabs/posts/${createCollabPost.id}`)
+    },
+    onError({ message }) {
+      notify('error', {
+        title: 'Error',
+        message,
+      })
     },
   })
 
@@ -228,7 +236,7 @@ export const CreateCollab = () => {
           <Creatable
             id="tech-stack"
             isMulti
-            placeholder=""
+            placeholder="Press Enter to add a tech"
             value={selectedStack}
             onChange={values => setSelectedStack(values as any)}
             components={{

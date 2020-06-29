@@ -3,4 +3,4 @@ import { rule } from 'graphql-shield'
 
 export const isAuthenticated = rule({
   cache: 'contextual',
-})(async (root, args, { user }: CollabContext) => Boolean(user))
+})((root, args, { user }: CollabContext) => Boolean(user))

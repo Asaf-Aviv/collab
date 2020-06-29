@@ -20,17 +20,45 @@ import { Paper } from '../../../components/global'
 import { SectionHorizonalHeader } from '../../../components/SectionHorizonalHeader/SectionHorizonalHeader'
 import { Loader } from '../../../components/Loader'
 import { DisplayError } from '../../../components/DisplayError'
+import { useToastNotification } from '../../notifications'
 
 export const CollabPost = () => {
   const { postId } = useParams<{ postId: string }>()
+  const notify = useToastNotification()
   const { data, loading, error, refetch } = useGetCollabPostQuery({
     variables: { postId },
+    onError({ message }) {
+      notify('error', {
+        title: 'Error',
+        message,
+      })
+    },
   })
   const [addComment] = useAddCollabPostCommentMutation({
     refetchQueries: [{ query: COLLAB_POST_COMMENTS, variables: { postId } }],
+    onError({ message }) {
+      notify('error', {
+        title: 'Error',
+        message,
+      })
+    },
   })
-  const [addReaction] = useAddCollabPostReactionMutation()
-  const [removeReaction] = useRemoveCollabPostReactionMutation()
+  const [addReaction] = useAddCollabPostReactionMutation({
+    onError({ message }) {
+      notify('error', {
+        title: 'Error',
+        message,
+      })
+    },
+  })
+  const [removeReaction] = useRemoveCollabPostReactionMutation({
+    onError({ message }) {
+      notify('error', {
+        title: 'Error',
+        message,
+      })
+    },
+  })
 
   if (loading)
     return (
