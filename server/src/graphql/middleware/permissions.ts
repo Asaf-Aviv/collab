@@ -10,6 +10,11 @@ import { collabTaskCommentMiddleware } from '../resolvers/TaskComment'
 import { collabDiscussionThreadMiddleware } from '../resolvers/CollabDiscussionThread'
 import { collabDiscussionThreadCommentMiddleware } from '../resolvers/CollabDiscussionThreadComment'
 import { collabPostMiddleware } from '../resolvers/CollabPost'
+import { collabPostCommentReactionMiddleware } from '../resolvers/CollabPostCommentReaction'
+import { collabDiscussionThreadReactionMiddleware } from '../resolvers/CollabDiscussionThreadReaction'
+import { collabDiscussionThreadCommentReactionMiddleware } from '../resolvers/CollabDiscussionThreadCommentReaction'
+import { collabTaskCommentReactionMiddleware } from '../resolvers/CollabTaskCommentReaction'
+import { collabWallMessageMiddleware } from '../resolvers/CollabWallMessage'
 
 export const permissions = shield(
   merge(
@@ -18,11 +23,16 @@ export const permissions = shield(
     collabPostReactionMiddleware,
     collabMiddleware,
     collabPostCommentMiddleware,
+    collabPostCommentReactionMiddleware,
     collabTaskListMiddleware,
     collabTaskMiddleware,
     collabTaskCommentMiddleware,
+    collabTaskCommentReactionMiddleware,
+    collabWallMessageMiddleware,
     collabDiscussionThreadMiddleware,
+    collabDiscussionThreadReactionMiddleware,
     collabDiscussionThreadCommentMiddleware,
+    collabDiscussionThreadCommentReactionMiddleware,
   ),
   { allowExternalErrors: true },
 )

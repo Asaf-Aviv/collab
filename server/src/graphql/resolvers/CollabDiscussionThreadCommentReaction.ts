@@ -1,4 +1,6 @@
 import { Resolvers } from '../types'
+import { and } from 'graphql-shield'
+import { isAuthenticated } from '../middleware/isAuthenticated'
 
 export const collabDiscussionThreadCommentReactionResolver: Resolvers = {
   Mutation: {
@@ -20,5 +22,12 @@ export const collabDiscussionThreadCommentReactionResolver: Resolvers = {
         ...reaction,
         userId: user!.id,
       }),
+  },
+}
+
+export const collabDiscussionThreadCommentReactionMiddleware = {
+  Mutation: {
+    addCollabDiscussionThreadCommentReaction: and(isAuthenticated),
+    removeCollabDiscussionThreadCommentReaction: and(isAuthenticated),
   },
 }

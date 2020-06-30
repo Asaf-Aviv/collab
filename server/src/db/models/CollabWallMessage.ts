@@ -71,7 +71,7 @@ export class CollabWallMessage extends Model<CollabWallMessage> {
     throw new Error('Could not delete message')
   }
 
-  static async getMessages(input: CollabWallMessagesInput, userId: string) {
+  static async getMessages(input: CollabWallMessagesInput) {
     const { collabId, offset, limit } = input
 
     const messages = await this.findAll({

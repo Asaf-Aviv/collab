@@ -1,9 +1,11 @@
 import { Resolvers } from '../types'
+import { and } from 'graphql-shield'
+import { isAuthenticated } from '../middleware/isAuthenticated'
 
 export const collabWallMessageResolver: Resolvers = {
   Query: {
-    collabWallMessages: (root, { input }, { user, models }) =>
-      models.CollabWallMessage.getMessages(input, user!.id),
+    collabWallMessages: (root, { input }, { models }) =>
+      models.CollabWallMessage.getMessages(input),
   },
   Mutation: {
     createWallMessage: (root, { input }, { user, models }) =>
@@ -17,5 +19,12 @@ export const collabWallMessageResolver: Resolvers = {
       return user!
     },
     isAuthor: ({ authorId }, args, { user }) => user?.id === authorId,
+  },
+}
+
+export const collabWallMessageMiddleware = {
+  Mutation: {
+    createWallMessage: and(isAuthenticated),
+    deleteWallMessage: and(isAuthenticated),
   },
 }
