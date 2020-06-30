@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, Flex } from '@chakra-ui/core'
+import { Text, Flex, Box } from '@chakra-ui/core'
 import { AvatarWithUsername } from '../AvatarWithUsername/AvatarWithUsername'
 import { User } from '../../graphql/generates'
 import styled from '@emotion/styled'
@@ -23,10 +23,12 @@ export const Comment = ({ /* id ,*/ content, author, children }: Props) => (
     <Flex as="header" justifyContent="space-between">
       <AvatarWithUsername size="sm" {...author} />
     </Flex>
-    <Text mt={2} mb={4}>
-      {content}
-    </Text>
-    {children}
+    <Box pl={10}>
+      <Text mt={2} mb={4}>
+        {content}
+      </Text>
+      {children}
+    </Box>
   </CommentContainer>
 )
 

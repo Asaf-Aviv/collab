@@ -6,7 +6,6 @@ import { Login, SignUp } from '../../auth-pages'
 import { CollabPosts } from '../../../components/CollabPosts'
 import { MyProfile } from '../../current-user-profile/MyProfile'
 import { CollabPost } from '../../collab-post/CollabPost'
-import { CollabPostsByStack } from '../../../components/CollabPostsByStack'
 import { Home } from '../../home/Home/Home'
 import { UserProfile } from '../../../components/UserProfile'
 import { ProtectedRoute } from '../ProtectedRoute'
@@ -29,9 +28,6 @@ export const Routes = () => (
     </Route>
     <Route exact path="/collabs/posts/:postId">
       <CollabPost />
-    </Route>
-    <Route path="/collabs/posts/stack/:stack">
-      <CollabPostsByStack />
     </Route>
     <Route path="/collab/:collabId">
       <Collab />

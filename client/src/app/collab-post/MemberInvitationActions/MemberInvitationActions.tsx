@@ -88,7 +88,7 @@ export const MemberInvitationActions = ({
         )}
       {requestToJoinPending && (
         <>
-          <Button isDisabled boxShadow="md">
+          <Button isDisabled boxShadow="md" size="sm">
             Pending
           </Button>
           <Button

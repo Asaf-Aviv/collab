@@ -16,6 +16,7 @@ import {
   Tag,
   TagLabel,
   TagCloseButton,
+  Box,
 } from '@chakra-ui/core'
 import {
   useCreateCollabPostMutation,
@@ -92,6 +93,20 @@ export const CreateCollab = () => {
     }))
   }
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+
+    createCollabPost({
+      variables: {
+        post: {
+          ...postInput,
+          languages: selectedLanguages.map(({ label }) => label),
+          stack: selectedStack.map(({ label }) => label),
+        },
+      },
+    })
+  }
+
   const { name, title, description, hasStarted } = postInput
 
   return (
@@ -99,59 +114,95 @@ export const CreateCollab = () => {
       <Heading as="h1" size="xl" textAlign="center" mb={10}>
         Create a Collab
       </Heading>
-      <Stack spacing={6} m="auto" maxW={768}>
-        <InputWithLabel
-          id="name"
-          htmlFor="name"
-          name="name"
-          label="Collab Name"
-          value={name}
-          onChange={handleInputChange}
-        />
-        <InputWithLabel
-          id="title"
-          htmlFor="title"
-          name="title"
-          label="Post Title"
-          value={title}
-          onChange={handleInputChange}
-        />
-        <Flex wrap="wrap">
-          <FormControl mr={10}>
-            <FormLabel htmlFor="new-project" mb={2}>
-              New Project?
+      <Box as="form" onSubmit={handleSubmit}>
+        <Stack spacing={6} m="auto" maxW={768}>
+          <InputWithLabel
+            isRequired
+            id="name"
+            htmlFor="name"
+            name="name"
+            label="Collab Name"
+            value={name}
+            onChange={handleInputChange}
+          />
+          <InputWithLabel
+            isRequired
+            id="title"
+            htmlFor="title"
+            name="title"
+            label="Post Title"
+            value={title}
+            onChange={handleInputChange}
+          />
+          <Flex wrap="wrap">
+            <FormControl mr={10}>
+              <FormLabel htmlFor="new-project" mb={2}>
+                New Project?
+              </FormLabel>
+              <RadioButtonGroup
+                spacing={4}
+                isInline
+                id="new-project"
+                value={hasStarted ? 'no' : 'yes'}
+              >
+                <Radio
+                  value="no"
+                  variantColor="purple"
+                  onChange={handleHasStaredChange}
+                >
+                  No
+                </Radio>
+                <Radio
+                  value="yes"
+                  variantColor="purple"
+                  onChange={handleHasStaredChange}
+                >
+                  Yes
+                </Radio>
+              </RadioButtonGroup>
+            </FormControl>
+            <FormControl width={['100%', 180]} mt={[4, 0]}>
+              <FormLabel htmlFor="experience">Experience</FormLabel>
+              <StyledReactSelect
+                defaultValue={experienceOptions[0]}
+                id="experience"
+                classNamePrefix="react-select"
+                name="experience"
+                options={experienceOptions}
+                onChange={handleExperienceChange as any}
+                styles={{
+                  control: (base: any, state: any) => ({
+                    ...base,
+                    borderWidth: 2,
+                    '&:hover': {
+                      borderColor: '#cab3ff',
+                    },
+                    borderColor:
+                      state.isFocused || state.menuIsOpen
+                        ? '#805ad5 !important'
+                        : 'transparent',
+                    boxShadow: 'none',
+                  }),
+                }}
+              />
+            </FormControl>
+          </Flex>
+          <FormControl>
+            <FormLabel htmlFor="communication-languages">
+              Communication Languages
             </FormLabel>
-            <RadioButtonGroup
-              spacing={4}
-              isInline
-              id="new-project"
-              value={hasStarted ? 'no' : 'yes'}
-            >
-              <Radio
-                value="no"
-                variantColor="purple"
-                onChange={handleHasStaredChange}
-              >
-                No
-              </Radio>
-              <Radio
-                value="yes"
-                variantColor="purple"
-                onChange={handleHasStaredChange}
-              >
-                Yes
-              </Radio>
-            </RadioButtonGroup>
-          </FormControl>
-          <FormControl width={['100%', 180]} mt={[4, 0]}>
-            <FormLabel htmlFor="experience">Experience</FormLabel>
-            <StyledReactSelect
-              defaultValue={experienceOptions[0]}
-              id="experience"
-              classNamePrefix="react-select"
-              name="experience"
-              options={experienceOptions}
-              onChange={handleExperienceChange as any}
+            <ReactSelect
+              id="communication-languages"
+              isMulti
+              placeholder=""
+              isSearchable
+              hideSelectedOptions
+              value={selectedLanguages}
+              onChange={values => setSelectedLanguages(values as any)}
+              options={data?.languages.map(name => ({
+                value: name,
+                label: name,
+              }))}
               styles={{
                 control: (base: any, state: any) => ({
                   ...base,
@@ -159,167 +210,126 @@ export const CreateCollab = () => {
                   '&:hover': {
                     borderColor: '#cab3ff',
                   },
+                  backgroundColor: '#f2f2ff',
                   borderColor:
                     state.isFocused || state.menuIsOpen
                       ? '#805ad5 !important'
                       : 'transparent',
                   boxShadow: 'none',
                 }),
+                multiValue: provided => ({
+                  ...provided,
+                  display: 'none',
+                }),
+                option: (base: any, state) => ({
+                  ...base,
+                  backgroundColor: state.isFocused ? '#d6bcfa' : 'transparent',
+                }),
               }}
             />
+            <Stack spacing={2} isInline mt={4} flexWrap="wrap">
+              {selectedLanguages?.map(({ label }) => (
+                <Tag
+                  size="md"
+                  key={label}
+                  rounded="full"
+                  variant="solid"
+                  variantColor="purple"
+                  cursor="pointer"
+                  mb={2}
+                  onClick={() =>
+                    setSelectedLanguages(prevState =>
+                      prevState.filter(language => language.label !== label),
+                    )
+                  }
+                >
+                  <TagLabel>{label}</TagLabel>
+                  <TagCloseButton />
+                </Tag>
+              ))}
+            </Stack>
           </FormControl>
-        </Flex>
-        <FormControl>
-          <FormLabel htmlFor="communication-languages">
-            Communication Languages
-          </FormLabel>
-          <ReactSelect
-            id="communication-languages"
-            isMulti
-            placeholder=""
-            isSearchable
-            hideSelectedOptions
-            value={selectedLanguages}
-            onChange={values => setSelectedLanguages(values as any)}
-            options={data?.languages.map(name => ({
-              value: name,
-              label: name,
-            }))}
-            styles={{
-              control: (base: any, state: any) => ({
-                ...base,
-                borderWidth: 2,
-                '&:hover': {
-                  borderColor: '#cab3ff',
-                },
-                backgroundColor: '#f2f2ff',
-                borderColor:
-                  state.isFocused || state.menuIsOpen
-                    ? '#805ad5 !important'
-                    : 'transparent',
-                boxShadow: 'none',
-              }),
-              multiValue: provided => ({
-                ...provided,
-                display: 'none',
-              }),
-              option: (base: any, state) => ({
-                ...base,
-                backgroundColor: state.isFocused ? '#d6bcfa' : 'transparent',
-              }),
-            }}
-          />
-          <Stack spacing={2} isInline mt={4} flexWrap="wrap">
-            {selectedLanguages?.map(({ label }) => (
-              <Tag
-                size="md"
-                key={label}
-                rounded="full"
-                variant="solid"
-                variantColor="purple"
-                cursor="pointer"
-                mb={2}
-                onClick={() =>
-                  setSelectedLanguages(prevState =>
-                    prevState.filter(language => language.label !== label),
-                  )
-                }
-              >
-                <TagLabel>{label}</TagLabel>
-                <TagCloseButton />
-              </Tag>
-            ))}
-          </Stack>
-        </FormControl>
-        <FormControl>
-          <FormLabel htmlFor="tech-stack">Tech Stack</FormLabel>
-          <Creatable
-            id="tech-stack"
-            isMulti
-            placeholder="Press Enter to add a tech"
-            value={selectedStack}
-            onChange={values => setSelectedStack(values as any)}
-            components={{
-              DropdownIndicator: () => null,
-              IndicatorSeparator: () => null,
-              Menu: () => null,
-            }}
-            styles={{
-              control: (base: any, state: any) => ({
-                ...base,
-                borderWidth: 2,
-                '&:hover': {
-                  borderColor: '#cab3ff',
-                },
-                backgroundColor: '#f2f2ff',
-                borderColor:
-                  state.isFocused || state.menuIsOpen
-                    ? '#805ad5 !important'
-                    : 'transparent',
-                boxShadow: 'none',
-              }),
-              multiValue: provided => ({
-                ...provided,
-                display: 'none',
-              }),
-            }}
-          />
-          <Stack spacing={2} isInline mt={4} flexWrap="wrap">
-            {selectedStack.map(({ label }) => (
-              <Tag
-                size="md"
-                key={label}
-                rounded="full"
-                variant="solid"
-                variantColor="purple"
-                cursor="pointer"
-                mb={2}
-                onClick={() =>
-                  setSelectedStack(prevState =>
-                    prevState.filter(stack => stack.label !== label),
-                  )
-                }
-              >
-                <TagLabel>{label}</TagLabel>
-                <TagCloseButton />
-              </Tag>
-            ))}
-          </Stack>
-        </FormControl>
-        <FormControl>
-          <FormLabel htmlFor="description">Description</FormLabel>
-          <Textarea
-            id="description"
-            name="description"
-            value={description}
-            minHeight={200}
-            onChange={handleInputChange}
-            bg="#f2f2ff"
-            p={2}
-            borderColor="transparent"
-            _hover={{ borderColor: '#cab3ff' }}
-            _focus={{ borderColor: '#805ad5' }}
-            borderWidth={2}
-          />
-        </FormControl>
-        <Button
-          alignSelf={{ md: 'flex-end' }}
-          variantColor="purple"
-          onClick={() =>
-            createCollabPost({
-              variables: {
-                post: {
-                  ...postInput,
-                  languages: selectedLanguages.map(({ label }) => label),
-                  stack: selectedStack.map(({ label }) => label),
-                },
-              },
-            })
-          }
-        >
-          Create
-        </Button>
-      </Stack>
+          <FormControl>
+            <FormLabel htmlFor="tech-stack">Tech Stack</FormLabel>
+            <Creatable
+              id="tech-stack"
+              isMulti
+              placeholder="Press Enter to add a tech"
+              value={selectedStack}
+              onChange={values => setSelectedStack(values as any)}
+              components={{
+                DropdownIndicator: () => null,
+                IndicatorSeparator: () => null,
+                Menu: () => null,
+              }}
+              styles={{
+                control: (base: any, state: any) => ({
+                  ...base,
+                  borderWidth: 2,
+                  '&:hover': {
+                    borderColor: '#cab3ff',
+                  },
+                  backgroundColor: '#f2f2ff',
+                  borderColor:
+                    state.isFocused || state.menuIsOpen
+                      ? '#805ad5 !important'
+                      : 'transparent',
+                  boxShadow: 'none',
+                }),
+                multiValue: provided => ({
+                  ...provided,
+                  display: 'none',
+                }),
+              }}
+            />
+            <Stack spacing={2} isInline mt={4} flexWrap="wrap">
+              {selectedStack.map(({ label }) => (
+                <Tag
+                  size="md"
+                  key={label}
+                  rounded="full"
+                  variant="solid"
+                  variantColor="purple"
+                  cursor="pointer"
+                  mb={2}
+                  onClick={() =>
+                    setSelectedStack(prevState =>
+                      prevState.filter(stack => stack.label !== label),
+                    )
+                  }
+                >
+                  <TagLabel>{label}</TagLabel>
+                  <TagCloseButton />
+                </Tag>
+              ))}
+            </Stack>
+          </FormControl>
+          <FormControl>
+            <FormLabel htmlFor="description">Description</FormLabel>
+            <Textarea
+              isRequired
+              id="description"
+              name="description"
+              value={description}
+              minHeight={200}
+              onChange={handleInputChange}
+              bg="#f2f2ff"
+              p={2}
+              borderColor="transparent"
+              _hover={{ borderColor: '#cab3ff' }}
+              _focus={{ borderColor: '#805ad5' }}
+              borderWidth={2}
+            />
+          </FormControl>
+          <Button
+            alignSelf={{ md: 'flex-end' }}
+            variantColor="purple"
+            type="submit"
+          >
+            Create
+          </Button>
+        </Stack>
+      </Box>
     </Container>
   )
 }
