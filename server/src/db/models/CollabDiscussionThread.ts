@@ -10,6 +10,7 @@ import {
   BelongsTo,
   IsUUID,
   HasMany,
+  CreatedAt,
 } from 'sequelize-typescript'
 import { v4 as uuid } from 'uuid'
 import { Collab } from './Collab'
@@ -42,11 +43,14 @@ export class CollabDiscussionThread extends Model<CollabDiscussionThread> {
   @Column
   authorId!: string
 
-  @BelongsTo(() => User, { foreignKey: 'authorId', onDelete: 'CASCADE' })
+  @BelongsTo(() => User, { foreignKey: 'authorId', onDelete: 'SET NULL' })
   author!: User
 
   @HasMany(() => CollabDiscussionThreadComment)
   comments!: CollabDiscussionThreadComment[]
+
+  @CreatedAt
+  creationDate!: Date
 
   static async createThread(threadInput: CreateThreadArgs, authorId: string) {
     const { collabId } = threadInput

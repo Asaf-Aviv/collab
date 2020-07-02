@@ -11,8 +11,6 @@ const PORT = 5555
 const httpServer = createServer(app)
 apolloServer.installSubscriptionHandlers(httpServer)
 
-const username = 'a'
-
 sequelize
   .authenticate()
   .then(async () => {

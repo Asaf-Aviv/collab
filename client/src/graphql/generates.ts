@@ -14,7 +14,7 @@ export type Scalars = {
 };
 
 export type Query = {
-   __typename?: 'Query';
+  __typename?: 'Query';
   advancedPostsSearch: CollabPostsSearchResultsPayload;
   collab: Maybe<Collab>;
   collabPost: Maybe<CollabPost>;
@@ -111,7 +111,7 @@ export type QueryUserArgs = {
 };
 
 export type Mutation = {
-   __typename?: 'Mutation';
+  __typename?: 'Mutation';
   acceptCollabInvitation: Scalars['ID'];
   acceptFriendRequest: User;
   acceptMemberRequest: Scalars['ID'];
@@ -473,7 +473,7 @@ export type MutationUploadAvatarArgs = {
 };
 
 export type Collab = {
-   __typename?: 'Collab';
+  __typename?: 'Collab';
   acceptsInvites: Scalars['Boolean'];
   collabPostId: Maybe<Scalars['ID']>;
   discussionThreads: Array<CollabDiscussionThread>;
@@ -490,12 +490,34 @@ export type Collab = {
   taskList: Array<TaskList>;
 };
 
+export type CollabDiscussionThread = {
+  __typename?: 'CollabDiscussionThread';
+  author: Maybe<User>;
+  collab: Maybe<Collab>;
+  comments: Array<CollabDiscussionThreadComment>;
+  commentsCount: Scalars['Int'];
+  content: Scalars['String'];
+  creationDate: Scalars['Date'];
+  id: Scalars['ID'];
+  reactions: Array<Reaction>;
+  reactionsCount: Scalars['Int'];
+  title: Scalars['String'];
+};
+
+export type CreateThreadArgs = {
+  collabId: Scalars['ID'];
+  content: Scalars['String'];
+  title: Scalars['String'];
+};
+
 export type CollabDiscussionThreadComment = {
-   __typename?: 'CollabDiscussionThreadComment';
+  __typename?: 'CollabDiscussionThreadComment';
   author: User;
   collab: Maybe<Collab>;
   content: Scalars['String'];
+  creationDate: Scalars['Date'];
   id: Scalars['ID'];
+  isAuthor: Scalars['Boolean'];
   reactions: Array<Reaction>;
   thread: Maybe<CollabDiscussionThread>;
 };
@@ -526,25 +548,6 @@ export type RemoveCollabDiscussionThreadReactionInput = {
   threadId: Scalars['ID'];
 };
 
-export type CollabDiscussionThread = {
-   __typename?: 'CollabDiscussionThread';
-  author: User;
-  collab: Maybe<Collab>;
-  comments: Array<CollabDiscussionThreadComment>;
-  commentsCount: Scalars['Int'];
-  content: Scalars['String'];
-  id: Scalars['ID'];
-  reactions: Array<Reaction>;
-  reactionsCount: Scalars['Int'];
-  title: Scalars['String'];
-};
-
-export type CreateThreadArgs = {
-  collabId: Scalars['ID'];
-  content: Scalars['String'];
-  title: Scalars['String'];
-};
-
 export type AdvancedPostsSearchInput = {
   experience: Maybe<Experience>;
   hasStarted: Maybe<Scalars['Boolean']>;
@@ -556,7 +559,7 @@ export type AdvancedPostsSearchInput = {
 };
 
 export type CollabPostsSearchResultsPayload = {
-   __typename?: 'CollabPostsSearchResultsPayload';
+  __typename?: 'CollabPostsSearchResultsPayload';
   hasNextPage: Scalars['Boolean'];
   posts: Array<CollabPost>;
 };
@@ -568,19 +571,19 @@ export type SearchPostsInput = {
 };
 
 export type SearchPostsPayload = {
-   __typename?: 'SearchPostsPayload';
+  __typename?: 'SearchPostsPayload';
   hasNextPage: Scalars['Boolean'];
   posts: Array<CollabPost>;
   totalResults: Scalars['Int'];
 };
 
 export type CollabPost = {
-   __typename?: 'CollabPost';
+  __typename?: 'CollabPost';
   acceptsInvites: Scalars['Boolean'];
   collabId: Scalars['ID'];
   comments: Array<CollabPostComment>;
   commentsCount: Scalars['Int'];
-  createdAt: Scalars['String'];
+  creationDate: Scalars['Date'];
   description: Scalars['String'];
   experience: Scalars['String'];
   hasStarted: Scalars['Boolean'];
@@ -605,7 +608,7 @@ export type CollabPost = {
 };
 
 export type CollabPostsPayload = {
-   __typename?: 'CollabPostsPayload';
+  __typename?: 'CollabPostsPayload';
   hasNextPage: Scalars['Boolean'];
   posts: Array<CollabPost>;
 };
@@ -630,10 +633,12 @@ export enum Experience {
 }
 
 export type CollabPostComment = {
-   __typename?: 'CollabPostComment';
+  __typename?: 'CollabPostComment';
   author: User;
   content: Scalars['String'];
+  creationDate: Scalars['Date'];
   id: Scalars['ID'];
+  isAuthor: Scalars['Boolean'];
   reactions: Array<Reaction>;
 };
 
@@ -668,7 +673,7 @@ export type RemoveCollabTaskCommentReactionInput = {
 };
 
 export type WallMessage = {
-   __typename?: 'WallMessage';
+  __typename?: 'WallMessage';
   author: User;
   content: Scalars['String'];
   creationDate: Scalars['Date'];
@@ -682,7 +687,7 @@ export type CreateWallMessageInput = {
 };
 
 export type CollabWallMessagesPayload = {
-   __typename?: 'CollabWallMessagesPayload';
+  __typename?: 'CollabWallMessagesPayload';
   hasNextPage: Scalars['Boolean'];
   messages: Array<WallMessage>;
 };
@@ -694,7 +699,7 @@ export type CollabWallMessagesInput = {
 };
 
 export type Subscription = {
-   __typename?: 'Subscription';
+  __typename?: 'Subscription';
   friendStatusChange: ChatUsersPayload;
   newFriendRequest: NewFriendRequestPayload;
   newNotification: Notification;
@@ -702,7 +707,7 @@ export type Subscription = {
 };
 
 export type Notification = {
-   __typename?: 'Notification';
+  __typename?: 'Notification';
   creationDate: Scalars['Date'];
   id: Scalars['ID'];
   isRead: Scalars['Boolean'];
@@ -720,18 +725,18 @@ export enum UserChatStatus {
 }
 
 export type ConnectToChatPayload = {
-   __typename?: 'ConnectToChatPayload';
+  __typename?: 'ConnectToChatPayload';
   users: Array<ChatUsersPayload>;
 };
 
 export type ChatUsersPayload = {
-   __typename?: 'ChatUsersPayload';
+  __typename?: 'ChatUsersPayload';
   status: UserChatStatus;
   user: User;
 };
 
 export type PrivateChatMessage = {
-   __typename?: 'PrivateChatMessage';
+  __typename?: 'PrivateChatMessage';
   authorId: Scalars['ID'];
   content: Scalars['String'];
   creationDate: Scalars['Date'];
@@ -744,7 +749,7 @@ export type SendPrivateChatMessageInput = {
 };
 
 export type PrivateMessage = {
-   __typename?: 'PrivateMessage';
+  __typename?: 'PrivateMessage';
   author: Maybe<User>;
   content: Scalars['String'];
   creationDate: Scalars['Date'];
@@ -754,7 +759,7 @@ export type PrivateMessage = {
 };
 
 export type PrivateMessagePreview = {
-   __typename?: 'PrivateMessagePreview';
+  __typename?: 'PrivateMessagePreview';
   avatar: Scalars['String'];
   content: Scalars['String'];
   userId: Scalars['ID'];
@@ -762,7 +767,7 @@ export type PrivateMessagePreview = {
 };
 
 export type GetConversationPayload = {
-   __typename?: 'GetConversationPayload';
+  __typename?: 'GetConversationPayload';
   hasNextPage: Scalars['Boolean'];
   messages: Array<PrivateMessage>;
 };
@@ -773,7 +778,7 @@ export type SendPrivateMessageInput = {
 };
 
 export type Reaction = {
-   __typename?: 'Reaction';
+  __typename?: 'Reaction';
   count: Scalars['Int'];
   emojiId: Scalars['ID'];
   isLiked: Scalars['Boolean'];
@@ -781,7 +786,7 @@ export type Reaction = {
 
 
 export type Task = {
-   __typename?: 'Task';
+  __typename?: 'Task';
   assignedBy: Maybe<User>;
   assignee: Maybe<User>;
   author: User;
@@ -827,7 +832,7 @@ export type MoveTaskToListInput = {
 };
 
 export type TaskComment = {
-   __typename?: 'TaskComment';
+  __typename?: 'TaskComment';
   author: Maybe<User>;
   content: Scalars['String'];
   id: Scalars['ID'];
@@ -858,12 +863,12 @@ export type UpdateTaskListPositionInput = {
 };
 
 export type TaskListPayload = {
-   __typename?: 'TaskListPayload';
+  __typename?: 'TaskListPayload';
   taskList: Array<TaskList>;
 };
 
 export type TaskList = {
-   __typename?: 'TaskList';
+  __typename?: 'TaskList';
   collab: Collab;
   id: Scalars['ID'];
   name: Scalars['String'];
@@ -873,12 +878,12 @@ export type TaskList = {
 
 
 export type NewFriendRequestPayload = {
-   __typename?: 'NewFriendRequestPayload';
+  __typename?: 'NewFriendRequestPayload';
   user: User;
 };
 
 export type CurrentUser = {
-   __typename?: 'CurrentUser';
+  __typename?: 'CurrentUser';
   avatar: Maybe<Scalars['String']>;
   bio: Scalars['String'];
   collabInvites: Array<Collab>;
@@ -905,7 +910,7 @@ export type CurrentUser = {
 };
 
 export type User = {
-   __typename?: 'User';
+  __typename?: 'User';
   avatar: Maybe<Scalars['String']>;
   bio: Scalars['String'];
   canRequestFriendship: Scalars['Boolean'];
@@ -937,14 +942,14 @@ export type UpdateUserInfoInput = {
 };
 
 export type CollabRequest = {
-   __typename?: 'CollabRequest';
+  __typename?: 'CollabRequest';
   collab: Collab;
   id: Scalars['ID'];
   member: User;
 };
 
 export type AuthPayload = {
-   __typename?: 'AuthPayload';
+  __typename?: 'AuthPayload';
   token: Scalars['String'];
 };
 
@@ -1861,7 +1866,7 @@ export type CollabPostsQuery = (
     & Pick<CollabPostsPayload, 'hasNextPage'>
     & { posts: Array<(
       { __typename?: 'CollabPost' }
-      & Pick<CollabPost, 'id' | 'title' | 'stack' | 'experience' | 'hasStarted' | 'languages' | 'createdAt' | 'isNew' | 'membersCount' | 'reactionsCount' | 'commentsCount'>
+      & Pick<CollabPost, 'id' | 'title' | 'stack' | 'experience' | 'hasStarted' | 'languages' | 'creationDate' | 'isNew' | 'membersCount' | 'reactionsCount' | 'commentsCount'>
       & { owner: (
         { __typename?: 'User' }
         & Pick<User, 'id' | 'username' | 'avatar'>
@@ -1884,7 +1889,7 @@ export type CollabPostsByStackQuery = (
     & Pick<CollabPostsSearchResultsPayload, 'hasNextPage'>
     & { posts: Array<(
       { __typename?: 'CollabPost' }
-      & Pick<CollabPost, 'id' | 'title' | 'stack' | 'experience' | 'hasStarted' | 'languages' | 'createdAt' | 'isNew' | 'membersCount' | 'reactionsCount' | 'commentsCount'>
+      & Pick<CollabPost, 'id' | 'title' | 'stack' | 'experience' | 'hasStarted' | 'languages' | 'creationDate' | 'isNew' | 'membersCount' | 'reactionsCount' | 'commentsCount'>
       & { owner: (
         { __typename?: 'User' }
         & Pick<User, 'id' | 'username' | 'avatar'>
@@ -1905,7 +1910,7 @@ export type AdvancedPostsSearchQuery = (
     & Pick<CollabPostsSearchResultsPayload, 'hasNextPage'>
     & { posts: Array<(
       { __typename?: 'CollabPost' }
-      & Pick<CollabPost, 'id' | 'title' | 'stack' | 'experience' | 'hasStarted' | 'languages' | 'createdAt' | 'isNew' | 'membersCount' | 'reactionsCount' | 'commentsCount'>
+      & Pick<CollabPost, 'id' | 'title' | 'stack' | 'experience' | 'hasStarted' | 'languages' | 'creationDate' | 'isNew' | 'membersCount' | 'reactionsCount' | 'commentsCount'>
       & { owner: (
         { __typename?: 'User' }
         & Pick<User, 'id' | 'username' | 'avatar'>
@@ -1944,7 +1949,7 @@ export type GetCollabPostQuery = (
   { __typename?: 'Query' }
   & { collabPost: Maybe<(
     { __typename?: 'CollabPost' }
-    & Pick<CollabPost, 'id' | 'name' | 'title' | 'description' | 'isNew' | 'collabId' | 'experience' | 'stack' | 'hasStarted' | 'languages' | 'acceptsInvites' | 'isOwner' | 'isMember' | 'invitationPending' | 'requestToJoinPending' | 'createdAt'>
+    & Pick<CollabPost, 'id' | 'name' | 'title' | 'description' | 'isNew' | 'collabId' | 'experience' | 'stack' | 'hasStarted' | 'languages' | 'acceptsInvites' | 'isOwner' | 'isMember' | 'invitationPending' | 'requestToJoinPending' | 'creationDate'>
     & { owner: (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
@@ -1978,7 +1983,7 @@ export type CollabPostCommentsQuery = (
     & Pick<CollabPost, 'id'>
     & { comments: Array<(
       { __typename?: 'CollabPostComment' }
-      & Pick<CollabPostComment, 'id' | 'content'>
+      & Pick<CollabPostComment, 'id' | 'content' | 'isAuthor' | 'creationDate'>
       & { author: (
         { __typename?: 'User' }
         & Pick<User, 'id' | 'username' | 'avatar'>
@@ -2063,11 +2068,11 @@ export type CollabDiscussionThreadsQuery = (
     & Pick<Collab, 'id'>
     & { discussionThreads: Array<(
       { __typename?: 'CollabDiscussionThread' }
-      & Pick<CollabDiscussionThread, 'id' | 'title' | 'commentsCount' | 'reactionsCount'>
-      & { author: (
+      & Pick<CollabDiscussionThread, 'id' | 'title' | 'creationDate' | 'commentsCount' | 'reactionsCount'>
+      & { author: Maybe<(
         { __typename?: 'User' }
         & Pick<User, 'id' | 'username' | 'avatar'>
-      ) }
+      )> }
     )> }
   )> }
 );
@@ -2081,11 +2086,11 @@ export type CollabThreadQuery = (
   { __typename?: 'Query' }
   & { thread: Maybe<(
     { __typename?: 'CollabDiscussionThread' }
-    & Pick<CollabDiscussionThread, 'id' | 'title' | 'content'>
-    & { author: (
+    & Pick<CollabDiscussionThread, 'id' | 'title' | 'content' | 'creationDate'>
+    & { author: Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
-    ), reactions: Array<(
+    )>, reactions: Array<(
       { __typename?: 'Reaction' }
       & Pick<Reaction, 'emojiId' | 'count' | 'isLiked'>
     )> }
@@ -2104,7 +2109,7 @@ export type CollabThreadCommentsQuery = (
     & Pick<CollabDiscussionThread, 'id'>
     & { comments: Array<(
       { __typename?: 'CollabDiscussionThreadComment' }
-      & Pick<CollabDiscussionThreadComment, 'id' | 'content'>
+      & Pick<CollabDiscussionThreadComment, 'id' | 'content' | 'creationDate' | 'isAuthor'>
       & { author: (
         { __typename?: 'User' }
         & Pick<User, 'id' | 'username' | 'avatar'>
@@ -4482,7 +4487,7 @@ export const CollabPostsDocument = gql`
       experience
       hasStarted
       languages
-      createdAt
+      creationDate
       isNew
       membersCount
       reactionsCount
@@ -4534,7 +4539,7 @@ export const CollabPostsByStackDocument = gql`
       experience
       hasStarted
       languages
-      createdAt
+      creationDate
       isNew
       membersCount
       reactionsCount
@@ -4587,7 +4592,7 @@ export const AdvancedPostsSearchDocument = gql`
       experience
       hasStarted
       languages
-      createdAt
+      creationDate
       isNew
       membersCount
       reactionsCount
@@ -4699,7 +4704,7 @@ export const GetCollabPostDocument = gql`
     isMember
     invitationPending
     requestToJoinPending
-    createdAt
+    creationDate
     reactions {
       emojiId
       count
@@ -4771,6 +4776,8 @@ export const CollabPostCommentsDocument = gql`
     comments {
       id
       content
+      isAuthor
+      creationDate
       author {
         id
         username
@@ -4958,6 +4965,7 @@ export const CollabDiscussionThreadsDocument = gql`
     discussionThreads {
       id
       title
+      creationDate
       author {
         id
         username
@@ -5001,6 +5009,7 @@ export const CollabThreadDocument = gql`
     id
     title
     content
+    creationDate
     author {
       id
       username
@@ -5047,6 +5056,8 @@ export const CollabThreadCommentsDocument = gql`
     comments {
       id
       content
+      creationDate
+      isAuthor
       author {
         id
         username

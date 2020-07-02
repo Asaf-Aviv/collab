@@ -11,5 +11,7 @@ export const collabPostCommentTypeDefs = gql`
     content: String!
     author: User!
     reactions: [Reaction!]!
+    isAuthor: Boolean!
+    creationDate: Date!
   }
 `

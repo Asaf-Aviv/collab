@@ -6,6 +6,7 @@ import { Paper } from '../../../components/global'
 import { useCollabDiscussionThreadsQuery } from '../../../graphql/generates'
 import { Loader } from '../../../components/Loader'
 import { DisplayError } from '../../../components/DisplayError'
+import { DisplayDate } from '../../../components/DisplayDate'
 
 export const CollabDiscussions = () => {
   const { collabId } = useParams<{ collabId: string }>()
@@ -18,7 +19,14 @@ export const CollabDiscussions = () => {
     <Box as="main" maxWidth={900} mx="auto">
       <section>
         {data?.collab?.discussionThreads.map(
-          ({ id, title, author, commentsCount, reactionsCount }) => (
+          ({
+            id,
+            title,
+            author,
+            commentsCount,
+            reactionsCount,
+            creationDate,
+          }) => (
             <Paper as="article" key={id} p={3} mb={4}>
               <Box as="header" flex={1}>
                 <Heading size="sm" fontWeight={600} pb={6} as="h3">
@@ -28,7 +36,7 @@ export const CollabDiscussions = () => {
                   <Text color="gray.400" mr={4}>
                     Opened by{' '}
                     {author ? (
-                      <Link to={`/user/${id}/${author.id}`}>
+                      <Link to={`/user/${author.id}`}>
                         <Text as="span" color="text" fontWeight={500}>
                           {author?.username}
                         </Text>
@@ -36,7 +44,7 @@ export const CollabDiscussions = () => {
                     ) : (
                       '[deleted user]'
                     )}{' '}
-                    on put date here
+                    <DisplayDate date={creationDate} />
                   </Text>
                   <CommentsAndReactionsCount
                     reactionsCount={reactionsCount}

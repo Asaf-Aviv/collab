@@ -49,6 +49,7 @@ export const collabPostCommentResolver: Resolvers = {
       const user = await loaders.userLoader.load(authorId)
       return user!
     },
+    isAuthor: ({ authorId }, args, { user }) => user?.id === authorId,
     reactions: ({ id }, args, { models, user }) =>
       (models.CollabPostCommentReaction.findAll({
         where: { commentId: id },

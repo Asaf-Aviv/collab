@@ -8,6 +8,7 @@ import {
   Default,
   BelongsTo,
   IsUUID,
+  CreatedAt,
 } from 'sequelize-typescript'
 import { v4 as uuid } from 'uuid'
 import { Collab } from './Collab'
@@ -52,6 +53,9 @@ export class CollabDiscussionThreadComment extends Model<
 
   @BelongsTo(() => User, { foreignKey: 'authorId', onDelete: 'CASCADE' })
   author!: User
+
+  @CreatedAt
+  creationDate!: Date
 
   static async createComment(
     input: AddDiscussionThreadCommentInput,

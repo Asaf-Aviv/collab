@@ -7,7 +7,6 @@ import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
 import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined'
 import SearchRoundedIcon from '@material-ui/icons/SearchRounded'
 import PostAddIcon from '@material-ui/icons/PostAdd'
-import FocusLock from 'react-focus-lock'
 import { Flex, Divider, Text } from '@chakra-ui/core'
 import styled from '@emotion/styled'
 import { NavLink } from 'react-router-dom'
@@ -63,78 +62,74 @@ export const SmallScreenNav = () => {
           initial={{ y: '-100%', opacity: 0.3 }}
           transition={{ duration: 0.3 }}
         >
-          <FocusLock>
-            <Flex
-              as="nav"
-              direction="column"
-              bg="white"
-              onClick={() => toggleIsOpen()}
-            >
-              <StyledLink exact to="/">
-                <HomeOutlinedIcon />
-                Home
-                <ArrowForwardIosIcon />
-              </StyledLink>
-              <StyledLink exact to="/collabs/posts">
-                <HomeOutlinedIcon />
-                Collabs
-                <ArrowForwardIosIcon />
-              </StyledLink>
-              <StyledLink exact to="/showcase">
-                <HomeOutlinedIcon />
-                Showcase
-                <ArrowForwardIosIcon />
-              </StyledLink>
-              <StyledLink to="/create">
-                <PostAddIcon />
-                Create
-                <ArrowForwardIosIcon />
-              </StyledLink>
-              <StyledLink to="/search">
-                <SearchRoundedIcon />
-                Search
-                <ArrowForwardIosIcon />
-              </StyledLink>
-              <Divider />
-              {!currentUser && (
-                <>
-                  <StyledLink to="/login">
-                    <PostAddIcon />
-                    Log in
-                    <ArrowForwardIosIcon />
-                  </StyledLink>
-                  <StyledLink to="/signup">
-                    <PostAddIcon />
-                    Sign up
-                    <ArrowForwardIosIcon />
-                  </StyledLink>
-                </>
-              )}
-              <Divider />
-              {currentUser && (
-                <LogoutButton
-                  bg="white"
-                  height="48px"
-                  justifyContent="flex-start"
-                  fontWeight={300}
-                  _hover={{
-                    bg: '#f3f3f3',
-                  }}
-                  _focus={{
-                    bg: '#f3f3f3',
-                  }}
-                  _active={{
-                    bg: '#f3f3f3',
-                  }}
-                >
-                  <ExitToAppOutlinedIcon />
-                  <Text ml="0.5rem" as="span">
-                    Sign Out
-                  </Text>
-                </LogoutButton>
-              )}
-            </Flex>
-          </FocusLock>
+          <Flex
+            as="nav"
+            direction="column"
+            bg="white"
+            onClick={() => toggleIsOpen()}
+          >
+            <StyledLink exact to="/">
+              <HomeOutlinedIcon />
+              Home
+              <ArrowForwardIosIcon />
+            </StyledLink>
+            <StyledLink exact to="/collabs/posts">
+              <HomeOutlinedIcon />
+              Collabs
+              <ArrowForwardIosIcon />
+            </StyledLink>
+            <StyledLink exact to="/showcase">
+              <HomeOutlinedIcon />
+              Showcase
+              <ArrowForwardIosIcon />
+            </StyledLink>
+            <StyledLink to="/create">
+              <PostAddIcon />
+              Create
+              <ArrowForwardIosIcon />
+            </StyledLink>
+            <StyledLink to="/search">
+              <SearchRoundedIcon />
+              Search
+              <ArrowForwardIosIcon />
+            </StyledLink>
+            <Divider />
+            {currentUser ? (
+              <LogoutButton
+                bg="white"
+                height="48px"
+                justifyContent="flex-start"
+                fontWeight={300}
+                _hover={{
+                  bg: '#f3f3f3',
+                }}
+                _focus={{
+                  bg: '#f3f3f3',
+                }}
+                _active={{
+                  bg: '#f3f3f3',
+                }}
+              >
+                <ExitToAppOutlinedIcon />
+                <Text ml="0.5rem" as="span">
+                  Sign Out
+                </Text>
+              </LogoutButton>
+            ) : (
+              <>
+                <StyledLink to="/login">
+                  <PostAddIcon />
+                  Log in
+                  <ArrowForwardIosIcon />
+                </StyledLink>
+                <StyledLink to="/signup">
+                  <PostAddIcon />
+                  Sign up
+                  <ArrowForwardIosIcon />
+                </StyledLink>
+              </>
+            )}
+          </Flex>
         </StyledMotion>
       )}
     </>

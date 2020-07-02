@@ -234,7 +234,7 @@ export const GET_COLLAB_POSTS = gql`
         experience
         hasStarted
         languages
-        createdAt
+        creationDate
         isNew
         membersCount
         reactionsCount
@@ -260,7 +260,7 @@ export const GET_COLLAB_POSTS_BY_STACK = gql`
         experience
         hasStarted
         languages
-        createdAt
+        creationDate
         isNew
         membersCount
         reactionsCount
@@ -286,7 +286,7 @@ export const ADVANCED_POSTS_SEARCH = gql`
         experience
         hasStarted
         languages
-        createdAt
+        creationDate
         isNew
         membersCount
         reactionsCount
@@ -348,7 +348,7 @@ export const GET_COLLAB_POST = gql`
       isMember
       invitationPending
       requestToJoinPending
-      createdAt
+      creationDate
       reactions {
         emojiId
         count
@@ -371,6 +371,8 @@ export const COLLAB_POST_COMMENTS = gql`
       comments {
         id
         content
+        isAuthor
+        creationDate
         author {
           id
           username
@@ -459,6 +461,7 @@ export const GET_COLLAB_DISCUSSIONS = gql`
       discussionThreads {
         id
         title
+        creationDate
         author {
           id
           username
@@ -477,6 +480,7 @@ export const GET_COLLAB_DISCUSSION_THREAD = gql`
       id
       title
       content
+      creationDate
       author {
         id
         username
@@ -498,6 +502,8 @@ export const GET_COLLAB_DISCUSSION_THREAD_COMMENTS = gql`
       comments {
         id
         content
+        creationDate
+        isAuthor
         author {
           id
           username

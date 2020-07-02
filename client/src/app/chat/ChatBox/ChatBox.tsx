@@ -1,6 +1,5 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import FocusLock from 'react-focus-lock'
 import { ChatInput } from '../ChatInput'
 import { ChatMessages } from '../ChatMessages'
 import { RootState, messagesActions } from '../reducers'
@@ -22,7 +21,6 @@ export const ChatBox = () => {
   useKey(['Esc', 'Escape'], closeChatBox)
 
   return (
-    <FocusLock returnFocus>
       <Flex
         roundedTop={6}
         height={350}
@@ -57,6 +55,5 @@ export const ChatBox = () => {
         <ChatMessages />
         <ChatInput />
       </Flex>
-    </FocusLock>
   )
 }

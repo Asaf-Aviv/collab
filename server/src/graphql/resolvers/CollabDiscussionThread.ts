@@ -22,7 +22,7 @@ export const collabDiscussionThreadResolver: Resolvers = {
     comments: ({ id }, args, { models }) =>
       models.CollabDiscussionThreadComment.findAll({
         where: { threadId: id },
-        order: [['createdAt', 'DESC']],
+        order: [['creation_date', 'DESC']],
       }),
     commentsCount: ({ id }, args, { models }) =>
       models.CollabDiscussionThreadComment.count({ where: { threadId: id } }),

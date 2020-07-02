@@ -72,7 +72,7 @@ export const collabPostTypeDefs = gql`
     commentsCount: Int!
     pendingInvites: [User!]!
     pendingRequests: [User!]!
-    createdAt: String!
+    creationDate: Date!
     updatedAt: String!
     isNew: Boolean!
     reactions: [Reaction!]!

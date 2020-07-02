@@ -131,7 +131,4 @@ const ButtonsContainer = styled(Flex)`
   > :nth-of-type(2) {
     margin-left: 1rem;
   }
-  > * {
-    flex: 1;
-  }
 `

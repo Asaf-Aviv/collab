@@ -111,11 +111,10 @@ export const CollabPost = () => {
   }
 
   const {
-    // id,
     name,
     title,
     description,
-    createdAt,
+    creationDate,
     owner,
     experience,
     stack,
@@ -123,7 +122,6 @@ export const CollabPost = () => {
     members,
     languages,
     isNew,
-    // isOwner,
     reactions,
     ...memberRequestsInfo
   } = data.collabPost
@@ -136,7 +134,7 @@ export const CollabPost = () => {
         <section>
           <Paper as="article" p={3} mb={10} flexDirection="column">
             <Flex as="header" align="center" mb={6}>
-              <PostAuthorHeader author={owner} date={createdAt} />
+              <PostAuthorHeader author={owner} date={creationDate} />
               {isNew && (
                 <PostTag variantColor="green" ml="auto">
                   NEW

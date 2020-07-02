@@ -12,7 +12,7 @@ export const collabPostResolver: Resolvers = {
     collabPosts: async (root, { offset, limit }, { models }) => {
       const posts = await models.CollabPost.findAll({
         order: [
-          ['created_at', 'desc'],
+          ['creation_date', 'desc'],
           ['id', 'desc'],
         ],
         offset,
@@ -48,7 +48,7 @@ export const collabPostResolver: Resolvers = {
         attributes: ['postId'],
         include: [{ model: models.CollabPost }],
         order: [
-          [{ model: models.CollabPost, as: 'post' }, 'createdAt', 'DESC'],
+          [{ model: models.CollabPost, as: 'post' }, 'creationDate', 'DESC'],
         ],
         offset,
         limit: limit + 1,
@@ -88,8 +88,10 @@ export const collabPostResolver: Resolvers = {
       models.CollabPost.deletePost(postId, user!.id),
   },
   CollabPost: {
-    owner: async ({ ownerId }, args, { loaders }) =>
-      loaders.userLoader.load(ownerId),
+    owner: async ({ ownerId }, args, { loaders }) => {
+      const user = await loaders.userLoader.load(ownerId)
+      return user!
+    },
     isOwner: ({ ownerId }, args, { user }) => user?.id === ownerId,
     isMember: async ({ collabId }, args, { user, models }) => {
       if (!user?.id) {
@@ -165,18 +167,17 @@ export const collabPostResolver: Resolvers = {
     members: async ({ collabId }, args, { loaders, models }) => {
       const members = await models.CollabMember.findAll({
         where: { collabId },
-        attributes: ['memberId'],
+        include: [models.User],
       })
 
-      const memberIds = members.map(({ memberId }) => memberId)
-      const users = await loaders.userLoader.loadMany(memberIds)
-      return users.map(replaceErrorWithNull)
+      return members.map(({ member }) => member)
     },
-    isNew: ({ createdAt }) => differenceInDays(new Date(), createdAt) <= 7,
+    isNew: ({ creationDate }) =>
+      differenceInDays(new Date(), creationDate) <= 7,
     comments: ({ id }, args, { models }) =>
       models.CollabPostComment.findAll({
         where: { postId: id },
-        order: [['createdAt', 'DESC']],
+        order: [['creationDate', 'DESC']],
       }),
     pendingInvites: async ({ collabId }, args, { models }) => {
       const pendingInviteMembers = await models.CollabMemberRequest.findAll({

@@ -61,10 +61,12 @@ export class CollabPost extends Model<CollabPost> {
   description!: string
 
   @CreatedAt
-  @Column
-  createdAt!: Date
+  creationDate!: Date
 
-  @BelongsToMany(() => Stack, () => CollabPostStack)
+  @BelongsToMany(
+    () => Stack,
+    () => CollabPostStack,
+  )
   stack!: (Stack & { CollabPostStack: CollabPostStack })[]
 
   @HasMany(() => CollabPostLanguage)

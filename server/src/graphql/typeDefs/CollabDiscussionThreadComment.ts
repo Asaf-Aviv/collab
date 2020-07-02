@@ -15,6 +15,8 @@ export const collabDiscussionThreadCommentTypeDefs = gql`
     thread: CollabDiscussionThread
     collab: Collab
     reactions: [Reaction!]!
+    creationDate: Date!
+    isAuthor: Boolean!
   }
 
   input CreateCollabDiscussionThreadCommentInput {

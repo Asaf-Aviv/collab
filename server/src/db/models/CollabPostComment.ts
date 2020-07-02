@@ -8,6 +8,7 @@ import {
   Default,
   BelongsTo,
   IsUUID,
+  CreatedAt,
 } from 'sequelize-typescript'
 import { v4 as uuid } from 'uuid'
 import { User } from './User'
@@ -37,6 +38,9 @@ export class CollabPostComment extends Model<CollabPostComment> {
 
   @Column
   content!: string
+
+  @CreatedAt
+  creationDate!: Date
 
   static async createComment(
     content: string,

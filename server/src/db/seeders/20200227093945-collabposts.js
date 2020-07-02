@@ -16,7 +16,7 @@ const generageCollabPost = (collab_id, owner_id) => {
     owner_id,
     collab_id,
     updated_at: new Date(),
-    created_at: new Date(),
+    creation_date: new Date(),
   }
 }
 
@@ -30,7 +30,7 @@ const comments = _.flatten(
       author_id: _.sample(seededUsers).id,
       content: faker.lorem.words(_.random(5, 14)),
       updated_at: new Date(),
-      created_at: new Date(),
+      creation_date: new Date(),
     })),
   ),
 )

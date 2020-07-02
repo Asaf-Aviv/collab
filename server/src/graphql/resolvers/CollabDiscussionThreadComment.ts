@@ -17,6 +17,7 @@ export const collabDiscussionThreadCommentResolver: Resolvers = {
   CollabDiscussionThreadComment: {
     author: ({ authorId }, args, { loaders }) =>
       loaders.userLoader.load(authorId),
+    isAuthor: ({ authorId }, args, { user }) => user?.id === authorId,
     thread: ({ threadId }, args, { models }) =>
       models.CollabDiscussionThread.findByPk(threadId),
     collab: ({ collabId }, args, { loaders }) =>

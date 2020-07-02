@@ -21,20 +21,32 @@ import { PostAuthorHeader } from '../../../components/PostAuthorHeader/PostAutho
 import { CommentForm } from '../../../components/CommentForm/CommentForm'
 import { SectionHorizonalHeader } from '../../../components/SectionHorizonalHeader/SectionHorizonalHeader'
 import { useToastNotification } from '../../notifications'
+import { Loader } from '../../../components/Loader'
+import { DisplayError } from '../../../components/DisplayError'
 
 export const DiscussionThread = () => {
   const { collabId, threadId } = useParams<{
     collabId: string
     threadId: string
   }>()
-  const { data: threadData } = useCollabThreadQuery({ variables: { threadId } })
-  const { data: commentsData, refetch } = useCollabThreadCommentsQuery({
+  const {
+    loading: loadingThread,
+    error: threadError,
+    data: threadData,
+    refetch: refetchThread,
+  } = useCollabThreadQuery({ variables: { threadId } })
+  const {
+    data: commentsData,
+    loading: loadingComments,
+    error: commentsError,
+    refetch: refetchComments,
+  } = useCollabThreadCommentsQuery({
     variables: { threadId },
   })
   const notify = useToastNotification()
   const [addComment] = useCreateDiscussionThreadCommentMutation({
     onCompleted: () => {
-      refetch()
+      refetchComments()
     },
     onError: ({ message }) => {
       notify('error', { title: 'Error', message })
@@ -133,26 +145,39 @@ export const DiscussionThread = () => {
     })
   }
 
-  const { title, author, ...thread } = threadData.thread
+  const { title, author, creationDate, ...thread } = threadData.thread
 
   return (
     <Box as="main" maxWidth={900} mx="auto" pb={8}>
+      {loadingThread && <Loader />}
+      {threadError && (
+        <DisplayError
+          message="Could not fetch thread"
+          onClick={() => refetchThread()}
+        />
+      )}
       <section>
         <Paper as="article" flexDirection="column" p={3} mb={6}>
           <header>
-            <PostAuthorHeader author={author} date="" mb={4} />
+            {author ? (
+              <PostAuthorHeader author={author} date={creationDate} mb={4} />
+            ) : (
+              '[deleted user]'
+            )}
+          </header>
+          <Box pl={14}>
             <Heading as="h1" size="lg" mb={4}>
               {title}
             </Heading>
-          </header>
-          <Text mb={8} maxWidth="60ch">
-            {thread.content}
-          </Text>
-          <ReactionPanel
-            reactions={thread.reactions}
-            addReaction={handleAddThreadReaction}
-            removeReaction={handleRemoveThreadReaction}
-          />
+            <Text mb={8} maxWidth="60ch">
+              {thread.content}
+            </Text>
+            <ReactionPanel
+              reactions={thread.reactions}
+              addReaction={handleAddThreadReaction}
+              removeReaction={handleRemoveThreadReaction}
+            />
+          </Box>
         </Paper>
       </section>
       <section>
@@ -160,6 +185,13 @@ export const DiscussionThread = () => {
       </section>
       <section>
         <SectionHorizonalHeader title="Comments" titleTag="h3" />
+        {loadingComments && <Loader />}
+        {commentsError && (
+          <DisplayError
+            message="Could not fetch comments"
+            onClick={() => refetchComments()}
+          />
+        )}
         {commentsData?.thread?.comments.map(comment => (
           <Comment key={comment.id} {...comment}>
             <ReactionPanel

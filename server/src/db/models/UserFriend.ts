@@ -23,7 +23,6 @@ export class UserFriend extends Model<UserFriend> {
   @Column
   id!: string
 
-  @Index
   @ForeignKey(() => User)
   @Column
   userId!: string
