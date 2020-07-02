@@ -24,7 +24,7 @@ const dbByEnv = {
 
 export default new Sequelize(
   dbByEnv[process.env.NODE_ENV as keyof typeof dbByEnv],
-  'root',
+  'postgres',
   '',
   baseConfig,
 )
