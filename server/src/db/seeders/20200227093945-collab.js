@@ -34,7 +34,7 @@ const createCollabTask = (listId, collabId, index) => ({
   ).owner_id,
   description: faker.random.words(_.random(5, 15)),
   updated_at: new Date(),
-  created_at: new Date(),
+  creation_date: new Date(),
   order: index,
 })
 
@@ -55,7 +55,7 @@ const createTaskComment = (task_id, author_id) => ({
   author_id,
   content: faker.random.words(_.random(4, 10)),
   updated_at: new Date(),
-  created_at: new Date(),
+  creation_date: new Date(),
 })
 
 const createRandomTaskCommentLength = (task_id, author_id) =>

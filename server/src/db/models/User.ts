@@ -14,6 +14,7 @@ import {
   AllowNull,
   Validate,
   BeforeValidate,
+  CreatedAt,
 } from 'sequelize-typescript'
 import { v4 as uuid } from 'uuid'
 import bcrypt from 'bcrypt'
@@ -83,6 +84,9 @@ export class User extends Model<User> {
   @AllowNull(false)
   @Column
   password!: string
+
+  @CreatedAt
+  creationDate!: Date
 
   @Default(null)
   @Column

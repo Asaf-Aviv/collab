@@ -51,12 +51,7 @@ export class Collab extends Model<Collab> {
   ownerId!: string
 
   @CreatedAt
-  @Column
-  createdAt!: Date
-
-  @UpdatedAt
-  @Column
-  updatedAt!: Date
+  creationDate!: Date
 
   @BelongsTo(() => User, { foreignKey: 'ownerId', onDelete: 'cascade' })
   owner!: User

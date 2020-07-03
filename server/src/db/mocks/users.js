@@ -13,7 +13,7 @@ const generageUser = (__, i) => ({
   bio: faker.random.words(_.random(5, 10)),
   password: bcrypt.hashSync('test1234', 12),
   updated_at: new Date(),
-  created_at: new Date(),
+  creation_date: new Date(),
   avatar: null,
 })
 
@@ -24,7 +24,7 @@ const asaf = {
   bio: faker.random.words(_.random(5, 10)),
   password: bcrypt.hashSync('test1234', 12),
   updated_at: new Date(),
-  created_at: new Date(),
+  creation_date: new Date(),
   avatar: null,
 }
 

@@ -9,7 +9,7 @@ const generageCollab = owner_id => ({
   accepts_invites: true,
   owner_id,
   updated_at: new Date(),
-  created_at: new Date(),
+  creation_date: new Date(),
   collab_post_id: null,
 })
 
@@ -20,10 +20,9 @@ exports.seededCollabs = seededCollabs
 const collabOwners = seededCollabs.map(({ id, owner_id }) => ({
   id: uuid(),
   collab_id: id,
-  is_owner: true,
   member_id: owner_id,
   updated_at: new Date(),
-  created_at: new Date(),
+  creation_date: new Date(),
 }))
 
 exports.collabOwners = collabOwners
@@ -37,7 +36,7 @@ const memberInvitations = _.flatten(
         type: 'invitation',
         member_id: userId,
         updated_at: new Date(),
-        created_at: new Date(),
+        creation_date: new Date(),
       }),
     ),
   ),
@@ -61,7 +60,7 @@ const memberRequests = _.flatten(
       type: 'request',
       member_id: userId,
       updated_at: new Date(),
-      created_at: new Date(),
+      creation_date: new Date(),
     })),
   ),
 )
@@ -76,7 +75,7 @@ const createDiscussionThread = (author_id, collab_id) => ({
   collab_id,
   content: faker.random.words(_.random(10, 20)),
   updated_at: new Date(),
-  created_at: new Date(),
+  creation_date: new Date(),
 })
 
 const collabThreads = _.flatten(
@@ -96,7 +95,7 @@ const createThreadComment = (thread_id, author_id, collab_id) => ({
   author_id,
   thread_id,
   updated_at: new Date(),
-  created_at: new Date(),
+  creation_date: new Date(),
 })
 
 const threadComments = _.flatten(

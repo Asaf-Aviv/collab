@@ -28,6 +28,7 @@ export const collabTypeDefs = gql`
     members: [User!]!
     isOwner: Boolean!
     isMember: Boolean!
+    creationDate: Date!
     invitationPending: Boolean!
     requestToJoinPending: Boolean!
     pendingInvites: [User]!

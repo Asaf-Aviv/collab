@@ -7,7 +7,7 @@ const friendRequests = seededUsers
     id: uuid(),
     sender_id: user.id,
     receiver_id: asaf.id,
-    created_at: new Date(),
+    creation_date: new Date(),
     updated_at: new Date(),
   }))
 
@@ -17,7 +17,7 @@ const friendRequests = seededUsers
 //     .map(user2 => ({
 //       user_id: user.id,
 //       friend_id: user2.id,
-//       created_at: new Date(),
+//       creation_date: new Date(),
 //       updated_at: new Date(),
 //     })),
 // )

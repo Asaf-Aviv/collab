@@ -8,6 +8,7 @@ import {
   BelongsTo,
   AllowNull,
   IsUUID,
+  CreatedAt,
 } from 'sequelize-typescript'
 import { v4 as uuid } from 'uuid'
 import { Collab } from './Collab'
@@ -35,8 +36,6 @@ export class CollabMember extends Model<CollabMember> {
   @BelongsTo(() => User, { foreignKey: 'memberId', onDelete: 'CASCADE' })
   member!: User
 
-  @AllowNull(false)
-  @Default(false)
-  @Column
-  isOwner!: boolean
+  @CreatedAt
+  creationDate!: Date
 }

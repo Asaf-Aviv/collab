@@ -8,6 +8,7 @@ import {
   BelongsTo,
   IsUUID,
   HasMany,
+  CreatedAt,
 } from 'sequelize-typescript'
 import { Op } from 'sequelize'
 import { v4 as uuid } from 'uuid'
@@ -43,6 +44,9 @@ export class CollabTask extends Model<CollabTask> {
   @ForeignKey(() => User)
   @Column
   authorId!: string
+
+  @CreatedAt
+  creationDate!: Date
 
   @BelongsTo(() => User, { foreignKey: 'authorId', onDelete: 'CASCADE' })
   author!: User

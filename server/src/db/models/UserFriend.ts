@@ -9,6 +9,7 @@ import {
   Default,
   IsUUID,
   Index,
+  CreatedAt,
 } from 'sequelize-typescript'
 import { v4 as uuid } from 'uuid'
 import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
@@ -36,6 +37,9 @@ export class UserFriend extends Model<UserFriend> {
 
   @BelongsTo(() => User, { foreignKey: 'friendId', onDelete: 'CASCADE' })
   friend!: User
+
+  @CreatedAt
+  creationDate!: Date
 
   static async createFriendship(friendId: string, userId: string) {
     const exist = this.findOne({ where: { userId, friendId } })

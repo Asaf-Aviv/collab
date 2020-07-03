@@ -12,6 +12,7 @@ export const taskCommentTypeDefs = gql`
     author: User
     task: Task
     reactions: [Reaction!]!
+    creationDate: Date!
   }
 
   input CreateTaskCommentInput {

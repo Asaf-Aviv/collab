@@ -7,6 +7,7 @@ import {
   BelongsTo,
   IsUUID,
   Default,
+  CreatedAt,
 } from 'sequelize-typescript'
 import { Op } from 'sequelize'
 import { v4 as uuid } from 'uuid'
@@ -37,6 +38,9 @@ export class UserFriendRequest extends Model<UserFriendRequest> {
 
   @BelongsTo(() => User, { foreignKey: 'receiverId', onDelete: 'CASCADE' })
   receiver!: User
+
+  @CreatedAt
+  creationDate!: Date
 
   static async createFriendRequest(receiverId: string, senderId: string) {
     const exist = await this.findOne({

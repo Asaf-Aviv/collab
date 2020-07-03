@@ -476,6 +476,7 @@ export type Collab = {
   __typename?: 'Collab';
   acceptsInvites: Scalars['Boolean'];
   collabPostId: Maybe<Scalars['ID']>;
+  creationDate: Scalars['Date'];
   discussionThreads: Array<CollabDiscussionThread>;
   id: Scalars['ID'];
   invitationPending: Scalars['Boolean'];
@@ -835,6 +836,7 @@ export type TaskComment = {
   __typename?: 'TaskComment';
   author: Maybe<User>;
   content: Scalars['String'];
+  creationDate: Scalars['Date'];
   id: Scalars['ID'];
   reactions: Array<Reaction>;
   task: Maybe<Task>;

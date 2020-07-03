@@ -8,6 +8,7 @@ import {
   Default,
   BelongsTo,
   IsUUID,
+  CreatedAt,
 } from 'sequelize-typescript'
 import { v4 as uuid } from 'uuid'
 import { User } from './User'
@@ -39,6 +40,9 @@ export class CollabTaskComment extends Model<CollabTaskComment> {
 
   @BelongsTo(() => User, { foreignKey: 'authorId', onDelete: 'CASCADE' })
   author!: User
+
+  @CreatedAt
+  creationDate!: Date
 
   @Column
   content!: string

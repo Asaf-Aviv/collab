@@ -488,6 +488,7 @@ export type Collab = {
   __typename?: 'Collab';
   acceptsInvites: Scalars['Boolean'];
   collabPostId?: Maybe<Scalars['ID']>;
+  creationDate: Scalars['Date'];
   discussionThreads: Array<CollabDiscussionThread>;
   id: Scalars['ID'];
   invitationPending: Scalars['Boolean'];
@@ -847,6 +848,7 @@ export type TaskComment = {
   __typename?: 'TaskComment';
   author?: Maybe<User>;
   content: Scalars['String'];
+  creationDate: Scalars['Date'];
   id: Scalars['ID'];
   reactions: Array<Reaction>;
   task?: Maybe<Task>;
@@ -2520,6 +2522,7 @@ export type MutationResolvers<ContextType = CollabContext, ParentType extends Re
 export type CollabResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Collab'] = ResolversParentTypes['Collab']> = ResolversObject<{
   acceptsInvites?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   collabPostId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  creationDate?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   discussionThreads?: Resolver<Array<ResolversTypes['CollabDiscussionThread']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   invitationPending?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
@@ -2725,6 +2728,7 @@ export type TaskResolvers<ContextType = CollabContext, ParentType extends Resolv
 export type TaskCommentResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['TaskComment'] = ResolversParentTypes['TaskComment']> = ResolversObject<{
   author?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  creationDate?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   reactions?: Resolver<Array<ResolversTypes['Reaction']>, ParentType, ContextType>;
   task?: Resolver<Maybe<ResolversTypes['Task']>, ParentType, ContextType>;
