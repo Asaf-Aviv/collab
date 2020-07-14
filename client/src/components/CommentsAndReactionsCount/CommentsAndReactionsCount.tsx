@@ -18,7 +18,7 @@ export const CommentsAndReactionsCount = ({
 }: Props) => (
   <Flex {...props}>
     <Flex mr={3} align="center">
-      <Emoji emoji="sunglasses" size={emojiSize || 24} />
+      <Emoji emoji="sunglasses" size={emojiSize || 24} set="twitter" />
       <Text fontWeight={600} ml="3px">
         {reactionsCount}
       </Text>

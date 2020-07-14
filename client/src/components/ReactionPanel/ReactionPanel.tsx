@@ -82,7 +82,7 @@ export const ReactionPanel = ({
               bg: 'purple.600',
             }}
           >
-            <Emoji emoji={emojiId} size={20} />
+            <Emoji emoji={emojiId} size={20} set="twitter" />
             <Text ml={1} fontWeight={700} fontSize="md">
               {count}
             </Text>
@@ -98,7 +98,7 @@ export const ReactionPanel = ({
             height="40px"
             position="relative"
           >
-            <Emoji size={20} emoji="sunglasses" />
+            <Emoji size={20} emoji="sunglasses" set="twitter" />
             <Icon name="add" size="12px" ml={1} mt="-15px" />
           </Button>
         </PopoverTrigger>
@@ -115,7 +115,7 @@ export const ReactionPanel = ({
               set="twitter"
               data={twitterEmojiData as any}
               showPreview={false}
-              sheetSize={20}
+              sheetSize={64}
               showSkinTones={false}
               exclude={['symbols']}
               onSelect={handleEmojiSelect}
