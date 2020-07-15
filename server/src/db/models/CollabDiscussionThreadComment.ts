@@ -15,7 +15,7 @@ import { Collab } from './Collab'
 import { User } from './User'
 import { CollabMember } from './CollabMember'
 import { CollabDiscussionThread } from './CollabDiscussionThread'
-import { AddDiscussionThreadCommentInput } from '../../graphql/types'
+import { CreateCollabDiscussionThreadCommentInput } from '../../graphql/types'
 
 @Table({ tableName: 'collab_discussion_thread_comments' })
 export class CollabDiscussionThreadComment extends Model<
@@ -58,7 +58,7 @@ export class CollabDiscussionThreadComment extends Model<
   creationDate!: Date
 
   static async createComment(
-    input: AddDiscussionThreadCommentInput,
+    input: CreateCollabDiscussionThreadCommentInput,
     authorId: string,
   ) {
     const { collabId } = input

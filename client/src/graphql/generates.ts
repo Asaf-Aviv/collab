@@ -14,7 +14,7 @@ export type Scalars = {
 };
 
 export type Query = {
-  __typename?: 'Query';
+   __typename?: 'Query';
   advancedPostsSearch: CollabPostsSearchResultsPayload;
   collab: Maybe<Collab>;
   collabPost: Maybe<CollabPost>;
@@ -111,7 +111,7 @@ export type QueryUserArgs = {
 };
 
 export type Mutation = {
-  __typename?: 'Mutation';
+   __typename?: 'Mutation';
   acceptCollabInvitation: Scalars['ID'];
   acceptFriendRequest: User;
   acceptMemberRequest: Scalars['ID'];
@@ -473,7 +473,7 @@ export type MutationUploadAvatarArgs = {
 };
 
 export type Collab = {
-  __typename?: 'Collab';
+   __typename?: 'Collab';
   acceptsInvites: Scalars['Boolean'];
   collabPostId: Maybe<Scalars['ID']>;
   creationDate: Scalars['Date'];
@@ -492,7 +492,7 @@ export type Collab = {
 };
 
 export type CollabDiscussionThread = {
-  __typename?: 'CollabDiscussionThread';
+   __typename?: 'CollabDiscussionThread';
   author: Maybe<User>;
   collab: Maybe<Collab>;
   comments: Array<CollabDiscussionThreadComment>;
@@ -512,7 +512,7 @@ export type CreateThreadArgs = {
 };
 
 export type CollabDiscussionThreadComment = {
-  __typename?: 'CollabDiscussionThreadComment';
+   __typename?: 'CollabDiscussionThreadComment';
   author: User;
   collab: Maybe<Collab>;
   content: Scalars['String'];
@@ -560,7 +560,7 @@ export type AdvancedPostsSearchInput = {
 };
 
 export type CollabPostsSearchResultsPayload = {
-  __typename?: 'CollabPostsSearchResultsPayload';
+   __typename?: 'CollabPostsSearchResultsPayload';
   hasNextPage: Scalars['Boolean'];
   posts: Array<CollabPost>;
 };
@@ -572,14 +572,14 @@ export type SearchPostsInput = {
 };
 
 export type SearchPostsPayload = {
-  __typename?: 'SearchPostsPayload';
+   __typename?: 'SearchPostsPayload';
   hasNextPage: Scalars['Boolean'];
   posts: Array<CollabPost>;
   totalResults: Scalars['Int'];
 };
 
 export type CollabPost = {
-  __typename?: 'CollabPost';
+   __typename?: 'CollabPost';
   acceptsInvites: Scalars['Boolean'];
   collabId: Scalars['ID'];
   comments: Array<CollabPostComment>;
@@ -609,7 +609,7 @@ export type CollabPost = {
 };
 
 export type CollabPostsPayload = {
-  __typename?: 'CollabPostsPayload';
+   __typename?: 'CollabPostsPayload';
   hasNextPage: Scalars['Boolean'];
   posts: Array<CollabPost>;
 };
@@ -634,7 +634,7 @@ export enum Experience {
 }
 
 export type CollabPostComment = {
-  __typename?: 'CollabPostComment';
+   __typename?: 'CollabPostComment';
   author: User;
   content: Scalars['String'];
   creationDate: Scalars['Date'];
@@ -674,7 +674,7 @@ export type RemoveCollabTaskCommentReactionInput = {
 };
 
 export type WallMessage = {
-  __typename?: 'WallMessage';
+   __typename?: 'WallMessage';
   author: User;
   content: Scalars['String'];
   creationDate: Scalars['Date'];
@@ -688,7 +688,7 @@ export type CreateWallMessageInput = {
 };
 
 export type CollabWallMessagesPayload = {
-  __typename?: 'CollabWallMessagesPayload';
+   __typename?: 'CollabWallMessagesPayload';
   hasNextPage: Scalars['Boolean'];
   messages: Array<WallMessage>;
 };
@@ -700,7 +700,7 @@ export type CollabWallMessagesInput = {
 };
 
 export type Subscription = {
-  __typename?: 'Subscription';
+   __typename?: 'Subscription';
   friendStatusChange: ChatUsersPayload;
   newFriendRequest: NewFriendRequestPayload;
   newNotification: Notification;
@@ -708,7 +708,7 @@ export type Subscription = {
 };
 
 export type Notification = {
-  __typename?: 'Notification';
+   __typename?: 'Notification';
   creationDate: Scalars['Date'];
   id: Scalars['ID'];
   isRead: Scalars['Boolean'];
@@ -726,18 +726,18 @@ export enum UserChatStatus {
 }
 
 export type ConnectToChatPayload = {
-  __typename?: 'ConnectToChatPayload';
+   __typename?: 'ConnectToChatPayload';
   users: Array<ChatUsersPayload>;
 };
 
 export type ChatUsersPayload = {
-  __typename?: 'ChatUsersPayload';
+   __typename?: 'ChatUsersPayload';
   status: UserChatStatus;
   user: User;
 };
 
 export type PrivateChatMessage = {
-  __typename?: 'PrivateChatMessage';
+   __typename?: 'PrivateChatMessage';
   authorId: Scalars['ID'];
   content: Scalars['String'];
   creationDate: Scalars['Date'];
@@ -750,7 +750,7 @@ export type SendPrivateChatMessageInput = {
 };
 
 export type PrivateMessage = {
-  __typename?: 'PrivateMessage';
+   __typename?: 'PrivateMessage';
   author: Maybe<User>;
   content: Scalars['String'];
   creationDate: Scalars['Date'];
@@ -760,7 +760,7 @@ export type PrivateMessage = {
 };
 
 export type PrivateMessagePreview = {
-  __typename?: 'PrivateMessagePreview';
+   __typename?: 'PrivateMessagePreview';
   avatar: Scalars['String'];
   content: Scalars['String'];
   userId: Scalars['ID'];
@@ -768,7 +768,7 @@ export type PrivateMessagePreview = {
 };
 
 export type GetConversationPayload = {
-  __typename?: 'GetConversationPayload';
+   __typename?: 'GetConversationPayload';
   hasNextPage: Scalars['Boolean'];
   messages: Array<PrivateMessage>;
 };
@@ -779,7 +779,7 @@ export type SendPrivateMessageInput = {
 };
 
 export type Reaction = {
-  __typename?: 'Reaction';
+   __typename?: 'Reaction';
   count: Scalars['Int'];
   emojiId: Scalars['ID'];
   isLiked: Scalars['Boolean'];
@@ -787,7 +787,7 @@ export type Reaction = {
 
 
 export type Task = {
-  __typename?: 'Task';
+   __typename?: 'Task';
   assignedBy: Maybe<User>;
   assignee: Maybe<User>;
   author: User;
@@ -833,7 +833,7 @@ export type MoveTaskToListInput = {
 };
 
 export type TaskComment = {
-  __typename?: 'TaskComment';
+   __typename?: 'TaskComment';
   author: Maybe<User>;
   content: Scalars['String'];
   creationDate: Scalars['Date'];
@@ -865,12 +865,12 @@ export type UpdateTaskListPositionInput = {
 };
 
 export type TaskListPayload = {
-  __typename?: 'TaskListPayload';
+   __typename?: 'TaskListPayload';
   taskList: Array<TaskList>;
 };
 
 export type TaskList = {
-  __typename?: 'TaskList';
+   __typename?: 'TaskList';
   collab: Collab;
   id: Scalars['ID'];
   name: Scalars['String'];
@@ -880,12 +880,12 @@ export type TaskList = {
 
 
 export type NewFriendRequestPayload = {
-  __typename?: 'NewFriendRequestPayload';
+   __typename?: 'NewFriendRequestPayload';
   user: User;
 };
 
 export type CurrentUser = {
-  __typename?: 'CurrentUser';
+   __typename?: 'CurrentUser';
   avatar: Maybe<Scalars['String']>;
   bio: Scalars['String'];
   collabInvites: Array<Collab>;
@@ -912,7 +912,7 @@ export type CurrentUser = {
 };
 
 export type User = {
-  __typename?: 'User';
+   __typename?: 'User';
   avatar: Maybe<Scalars['String']>;
   bio: Scalars['String'];
   canRequestFriendship: Scalars['Boolean'];
@@ -944,14 +944,14 @@ export type UpdateUserInfoInput = {
 };
 
 export type CollabRequest = {
-  __typename?: 'CollabRequest';
+   __typename?: 'CollabRequest';
   collab: Collab;
   id: Scalars['ID'];
   member: User;
 };
 
 export type AuthPayload = {
-  __typename?: 'AuthPayload';
+   __typename?: 'AuthPayload';
   token: Scalars['String'];
 };
 

@@ -1,5 +1,5 @@
 {
-  "name": "client",
+  "name": "lets-collab",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -61,8 +61,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
-    "eject": "react-scripts eject",
-    "cypress:open": "cypress open"
+    "eject": "react-scripts eject"
   },
   "browserslist": {
     "production": [

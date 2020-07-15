@@ -13,3 +13,4 @@ t.js
 server/dump.rdb
 
 server/src/public
+ecosystem.config.js

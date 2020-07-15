@@ -13,10 +13,16 @@ export const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(express.static(path.join(__dirname, '../../client/build')))
 app.use(
   '/static/avatars',
   express.static(path.join(__dirname, './public/avatars')),
 )
+
+app.get('*', (req, res) => {
+  console.log('get')
+  res.sendFile(path.join(__dirname, '../../client/build', 'index.html'))
+})
 
 const schema = applyMiddleware(
   makeExecutableSchema({
@@ -47,14 +53,6 @@ export const apolloServer = new ApolloServer({
         ...createContext(),
         user,
       }
-    },
-    onDisconnect: async (websocket, context) => {
-      // const initialContext = await context.initPromise
-      // if (initialContext.user) {
-      //   initialContext.redis
-      //     .srem('chat:onlineUsers', initialContext.user.id)
-      //     .catch(console.error)
-      // }
     },
   },
 })
