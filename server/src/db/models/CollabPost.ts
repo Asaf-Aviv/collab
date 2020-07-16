@@ -63,10 +63,7 @@ export class CollabPost extends Model<CollabPost> {
   @CreatedAt
   creationDate!: Date
 
-  @BelongsToMany(
-    () => Stack,
-    () => CollabPostStack,
-  )
+  @BelongsToMany(() => Stack, () => CollabPostStack)
   stack!: (Stack & { CollabPostStack: CollabPostStack })[]
 
   @HasMany(() => CollabPostLanguage)
@@ -179,7 +176,7 @@ export class CollabPost extends Model<CollabPost> {
     }
     if (isNew) {
       and.push({
-        createdAt: {
+        creationDate: {
           [Op.gte]: subDays(new Date(), 7),
         },
       })
@@ -220,7 +217,7 @@ export class CollabPost extends Model<CollabPost> {
       where: {
         [Op.and]: and,
       },
-      order: ['createdAt'],
+      order: ['creationDate'],
       offset,
       limit: limit + 1,
     })

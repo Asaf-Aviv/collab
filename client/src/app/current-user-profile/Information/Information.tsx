@@ -19,6 +19,7 @@ import { InputWithLabel } from '../../../components/InputWithLabel'
 import styled from '@emotion/styled'
 import { Loader } from '../../../components/Loader'
 import { DisplayError } from '../../../components/DisplayError'
+import { useToastNotification } from '../../notifications'
 
 export const Information = () => {
   const {
@@ -30,12 +31,19 @@ export const Information = () => {
     notifyOnNetworkStatusChange: true,
   })
   const [infoInput, setInfoInput] = useState<UpdateUserInfoInput>(null as any)
+  const notify = useToastNotification()
   const [
     updateInfo,
     { loading: updateInfoLoading /*  error: updateInfoError */ },
   ] = useUpdateUserInfoMutation({
     variables: {
       input: infoInput!,
+    },
+    onCompleted() {
+      notify('success', {
+        title: 'Success',
+        message: 'Information updated successfully',
+      })
     },
   })
 

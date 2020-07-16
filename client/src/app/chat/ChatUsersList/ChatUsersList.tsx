@@ -37,6 +37,7 @@ export const ChatUsersList = memo(function ChatUsersList({
         overflowY="auto"
         overflowX="hidden"
         bg="white"
+        height="100%"
         borderRadius={6}
         p={2}
         boxShadow="0 1px 1px 1px #c3c3c3"

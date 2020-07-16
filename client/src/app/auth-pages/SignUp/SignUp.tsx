@@ -47,6 +47,7 @@ export const SignUp = () => {
             <InputWithLabel
               isRequired
               label="Username"
+              autoComplete="username"
               htmlFor="username"
               id="username"
               value={username}
@@ -57,6 +58,7 @@ export const SignUp = () => {
             <InputWithLabel
               isRequired
               label="Email address"
+              autoComplete="email"
               htmlFor="email"
               id="email"
               type="email"
@@ -67,6 +69,7 @@ export const SignUp = () => {
           <Box>
             <InputWithLabel
               isRequired
+              autoComplete="current-password"
               label="Password"
               htmlFor="password"
               id="password"

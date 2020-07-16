@@ -69,6 +69,7 @@ export const Chat = ({ isMinimized, toggleMinimize }: Props) => {
             transition={{ duration: 0.8, ease: 'anticipate' }}
           >
             <Flex
+              height="100%"
               direction="column"
               flexBasis={230}
               position="sticky"
@@ -131,6 +132,7 @@ export const Chat = ({ isMinimized, toggleMinimize }: Props) => {
 }
 
 const StyledChatContainer = styled(motion.div)`
+  height: 100vh;
   position: fixed;
   right: 0;
   top: 64px;

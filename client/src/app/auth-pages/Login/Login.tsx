@@ -45,6 +45,7 @@ export const Login = () => {
           <Box>
             <InputWithLabel
               isRequired
+              autoComplete="email"
               label="Email address"
               htmlFor="email"
               id="email"

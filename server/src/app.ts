@@ -13,7 +13,7 @@ export const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(express.static(path.join(__dirname, '../../client/build')))
+app.use(express.static(path.join(__dirname, '../build')))
 app.use(
   '/static/avatars',
   express.static(path.join(__dirname, './public/avatars')),
@@ -21,7 +21,7 @@ app.use(
 
 app.get('*', (req, res) => {
   console.log('get')
-  res.sendFile(path.join(__dirname, '../../client/build', 'index.html'))
+  res.sendFile(path.join(__dirname, '../build', 'index.html'))
 })
 
 const schema = applyMiddleware(
