@@ -78,11 +78,6 @@ export const SmallScreenNav = () => {
               Collabs
               <ArrowForwardIosIcon />
             </StyledLink>
-            <StyledLink exact to="/showcase">
-              <HomeOutlinedIcon />
-              Showcase
-              <ArrowForwardIosIcon />
-            </StyledLink>
             <StyledLink to="/create">
               <PostAddIcon />
               Create

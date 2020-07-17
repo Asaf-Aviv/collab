@@ -34,9 +34,6 @@ export const NavBar = () => {
           <StyledLink exact to="/collabs/posts">
             Collabs
           </StyledLink>
-          <StyledLink exact to="/showcase">
-            Showcase
-          </StyledLink>
           <StyledLink to="/create">Create</StyledLink>
           <StyledLink to="/search">Search</StyledLink>
         </StyledFlex>
