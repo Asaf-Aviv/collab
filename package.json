@@ -46,7 +46,7 @@
     "react-select": "^3.1.0",
     "react-window": "^1.8.5",
     "reflect-metadata": "^0.1.13",
-    "sequelize": "^6.3.3",
+    "sequelize": "^5.22.3",
     "sequelize-typescript": "^1.1.0",
     "simplebar-react": "^2.2.0",
     "subscriptions-transport-ws": "^0.9.16",
