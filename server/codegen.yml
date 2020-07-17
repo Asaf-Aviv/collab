@@ -1,8 +1,8 @@
-schema: ./src/graphql/typeDefs/*.ts
+schema: src/graphql/typeDefs/*.ts
 documents:
-  - '../client/src/graphql/queries.ts'
-  - '../client/src/graphql/mutations.ts'
-  - '../client/src/graphql/subscriptions.ts'
+  - '../src/graphql/queries.ts'
+  - '../src/graphql/mutations.ts'
+  - '../src/graphql/subscriptions.ts'
 watch: true
 require: ts-node/register/transpile-only
 generates:
@@ -13,19 +13,19 @@ generates:
       - typescript-resolvers:
     config:
       mappers:
-        Collab: '../db/models/Collab#GQLCollab'
-        CollabDiscussionThreadComment: '../db/models/CollabDiscussionThreadComment#GQLCollabDiscussionThreadComment'
-        CollabDiscussionThread: '../db/models/CollabDiscussionThread#GQLCollabDiscussionThread'
-        CollabPost: '../db/models/CollabPost#GQLCollabPost'
-        CollabPostComment: '../db/models/CollabPostComment#GQLCollabPostComment'
-        Task: '../db/models/CollabTask#GQLCollabTask'
-        TaskComment: '../db/models/CollabTaskComment#GQLCollabTaskComment'
-        TaskList: '../db/models/CollabTaskList#GQLCollabTaskList'
-        User: '../db/models/User#GQLUser'
-        PrivateMessage: '../db/models/PrivateMessage#GQLPrivateMessage'
-        WallMessage: '../db/models/CollabWallMessage#GQLWallMessage'
+        Collab: 'src/db/models/Collab#GQLCollab'
+        CollabDiscussionThreadComment: 'src/db/models/CollabDiscussionThreadComment#GQLCollabDiscussionThreadComment'
+        CollabDiscussionThread: 'src/db/models/CollabDiscussionThread#GQLCollabDiscussionThread'
+        CollabPost: 'src/db/models/CollabPost#GQLCollabPost'
+        CollabPostComment: 'src/db/models/CollabPostComment#GQLCollabPostComment'
+        Task: 'src/db/models/CollabTask#GQLCollabTask'
+        TaskComment: 'src/db/models/CollabTaskComment#GQLCollabTaskComment'
+        TaskList: 'src/db/models/CollabTaskList#GQLCollabTaskList'
+        User: 'src/db/models/User#GQLUser'
+        PrivateMessage: 'src/db/models/PrivateMessage#GQLPrivateMessage'
+        WallMessage: 'src/db/models/CollabWallMessage#GQLWallMessage'
       useIndexSignature: true
-      contextType: ./context/CollabContext#CollabContext
+      contextType: src/graphql/context/CollabContext#CollabContext
       fieldContextTypes:
         # User
         - Mutation.deleteUser#./context/CollabContext#CollabContextWithUser
@@ -52,7 +52,7 @@ generates:
         # Collab Task Comment
         - Mutation.createTaskComment#./context/CollabContext#CollabContextWithUser
         - Mutation.deleteTaskComment#./context/CollabContext#CollabContextWithUser
-  ../client/src/graphql/generates.ts:
+  ./src/graphql/generates.ts:
     plugins:
       - typescript
       - typescript-operations

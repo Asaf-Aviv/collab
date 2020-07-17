@@ -14,7 +14,7 @@ apolloServer.installSubscriptionHandlers(httpServer)
 sequelize
   .authenticate()
   .then(async () => {
-    // await sequelize.sync({ force: true })
+    await sequelize.sync({ force: true })
 
     httpServer.listen(PORT, () =>
       console.info(`Server running on port ${PORT}`),

@@ -28,6 +28,8 @@ module.exports = {
     },
   },
   rules: {
+    semi: 'off',
+    '@typescript-eslint/semi': ['error', 'never'],
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
     'testing-library/await-async-query': 'error',

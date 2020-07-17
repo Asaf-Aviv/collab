@@ -2,15 +2,12 @@
 node_modules
 
 dist
+build
 
 .env
 .env.production
-build
 
 package-lock.json
-
-t.js
-server/dump.rdb
 
 server/src/public
 ecosystem.config.js
