@@ -8,11 +8,10 @@ export const Footer = () => {
   return (
     <Box as="footer" bg="#1c0b2f">
       <Container py={6} m="0 auto">
-        <Flex>
+        <Flex wrap="wrap">
           <StyledFlex>
             <StyledLink to="/">Home</StyledLink>
             <StyledLink to="/collabs">Collabs</StyledLink>
-            <StyledLink to="/showcase">Showcase</StyledLink>
             <StyledLink to="/create">Create</StyledLink>
             <StyledLink to="/search">Search</StyledLink>
           </StyledFlex>
@@ -24,14 +23,20 @@ export const Footer = () => {
             <StyledLink to="/faq">Faq</StyledLink>
             <StyledLink to="/help">Help</StyledLink>
             <StyledLink to="/suggestions">Suggestions</StyledLink>
-            {/* <StyledLink
-              //@ts-ignore
-              as="a"
-              href="mailto:"
-            >
-              Contact
-            </StyledLink> */}
           </StyledFlex>
+          <Box width="100%" color="white" py={4}>
+            <p>
+              Join us on{' '}
+              <a
+                style={{ color: '#c7aeff' }}
+                href="https://discord.gg/sy3rFhx"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Discord!
+              </a>
+            </p>
+          </Box>
         </Flex>
       </Container>
       <Box bg="#19021d">

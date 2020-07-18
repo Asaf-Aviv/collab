@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Box } from '@chakra-ui/core'
+import ReactGA from 'react-ga'
 import { NavBar } from '../../navbar'
 import { Footer } from '../Footer'
 import { Routes } from '../../routes'
@@ -17,6 +18,7 @@ export const Layout = () => {
   const windowWidth = useWindowWidth()
 
   useEffect(() => {
+    ReactGA.pageview(location.pathname + location.search)
     window.scrollTo({ top: 0 })
   }, [location])
 
