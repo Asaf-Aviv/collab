@@ -1,5 +1,6 @@
 import express from 'express'
 import path from 'path'
+import helmet from 'helmet'
 import { ApolloServer, makeExecutableSchema } from 'apollo-server-express'
 import { applyMiddleware } from 'graphql-middleware'
 import { typeDefs } from './graphql/typeDefs'
@@ -11,6 +12,7 @@ import { decodeToken } from './utils'
 
 export const app = express()
 
+app.use(helmet())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, '../build')))
