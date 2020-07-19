@@ -37,7 +37,6 @@ export const Wall = () => {
   })
   const loadNextPageTriggerRef = useRef<HTMLSpanElement | null>(null)
   const notify = useToastNotification()
-
   const [deleteMessage] = useDeleteWallMessageMutation({
     update(store, { data }) {
       console.log(data)

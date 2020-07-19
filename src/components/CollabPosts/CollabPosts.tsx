@@ -6,6 +6,7 @@ import { CollabPostCard } from '../CollabPostCard'
 import { Loader } from '../Loader'
 import { DisplayError } from '../DisplayError'
 import { useOnVisibilty } from '../../hooks/useOnVisibilty'
+import { SEO } from '../SEO'
 
 export const CollabPosts = () => {
   const { data, loading, error, fetchMore, refetch } = useCollabPostsQuery({
@@ -50,18 +51,21 @@ export const CollabPosts = () => {
   )
 
   return (
-    <Container as="main" maxWidth={900} pb={4}>
-      {posts?.map(post => (
-        <CollabPostCard key={post.id} {...post} mb={8} />
-      ))}
-      {error && (
-        <DisplayError
-          message="Could not fetch collabs"
-          onClick={() => refetch()}
-        />
-      )}
-      {loading && <Loader />}
-      {!error && <span ref={loadNextPageTriggerRef} />}
-    </Container>
+    <>
+      <SEO title="Collabs" url={window.location.href} />
+      <Container as="main" maxWidth={900} pb={4}>
+        {posts?.map(post => (
+          <CollabPostCard key={post.id} {...post} mb={8} />
+        ))}
+        {error && (
+          <DisplayError
+            message="Could not fetch collabs"
+            onClick={() => refetch()}
+          />
+        )}
+        {loading && <Loader />}
+        {!error && <span ref={loadNextPageTriggerRef} />}
+      </Container>
+    </>
   )
 }

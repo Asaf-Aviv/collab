@@ -8,6 +8,7 @@
     "date-fns": "^2.14.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "graphql": "^15.3.0",
     "graphql-middleware": "^4.0.2",
     "graphql-shield": "^7.3.2",
     "graphql-tools": "^6.0.14",

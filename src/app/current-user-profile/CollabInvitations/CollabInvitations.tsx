@@ -12,6 +12,7 @@ import { AvatarWithUsername } from '../../../components/AvatarWithUsername'
 import { Loader } from '../../../components/Loader'
 import { DisplayError } from '../../../components/DisplayError'
 import { getAvatarUrl } from '../../../utils'
+import { SEO } from '../../../components/SEO'
 
 const removeInvitationFromCache = (store: DataProxy, collabId: string) => {
   const query = GetCurrentUserCollabInvitationsDocument
@@ -58,76 +59,79 @@ export const CollabInvitations = () => {
   const { collabInvites } = data?.currentUser || {}
 
   return (
-    <Box as="main" flex={1}>
-      <Heading as="h1" size="md" mb={4} fontWeight={500}>
-        Collab Invitations
-      </Heading>
-      <section>
-        {collabInvites?.map(({ id, name, owner }) => (
-          <PseudoBox
-            key={id}
-            py={4}
-            px={2}
-            _notFirst={{
-              borderTop: '1px solid #e1e1e1',
-            }}
-            _hover={{
-              bg: '#EEE',
-            }}
-          >
-            <Box mb={4}>
-              <AvatarWithUsername
-                id={owner.id}
-                avatar={getAvatarUrl(owner.avatar)}
-                username={owner.username}
-                size="sm"
-                mb={2}
-              />
-              <Text>
-                invited you to join{' '}
-                <Text as="span" fontWeight={700}>
-                  {name}
-                </Text>
-              </Text>
-            </Box>
-            <Button
-              size="sm"
-              variant="outline"
-              variantColor="red"
-              mr={3}
-              onClick={() => {
-                declineInvitation({
-                  variables: {
-                    collabId: id,
-                  },
-                })
+    <>
+      <SEO title="My Collab Invitations" url={window.location.href} />
+      <Box as="main" flex={1}>
+        <Heading as="h1" size="md" mb={4} fontWeight={500}>
+          Collab Invitations
+        </Heading>
+        <section>
+          {collabInvites?.map(({ id, name, owner }) => (
+            <PseudoBox
+              key={id}
+              py={4}
+              px={2}
+              _notFirst={{
+                borderTop: '1px solid #e1e1e1',
+              }}
+              _hover={{
+                bg: '#EEE',
               }}
             >
-              Decline
-            </Button>
-            <Button
-              size="sm"
-              variantColor="purple"
-              onClick={() =>
-                acceptInvitation({
-                  variables: {
-                    collabId: id,
-                  },
-                })
-              }
-            >
-              Accept
-            </Button>
-          </PseudoBox>
-        ))}
-        {loading && <Loader />}
-        {error && (
-          <DisplayError
-            message="Could not fetch requests"
-            onClick={() => refetch()}
-          />
-        )}
-      </section>
-    </Box>
+              <Box mb={4}>
+                <AvatarWithUsername
+                  id={owner.id}
+                  avatar={getAvatarUrl(owner.avatar)}
+                  username={owner.username}
+                  size="sm"
+                  mb={2}
+                />
+                <Text>
+                  invited you to join{' '}
+                  <Text as="span" fontWeight={700}>
+                    {name}
+                  </Text>
+                </Text>
+              </Box>
+              <Button
+                size="sm"
+                variant="outline"
+                variantColor="red"
+                mr={3}
+                onClick={() => {
+                  declineInvitation({
+                    variables: {
+                      collabId: id,
+                    },
+                  })
+                }}
+              >
+                Decline
+              </Button>
+              <Button
+                size="sm"
+                variantColor="purple"
+                onClick={() =>
+                  acceptInvitation({
+                    variables: {
+                      collabId: id,
+                    },
+                  })
+                }
+              >
+                Accept
+              </Button>
+            </PseudoBox>
+          ))}
+          {loading && <Loader />}
+          {error && (
+            <DisplayError
+              message="Could not fetch requests"
+              onClick={() => refetch()}
+            />
+          )}
+        </section>
+      </Box>
+    </>
   )
 }

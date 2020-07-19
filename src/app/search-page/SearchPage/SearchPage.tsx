@@ -14,6 +14,7 @@ import { useOnVisibilty } from '../../../hooks/useOnVisibilty'
 import { useLocation } from 'react-router-dom'
 import { SectionHorizonalHeader } from '../../../components/SectionHorizonalHeader'
 import { SearchOptions } from '../SearchOptions'
+import { SEO } from '../../../components/SEO'
 
 export const SearchPage = () => {
   const [
@@ -83,33 +84,36 @@ export const SearchPage = () => {
   )
 
   return (
-    <Container maxWidth={900}>
-      <Box as="header">
-        <SearchOptions />
-      </Box>
-      <Box as="main" mx="auto" mt={8}>
-        <SectionHorizonalHeader title="Search Results" titleTag="h2" />
-        {posts && (
-          <>
-            {posts?.map(post => (
-              <CollabPostCard key={post.id} {...post} mb={8} />
-            ))}
-          </>
-        )}
-        {error && (
-          <DisplayError
-            message="Could not fetch collab posts"
-            onClick={() => refetch()}
-          />
-        )}
-        {loading && <Loader />}
-        {!error && <span ref={loadNextPageTriggerRef} />}
-        {posts?.length === 0 && (
-          <Text textAlign="center" my={4}>
-            We couldn&apos;t find anything, try to loose up the filters a bit
-          </Text>
-        )}
-      </Box>
-    </Container>
+    <>
+      <SEO title="Search Collabs" url={window.location.href} />
+      <Container maxWidth={900}>
+        <Box as="header">
+          <SearchOptions />
+        </Box>
+        <Box as="main" mx="auto" mt={8}>
+          <SectionHorizonalHeader title="Search Results" titleTag="h2" />
+          {posts && (
+            <>
+              {posts?.map(post => (
+                <CollabPostCard key={post.id} {...post} mb={8} />
+              ))}
+            </>
+          )}
+          {error && (
+            <DisplayError
+              message="Could not fetch collab posts"
+              onClick={() => refetch()}
+            />
+          )}
+          {loading && <Loader />}
+          {!error && <span ref={loadNextPageTriggerRef} />}
+          {posts?.length === 0 && (
+            <Text textAlign="center" my={4}>
+              We couldn&apos;t find anything, try to loose up the filters a bit
+            </Text>
+          )}
+        </Box>
+      </Container>
+    </>
   )
 }

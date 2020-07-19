@@ -20,6 +20,7 @@ import styled from '@emotion/styled'
 import { Loader } from '../../../components/Loader'
 import { DisplayError } from '../../../components/DisplayError'
 import { useToastNotification } from '../../notifications'
+import { SEO } from '../../../components/SEO'
 
 export const Information = () => {
   const {
@@ -77,121 +78,124 @@ export const Information = () => {
   }
 
   return (
-    <Box as="main" pb={4} flex={1}>
-      <Heading as="h1" size="md" mb={4} fontWeight={500}>
-        Edit your Information
-      </Heading>
-      {/* wait for the initial values to populate the inputs */}
-      {infoInput && (
-        <>
-          <StyledFlex>
-            <InputWithLabel
-              name="firstName"
-              pl={2}
-              htmlFor="first-name"
-              label="First Name"
-              value={infoInput.firstName}
-              onChange={handleInputChange}
-              size="md"
-            />
-            <InputWithLabel
-              name="lastName"
-              pl={2}
-              htmlFor="last-name"
-              label="Last Name"
-              value={infoInput.lastName}
-              onChange={handleInputChange}
-              size="md"
-            />
-            <InputWithLabel
-              name="title"
-              _placeholder={{
-                fontSize: '0.75rem',
-              }}
-              htmlFor="title"
-              label="Title"
-              pl={2}
-              value={infoInput.title}
-              onChange={handleInputChange}
-              size="md"
-              placeholder="E.X: Software Engineer, Front-End Engineer"
-            />
-            <InputWithLabel
-              name="twitter"
-              pl={2}
-              htmlFor="twitter"
-              label="Twitter"
-              value={infoInput.twitter}
-              onChange={handleInputChange}
-              size="md"
-            />
-            <InputWithLabel
-              name="github"
-              pl={2}
-              htmlFor="github"
-              label="Github"
-              value={infoInput.github}
-              onChange={handleInputChange}
-              size="md"
-            />
-            <InputWithLabel
-              name="linkedin"
-              pl={2}
-              htmlFor="linkedin"
-              label="Linkedin"
-              value={infoInput.linkedin}
-              onChange={handleInputChange}
-              size="md"
-            />
-            <FormControl>
-              <FormLabel htmlFor="country">Country</FormLabel>
-              <Select
-                id="country"
-                options={countryOptions}
-                onChange={(e: any) =>
-                  setInfoInput({ ...infoInput, country: e?.value ?? null })
-                }
-                defaultValue={countryOptions.find(
-                  x => x.label === infoInput.country,
-                )}
-              />
-            </FormControl>
-            <FormControl width="100%">
-              <FormLabel htmlFor="bio">Bio</FormLabel>
-              <Textarea
-                name="bio"
-                id="bio"
-                bg="#f2f2ff"
-                p={2}
-                mb={4}
-                _hover={{ borderColor: '#cab3ff' }}
-                _focus={{ borderColor: '#805ad5' }}
-                value={infoInput.bio ?? ''}
+    <>
+      <SEO title="My Information" url={window.location.href} />
+      <Box as="main" pb={4} flex={1}>
+        <Heading as="h1" size="md" mb={4} fontWeight={500}>
+          Edit your Information
+        </Heading>
+        {/* wait for the initial values to populate the inputs */}
+        {infoInput && (
+          <>
+            <StyledFlex>
+              <InputWithLabel
+                name="firstName"
+                pl={2}
+                htmlFor="first-name"
+                label="First Name"
+                value={infoInput.firstName}
                 onChange={handleInputChange}
-                minHeight={140}
+                size="md"
               />
-            </FormControl>
-          </StyledFlex>
-          <Button
-            ml="auto"
-            display="block"
-            onClick={handleUpdateInfo}
-            isLoading={updateInfoLoading}
-            loadingText="Updating"
-            variantColor="purple"
-          >
-            Update
-          </Button>
-        </>
-      )}
-      {loading && <Loader />}
-      {error && (
-        <DisplayError
-          message="Could not fetch information"
-          onClick={() => refetch()}
-        />
-      )}
-    </Box>
+              <InputWithLabel
+                name="lastName"
+                pl={2}
+                htmlFor="last-name"
+                label="Last Name"
+                value={infoInput.lastName}
+                onChange={handleInputChange}
+                size="md"
+              />
+              <InputWithLabel
+                name="title"
+                _placeholder={{
+                  fontSize: '0.75rem',
+                }}
+                htmlFor="title"
+                label="Title"
+                pl={2}
+                value={infoInput.title}
+                onChange={handleInputChange}
+                size="md"
+                placeholder="E.X: Software Engineer, Front-End Engineer"
+              />
+              <InputWithLabel
+                name="twitter"
+                pl={2}
+                htmlFor="twitter"
+                label="Twitter"
+                value={infoInput.twitter}
+                onChange={handleInputChange}
+                size="md"
+              />
+              <InputWithLabel
+                name="github"
+                pl={2}
+                htmlFor="github"
+                label="Github"
+                value={infoInput.github}
+                onChange={handleInputChange}
+                size="md"
+              />
+              <InputWithLabel
+                name="linkedin"
+                pl={2}
+                htmlFor="linkedin"
+                label="Linkedin"
+                value={infoInput.linkedin}
+                onChange={handleInputChange}
+                size="md"
+              />
+              <FormControl>
+                <FormLabel htmlFor="country">Country</FormLabel>
+                <Select
+                  id="country"
+                  options={countryOptions}
+                  onChange={(e: any) =>
+                    setInfoInput({ ...infoInput, country: e?.value ?? null })
+                  }
+                  defaultValue={countryOptions.find(
+                    x => x.label === infoInput.country,
+                  )}
+                />
+              </FormControl>
+              <FormControl width="100%">
+                <FormLabel htmlFor="bio">Bio</FormLabel>
+                <Textarea
+                  name="bio"
+                  id="bio"
+                  bg="#f2f2ff"
+                  p={2}
+                  mb={4}
+                  _hover={{ borderColor: '#cab3ff' }}
+                  _focus={{ borderColor: '#805ad5' }}
+                  value={infoInput.bio ?? ''}
+                  onChange={handleInputChange}
+                  minHeight={140}
+                />
+              </FormControl>
+            </StyledFlex>
+            <Button
+              ml="auto"
+              display="block"
+              onClick={handleUpdateInfo}
+              isLoading={updateInfoLoading}
+              loadingText="Updating"
+              variantColor="purple"
+            >
+              Update
+            </Button>
+          </>
+        )}
+        {loading && <Loader />}
+        {error && (
+          <DisplayError
+            message="Could not fetch information"
+            onClick={() => refetch()}
+          />
+        )}
+      </Box>
+    </>
   )
 }
 

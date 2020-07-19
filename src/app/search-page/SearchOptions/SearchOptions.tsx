@@ -335,7 +335,7 @@ const StyledFlex = styled(Flex)`
   @media (max-width: 479px) {
     justify-content: center;
 
-    > :nth-child(-n + 2) {
+    > :nth-of-type(-n + 2) {
       width: 50%;
       margin-bottom: 1rem;
       display: flex;
@@ -343,7 +343,7 @@ const StyledFlex = styled(Flex)`
       align-items: center;
     }
 
-    > :nth-last-child(-n + 2) {
+    > :nth-last-of-type(-n + 2) {
       width: 100%;
       margin-bottom: 1.5rem;
     }

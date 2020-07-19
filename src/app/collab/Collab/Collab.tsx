@@ -19,6 +19,7 @@ import { useToastNotification } from '../../notifications'
 import { DisplayError } from '../../../components/DisplayError'
 import { useWindowWidth } from '../../../providers'
 import { Container } from '../../../components/global'
+import { SEO } from '../../../components/SEO'
 
 export const Collab = () => {
   const { collabId } = useParams<{ collabId: string }>()
@@ -70,22 +71,37 @@ export const Collab = () => {
         maxWidth={['100%', '100%', 'calc(100vw - 250px)']}
       >
         <Switch>
-          <Route path={`${match.path}/wall`} component={Wall} />
-          <Route path={`${match.path}/task-board`} component={TaskBoard} />
-          <Route
-            path={`${match.path}/members`}
-            render={() => <CollabMembers isOwner={data?.collab?.isOwner} />}
-          />
-          <Route
-            exact
-            path={`${match.path}/discussions`}
-            component={CollabDiscussions}
-          />
-          <Route
-            path={`${match.path}/discussions/:threadId`}
-            component={DiscussionThread}
-          />
-
+          <Route path={`${match.path}/wall`}>
+            <SEO
+              title={`Wall - ${data?.collab?.name}`}
+              url={window.location.href}
+            />
+            <Wall />
+          </Route>
+          <Route path={`${match.path}/task-board`}>
+            <SEO
+              title={`Task Board - ${data?.collab?.name}`}
+              url={window.location.href}
+            />
+            <TaskBoard />
+          </Route>
+          <Route path={`${match.path}/members`}>
+            <SEO
+              title={`Members - ${data?.collab?.name}`}
+              url={window.location.href}
+            />
+            <CollabMembers isOwner={data?.collab?.isOwner} />
+          </Route>
+          <Route exact path={`${match.path}/discussions`}>
+            <SEO
+              title={`Discussions - ${data?.collab?.name}`}
+              url={window.location.href}
+            />
+            <CollabDiscussions />
+          </Route>
+          <Route path={`${match.path}/discussions/:threadId`}>
+            <DiscussionThread collabName={data?.collab?.name} />
+          </Route>
           <Redirect to={`${match.path}/wall`} />
         </Switch>
       </Box>

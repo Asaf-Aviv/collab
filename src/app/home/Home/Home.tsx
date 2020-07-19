@@ -8,10 +8,12 @@ import { Container } from '../../../components/global'
 import { Heading, Box, Stack, Flex, Button, Text } from '@chakra-ui/core'
 import styled from '@emotion/styled'
 import { Link } from 'react-router-dom'
+import { SEO } from '../../../components/SEO'
 
 export const Home = () => {
   return (
     <>
+      <SEO title="Home" url={window.location.href} />
       <Container bg="#582398" width="100%" pt={4}>
         <Flex direction="column" position="relative">
           <Circle bg="#42d29f" border="#42d29f" top="-10px" left="15px" />

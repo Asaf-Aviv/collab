@@ -23,8 +23,13 @@ import { SectionHorizonalHeader } from '../../../components/SectionHorizonalHead
 import { useToastNotification } from '../../notifications'
 import { Loader } from '../../../components/Loader'
 import { DisplayError } from '../../../components/DisplayError'
+import { SEO } from '../../../components/SEO'
 
-export const DiscussionThread = () => {
+type Props = {
+  collabName?: string
+}
+
+export const DiscussionThread = ({ collabName }: Props) => {
   const { collabId, threadId } = useParams<{
     collabId: string
     threadId: string
@@ -87,7 +92,13 @@ export const DiscussionThread = () => {
     },
   })
 
-  if (!threadData?.thread) return null
+  if (!threadData?.thread) {
+    return (
+      <Box py={4} textAlign="center">
+        <Text>Thread not found</Text>
+      </Box>
+    )
+  }
 
   const handleCommentSubmit = (content: string) => {
     addComment({
@@ -148,60 +159,66 @@ export const DiscussionThread = () => {
   const { title, author, creationDate, ...thread } = threadData.thread
 
   return (
-    <Box as="main" maxWidth={900} mx="auto" pb={8}>
-      {loadingThread && <Loader />}
-      {threadError && (
-        <DisplayError
-          message="Could not fetch thread"
-          onClick={() => refetchThread()}
-        />
-      )}
-      <section>
-        <Paper as="article" flexDirection="column" p={3} mb={6}>
-          <header>
-            {author ? (
-              <PostAuthorHeader author={author} date={creationDate} mb={4} />
-            ) : (
-              '[deleted user]'
-            )}
-          </header>
-          <Box pl={14}>
-            <Heading as="h1" size="lg" mb={4}>
-              {title}
-            </Heading>
-            <Text mb={8} maxWidth="60ch">
-              {thread.content}
-            </Text>
-            <ReactionPanel
-              reactions={thread.reactions}
-              addReaction={handleAddThreadReaction}
-              removeReaction={handleRemoveThreadReaction}
-            />
-          </Box>
-        </Paper>
-      </section>
-      <section>
-        <CommentForm onSubmit={handleCommentSubmit} />
-      </section>
-      <section>
-        <SectionHorizonalHeader title="Comments" titleTag="h3" />
-        {loadingComments && <Loader />}
-        {commentsError && (
+    <>
+      <SEO
+        title={title ? `${title} - ${collabName}` : undefined}
+        url={window.location.href}
+      />
+      <Box as="main" maxWidth={900} mx="auto" pb={8}>
+        {loadingThread && <Loader />}
+        {threadError && (
           <DisplayError
-            message="Could not fetch comments"
-            onClick={() => refetchComments()}
+            message="Could not fetch thread"
+            onClick={() => refetchThread()}
           />
         )}
-        {commentsData?.thread?.comments.map(comment => (
-          <Comment key={comment.id} {...comment}>
-            <ReactionPanel
-              reactions={comment.reactions}
-              addReaction={handleAddReaction(comment.id)}
-              removeReaction={handleRemoveReaction(comment.id)}
+        <section>
+          <Paper as="article" flexDirection="column" p={3} mb={6}>
+            <header>
+              {author ? (
+                <PostAuthorHeader author={author} date={creationDate} mb={4} />
+              ) : (
+                '[deleted user]'
+              )}
+            </header>
+            <Box pl={14}>
+              <Heading as="h1" size="lg" mb={4}>
+                {title}
+              </Heading>
+              <Text mb={8} maxWidth="60ch">
+                {thread.content}
+              </Text>
+              <ReactionPanel
+                reactions={thread.reactions}
+                addReaction={handleAddThreadReaction}
+                removeReaction={handleRemoveThreadReaction}
+              />
+            </Box>
+          </Paper>
+        </section>
+        <section>
+          <CommentForm onSubmit={handleCommentSubmit} />
+        </section>
+        <section>
+          <SectionHorizonalHeader title="Comments" titleTag="h3" />
+          {loadingComments && <Loader />}
+          {commentsError && (
+            <DisplayError
+              message="Could not fetch comments"
+              onClick={() => refetchComments()}
             />
-          </Comment>
-        ))}
-      </section>
-    </Box>
+          )}
+          {commentsData?.thread?.comments.map(comment => (
+            <Comment key={comment.id} {...comment}>
+              <ReactionPanel
+                reactions={comment.reactions}
+                addReaction={handleAddReaction(comment.id)}
+                removeReaction={handleRemoveReaction(comment.id)}
+              />
+            </Comment>
+          ))}
+        </section>
+      </Box>
+    </>
   )
 }

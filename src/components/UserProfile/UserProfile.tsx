@@ -6,11 +6,7 @@ import { Heading } from '@chakra-ui/core'
 import { UserCard } from '../UserCard'
 import { Loader } from '../Loader'
 import { DisplayError } from '../DisplayError'
-
-type Props = {
-  userId: string
-  onCompleted?: (friendId: string) => void
-}
+import { SEO } from '../SEO'
 
 export const UserProfile = () => {
   const { userId } = useParams<{ userId: string }>()
@@ -23,9 +19,15 @@ export const UserProfile = () => {
   return (
     <Container>
       {user === null && (
-        <Heading textAlign="center" size="md" as="h1" py={4}>
-          User not found
-        </Heading>
+        <>
+          <SEO url={'/'} />
+          <Heading textAlign="center" size="md" as="h1" py={4}>
+            User not found
+          </Heading>
+        </>
+      )}
+      {user && (
+        <SEO title={`${user.username}'s Profile`} url={window.location.href} />
       )}
       {user && <UserCard {...user} mx="auto" maxWidth={350} />}
       {loading && <Loader />}
