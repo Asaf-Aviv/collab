@@ -154,8 +154,7 @@ export const SearchBar = (props: Props) => {
   return (
     <Box
       ref={containerRef}
-      maxWidth={['100%', '100%', 500]}
-      flex={1}
+      flex={[6, 6, 6, 6, 1]}
       px={[2, 2, 4]}
       position="relative"
       {...props}

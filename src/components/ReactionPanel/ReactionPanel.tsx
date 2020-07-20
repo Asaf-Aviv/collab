@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react'
 import { NimblePicker, EmojiData, Emoji } from 'emoji-mart'
-import twitterEmojiData from 'emoji-mart/data/twitter.json'
+import appleEmojiData from 'emoji-mart/data/apple.json'
 import 'emoji-mart/css/emoji-mart.css'
 import {
   Button,
@@ -82,7 +82,7 @@ export const ReactionPanel = ({
               bg: 'purple.600',
             }}
           >
-            <Emoji emoji={emojiId} size={20} set="twitter" />
+            <Emoji emoji={emojiId} size={20} set="apple" />
             <Text ml={1} fontWeight={700} fontSize="md">
               {count}
             </Text>
@@ -98,7 +98,7 @@ export const ReactionPanel = ({
             height="40px"
             position="relative"
           >
-            <Emoji size={20} emoji="sunglasses" set="twitter" />
+            <Emoji size={20} emoji="sunglasses" set="apple" />
             <Icon name="add" size="12px" ml={1} mt="-15px" />
           </Button>
         </PopoverTrigger>
@@ -112,8 +112,8 @@ export const ReactionPanel = ({
           <FocusLock ref={emojiContainerRef}>
             <NimblePicker
               style={{ maxWidth: 376 }}
-              set="twitter"
-              data={twitterEmojiData as any}
+              set="apple"
+              data={appleEmojiData as any}
               showPreview={false}
               sheetSize={64}
               showSkinTones={false}

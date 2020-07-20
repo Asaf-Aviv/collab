@@ -16,16 +16,6 @@ export const Home = () => {
       <SEO title="Home" url={window.location.href} />
       <Container bg="#582398" width="100%" pt={4}>
         <Flex direction="column" position="relative">
-          <Circle bg="#42d29f" border="#42d29f" top="-10px" left="15px" />
-          <Circle border="#E91E63" top="80px" left="25px" />
-          <Circle bg="#9a07ff" left="40px" top="155px" />
-          <Circle bg="#fcbe40" left="150px" top="30px" />
-          <Circle border="#9a07ff" right="10px" top="25px" />
-          <Circle bg="#fcbe40" right="150px" top="5px" />
-          <Circle bg="#E91E63" right="50px" top="125px" />
-          <StyledTriangle top="42px" bg="#ffbe40" />
-          <StyledTriangle top="80px" right="30px" bg="#9a07ff" />
-          <StyledTriangle top="42px" bg="#ffbe40" />
           <Stack spacing={3} align="center" my={10}>
             <Heading
               as="h1"
@@ -121,7 +111,7 @@ export const Home = () => {
   )
 }
 
-type Props = {
+type FeatureSectionProps = {
   text: string
   svg: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
   title?: string
@@ -133,7 +123,7 @@ const FeatureSection = ({
   title,
   text,
   textColor,
-}: Props) => (
+}: FeatureSectionProps) => (
   <Box maxWidth={900} m="0 auto" h={['auto', 'auto', 400]}>
     <StyledFlex
       py={8}
@@ -161,33 +151,6 @@ const FeatureSection = ({
     </StyledFlex>
   </Box>
 )
-
-const StyledTriangle = styled.svg<{ [k: string]: any }>`
-  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-  height: 25px;
-  width: 25px;
-  position: absolute;
-  top: ${props => props.top};
-  bottom: ${props => props.bottom};
-  left: ${props => props.left};
-  right: ${props => props.right};
-  background-color: ${props => props.bg ?? 'transparent'};
-  border: 3px solid ${props => props.border ?? props.bg};
-`
-
-const Circle = styled.div<{ [k: string]: any }>`
-  clip-path: circle(48% at 50% 50%);
-  height: 25px;
-  width: 25px;
-  position: absolute;
-  top: ${props => props.top};
-  bottom: ${props => props.bottom};
-  left: ${props => props.left};
-  right: ${props => props.right};
-  background-color: ${props => props.bg ?? 'transparent'};
-  border: 3px solid ${props => props.border ?? props.bg};
-  border-radius: 50%;
-`
 
 const StyledFlex = styled(Flex)`
   align-items: center;

@@ -10,7 +10,7 @@ export const NavUserPanel = () => {
   const width = useWindowWidth()
 
   return (
-    <StyledFlex>
+    <StyledFlex flex={1} justify="flex-end">
       <Notifications />
       {width >= 480 && <FriendRequestsBallon />}
       <UserAccountMenu />

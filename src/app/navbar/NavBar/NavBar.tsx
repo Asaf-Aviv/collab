@@ -41,7 +41,7 @@ export const NavBar = () => {
         {currentUser ? (
           <NavUserPanel />
         ) : (
-          <StyledFlex>
+          <StyledFlex justify="flex-end">
             <Button
               as={NavLink as any}
               //@ts-ignore
@@ -70,9 +70,9 @@ export const NavBar = () => {
 }
 
 const StyledFlex = styled(Flex)`
-  display: flex;
   align-items: center;
   font-weight: 300;
+  flex: 1;
 `
 
 const StyledLink = styled(NavLink)`

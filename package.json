@@ -66,7 +66,7 @@
     "build:client": "react-scripts build",
     "build:server": "cd server && tsc",
     "generate": "cd server && npm run generate",
-    "dev": "concurrently \"npm:start:server\" \"npm:generate\" \"npm:start:client\"",
+    "dev": "concurrently \"npm:generate\" \"npm:start:client\" \"npm:start:server\"",
     "test:client": "react-scripts test",
     "seed": "cd server && npm run seed",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
