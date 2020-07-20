@@ -4,7 +4,6 @@ import { v1 as uuid } from 'uuid'
 import { Resolvers, UserChatStatus } from '../types.d'
 import { isNotNull, withCancel } from '../../helpers/helpers'
 import { REDIS_CHAT_USERS } from '../../redis/redis'
-import _ from 'lodash'
 
 const NEW_PRIVATE_CHAT_MESSAGE = 'NEW_PRIVATE_CHAT_MESSAGE'
 const FRIEND_STATUS_CHANGE = 'FRIEND_STATUS_CHANGE'
@@ -37,13 +36,6 @@ export const privateChatResolver: Resolvers = {
       )
 
       const users = allFriendStatuses.filter(isNotNull)
-
-      return {
-        users: allFriends.map(f => ({
-          user: f,
-          status: _.sample(['ONLINE', 'AWAY', 'DND', 'OFFLINE']),
-        })),
-      }
       return { users }
     },
     updateStatus: async (root, { status }, { models, redis, user }) => {
@@ -52,6 +44,7 @@ export const privateChatResolver: Resolvers = {
       models.User.getAllUserFriends(user!.id).then(friends => {
         friends.map(async friend => {
           const friendStatus = await redis.hget(REDIS_CHAT_USERS, friend.id)
+
           if (friendStatus && friendStatus !== 'OFFLINE') {
             pubsub.publish(FRIEND_STATUS_CHANGE, {
               recipientId: friend.id,
@@ -92,7 +85,11 @@ export const privateChatResolver: Resolvers = {
           ({ recipientId }) => recipientId === user!.id,
         )
 
-        return withCancel(subscriptionFilter(), () => {})
+        return withCancel(subscriptionFilter(), () =>
+          redis.hdel(REDIS_CHAT_USERS, user!.id).catch(err => {
+            console.log('Deleting connected user error', err)
+          }),
+        )
       },
     },
     friendStatusChange: {

@@ -1,17 +1,16 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { GQLCollab } from 'src/db/models/Collab';
-import { GQLCollabDiscussionThreadComment } from 'src/db/models/CollabDiscussionThreadComment';
-import { GQLCollabDiscussionThread } from 'src/db/models/CollabDiscussionThread';
-import { GQLCollabPost } from 'src/db/models/CollabPost';
-import { GQLCollabPostComment } from 'src/db/models/CollabPostComment';
-import { GQLCollabTask } from 'src/db/models/CollabTask';
-import { GQLCollabTaskComment } from 'src/db/models/CollabTaskComment';
-import { GQLCollabTaskList } from 'src/db/models/CollabTaskList';
-import { GQLUser } from 'src/db/models/User';
-import { GQLPrivateMessage } from 'src/db/models/PrivateMessage';
-import { GQLWallMessage } from 'src/db/models/CollabWallMessage';
-import { CollabContext } from 'src/graphql/context/CollabContext';
-import { CollabContextWithUser } from './context/CollabContext';
+import { GQLCollab } from '../db/models/Collab';
+import { GQLCollabDiscussionThreadComment } from '../db/models/CollabDiscussionThreadComment';
+import { GQLCollabDiscussionThread } from '../db/models/CollabDiscussionThread';
+import { GQLCollabPost } from '../db/models/CollabPost';
+import { GQLCollabPostComment } from '../db/models/CollabPostComment';
+import { GQLCollabTask } from '../db/models/CollabTask';
+import { GQLCollabTaskComment } from '../db/models/CollabTaskComment';
+import { GQLCollabTaskList } from '../db/models/CollabTaskList';
+import { GQLUser } from '../db/models/User';
+import { GQLPrivateMessage } from '../db/models/PrivateMessage';
+import { GQLWallMessage } from '../db/models/CollabWallMessage';
+import { CollabContext, CollabContextWithUser } from './context/CollabContext';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: any }> = { [K in keyof T]: T[K] };
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
@@ -527,8 +526,8 @@ export type CreateThreadArgs = {
 
 export type CollabDiscussionThreadComment = {
   __typename?: 'CollabDiscussionThreadComment';
-  author: User;
-  collab?: Maybe<Collab>;
+  author?: Maybe<User>;
+  collab: Collab;
   content: Scalars['String'];
   creationDate: Scalars['Date'];
   id: Scalars['ID'];
@@ -1565,10 +1564,10 @@ export type CreateDiscussionThreadCommentMutation = (
   & { createCollabDiscussionThreadComment: (
     { __typename?: 'CollabDiscussionThreadComment' }
     & Pick<CollabDiscussionThreadComment, 'id' | 'content'>
-    & { author: (
+    & { author?: Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
-    ), reactions: Array<(
+    )>, reactions: Array<(
       { __typename?: 'Reaction' }
       & Pick<Reaction, 'emojiId' | 'count' | 'isLiked'>
     )> }
@@ -2126,10 +2125,10 @@ export type CollabThreadCommentsQuery = (
     & { comments: Array<(
       { __typename?: 'CollabDiscussionThreadComment' }
       & Pick<CollabDiscussionThreadComment, 'id' | 'content' | 'creationDate' | 'isAuthor'>
-      & { author: (
+      & { author?: Maybe<(
         { __typename?: 'User' }
         & Pick<User, 'id' | 'username' | 'avatar'>
-      ), reactions: Array<(
+      )>, reactions: Array<(
         { __typename?: 'Reaction' }
         & Pick<Reaction, 'emojiId' | 'count' | 'isLiked'>
       )> }
@@ -2558,8 +2557,8 @@ export type CollabDiscussionThreadResolvers<ContextType = CollabContext, ParentT
 }>;
 
 export type CollabDiscussionThreadCommentResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['CollabDiscussionThreadComment'] = ResolversParentTypes['CollabDiscussionThreadComment']> = ResolversObject<{
-  author?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
-  collab?: Resolver<Maybe<ResolversTypes['Collab']>, ParentType, ContextType>;
+  author?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  collab?: Resolver<ResolversTypes['Collab'], ParentType, ContextType>;
   content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   creationDate?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;

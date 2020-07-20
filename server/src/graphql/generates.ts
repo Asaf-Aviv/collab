@@ -514,8 +514,8 @@ export type CreateThreadArgs = {
 
 export type CollabDiscussionThreadComment = {
   __typename?: 'CollabDiscussionThreadComment';
-  author: User;
-  collab: Maybe<Collab>;
+  author: Maybe<User>;
+  collab: Collab;
   content: Scalars['String'];
   creationDate: Scalars['Date'];
   id: Scalars['ID'];
@@ -1552,10 +1552,10 @@ export type CreateDiscussionThreadCommentMutation = (
   & { createCollabDiscussionThreadComment: (
     { __typename?: 'CollabDiscussionThreadComment' }
     & Pick<CollabDiscussionThreadComment, 'id' | 'content'>
-    & { author: (
+    & { author: Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
-    ), reactions: Array<(
+    )>, reactions: Array<(
       { __typename?: 'Reaction' }
       & Pick<Reaction, 'emojiId' | 'count' | 'isLiked'>
     )> }
@@ -2113,10 +2113,10 @@ export type CollabThreadCommentsQuery = (
     & { comments: Array<(
       { __typename?: 'CollabDiscussionThreadComment' }
       & Pick<CollabDiscussionThreadComment, 'id' | 'content' | 'creationDate' | 'isAuthor'>
-      & { author: (
+      & { author: Maybe<(
         { __typename?: 'User' }
         & Pick<User, 'id' | 'username' | 'avatar'>
-      ), reactions: Array<(
+      )>, reactions: Array<(
         { __typename?: 'Reaction' }
         & Pick<Reaction, 'emojiId' | 'count' | 'isLiked'>
       )> }

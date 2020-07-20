@@ -22,8 +22,10 @@ export const collabTaskResolver: Resolvers = {
       models.CollabTask.deleteTask(taskId, user.id),
   },
   Task: {
-    author: ({ authorId }, args, { loaders }) =>
-      loaders.userLoader.load(authorId),
+    author: async ({ authorId }, args, { loaders }) => {
+      const author = await loaders.userLoader.load(authorId)
+      return author!
+    },
     assignedBy: ({ assignedById }, args, { loaders }) =>
       assignedById ? loaders.userLoader.load(assignedById) : null,
     assignee: ({ assigneeId }, args, { loaders }) =>
@@ -39,7 +41,11 @@ export const collabTaskResolver: Resolvers = {
 
 export const collabTaskMiddleware = {
   Mutation: {
-    // createTask: and(isAuthenticated),
-    // deleteTask: and(isAuthenticated),
+    createTask: and(isAuthenticated),
+    updateTask: and(isAuthenticated),
+    updateTaskAssignee: and(isAuthenticated),
+    updateTaskPosition: and(isAuthenticated),
+    moveTaskToList: and(isAuthenticated),
+    deleteTask: and(isAuthenticated),
   },
 }

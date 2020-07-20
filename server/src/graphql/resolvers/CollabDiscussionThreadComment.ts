@@ -20,8 +20,10 @@ export const collabDiscussionThreadCommentResolver: Resolvers = {
     isAuthor: ({ authorId }, args, { user }) => user?.id === authorId,
     thread: ({ threadId }, args, { models }) =>
       models.CollabDiscussionThread.findByPk(threadId),
-    collab: ({ collabId }, args, { loaders }) =>
-      loaders.collabLoader.load(collabId),
+    collab: async ({ collabId }, args, { loaders }) => {
+      const collab = await loaders.collabLoader.load(collabId)
+      return collab!
+    },
     reactions: ({ id }, args, { models, user }) =>
       (models.CollabDiscussionThreadCommentReaction.findAll({
         where: { commentId: id },

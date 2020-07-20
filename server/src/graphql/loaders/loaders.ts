@@ -2,12 +2,11 @@ import Dataloader from 'dataloader'
 import { Collab } from '../../db/models/Collab'
 import { User } from '../../db/models/User'
 import { find } from 'lodash'
-import { uniqueKeys } from '../helpers/uniqueKeys'
 
 const createUserLoader = () =>
   new Dataloader<string, User | null>(async ids => {
     const users = await User.findAll({ where: { id: ids as string[] } })
-    return ids.map(id => find(users, { id }) || null) as (Collab | null)[]
+    return ids.map(id => find(users, { id }) || null) as (User | null)[]
   })
 
 const createCollabLoader = () =>

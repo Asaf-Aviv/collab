@@ -90,4 +90,7 @@ export class CollabWallMessage extends Model<CollabWallMessage> {
   }
 }
 
-type GQLWallMessage = GQLResolverTypes<CollabWallMessage, 'author' | 'collab'>
+export type GQLWallMessage = GQLResolverTypes<
+  CollabWallMessage,
+  'author' | 'collab'
+>
