@@ -13,19 +13,19 @@ generates:
       - typescript-resolvers:
     config:
       mappers:
-        Collab: 'src/db/models/Collab#GQLCollab'
-        CollabDiscussionThreadComment: 'src/db/models/CollabDiscussionThreadComment#GQLCollabDiscussionThreadComment'
-        CollabDiscussionThread: 'src/db/models/CollabDiscussionThread#GQLCollabDiscussionThread'
-        CollabPost: 'src/db/models/CollabPost#GQLCollabPost'
-        CollabPostComment: 'src/db/models/CollabPostComment#GQLCollabPostComment'
-        Task: 'src/db/models/CollabTask#GQLCollabTask'
-        TaskComment: 'src/db/models/CollabTaskComment#GQLCollabTaskComment'
-        TaskList: 'src/db/models/CollabTaskList#GQLCollabTaskList'
-        User: 'src/db/models/User#GQLUser'
-        PrivateMessage: 'src/db/models/PrivateMessage#GQLPrivateMessage'
-        WallMessage: 'src/db/models/CollabWallMessage#GQLWallMessage'
+        Collab: '../db/models/Collab#GQLCollab'
+        CollabDiscussionThreadComment: '../db/models/CollabDiscussionThreadComment#GQLCollabDiscussionThreadComment'
+        CollabDiscussionThread: '../db/models/CollabDiscussionThread#GQLCollabDiscussionThread'
+        CollabPost: '../db/models/CollabPost#GQLCollabPost'
+        CollabPostComment: '../db/models/CollabPostComment#GQLCollabPostComment'
+        Task: '../db/models/CollabTask#GQLCollabTask'
+        TaskComment: '../db/models/CollabTaskComment#GQLCollabTaskComment'
+        TaskList: '../db/models/CollabTaskList#GQLCollabTaskList'
+        User: '../db/models/User#GQLUser'
+        PrivateMessage: '../db/models/PrivateMessage#GQLPrivateMessage'
+        WallMessage: '../db/models/CollabWallMessage#GQLWallMessage'
       useIndexSignature: true
-      contextType: src/graphql/context/CollabContext#CollabContext
+      contextType: ./context/CollabContext#CollabContext
       fieldContextTypes:
         # User
         - Mutation.deleteUser#./context/CollabContext#CollabContextWithUser
