@@ -8,6 +8,7 @@ import { ApolloProvider } from '@apollo/react-hooks'
 import * as serviceWorker from './serviceWorker'
 import { apolloClient } from './apolloClient'
 import { AppProviders } from './providers'
+import { ErrorBoundary } from './components/ErrorBoundary'
 
 if (process.env.NODE_ENV === 'production') {
   Sentry.init({
@@ -17,13 +18,15 @@ if (process.env.NODE_ENV === 'production') {
 ReactGA.initialize(process.env.REACT_APP_GA!)
 
 ReactDOM.render(
-  <ApolloProvider client={apolloClient}>
-    <BrowserRouter>
-      <AppProviders>
-        <App />
-      </AppProviders>
-    </BrowserRouter>
-  </ApolloProvider>,
+  <ErrorBoundary text="Oh Oh, Our App crushed!">
+    <ApolloProvider client={apolloClient}>
+      <BrowserRouter>
+        <AppProviders>
+          <App />
+        </AppProviders>
+      </BrowserRouter>
+    </ApolloProvider>
+  </ErrorBoundary>,
   document.getElementById('root'),
 )
 
