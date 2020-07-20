@@ -39,7 +39,7 @@ export const collabPostCommentReactionResolver: Resolvers = {
             })
           })
           .catch(err => {
-            console.log(
+            console.error(
               'Could not send CollabPostCommentReactionNotification',
               err,
             )

@@ -39,7 +39,6 @@ export const Wall = () => {
   const notify = useToastNotification()
   const [deleteMessage] = useDeleteWallMessageMutation({
     update(store, { data }) {
-      console.log(data)
       if (!data) return
 
       const messagesData = store.readQuery<CollabWallMessagesQuery>({

@@ -21,7 +21,6 @@ export const AddWallMessageForm = () => {
       },
     },
     update(store, { data }) {
-      console.log(data)
       if (!data) return
 
       const messagesData = store.readQuery<CollabWallMessagesQuery>({

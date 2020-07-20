@@ -34,9 +34,7 @@ export const collabPostCommentResolver: Resolvers = {
               newNotification,
             })
           })
-          .catch(err => {
-            console.log(err)
-          })
+          .catch(console.error)
       }
 
       return comment

@@ -87,7 +87,7 @@ export const privateChatResolver: Resolvers = {
 
         return withCancel(subscriptionFilter(), () =>
           redis.hdel(REDIS_CHAT_USERS, user!.id).catch(err => {
-            console.log('Deleting connected user error', err)
+            console.error('Deleting connected user error', err)
           }),
         )
       },
