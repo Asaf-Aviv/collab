@@ -74,9 +74,12 @@ export const userResolver: Resolvers = {
           ).on('close', async () => {
             if (user!.avatar) {
               fs.unlink(
-                `${__dirname}../../../public/avatars/${user!.avatar}`,
+                path.resolve(__dirname, `../../public/avatars/${user!.avatar}`),
               ).catch(err => {
-                console.log(`Could not delete old avatar ${user!.avatar}`, err)
+                console.error(
+                  `Could not delete old avatar ${user!.avatar}`,
+                  err,
+                )
               })
             }
             const updatedUser = await user!.update({ avatar: filename })
