@@ -65,6 +65,7 @@
     "start:server": "cd server && npm start",
     "build:client": "react-scripts build",
     "build:server": "cd server && tsc",
+    "deploy": "cd server && node deploy.js",
     "generate": "cd server && npm run generate",
     "dev": "concurrently \"npm:generate\" \"npm:start:client\" \"npm:start:server\"",
     "test:client": "react-scripts test",

@@ -26,6 +26,7 @@
   },
   "scripts": {
     "start": "ts-node-dev --transpile-only --no-notify --watch 'src/**/**.ts' --respawn src/server.ts",
+    "deploy": "node deploy.js",
     "generate": "graphql-codegen --watch",
     "seed": "sequelize-cli db:seed:undo:all && sequelize-cli db:seed:all"
   },

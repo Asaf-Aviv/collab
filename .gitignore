@@ -11,3 +11,4 @@ package-lock.json
 
 server/src/public
 ecosystem.config.js
+deploy.js
