@@ -36,7 +36,7 @@ export const Conversations = () => {
       <Box as="main" flex={1} pb={4}>
         <Flex align="center" as="header" justify="space-between" mb={4}>
           <Heading as="h1" size="md" fontWeight={500}>
-            Your Conversations
+            My Conversations
           </Heading>
           <Button
             size={width >= 480 ? 'md' : 'sm'}

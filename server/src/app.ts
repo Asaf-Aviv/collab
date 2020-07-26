@@ -56,6 +56,15 @@ export const apolloServer = new ApolloServer({
       }
     },
   },
+  formatError(err) {
+    console.error(err)
+
+    if (err.extensions?.code === 'INTERNAL_SERVER_ERROR') {
+      return new Error('Something went wrong')
+    }
+
+    return err
+  },
 })
 
 apolloServer.applyMiddleware({ app })

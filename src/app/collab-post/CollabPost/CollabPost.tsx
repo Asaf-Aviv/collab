@@ -6,7 +6,7 @@ import {
   useRemoveCollabPostReactionMutation,
   useAddCollabPostReactionMutation,
 } from '../../../graphql/generates'
-import { Text, Heading, Stack, Flex, Box } from '@chakra-ui/core'
+import { Text, Heading, Stack, Flex, Box, Icon } from '@chakra-ui/core'
 import { AvatarWithUsername } from '../../../components/AvatarWithUsername/AvatarWithUsername'
 import { Container } from '../../../components/global'
 import { COLLAB_POST_COMMENTS } from '../../../graphql/queries'
@@ -149,14 +149,14 @@ export const CollabPost = () => {
                   as={Link}
                   //@ts-ignore
                   to={`/collab/${collabId}`}
+                  display="flex"
+                  alignItems="center"
                 >
-                  <Heading size="lg" as="h2" color="#964cff">
-                    {name}
+                  <Heading size="lg" as="h1">
+                    {title}
                   </Heading>
+                  <Icon ml={2} name="external-link" mb="0.05rem" />
                 </Box>
-                <Heading size="lg" as="h1">
-                  {title}
-                </Heading>
                 <Text maxWidth="60ch">{description}</Text>
                 <Flex wrap="wrap">
                   <PostTag mt={2}>{experience}</PostTag>

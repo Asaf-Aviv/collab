@@ -1,4 +1,5 @@
 import React from 'react'
+import { capitalize } from 'lodash-es'
 import { Flex, Text, Box } from '@chakra-ui/core'
 import { CloseButton } from '../../../components/CloseButton'
 
@@ -30,10 +31,10 @@ export type ToastProps = typeof toastProps
 export type Variant = keyof ToastProps
 
 export type ToastNotificationProps = {
-  title: string
-  message: string
   variant: Variant
+  message: string
   dismiss: () => void
+  title?: string
   url?: string
   type?: string
 }
@@ -42,7 +43,7 @@ const getToastProps = (variant: Variant) => toastProps[variant]
 
 export const ToastNotification = ({
   variant,
-  title,
+  title = capitalize(variant),
   dismiss,
   message,
 }: ToastNotificationProps) => {

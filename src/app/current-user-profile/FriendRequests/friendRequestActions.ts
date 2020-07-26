@@ -99,7 +99,7 @@ export const useFriendRequestActions = () => {
   ] = useDeclineFriendRequestMutation({
     update(store, { data }) {
       if (!data) return
-      removeFriendRequestFromCache(store, data.declineFriendRequest)
+      removeFriendRequestFromCache(store, data.declineFriendRequest.id)
       updateFriendRequestsCount(store, -1)
     },
   })

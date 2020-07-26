@@ -7,31 +7,75 @@ import {
   Box,
   Stack,
   PseudoBoxProps,
+  Button,
 } from '@chakra-ui/core'
 import styled from '@emotion/styled'
 import { Link } from 'react-router-dom'
-import { User } from '../../graphql/generates'
+import {
+  User,
+  useSendFriendRequestMutation,
+  useRemoveFriendMutation,
+} from '../../graphql/generates'
 import { Paper } from '../global'
 import { getAvatarUrl } from '../../utils'
+import { DotsMenu } from '../DotsMenu/Index'
+import { useToastNotification } from '../../app/notifications'
 
 type Props = Omit<PseudoBoxProps, 'title'> &
   Omit<User, 'firstName' | 'lastName' | 'collabs'> & {
-    dotsMenu?: React.ReactNode
+    showDotsMenu?: boolean
+    dotsMenuItems?: React.ReactNode
+    dotsMenuLabel?: string
   }
+
+const dotsMenuIconStyles = { bg: 'inherit', color: 'white' }
 
 export const UserCard = ({
   id,
   avatar,
   username,
   bio,
-  dotsMenu,
   title,
   country,
-  isSelf,
+  dotsMenuItems,
+  showDotsMenu = false,
+  dotsMenuLabel = 'User Options',
   canRequestFriendship,
   isFriend,
   ...props
 }: Props) => {
+  const notify = useToastNotification()
+  const [removeFriend] = useRemoveFriendMutation({
+    variables: {
+      friendId: id,
+    },
+    onCompleted() {
+      notify('success', {
+        message: `Successfully removed ${username}`,
+      })
+    },
+    onError({ message }) {
+      notify('error', {
+        message,
+      })
+    },
+  })
+  const [sendFriendRequest] = useSendFriendRequestMutation({
+    variables: {
+      friendId: id,
+    },
+    onCompleted() {
+      notify('success', {
+        message: 'Friend request sent successfully',
+      })
+    },
+    onError({ message }) {
+      notify('error', {
+        message,
+      })
+    },
+  })
+
   return (
     <Paper
       flexDirection="column"
@@ -42,9 +86,31 @@ export const UserCard = ({
       {...props}
     >
       <Flex p={4} direction="column" align="center" width="100%">
-        {dotsMenu && (
+        {showDotsMenu && (
           <Box position="absolute" right={1} top={2}>
-            {dotsMenu}
+            <DotsMenu
+              iconProps={{
+                ariaLabel: dotsMenuLabel,
+                color: '#c1c1c1',
+                _hover: dotsMenuIconStyles,
+                _focus: dotsMenuIconStyles,
+                _active: dotsMenuIconStyles,
+              }}
+            >
+              <Flex direction="column">
+                {dotsMenuItems}
+                {canRequestFriendship && (
+                  <Button size="sm" onClick={() => sendFriendRequest()}>
+                    Add Friend
+                  </Button>
+                )}
+                {isFriend && (
+                  <Button size="sm" onClick={() => removeFriend()}>
+                    Remove Friend
+                  </Button>
+                )}
+              </Flex>
+            </DotsMenu>
           </Box>
         )}
         <Avatar

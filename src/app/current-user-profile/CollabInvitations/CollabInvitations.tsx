@@ -60,7 +60,7 @@ export const CollabInvitations = () => {
 
   return (
     <>
-      <SEO title="My Collab Invitations" url={window.location.href} />
+      <SEO title="Collab Invitations" url={window.location.href} />
       <Box as="main" flex={1}>
         <Heading as="h1" size="md" mb={4} fontWeight={500}>
           Collab Invitations

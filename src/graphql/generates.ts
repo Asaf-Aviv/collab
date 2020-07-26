@@ -2,6 +2,7 @@ import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/react-common';
 import * as ApolloReactHooks from '@apollo/react-hooks';
 export type Maybe<T> = T | null;
+export type Exact<T extends { [key: string]: any }> = { [K in keyof T]: T[K] };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -14,7 +15,7 @@ export type Scalars = {
 };
 
 export type Query = {
-   __typename?: 'Query';
+  __typename?: 'Query';
   advancedPostsSearch: CollabPostsSearchResultsPayload;
   collab: Maybe<Collab>;
   collabPost: Maybe<CollabPost>;
@@ -111,7 +112,7 @@ export type QueryUserArgs = {
 };
 
 export type Mutation = {
-   __typename?: 'Mutation';
+  __typename?: 'Mutation';
   acceptCollabInvitation: Scalars['ID'];
   acceptFriendRequest: User;
   acceptMemberRequest: Scalars['ID'];
@@ -131,8 +132,7 @@ export type Mutation = {
   createTaskList: TaskList;
   createWallMessage: WallMessage;
   declineCollabInvitation: Scalars['ID'];
-  /** returns the id of the declined friend */
-  declineFriendRequest: Scalars['ID'];
+  declineFriendRequest: User;
   declineMemberRequest: Scalars['ID'];
   deleteAllNotifications: Scalars['Boolean'];
   deleteCollab: Scalars['Boolean'];
@@ -158,11 +158,10 @@ export type Mutation = {
   removeCollabPostCommentReaction: Scalars['Boolean'];
   removeCollabPostReaction: CollabPost;
   removeCollabTaskCommentReaction: Scalars['Boolean'];
-  /** returns the id of the removed friend */
-  removeFriend: Scalars['ID'];
+  removeFriend: User;
   removeMember: Collab;
   requestToJoin: Scalars['Boolean'];
-  sendFriendRequest: Scalars['Boolean'];
+  sendFriendRequest: User;
   sendPrivateChatMessage: PrivateChatMessage;
   sendPrivateMessage: PrivateMessage;
   signUp: AuthPayload;
@@ -473,7 +472,7 @@ export type MutationUploadAvatarArgs = {
 };
 
 export type Collab = {
-   __typename?: 'Collab';
+  __typename?: 'Collab';
   acceptsInvites: Scalars['Boolean'];
   collabPostId: Maybe<Scalars['ID']>;
   creationDate: Scalars['Date'];
@@ -492,7 +491,7 @@ export type Collab = {
 };
 
 export type CollabDiscussionThread = {
-   __typename?: 'CollabDiscussionThread';
+  __typename?: 'CollabDiscussionThread';
   author: Maybe<User>;
   collab: Maybe<Collab>;
   comments: Array<CollabDiscussionThreadComment>;
@@ -512,9 +511,9 @@ export type CreateThreadArgs = {
 };
 
 export type CollabDiscussionThreadComment = {
-   __typename?: 'CollabDiscussionThreadComment';
-  author: User;
-  collab: Maybe<Collab>;
+  __typename?: 'CollabDiscussionThreadComment';
+  author: Maybe<User>;
+  collab: Collab;
   content: Scalars['String'];
   creationDate: Scalars['Date'];
   id: Scalars['ID'];
@@ -560,7 +559,7 @@ export type AdvancedPostsSearchInput = {
 };
 
 export type CollabPostsSearchResultsPayload = {
-   __typename?: 'CollabPostsSearchResultsPayload';
+  __typename?: 'CollabPostsSearchResultsPayload';
   hasNextPage: Scalars['Boolean'];
   posts: Array<CollabPost>;
 };
@@ -572,14 +571,14 @@ export type SearchPostsInput = {
 };
 
 export type SearchPostsPayload = {
-   __typename?: 'SearchPostsPayload';
+  __typename?: 'SearchPostsPayload';
   hasNextPage: Scalars['Boolean'];
   posts: Array<CollabPost>;
   totalResults: Scalars['Int'];
 };
 
 export type CollabPost = {
-   __typename?: 'CollabPost';
+  __typename?: 'CollabPost';
   acceptsInvites: Scalars['Boolean'];
   collabId: Scalars['ID'];
   comments: Array<CollabPostComment>;
@@ -609,7 +608,7 @@ export type CollabPost = {
 };
 
 export type CollabPostsPayload = {
-   __typename?: 'CollabPostsPayload';
+  __typename?: 'CollabPostsPayload';
   hasNextPage: Scalars['Boolean'];
   posts: Array<CollabPost>;
 };
@@ -634,7 +633,7 @@ export enum Experience {
 }
 
 export type CollabPostComment = {
-   __typename?: 'CollabPostComment';
+  __typename?: 'CollabPostComment';
   author: User;
   content: Scalars['String'];
   creationDate: Scalars['Date'];
@@ -674,7 +673,7 @@ export type RemoveCollabTaskCommentReactionInput = {
 };
 
 export type WallMessage = {
-   __typename?: 'WallMessage';
+  __typename?: 'WallMessage';
   author: User;
   content: Scalars['String'];
   creationDate: Scalars['Date'];
@@ -688,7 +687,7 @@ export type CreateWallMessageInput = {
 };
 
 export type CollabWallMessagesPayload = {
-   __typename?: 'CollabWallMessagesPayload';
+  __typename?: 'CollabWallMessagesPayload';
   hasNextPage: Scalars['Boolean'];
   messages: Array<WallMessage>;
 };
@@ -700,7 +699,7 @@ export type CollabWallMessagesInput = {
 };
 
 export type Subscription = {
-   __typename?: 'Subscription';
+  __typename?: 'Subscription';
   friendStatusChange: ChatUsersPayload;
   newFriendRequest: NewFriendRequestPayload;
   newNotification: Notification;
@@ -708,7 +707,7 @@ export type Subscription = {
 };
 
 export type Notification = {
-   __typename?: 'Notification';
+  __typename?: 'Notification';
   creationDate: Scalars['Date'];
   id: Scalars['ID'];
   isRead: Scalars['Boolean'];
@@ -726,18 +725,18 @@ export enum UserChatStatus {
 }
 
 export type ConnectToChatPayload = {
-   __typename?: 'ConnectToChatPayload';
+  __typename?: 'ConnectToChatPayload';
   users: Array<ChatUsersPayload>;
 };
 
 export type ChatUsersPayload = {
-   __typename?: 'ChatUsersPayload';
+  __typename?: 'ChatUsersPayload';
   status: UserChatStatus;
   user: User;
 };
 
 export type PrivateChatMessage = {
-   __typename?: 'PrivateChatMessage';
+  __typename?: 'PrivateChatMessage';
   authorId: Scalars['ID'];
   content: Scalars['String'];
   creationDate: Scalars['Date'];
@@ -750,7 +749,7 @@ export type SendPrivateChatMessageInput = {
 };
 
 export type PrivateMessage = {
-   __typename?: 'PrivateMessage';
+  __typename?: 'PrivateMessage';
   author: Maybe<User>;
   content: Scalars['String'];
   creationDate: Scalars['Date'];
@@ -760,7 +759,7 @@ export type PrivateMessage = {
 };
 
 export type PrivateMessagePreview = {
-   __typename?: 'PrivateMessagePreview';
+  __typename?: 'PrivateMessagePreview';
   avatar: Scalars['String'];
   content: Scalars['String'];
   userId: Scalars['ID'];
@@ -768,7 +767,7 @@ export type PrivateMessagePreview = {
 };
 
 export type GetConversationPayload = {
-   __typename?: 'GetConversationPayload';
+  __typename?: 'GetConversationPayload';
   hasNextPage: Scalars['Boolean'];
   messages: Array<PrivateMessage>;
 };
@@ -779,7 +778,7 @@ export type SendPrivateMessageInput = {
 };
 
 export type Reaction = {
-   __typename?: 'Reaction';
+  __typename?: 'Reaction';
   count: Scalars['Int'];
   emojiId: Scalars['ID'];
   isLiked: Scalars['Boolean'];
@@ -787,7 +786,7 @@ export type Reaction = {
 
 
 export type Task = {
-   __typename?: 'Task';
+  __typename?: 'Task';
   assignedBy: Maybe<User>;
   assignee: Maybe<User>;
   author: User;
@@ -833,7 +832,7 @@ export type MoveTaskToListInput = {
 };
 
 export type TaskComment = {
-   __typename?: 'TaskComment';
+  __typename?: 'TaskComment';
   author: Maybe<User>;
   content: Scalars['String'];
   creationDate: Scalars['Date'];
@@ -865,12 +864,12 @@ export type UpdateTaskListPositionInput = {
 };
 
 export type TaskListPayload = {
-   __typename?: 'TaskListPayload';
+  __typename?: 'TaskListPayload';
   taskList: Array<TaskList>;
 };
 
 export type TaskList = {
-   __typename?: 'TaskList';
+  __typename?: 'TaskList';
   collab: Collab;
   id: Scalars['ID'];
   name: Scalars['String'];
@@ -880,12 +879,12 @@ export type TaskList = {
 
 
 export type NewFriendRequestPayload = {
-   __typename?: 'NewFriendRequestPayload';
+  __typename?: 'NewFriendRequestPayload';
   user: User;
 };
 
 export type CurrentUser = {
-   __typename?: 'CurrentUser';
+  __typename?: 'CurrentUser';
   avatar: Maybe<Scalars['String']>;
   bio: Scalars['String'];
   collabInvites: Array<Collab>;
@@ -912,7 +911,7 @@ export type CurrentUser = {
 };
 
 export type User = {
-   __typename?: 'User';
+  __typename?: 'User';
   avatar: Maybe<Scalars['String']>;
   bio: Scalars['String'];
   canRequestFriendship: Scalars['Boolean'];
@@ -944,14 +943,14 @@ export type UpdateUserInfoInput = {
 };
 
 export type CollabRequest = {
-   __typename?: 'CollabRequest';
+  __typename?: 'CollabRequest';
   collab: Collab;
   id: Scalars['ID'];
   member: User;
 };
 
 export type AuthPayload = {
-   __typename?: 'AuthPayload';
+  __typename?: 'AuthPayload';
   token: Scalars['String'];
 };
 
@@ -966,9 +965,9 @@ export type LoginArgs = {
   password: Scalars['String'];
 };
 
-export type SignUpMutationVariables = {
+export type SignUpMutationVariables = Exact<{
   credentials: SignUpArgs;
-};
+}>;
 
 
 export type SignUpMutation = (
@@ -979,9 +978,9 @@ export type SignUpMutation = (
   ) }
 );
 
-export type LoginMutationVariables = {
+export type LoginMutationVariables = Exact<{
   credentials: LoginArgs;
-};
+}>;
 
 
 export type LoginMutation = (
@@ -992,9 +991,9 @@ export type LoginMutation = (
   ) }
 );
 
-export type UpdateUserInfoMutationVariables = {
+export type UpdateUserInfoMutationVariables = Exact<{
   input: UpdateUserInfoInput;
-};
+}>;
 
 
 export type UpdateUserInfoMutation = (
@@ -1005,9 +1004,9 @@ export type UpdateUserInfoMutation = (
   ) }
 );
 
-export type MarkNotificationAsReadMutationVariables = {
+export type MarkNotificationAsReadMutationVariables = Exact<{
   notificationId: Scalars['ID'];
-};
+}>;
 
 
 export type MarkNotificationAsReadMutation = (
@@ -1018,7 +1017,7 @@ export type MarkNotificationAsReadMutation = (
   ) }
 );
 
-export type MarkAllNotificationsAsReadMutationVariables = {};
+export type MarkAllNotificationsAsReadMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type MarkAllNotificationsAsReadMutation = (
@@ -1026,9 +1025,9 @@ export type MarkAllNotificationsAsReadMutation = (
   & Pick<Mutation, 'markAllNotificationsAsRead'>
 );
 
-export type DeleteNotificationMutationVariables = {
+export type DeleteNotificationMutationVariables = Exact<{
   notificationId: Scalars['ID'];
-};
+}>;
 
 
 export type DeleteNotificationMutation = (
@@ -1036,7 +1035,7 @@ export type DeleteNotificationMutation = (
   & Pick<Mutation, 'deleteNotification'>
 );
 
-export type DeleteAllNotificationsMutationVariables = {};
+export type DeleteAllNotificationsMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type DeleteAllNotificationsMutation = (
@@ -1044,22 +1043,9 @@ export type DeleteAllNotificationsMutation = (
   & Pick<Mutation, 'deleteAllNotifications'>
 );
 
-export type AcceptFriendRequestMutationVariables = {
-  friendId: Scalars['ID'];
-};
-
-
-export type AcceptFriendRequestMutation = (
-  { __typename?: 'Mutation' }
-  & { acceptFriendRequest: (
-    { __typename?: 'User' }
-    & Pick<User, 'id' | 'username' | 'avatar'>
-  ) }
-);
-
-export type SendPrivateMessageMutationVariables = {
+export type SendPrivateMessageMutationVariables = Exact<{
   input: SendPrivateMessageInput;
-};
+}>;
 
 
 export type SendPrivateMessageMutation = (
@@ -1077,9 +1063,9 @@ export type SendPrivateMessageMutation = (
   ) }
 );
 
-export type DeletePrivateMessageMutationVariables = {
+export type DeletePrivateMessageMutationVariables = Exact<{
   messageId: Scalars['ID'];
-};
+}>;
 
 
 export type DeletePrivateMessageMutation = (
@@ -1087,29 +1073,61 @@ export type DeletePrivateMessageMutation = (
   & Pick<Mutation, 'deletePrivateMessage'>
 );
 
-export type DeclineFriendRequestMutationVariables = {
-  senderId: Scalars['ID'];
-};
-
-
-export type DeclineFriendRequestMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'declineFriendRequest'>
-);
-
-export type SendFriendRequestMutationVariables = {
+export type SendFriendRequestMutationVariables = Exact<{
   friendId: Scalars['ID'];
-};
+}>;
 
 
 export type SendFriendRequestMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Mutation, 'sendFriendRequest'>
+  & { sendFriendRequest: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'canRequestFriendship'>
+  ) }
 );
 
-export type CreateCollabPostMutationVariables = {
+export type AcceptFriendRequestMutationVariables = Exact<{
+  friendId: Scalars['ID'];
+}>;
+
+
+export type AcceptFriendRequestMutation = (
+  { __typename?: 'Mutation' }
+  & { acceptFriendRequest: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username' | 'avatar' | 'canRequestFriendship' | 'isFriend'>
+  ) }
+);
+
+export type DeclineFriendRequestMutationVariables = Exact<{
+  senderId: Scalars['ID'];
+}>;
+
+
+export type DeclineFriendRequestMutation = (
+  { __typename?: 'Mutation' }
+  & { declineFriendRequest: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'canRequestFriendship'>
+  ) }
+);
+
+export type RemoveFriendMutationVariables = Exact<{
+  friendId: Scalars['ID'];
+}>;
+
+
+export type RemoveFriendMutation = (
+  { __typename?: 'Mutation' }
+  & { removeFriend: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'canRequestFriendship' | 'isFriend'>
+  ) }
+);
+
+export type CreateCollabPostMutationVariables = Exact<{
   post: CollabPostArgs;
-};
+}>;
 
 
 export type CreateCollabPostMutation = (
@@ -1120,10 +1138,10 @@ export type CreateCollabPostMutation = (
   ) }
 );
 
-export type AddCollabPostCommentMutationVariables = {
+export type AddCollabPostCommentMutationVariables = Exact<{
   content: Scalars['String'];
   postId: Scalars['ID'];
-};
+}>;
 
 
 export type AddCollabPostCommentMutation = (
@@ -1138,9 +1156,9 @@ export type AddCollabPostCommentMutation = (
   ) }
 );
 
-export type AddCollabPostReactionMutationVariables = {
+export type AddCollabPostReactionMutationVariables = Exact<{
   reaction: AddCollabPostReactionInput;
-};
+}>;
 
 
 export type AddCollabPostReactionMutation = (
@@ -1155,9 +1173,9 @@ export type AddCollabPostReactionMutation = (
   ) }
 );
 
-export type RemoveCollabPostReactionMutationVariables = {
+export type RemoveCollabPostReactionMutationVariables = Exact<{
   reaction: RemoveCollabPostReactionInput;
-};
+}>;
 
 
 export type RemoveCollabPostReactionMutation = (
@@ -1172,9 +1190,9 @@ export type RemoveCollabPostReactionMutation = (
   ) }
 );
 
-export type AddCollabPostCommentReactionMutationVariables = {
+export type AddCollabPostCommentReactionMutationVariables = Exact<{
   reaction: AddCollabPostCommentReactionInput;
-};
+}>;
 
 
 export type AddCollabPostCommentReactionMutation = (
@@ -1182,9 +1200,9 @@ export type AddCollabPostCommentReactionMutation = (
   & Pick<Mutation, 'addCollabPostCommentReaction'>
 );
 
-export type RemoveCollabPostCommentReactionMutationVariables = {
+export type RemoveCollabPostCommentReactionMutationVariables = Exact<{
   reaction: RemoveCollabPostCommentReactionInput;
-};
+}>;
 
 
 export type RemoveCollabPostCommentReactionMutation = (
@@ -1192,9 +1210,9 @@ export type RemoveCollabPostCommentReactionMutation = (
   & Pick<Mutation, 'removeCollabPostCommentReaction'>
 );
 
-export type AddCollabDiscussionThreadReactionMutationVariables = {
+export type AddCollabDiscussionThreadReactionMutationVariables = Exact<{
   reaction: AddCollabDiscussionThreadReactionInput;
-};
+}>;
 
 
 export type AddCollabDiscussionThreadReactionMutation = (
@@ -1202,9 +1220,9 @@ export type AddCollabDiscussionThreadReactionMutation = (
   & Pick<Mutation, 'addCollabDiscussionThreadReaction'>
 );
 
-export type RemoveCollabDiscussionThreadReactionMutationVariables = {
+export type RemoveCollabDiscussionThreadReactionMutationVariables = Exact<{
   reaction: RemoveCollabDiscussionThreadReactionInput;
-};
+}>;
 
 
 export type RemoveCollabDiscussionThreadReactionMutation = (
@@ -1212,9 +1230,9 @@ export type RemoveCollabDiscussionThreadReactionMutation = (
   & Pick<Mutation, 'removeCollabDiscussionThreadReaction'>
 );
 
-export type AddDiscussionThreadCommentReactionMutationVariables = {
+export type AddDiscussionThreadCommentReactionMutationVariables = Exact<{
   reaction: AddDiscussionThreadCommentReactionInput;
-};
+}>;
 
 
 export type AddDiscussionThreadCommentReactionMutation = (
@@ -1222,9 +1240,9 @@ export type AddDiscussionThreadCommentReactionMutation = (
   & Pick<Mutation, 'addCollabDiscussionThreadCommentReaction'>
 );
 
-export type RemoveDiscussionThreadCommentReactionMutationVariables = {
+export type RemoveDiscussionThreadCommentReactionMutationVariables = Exact<{
   reaction: RemoveDiscussionThreadCommentReactionInput;
-};
+}>;
 
 
 export type RemoveDiscussionThreadCommentReactionMutation = (
@@ -1232,10 +1250,10 @@ export type RemoveDiscussionThreadCommentReactionMutation = (
   & Pick<Mutation, 'removeCollabDiscussionThreadCommentReaction'>
 );
 
-export type InviteMemberMutationVariables = {
+export type InviteMemberMutationVariables = Exact<{
   collabId: Scalars['ID'];
   memberId: Scalars['ID'];
-};
+}>;
 
 
 export type InviteMemberMutation = (
@@ -1246,9 +1264,9 @@ export type InviteMemberMutation = (
   ) }
 );
 
-export type RequestToJoinMutationVariables = {
+export type RequestToJoinMutationVariables = Exact<{
   collabId: Scalars['ID'];
-};
+}>;
 
 
 export type RequestToJoinMutation = (
@@ -1256,9 +1274,9 @@ export type RequestToJoinMutation = (
   & Pick<Mutation, 'requestToJoin'>
 );
 
-export type CancelCollabRequestToJoinMutationVariables = {
+export type CancelCollabRequestToJoinMutationVariables = Exact<{
   collabId: Scalars['ID'];
-};
+}>;
 
 
 export type CancelCollabRequestToJoinMutation = (
@@ -1266,9 +1284,9 @@ export type CancelCollabRequestToJoinMutation = (
   & Pick<Mutation, 'cancelRequestToJoin'>
 );
 
-export type AcceptCollabInvitationMutationVariables = {
+export type AcceptCollabInvitationMutationVariables = Exact<{
   collabId: Scalars['ID'];
-};
+}>;
 
 
 export type AcceptCollabInvitationMutation = (
@@ -1276,9 +1294,9 @@ export type AcceptCollabInvitationMutation = (
   & Pick<Mutation, 'acceptCollabInvitation'>
 );
 
-export type DeclineCollabInvitationMutationVariables = {
+export type DeclineCollabInvitationMutationVariables = Exact<{
   collabId: Scalars['ID'];
-};
+}>;
 
 
 export type DeclineCollabInvitationMutation = (
@@ -1286,10 +1304,10 @@ export type DeclineCollabInvitationMutation = (
   & Pick<Mutation, 'declineCollabInvitation'>
 );
 
-export type AcceptMemberRequestMutationVariables = {
+export type AcceptMemberRequestMutationVariables = Exact<{
   collabId: Scalars['ID'];
   memberId: Scalars['ID'];
-};
+}>;
 
 
 export type AcceptMemberRequestMutation = (
@@ -1297,10 +1315,10 @@ export type AcceptMemberRequestMutation = (
   & Pick<Mutation, 'acceptMemberRequest'>
 );
 
-export type DeclineMemberRequestMutationVariables = {
+export type DeclineMemberRequestMutationVariables = Exact<{
   collabId: Scalars['ID'];
   memberId: Scalars['ID'];
-};
+}>;
 
 
 export type DeclineMemberRequestMutation = (
@@ -1308,10 +1326,10 @@ export type DeclineMemberRequestMutation = (
   & Pick<Mutation, 'declineMemberRequest'>
 );
 
-export type RemoveMemberMutationVariables = {
+export type RemoveMemberMutationVariables = Exact<{
   collabId: Scalars['ID'];
   memberId: Scalars['ID'];
-};
+}>;
 
 
 export type RemoveMemberMutation = (
@@ -1326,9 +1344,9 @@ export type RemoveMemberMutation = (
   ) }
 );
 
-export type CreateWallMessageMutationVariables = {
+export type CreateWallMessageMutationVariables = Exact<{
   input: CreateWallMessageInput;
-};
+}>;
 
 
 export type CreateWallMessageMutation = (
@@ -1343,9 +1361,9 @@ export type CreateWallMessageMutation = (
   ) }
 );
 
-export type DeleteWallMessageMutationVariables = {
+export type DeleteWallMessageMutationVariables = Exact<{
   messageId: Scalars['ID'];
-};
+}>;
 
 
 export type DeleteWallMessageMutation = (
@@ -1353,9 +1371,9 @@ export type DeleteWallMessageMutation = (
   & Pick<Mutation, 'deleteWallMessage'>
 );
 
-export type CreateTaskListMutationVariables = {
+export type CreateTaskListMutationVariables = Exact<{
   input: CreateTaskListInput;
-};
+}>;
 
 
 export type CreateTaskListMutation = (
@@ -1366,9 +1384,9 @@ export type CreateTaskListMutation = (
   ) }
 );
 
-export type UpdateTaskListNameMutationVariables = {
+export type UpdateTaskListNameMutationVariables = Exact<{
   input: UpdateTaskListNameInput;
-};
+}>;
 
 
 export type UpdateTaskListNameMutation = (
@@ -1379,9 +1397,9 @@ export type UpdateTaskListNameMutation = (
   ) }
 );
 
-export type UpdateTaskListPositionMutationVariables = {
+export type UpdateTaskListPositionMutationVariables = Exact<{
   input: UpdateTaskListPositionInput;
-};
+}>;
 
 
 export type UpdateTaskListPositionMutation = (
@@ -1392,9 +1410,9 @@ export type UpdateTaskListPositionMutation = (
   ) }
 );
 
-export type DeleteTaskListMutationVariables = {
+export type DeleteTaskListMutationVariables = Exact<{
   taskListId: Scalars['ID'];
-};
+}>;
 
 
 export type DeleteTaskListMutation = (
@@ -1402,9 +1420,9 @@ export type DeleteTaskListMutation = (
   & Pick<Mutation, 'deleteTaskList'>
 );
 
-export type CreateTaskMutationVariables = {
+export type CreateTaskMutationVariables = Exact<{
   input: CreateTaskInput;
-};
+}>;
 
 
 export type CreateTaskMutation = (
@@ -1425,9 +1443,9 @@ export type CreateTaskMutation = (
   ) }
 );
 
-export type DeleteTaskMutationVariables = {
+export type DeleteTaskMutationVariables = Exact<{
   taskId: Scalars['ID'];
-};
+}>;
 
 
 export type DeleteTaskMutation = (
@@ -1435,9 +1453,9 @@ export type DeleteTaskMutation = (
   & Pick<Mutation, 'deleteTask'>
 );
 
-export type UpdateTaskMutationVariables = {
+export type UpdateTaskMutationVariables = Exact<{
   input: UpdateTaskInput;
-};
+}>;
 
 
 export type UpdateTaskMutation = (
@@ -1455,9 +1473,9 @@ export type UpdateTaskMutation = (
   ) }
 );
 
-export type MoveTaskToListMutationVariables = {
+export type MoveTaskToListMutationVariables = Exact<{
   input: MoveTaskToListInput;
-};
+}>;
 
 
 export type MoveTaskToListMutation = (
@@ -1468,9 +1486,9 @@ export type MoveTaskToListMutation = (
   ) }
 );
 
-export type UpdateTaskPositionMutationVariables = {
+export type UpdateTaskPositionMutationVariables = Exact<{
   input: UpdateTaskPositionInput;
-};
+}>;
 
 
 export type UpdateTaskPositionMutation = (
@@ -1481,9 +1499,9 @@ export type UpdateTaskPositionMutation = (
   ) }
 );
 
-export type UpdateTaskAssigneeMutationVariables = {
+export type UpdateTaskAssigneeMutationVariables = Exact<{
   input: UpdateTaskAssigneeInput;
-};
+}>;
 
 
 export type UpdateTaskAssigneeMutation = (
@@ -1501,9 +1519,9 @@ export type UpdateTaskAssigneeMutation = (
   ) }
 );
 
-export type CreateTaskCommentMutationVariables = {
+export type CreateTaskCommentMutationVariables = Exact<{
   input: CreateTaskCommentInput;
-};
+}>;
 
 
 export type CreateTaskCommentMutation = (
@@ -1521,9 +1539,9 @@ export type CreateTaskCommentMutation = (
   ) }
 );
 
-export type AddTaskCommentReactionMutationVariables = {
+export type AddTaskCommentReactionMutationVariables = Exact<{
   reaction: AddCollabTaskCommentReactionInput;
-};
+}>;
 
 
 export type AddTaskCommentReactionMutation = (
@@ -1531,9 +1549,9 @@ export type AddTaskCommentReactionMutation = (
   & Pick<Mutation, 'addCollabTaskCommentReaction'>
 );
 
-export type RemoveTaskCommentReactionMutationVariables = {
+export type RemoveTaskCommentReactionMutationVariables = Exact<{
   reaction: RemoveCollabTaskCommentReactionInput;
-};
+}>;
 
 
 export type RemoveTaskCommentReactionMutation = (
@@ -1541,9 +1559,9 @@ export type RemoveTaskCommentReactionMutation = (
   & Pick<Mutation, 'removeCollabTaskCommentReaction'>
 );
 
-export type CreateDiscussionThreadCommentMutationVariables = {
+export type CreateDiscussionThreadCommentMutationVariables = Exact<{
   input: CreateCollabDiscussionThreadCommentInput;
-};
+}>;
 
 
 export type CreateDiscussionThreadCommentMutation = (
@@ -1551,19 +1569,19 @@ export type CreateDiscussionThreadCommentMutation = (
   & { createCollabDiscussionThreadComment: (
     { __typename?: 'CollabDiscussionThreadComment' }
     & Pick<CollabDiscussionThreadComment, 'id' | 'content'>
-    & { author: (
+    & { author: Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
-    ), reactions: Array<(
+    )>, reactions: Array<(
       { __typename?: 'Reaction' }
       & Pick<Reaction, 'emojiId' | 'count' | 'isLiked'>
     )> }
   ) }
 );
 
-export type ConnectToChatMutationVariables = {
+export type ConnectToChatMutationVariables = Exact<{
   status: UserChatStatus;
-};
+}>;
 
 
 export type ConnectToChatMutation = (
@@ -1581,9 +1599,9 @@ export type ConnectToChatMutation = (
   ) }
 );
 
-export type SendPrivateChatMessageMutationVariables = {
+export type SendPrivateChatMessageMutationVariables = Exact<{
   input: SendPrivateChatMessageInput;
-};
+}>;
 
 
 export type SendPrivateChatMessageMutation = (
@@ -1594,9 +1612,9 @@ export type SendPrivateChatMessageMutation = (
   ) }
 );
 
-export type UpdateStatusMutationVariables = {
+export type UpdateStatusMutationVariables = Exact<{
   status: UserChatStatus;
-};
+}>;
 
 
 export type UpdateStatusMutation = (
@@ -1604,7 +1622,7 @@ export type UpdateStatusMutation = (
   & Pick<Mutation, 'updateStatus'>
 );
 
-export type FriendStatusChangeSubscriptionVariables = {};
+export type FriendStatusChangeSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
 export type FriendStatusChangeSubscription = (
@@ -1619,7 +1637,7 @@ export type FriendStatusChangeSubscription = (
   ) }
 );
 
-export type NewPrivateChatMessageSubscriptionVariables = {};
+export type NewPrivateChatMessageSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
 export type NewPrivateChatMessageSubscription = (
@@ -1630,7 +1648,7 @@ export type NewPrivateChatMessageSubscription = (
   ) }
 );
 
-export type GetCurrentUserQueryVariables = {};
+export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetCurrentUserQuery = (
@@ -1641,7 +1659,7 @@ export type GetCurrentUserQuery = (
   )> }
 );
 
-export type CurrentUserFriendsQueryVariables = {};
+export type CurrentUserFriendsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type CurrentUserFriendsQuery = (
@@ -1656,7 +1674,7 @@ export type CurrentUserFriendsQuery = (
   )> }
 );
 
-export type CurrentUserNotificationsQueryVariables = {};
+export type CurrentUserNotificationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type CurrentUserNotificationsQuery = (
@@ -1671,7 +1689,7 @@ export type CurrentUserNotificationsQuery = (
   )> }
 );
 
-export type CurrentUserFriendRequestsQueryVariables = {};
+export type CurrentUserFriendRequestsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type CurrentUserFriendRequestsQuery = (
@@ -1686,9 +1704,9 @@ export type CurrentUserFriendRequestsQuery = (
   )> }
 );
 
-export type SearchFriendsQueryVariables = {
+export type SearchFriendsQueryVariables = Exact<{
   input: SearchUsersInput;
-};
+}>;
 
 
 export type SearchFriendsQuery = (
@@ -1699,9 +1717,9 @@ export type SearchFriendsQuery = (
   )> }
 );
 
-export type SearchUsersQueryVariables = {
+export type SearchUsersQueryVariables = Exact<{
   input: SearchUsersInput;
-};
+}>;
 
 
 export type SearchUsersQuery = (
@@ -1712,7 +1730,7 @@ export type SearchUsersQuery = (
   )> }
 );
 
-export type GetCurrentUserInfoQueryVariables = {};
+export type GetCurrentUserInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetCurrentUserInfoQuery = (
@@ -1723,7 +1741,7 @@ export type GetCurrentUserInfoQuery = (
   )> }
 );
 
-export type CurrentUserConversationsPreviewQueryVariables = {};
+export type CurrentUserConversationsPreviewQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type CurrentUserConversationsPreviewQuery = (
@@ -1738,11 +1756,11 @@ export type CurrentUserConversationsPreviewQuery = (
   )> }
 );
 
-export type CurrentUserConversationQueryVariables = {
+export type CurrentUserConversationQueryVariables = Exact<{
   userId: Scalars['ID'];
   offset: Scalars['Int'];
   limit: Scalars['Int'];
-};
+}>;
 
 
 export type CurrentUserConversationQuery = (
@@ -1764,7 +1782,7 @@ export type CurrentUserConversationQuery = (
   ) }
 );
 
-export type GetCurrentUserCollabsQueryVariables = {};
+export type GetCurrentUserCollabsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetCurrentUserCollabsQuery = (
@@ -1779,7 +1797,7 @@ export type GetCurrentUserCollabsQuery = (
   )> }
 );
 
-export type GetCurrentUserCollabInvitationsQueryVariables = {};
+export type GetCurrentUserCollabInvitationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetCurrentUserCollabInvitationsQuery = (
@@ -1798,7 +1816,7 @@ export type GetCurrentUserCollabInvitationsQuery = (
   )> }
 );
 
-export type GetCurrentUserCollabRequestsQueryVariables = {};
+export type GetCurrentUserCollabRequestsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetCurrentUserCollabRequestsQuery = (
@@ -1820,7 +1838,7 @@ export type GetCurrentUserCollabRequestsQuery = (
   )> }
 );
 
-export type GetCurrentUserTasksQueryVariables = {};
+export type GetCurrentUserTasksQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetCurrentUserTasksQuery = (
@@ -1842,9 +1860,9 @@ export type GetCurrentUserTasksQuery = (
   )> }
 );
 
-export type UserQueryVariables = {
+export type UserQueryVariables = Exact<{
   id: Scalars['ID'];
-};
+}>;
 
 
 export type UserQuery = (
@@ -1855,10 +1873,10 @@ export type UserQuery = (
   )> }
 );
 
-export type CollabPostsQueryVariables = {
+export type CollabPostsQueryVariables = Exact<{
   offset: Scalars['Int'];
   limit: Scalars['Int'];
-};
+}>;
 
 
 export type CollabPostsQuery = (
@@ -1877,11 +1895,11 @@ export type CollabPostsQuery = (
   ) }
 );
 
-export type CollabPostsByStackQueryVariables = {
+export type CollabPostsByStackQueryVariables = Exact<{
   stack: Scalars['String'];
   offset: Scalars['Int'];
   limit: Scalars['Int'];
-};
+}>;
 
 
 export type CollabPostsByStackQuery = (
@@ -1900,9 +1918,9 @@ export type CollabPostsByStackQuery = (
   ) }
 );
 
-export type AdvancedPostsSearchQueryVariables = {
+export type AdvancedPostsSearchQueryVariables = Exact<{
   input: AdvancedPostsSearchInput;
-};
+}>;
 
 
 export type AdvancedPostsSearchQuery = (
@@ -1921,9 +1939,9 @@ export type AdvancedPostsSearchQuery = (
   ) }
 );
 
-export type SearchPostsByTitleQueryVariables = {
+export type SearchPostsByTitleQueryVariables = Exact<{
   input: SearchPostsInput;
-};
+}>;
 
 
 export type SearchPostsByTitleQuery = (
@@ -1942,9 +1960,9 @@ export type SearchPostsByTitleQuery = (
   ) }
 );
 
-export type GetCollabPostQueryVariables = {
+export type GetCollabPostQueryVariables = Exact<{
   postId: Scalars['ID'];
-};
+}>;
 
 
 export type GetCollabPostQuery = (
@@ -1965,7 +1983,7 @@ export type GetCollabPostQuery = (
   )> }
 );
 
-export type CollabPostLanguagesQueryVariables = {};
+export type CollabPostLanguagesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type CollabPostLanguagesQuery = (
@@ -1973,9 +1991,9 @@ export type CollabPostLanguagesQuery = (
   & Pick<Query, 'languages'>
 );
 
-export type CollabPostCommentsQueryVariables = {
+export type CollabPostCommentsQueryVariables = Exact<{
   postId: Scalars['ID'];
-};
+}>;
 
 
 export type CollabPostCommentsQuery = (
@@ -1997,9 +2015,9 @@ export type CollabPostCommentsQuery = (
   )> }
 );
 
-export type CollabQueryVariables = {
+export type CollabQueryVariables = Exact<{
   collabId: Scalars['ID'];
-};
+}>;
 
 
 export type CollabQuery = (
@@ -2020,9 +2038,9 @@ export type CollabQuery = (
   )> }
 );
 
-export type CollabMembersQueryVariables = {
+export type CollabMembersQueryVariables = Exact<{
   collabId: Scalars['ID'];
-};
+}>;
 
 
 export type CollabMembersQuery = (
@@ -2037,9 +2055,9 @@ export type CollabMembersQuery = (
   )> }
 );
 
-export type CollabWallMessagesQueryVariables = {
+export type CollabWallMessagesQueryVariables = Exact<{
   input: CollabWallMessagesInput;
-};
+}>;
 
 
 export type CollabWallMessagesQuery = (
@@ -2058,9 +2076,9 @@ export type CollabWallMessagesQuery = (
   ) }
 );
 
-export type CollabDiscussionThreadsQueryVariables = {
+export type CollabDiscussionThreadsQueryVariables = Exact<{
   collabId: Scalars['ID'];
-};
+}>;
 
 
 export type CollabDiscussionThreadsQuery = (
@@ -2079,9 +2097,9 @@ export type CollabDiscussionThreadsQuery = (
   )> }
 );
 
-export type CollabThreadQueryVariables = {
+export type CollabThreadQueryVariables = Exact<{
   threadId: Scalars['ID'];
-};
+}>;
 
 
 export type CollabThreadQuery = (
@@ -2099,9 +2117,9 @@ export type CollabThreadQuery = (
   )> }
 );
 
-export type CollabThreadCommentsQueryVariables = {
+export type CollabThreadCommentsQueryVariables = Exact<{
   threadId: Scalars['ID'];
-};
+}>;
 
 
 export type CollabThreadCommentsQuery = (
@@ -2112,10 +2130,10 @@ export type CollabThreadCommentsQuery = (
     & { comments: Array<(
       { __typename?: 'CollabDiscussionThreadComment' }
       & Pick<CollabDiscussionThreadComment, 'id' | 'content' | 'creationDate' | 'isAuthor'>
-      & { author: (
+      & { author: Maybe<(
         { __typename?: 'User' }
         & Pick<User, 'id' | 'username' | 'avatar'>
-      ), reactions: Array<(
+      )>, reactions: Array<(
         { __typename?: 'Reaction' }
         & Pick<Reaction, 'emojiId' | 'count' | 'isLiked'>
       )> }
@@ -2123,9 +2141,9 @@ export type CollabThreadCommentsQuery = (
   )> }
 );
 
-export type TaskListQueryVariables = {
+export type TaskListQueryVariables = Exact<{
   collabId: Scalars['ID'];
-};
+}>;
 
 
 export type TaskListQuery = (
@@ -2153,9 +2171,9 @@ export type TaskListQuery = (
   ) }
 );
 
-export type TaskCommentsQueryVariables = {
+export type TaskCommentsQueryVariables = Exact<{
   taskId: Scalars['ID'];
-};
+}>;
 
 
 export type TaskCommentsQuery = (
@@ -2177,7 +2195,7 @@ export type TaskCommentsQuery = (
   )> }
 );
 
-export type NewNotificationSubscriptionVariables = {};
+export type NewNotificationSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
 export type NewNotificationSubscription = (
@@ -2188,7 +2206,7 @@ export type NewNotificationSubscription = (
   ) }
 );
 
-export type NewFriendRequestSubscriptionVariables = {};
+export type NewFriendRequestSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
 export type NewFriendRequestSubscription = (
@@ -2425,40 +2443,6 @@ export function useDeleteAllNotificationsMutation(baseOptions?: ApolloReactHooks
 export type DeleteAllNotificationsMutationHookResult = ReturnType<typeof useDeleteAllNotificationsMutation>;
 export type DeleteAllNotificationsMutationResult = ApolloReactCommon.MutationResult<DeleteAllNotificationsMutation>;
 export type DeleteAllNotificationsMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteAllNotificationsMutation, DeleteAllNotificationsMutationVariables>;
-export const AcceptFriendRequestDocument = gql`
-    mutation AcceptFriendRequest($friendId: ID!) {
-  acceptFriendRequest(friendId: $friendId) {
-    id
-    username
-    avatar
-  }
-}
-    `;
-export type AcceptFriendRequestMutationFn = ApolloReactCommon.MutationFunction<AcceptFriendRequestMutation, AcceptFriendRequestMutationVariables>;
-
-/**
- * __useAcceptFriendRequestMutation__
- *
- * To run a mutation, you first call `useAcceptFriendRequestMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAcceptFriendRequestMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [acceptFriendRequestMutation, { data, loading, error }] = useAcceptFriendRequestMutation({
- *   variables: {
- *      friendId: // value for 'friendId'
- *   },
- * });
- */
-export function useAcceptFriendRequestMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AcceptFriendRequestMutation, AcceptFriendRequestMutationVariables>) {
-        return ApolloReactHooks.useMutation<AcceptFriendRequestMutation, AcceptFriendRequestMutationVariables>(AcceptFriendRequestDocument, baseOptions);
-      }
-export type AcceptFriendRequestMutationHookResult = ReturnType<typeof useAcceptFriendRequestMutation>;
-export type AcceptFriendRequestMutationResult = ApolloReactCommon.MutationResult<AcceptFriendRequestMutation>;
-export type AcceptFriendRequestMutationOptions = ApolloReactCommon.BaseMutationOptions<AcceptFriendRequestMutation, AcceptFriendRequestMutationVariables>;
 export const SendPrivateMessageDocument = gql`
     mutation SendPrivateMessage($input: SendPrivateMessageInput!) {
   sendPrivateMessage(input: $input) {
@@ -2534,39 +2518,12 @@ export function useDeletePrivateMessageMutation(baseOptions?: ApolloReactHooks.M
 export type DeletePrivateMessageMutationHookResult = ReturnType<typeof useDeletePrivateMessageMutation>;
 export type DeletePrivateMessageMutationResult = ApolloReactCommon.MutationResult<DeletePrivateMessageMutation>;
 export type DeletePrivateMessageMutationOptions = ApolloReactCommon.BaseMutationOptions<DeletePrivateMessageMutation, DeletePrivateMessageMutationVariables>;
-export const DeclineFriendRequestDocument = gql`
-    mutation DeclineFriendRequest($senderId: ID!) {
-  declineFriendRequest(senderId: $senderId)
-}
-    `;
-export type DeclineFriendRequestMutationFn = ApolloReactCommon.MutationFunction<DeclineFriendRequestMutation, DeclineFriendRequestMutationVariables>;
-
-/**
- * __useDeclineFriendRequestMutation__
- *
- * To run a mutation, you first call `useDeclineFriendRequestMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeclineFriendRequestMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [declineFriendRequestMutation, { data, loading, error }] = useDeclineFriendRequestMutation({
- *   variables: {
- *      senderId: // value for 'senderId'
- *   },
- * });
- */
-export function useDeclineFriendRequestMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeclineFriendRequestMutation, DeclineFriendRequestMutationVariables>) {
-        return ApolloReactHooks.useMutation<DeclineFriendRequestMutation, DeclineFriendRequestMutationVariables>(DeclineFriendRequestDocument, baseOptions);
-      }
-export type DeclineFriendRequestMutationHookResult = ReturnType<typeof useDeclineFriendRequestMutation>;
-export type DeclineFriendRequestMutationResult = ApolloReactCommon.MutationResult<DeclineFriendRequestMutation>;
-export type DeclineFriendRequestMutationOptions = ApolloReactCommon.BaseMutationOptions<DeclineFriendRequestMutation, DeclineFriendRequestMutationVariables>;
 export const SendFriendRequestDocument = gql`
     mutation SendFriendRequest($friendId: ID!) {
-  sendFriendRequest(friendId: $friendId)
+  sendFriendRequest(friendId: $friendId) {
+    id
+    canRequestFriendship
+  }
 }
     `;
 export type SendFriendRequestMutationFn = ApolloReactCommon.MutationFunction<SendFriendRequestMutation, SendFriendRequestMutationVariables>;
@@ -2594,6 +2551,109 @@ export function useSendFriendRequestMutation(baseOptions?: ApolloReactHooks.Muta
 export type SendFriendRequestMutationHookResult = ReturnType<typeof useSendFriendRequestMutation>;
 export type SendFriendRequestMutationResult = ApolloReactCommon.MutationResult<SendFriendRequestMutation>;
 export type SendFriendRequestMutationOptions = ApolloReactCommon.BaseMutationOptions<SendFriendRequestMutation, SendFriendRequestMutationVariables>;
+export const AcceptFriendRequestDocument = gql`
+    mutation AcceptFriendRequest($friendId: ID!) {
+  acceptFriendRequest(friendId: $friendId) {
+    id
+    username
+    avatar
+    canRequestFriendship
+    isFriend
+  }
+}
+    `;
+export type AcceptFriendRequestMutationFn = ApolloReactCommon.MutationFunction<AcceptFriendRequestMutation, AcceptFriendRequestMutationVariables>;
+
+/**
+ * __useAcceptFriendRequestMutation__
+ *
+ * To run a mutation, you first call `useAcceptFriendRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAcceptFriendRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [acceptFriendRequestMutation, { data, loading, error }] = useAcceptFriendRequestMutation({
+ *   variables: {
+ *      friendId: // value for 'friendId'
+ *   },
+ * });
+ */
+export function useAcceptFriendRequestMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AcceptFriendRequestMutation, AcceptFriendRequestMutationVariables>) {
+        return ApolloReactHooks.useMutation<AcceptFriendRequestMutation, AcceptFriendRequestMutationVariables>(AcceptFriendRequestDocument, baseOptions);
+      }
+export type AcceptFriendRequestMutationHookResult = ReturnType<typeof useAcceptFriendRequestMutation>;
+export type AcceptFriendRequestMutationResult = ApolloReactCommon.MutationResult<AcceptFriendRequestMutation>;
+export type AcceptFriendRequestMutationOptions = ApolloReactCommon.BaseMutationOptions<AcceptFriendRequestMutation, AcceptFriendRequestMutationVariables>;
+export const DeclineFriendRequestDocument = gql`
+    mutation DeclineFriendRequest($senderId: ID!) {
+  declineFriendRequest(senderId: $senderId) {
+    id
+    canRequestFriendship
+  }
+}
+    `;
+export type DeclineFriendRequestMutationFn = ApolloReactCommon.MutationFunction<DeclineFriendRequestMutation, DeclineFriendRequestMutationVariables>;
+
+/**
+ * __useDeclineFriendRequestMutation__
+ *
+ * To run a mutation, you first call `useDeclineFriendRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeclineFriendRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [declineFriendRequestMutation, { data, loading, error }] = useDeclineFriendRequestMutation({
+ *   variables: {
+ *      senderId: // value for 'senderId'
+ *   },
+ * });
+ */
+export function useDeclineFriendRequestMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeclineFriendRequestMutation, DeclineFriendRequestMutationVariables>) {
+        return ApolloReactHooks.useMutation<DeclineFriendRequestMutation, DeclineFriendRequestMutationVariables>(DeclineFriendRequestDocument, baseOptions);
+      }
+export type DeclineFriendRequestMutationHookResult = ReturnType<typeof useDeclineFriendRequestMutation>;
+export type DeclineFriendRequestMutationResult = ApolloReactCommon.MutationResult<DeclineFriendRequestMutation>;
+export type DeclineFriendRequestMutationOptions = ApolloReactCommon.BaseMutationOptions<DeclineFriendRequestMutation, DeclineFriendRequestMutationVariables>;
+export const RemoveFriendDocument = gql`
+    mutation RemoveFriend($friendId: ID!) {
+  removeFriend(friendId: $friendId) {
+    id
+    canRequestFriendship
+    isFriend
+  }
+}
+    `;
+export type RemoveFriendMutationFn = ApolloReactCommon.MutationFunction<RemoveFriendMutation, RemoveFriendMutationVariables>;
+
+/**
+ * __useRemoveFriendMutation__
+ *
+ * To run a mutation, you first call `useRemoveFriendMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveFriendMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeFriendMutation, { data, loading, error }] = useRemoveFriendMutation({
+ *   variables: {
+ *      friendId: // value for 'friendId'
+ *   },
+ * });
+ */
+export function useRemoveFriendMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RemoveFriendMutation, RemoveFriendMutationVariables>) {
+        return ApolloReactHooks.useMutation<RemoveFriendMutation, RemoveFriendMutationVariables>(RemoveFriendDocument, baseOptions);
+      }
+export type RemoveFriendMutationHookResult = ReturnType<typeof useRemoveFriendMutation>;
+export type RemoveFriendMutationResult = ApolloReactCommon.MutationResult<RemoveFriendMutation>;
+export type RemoveFriendMutationOptions = ApolloReactCommon.BaseMutationOptions<RemoveFriendMutation, RemoveFriendMutationVariables>;
 export const CreateCollabPostDocument = gql`
     mutation CreateCollabPost($post: CollabPostArgs!) {
   createCollabPost(post: $post) {

@@ -21,5 +21,4 @@ redis
       )
     }),
   )
-
   .catch(console.error)

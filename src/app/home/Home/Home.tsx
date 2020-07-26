@@ -36,8 +36,8 @@ export const Home = () => {
               size="lg"
               fontWeight={400}
             >
-              Connect with other developers from all over the world and build
-              awesome Apps together!
+              Collaborate with other developers from all over the world and
+              build awesome Apps together!
             </Heading>
           </Stack>
           <Box w={['100%', '100%', '60%']} m="0 auto">

@@ -119,7 +119,7 @@ export const userResolver: Resolvers = {
       return updatedUser as ResolversTypes['currentUser']
     },
     sendFriendRequest: async (root, { friendId }, { models, user, pubsub }) => {
-      const { UserFriendRequest, Notification } = models
+      const { UserFriendRequest, Notification, User } = models
       const request = await UserFriendRequest.createFriendRequest(
         friendId,
         user!.id,
@@ -143,7 +143,8 @@ export const userResolver: Resolvers = {
         },
       })
 
-      return true
+      const friend = await User.findByPk(friendId)
+      return friend!
     },
     acceptFriendRequest: async (
       root,
@@ -166,10 +167,22 @@ export const userResolver: Resolvers = {
 
       return friendship
     },
-    declineFriendRequest: (root, { senderId }, { models, user }) =>
-      models.UserFriendRequest.deleteFriendRequest(user!.id, senderId),
-    removeFriend: (root, { friendId }, { models, user }) =>
-      models.UserFriend.deleteFriendship(friendId, user!.id),
+    declineFriendRequest: async (root, { senderId }, { models, user }) => {
+      const { UserFriendRequest, User } = models
+
+      await UserFriendRequest.deleteFriendRequest(user!.id, senderId)
+
+      const sender = await User.findByPk(senderId)
+      return sender!
+    },
+    removeFriend: async (root, { friendId }, { models, user }) => {
+      const { UserFriend, User } = models
+
+      await UserFriend.deleteFriendship(friendId, user!.id)
+
+      const friend = await User.findByPk(friendId)
+      return friend!
+    },
   },
   Subscription: {
     newFriendRequest: {

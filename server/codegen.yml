@@ -52,7 +52,7 @@ generates:
         # Collab Task Comment
         - Mutation.createTaskComment#./context/CollabContext#CollabContextWithUser
         - Mutation.deleteTaskComment#./context/CollabContext#CollabContextWithUser
-  ./src/graphql/generates.ts:
+  ../src/graphql/generates.ts:
     plugins:
       - typescript
       - typescript-operations

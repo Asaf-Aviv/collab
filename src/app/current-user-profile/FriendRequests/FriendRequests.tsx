@@ -42,7 +42,7 @@ export const FriendRequests = () => {
 
   return (
     <>
-      <SEO title="My Friend Requests" url={window.location.href} />
+      <SEO title="Friend Requests" url={window.location.href} />
       <Box as="main" flex={1} pb={4}>
         <Heading as="h1" size="md" mb={4} fontWeight={500}>
           Friend Requests

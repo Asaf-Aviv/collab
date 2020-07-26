@@ -3,21 +3,42 @@ import { useParams } from 'react-router-dom'
 import {
   useCollabMembersQuery,
   useRemoveMemberMutation,
+  CollabMembersDocument,
 } from '../../../graphql/generates'
 import { UserCard } from '../../../components/UserCard/UserCard'
 import { Grid, Button, Box } from '@chakra-ui/core'
 import { useCurrentUser } from '../../../providers'
-import { DotsMenu } from '../../../components/DotsMenu/Index'
 import { InviteMembersModal } from '../InviteMembersModal'
+import { useToastNotification } from '../../notifications'
 
 export const CollabMembers = ({ isOwner = false }) => {
+  const notify = useToastNotification()
   const { collabId } = useParams<{ collabId: string }>()
   const [isInviteMembersModalOpen, setIsInviteMembersModalOpen] = useState(
     false,
   )
   const currentUser = useCurrentUser()
   const { data } = useCollabMembersQuery({ variables: { collabId } })
-  const [removeMember] = useRemoveMemberMutation()
+  const [removeMember] = useRemoveMemberMutation({
+    refetchQueries: [
+      {
+        query: CollabMembersDocument,
+        variables: {
+          collabId,
+        },
+      },
+    ],
+    onCompleted() {
+      notify('success', {
+        message: `Successfully removed member`,
+      })
+    },
+    onError({ message }) {
+      notify('error', {
+        message,
+      })
+    },
+  })
 
   return (
     <Box as="main" pb={4}>
@@ -51,39 +72,27 @@ export const CollabMembers = ({ isOwner = false }) => {
           <UserCard
             key={member.id}
             {...member}
-            {...(isOwner &&
-              currentUser?.id !== member.id && {
-                dotsMenu: (
-                  <DotsMenu
-                    iconProps={{
-                      ariaLabel: 'User Menu',
-                      color: '#c1c1c1',
-                      _hover: dotsMenuIconStyles,
-                      _focus: dotsMenuIconStyles,
-                      _active: dotsMenuIconStyles,
-                    }}
-                  >
-                    <Button
-                      size="sm"
-                      onClick={() =>
-                        removeMember({
-                          variables: {
-                            collabId,
-                            memberId: member.id,
-                          },
-                        })
-                      }
-                    >
-                      Remove Member
-                    </Button>
-                  </DotsMenu>
-                ),
-              })}
+            showDotsMenu={currentUser?.id !== member.id}
+            dotsMenuItems={
+              isOwner ? (
+                <Button
+                  size="sm"
+                  onClick={() =>
+                    removeMember({
+                      variables: {
+                        collabId,
+                        memberId: member.id,
+                      },
+                    })
+                  }
+                >
+                  Remove Member
+                </Button>
+              ) : null
+            }
           />
         ))}
       </Grid>
     </Box>
   )
 }
-
-const dotsMenuIconStyles = { bg: 'inherit', color: 'white' }

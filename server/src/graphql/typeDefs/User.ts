@@ -18,12 +18,10 @@ export const userTypeDefs = gql`
     acceptCollabInvitation(collabId: ID!): ID!
     declineCollabInvitation(collabId: ID!): ID!
     updateUserInfo(input: UpdateUserInfoInput): CurrentUser!
-    sendFriendRequest(friendId: ID!): Boolean!
+    sendFriendRequest(friendId: ID!): User!
     acceptFriendRequest(friendId: ID!): User!
-    "returns the id of the declined friend"
-    declineFriendRequest(senderId: ID!): ID!
-    "returns the id of the removed friend"
-    removeFriend(friendId: ID!): ID!
+    declineFriendRequest(senderId: ID!): User!
+    removeFriend(friendId: ID!): User!
     uploadAvatar(avatar: Upload!): CurrentUser!
   }
 

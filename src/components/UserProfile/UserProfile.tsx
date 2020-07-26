@@ -18,18 +18,20 @@ export const UserProfile = () => {
 
   return (
     <Container>
-      {user === null && (
+      {user && (
         <>
-          <SEO url={'/'} />
-          <Heading textAlign="center" size="md" as="h1" py={4}>
-            User not found
-          </Heading>
+          <SEO
+            title={`${user.username}'s Profile`}
+            url={window.location.href}
+          />
+          <UserCard {...user} showDotsMenu mx="auto" maxWidth={350} />
         </>
       )}
-      {user && (
-        <SEO title={`${user.username}'s Profile`} url={window.location.href} />
+      {user === null && (
+        <Heading textAlign="center" size="md" as="h1" py={4}>
+          User not found
+        </Heading>
       )}
-      {user && <UserCard {...user} mx="auto" maxWidth={350} />}
       {loading && <Loader />}
       {error && (
         <DisplayError

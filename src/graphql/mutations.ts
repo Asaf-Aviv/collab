@@ -58,16 +58,6 @@ export const DELETE_ALL_NOTIFICATIONS = gql`
   }
 `
 
-export const ACCEPT_FRIEND_REQUEST = gql`
-  mutation AcceptFriendRequest($friendId: ID!) {
-    acceptFriendRequest(friendId: $friendId) {
-      id
-      username
-      avatar
-    }
-  }
-`
-
 export const SEND_PRIVATE_MESSAGE = gql`
   mutation SendPrivateMessage($input: SendPrivateMessageInput!) {
     sendPrivateMessage(input: $input) {
@@ -116,15 +106,43 @@ export const DELETE_PRIVATE_MESSAGE = gql`
 //   }
 // `
 
-export const DECLINE_FRIEND_REQUEST = gql`
-  mutation DeclineFriendRequest($senderId: ID!) {
-    declineFriendRequest(senderId: $senderId)
-  }
-`
-// User
 export const SEND_FRIEND_REQUEST = gql`
   mutation SendFriendRequest($friendId: ID!) {
-    sendFriendRequest(friendId: $friendId)
+    sendFriendRequest(friendId: $friendId) {
+      id
+      canRequestFriendship
+    }
+  }
+`
+
+export const ACCEPT_FRIEND_REQUEST = gql`
+  mutation AcceptFriendRequest($friendId: ID!) {
+    acceptFriendRequest(friendId: $friendId) {
+      id
+      username
+      avatar
+      canRequestFriendship
+      isFriend
+    }
+  }
+`
+
+export const DECLINE_FRIEND_REQUEST = gql`
+  mutation DeclineFriendRequest($senderId: ID!) {
+    declineFriendRequest(senderId: $senderId) {
+      id
+      canRequestFriendship
+    }
+  }
+`
+
+export const REMOVE_FRIEND = gql`
+  mutation RemoveFriend($friendId: ID!) {
+    removeFriend(friendId: $friendId) {
+      id
+      canRequestFriendship
+      isFriend
+    }
   }
 `
 
@@ -286,7 +304,7 @@ export const REMOVE_COLLAB_MEMBER = gql`
 `
 
 // Collab wall
-const CREATE_WALL_MESSAGE = gql`
+export const CREATE_WALL_MESSAGE = gql`
   mutation CreateWallMessage($input: CreateWallMessageInput!) {
     createWallMessage(input: $input) {
       id
@@ -302,7 +320,7 @@ const CREATE_WALL_MESSAGE = gql`
   }
 `
 
-const DELETE_WALL_MESSAGE = gql`
+export const DELETE_WALL_MESSAGE = gql`
   mutation DeleteWallMessage($messageId: ID!) {
     deleteWallMessage(messageId: $messageId)
   }
@@ -486,7 +504,7 @@ export const ADD_DISCUSSION_THREAD_COMMENT = gql`
 `
 
 // Chat
-const CONNECT_TO_CHAT = gql`
+export const CONNECT_TO_CHAT = gql`
   mutation ConnectToChat($status: UserChatStatus!) {
     connectToChat(status: $status) {
       users {
@@ -501,7 +519,7 @@ const CONNECT_TO_CHAT = gql`
   }
 `
 
-const SEND_PRIVATE_CHAT_MESSAGE = gql`
+export const SEND_PRIVATE_CHAT_MESSAGE = gql`
   mutation SendPrivateChatMessage($input: SendPrivateChatMessageInput!) {
     sendPrivateChatMessage(input: $input) {
       id
@@ -512,13 +530,13 @@ const SEND_PRIVATE_CHAT_MESSAGE = gql`
   }
 `
 
-const UPDATE_STATUS = gql`
+export const UPDATE_STATUS = gql`
   mutation UpdateStatus($status: UserChatStatus!) {
     updateStatus(status: $status)
   }
 `
 
-const FRIEND_STATUS_CHANGE = gql`
+export const FRIEND_STATUS_CHANGE = gql`
   subscription FriendStatusChange {
     friendStatusChange {
       user {
@@ -531,7 +549,7 @@ const FRIEND_STATUS_CHANGE = gql`
   }
 `
 
-const NEW_PRIVATE_CHAT_MESSAGE = gql`
+export const NEW_PRIVATE_CHAT_MESSAGE = gql`
   subscription NewPrivateChatMessage {
     newPrivateChatMessage {
       id

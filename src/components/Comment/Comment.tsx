@@ -9,14 +9,14 @@ import { DisplayDate } from '../DisplayDate'
 type Props = {
   id: string
   content: string
-  author: Pick<User, 'id' | 'avatar' | 'username'>
+  author: Pick<User, 'id' | 'avatar' | 'username'> | null
   children?: React.ReactNode
   isAuthor: boolean
   creationDate: string
 }
 
 export const Comment = ({
-  isAuthor,
+  // isAuthor,
   content,
   author,
   creationDate,
@@ -30,8 +30,8 @@ export const Comment = ({
     p={3}
   >
     <Flex as="header" justifyContent="space-between" align="center">
-      <AvatarWithUsername size="sm" {...author} />
-      {isAuthor && 'ISAUTHOR'}
+      {author && <AvatarWithUsername size="sm" {...author} />}
+      {!author && <Text>Deleted User</Text>}
       <DisplayDate date={creationDate} ml={2} />
     </Flex>
     <Box pl={10}>

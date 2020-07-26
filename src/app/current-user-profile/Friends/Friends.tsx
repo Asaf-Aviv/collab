@@ -18,7 +18,7 @@ export const Friends = () => {
       <SEO title="My Friends" url={window.location.href} />
       <Box as="main" flex={1} pb={4}>
         <Heading as="h1" size="md" mb={4} fontWeight={500}>
-          Your Friends
+          My Friends
         </Heading>
         {friends?.map(friend => (
           <UserCard key={friend.id} {...friend}></UserCard>

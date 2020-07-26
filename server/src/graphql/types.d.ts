@@ -144,8 +144,7 @@ export type Mutation = {
   createTaskList: TaskList;
   createWallMessage: WallMessage;
   declineCollabInvitation: Scalars['ID'];
-  /** returns the id of the declined friend */
-  declineFriendRequest: Scalars['ID'];
+  declineFriendRequest: User;
   declineMemberRequest: Scalars['ID'];
   deleteAllNotifications: Scalars['Boolean'];
   deleteCollab: Scalars['Boolean'];
@@ -171,11 +170,10 @@ export type Mutation = {
   removeCollabPostCommentReaction: Scalars['Boolean'];
   removeCollabPostReaction: CollabPost;
   removeCollabTaskCommentReaction: Scalars['Boolean'];
-  /** returns the id of the removed friend */
-  removeFriend: Scalars['ID'];
+  removeFriend: User;
   removeMember: Collab;
   requestToJoin: Scalars['Boolean'];
-  sendFriendRequest: Scalars['Boolean'];
+  sendFriendRequest: User;
   sendPrivateChatMessage: PrivateChatMessage;
   sendPrivateMessage: PrivateMessage;
   signUp: AuthPayload;
@@ -1057,19 +1055,6 @@ export type DeleteAllNotificationsMutation = (
   & Pick<Mutation, 'deleteAllNotifications'>
 );
 
-export type AcceptFriendRequestMutationVariables = Exact<{
-  friendId: Scalars['ID'];
-}>;
-
-
-export type AcceptFriendRequestMutation = (
-  { __typename?: 'Mutation' }
-  & { acceptFriendRequest: (
-    { __typename?: 'User' }
-    & Pick<User, 'id' | 'username' | 'avatar'>
-  ) }
-);
-
 export type SendPrivateMessageMutationVariables = Exact<{
   input: SendPrivateMessageInput;
 }>;
@@ -1100,16 +1085,6 @@ export type DeletePrivateMessageMutation = (
   & Pick<Mutation, 'deletePrivateMessage'>
 );
 
-export type DeclineFriendRequestMutationVariables = Exact<{
-  senderId: Scalars['ID'];
-}>;
-
-
-export type DeclineFriendRequestMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'declineFriendRequest'>
-);
-
 export type SendFriendRequestMutationVariables = Exact<{
   friendId: Scalars['ID'];
 }>;
@@ -1117,7 +1092,49 @@ export type SendFriendRequestMutationVariables = Exact<{
 
 export type SendFriendRequestMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Mutation, 'sendFriendRequest'>
+  & { sendFriendRequest: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'canRequestFriendship'>
+  ) }
+);
+
+export type AcceptFriendRequestMutationVariables = Exact<{
+  friendId: Scalars['ID'];
+}>;
+
+
+export type AcceptFriendRequestMutation = (
+  { __typename?: 'Mutation' }
+  & { acceptFriendRequest: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username' | 'avatar' | 'canRequestFriendship' | 'isFriend'>
+  ) }
+);
+
+export type DeclineFriendRequestMutationVariables = Exact<{
+  senderId: Scalars['ID'];
+}>;
+
+
+export type DeclineFriendRequestMutation = (
+  { __typename?: 'Mutation' }
+  & { declineFriendRequest: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'canRequestFriendship'>
+  ) }
+);
+
+export type RemoveFriendMutationVariables = Exact<{
+  friendId: Scalars['ID'];
+}>;
+
+
+export type RemoveFriendMutation = (
+  { __typename?: 'Mutation' }
+  & { removeFriend: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'canRequestFriendship' | 'isFriend'>
+  ) }
 );
 
 export type CreateCollabPostMutationVariables = Exact<{
@@ -2479,7 +2496,7 @@ export type MutationResolvers<ContextType = CollabContext, ParentType extends Re
   createTaskList?: Resolver<ResolversTypes['TaskList'], ParentType, CollabContextWithUser, RequireFields<MutationCreateTaskListArgs, 'input'>>;
   createWallMessage?: Resolver<ResolversTypes['WallMessage'], ParentType, ContextType, RequireFields<MutationCreateWallMessageArgs, 'input'>>;
   declineCollabInvitation?: Resolver<ResolversTypes['ID'], ParentType, CollabContextWithUser, RequireFields<MutationDeclineCollabInvitationArgs, 'collabId'>>;
-  declineFriendRequest?: Resolver<ResolversTypes['ID'], ParentType, ContextType, RequireFields<MutationDeclineFriendRequestArgs, 'senderId'>>;
+  declineFriendRequest?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationDeclineFriendRequestArgs, 'senderId'>>;
   declineMemberRequest?: Resolver<ResolversTypes['ID'], ParentType, CollabContextWithUser, RequireFields<MutationDeclineMemberRequestArgs, 'collabId' | 'memberId'>>;
   deleteAllNotifications?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   deleteCollab?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationDeleteCollabArgs, 'collabId'>>;
@@ -2505,10 +2522,10 @@ export type MutationResolvers<ContextType = CollabContext, ParentType extends Re
   removeCollabPostCommentReaction?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemoveCollabPostCommentReactionArgs, 'reaction'>>;
   removeCollabPostReaction?: Resolver<ResolversTypes['CollabPost'], ParentType, ContextType, RequireFields<MutationRemoveCollabPostReactionArgs, 'reaction'>>;
   removeCollabTaskCommentReaction?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemoveCollabTaskCommentReactionArgs, 'reaction'>>;
-  removeFriend?: Resolver<ResolversTypes['ID'], ParentType, ContextType, RequireFields<MutationRemoveFriendArgs, 'friendId'>>;
+  removeFriend?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationRemoveFriendArgs, 'friendId'>>;
   removeMember?: Resolver<ResolversTypes['Collab'], ParentType, CollabContextWithUser, RequireFields<MutationRemoveMemberArgs, 'collabId' | 'memberId'>>;
   requestToJoin?: Resolver<ResolversTypes['Boolean'], ParentType, CollabContextWithUser, RequireFields<MutationRequestToJoinArgs, 'collabId'>>;
-  sendFriendRequest?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationSendFriendRequestArgs, 'friendId'>>;
+  sendFriendRequest?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationSendFriendRequestArgs, 'friendId'>>;
   sendPrivateChatMessage?: Resolver<ResolversTypes['PrivateChatMessage'], ParentType, ContextType, RequireFields<MutationSendPrivateChatMessageArgs, 'input'>>;
   sendPrivateMessage?: Resolver<ResolversTypes['PrivateMessage'], ParentType, ContextType, RequireFields<MutationSendPrivateMessageArgs, 'input'>>;
   signUp?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'credentials'>>;
