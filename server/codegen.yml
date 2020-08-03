@@ -12,6 +12,7 @@ generates:
       - typescript-operations
       - typescript-resolvers:
     config:
+      enumsAsTypes: true
       mappers:
         Collab: '../db/models/Collab#GQLCollab'
         CollabDiscussionThreadComment: '../db/models/CollabDiscussionThreadComment#GQLCollabDiscussionThreadComment'
