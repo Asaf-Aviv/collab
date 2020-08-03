@@ -8,6 +8,9 @@ module.exports = {
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:import/errors',
+    'plugin:import/warnings',
+    'plugin:import/typescript',
   ],
   globals: {
     Atomics: 'readonly',
@@ -38,12 +41,28 @@ module.exports = {
     'testing-library/no-debug': 'warn',
     'no-unused-vars': 'off',
     'react/prop-types': 'off',
+    'no-console': 'warn',
+    'no-shadow': ['error'],
     '@typescript-eslint/no-unused-vars': [
       'error',
       {
         vars: 'all',
         args: 'after-used',
         ignoreRestSiblings: false,
+      },
+    ],
+    'import/order': [
+      'error',
+      {
+        groups: [
+          'external',
+          'builtin',
+          'index',
+          'sibling',
+          'parent',
+          'internal',
+          'object',
+        ],
       },
     ],
   },
