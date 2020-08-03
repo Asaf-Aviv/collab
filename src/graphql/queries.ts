@@ -574,3 +574,19 @@ export const GET_TASK_COMMENTS = gql`
     }
   }
 `
+
+// Chat
+export const GET_ONLINE_FRIENDS = gql`
+  query OnlineChatFriends {
+    onlineChatFriends {
+      users {
+        user {
+          id
+          username
+          avatar
+        }
+        status
+      }
+    }
+  }
+`

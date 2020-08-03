@@ -31,6 +31,15 @@ export const UPDATE_CURRENT_USER_INFO = gql`
   }
 `
 
+export const UPLOAD_AVATAR = gql`
+  mutation UploadAvatar($avatar: Upload!) {
+    uploadAvatar(avatar: $avatar) {
+      id
+      avatar
+    }
+  }
+`
+
 export const MARK_NOTIFICATION_AS_READ = gql`
   mutation MarkNotificationAsRead($notificationId: ID!) {
     markNotificationAsRead(notificationId: $notificationId) {
@@ -504,21 +513,6 @@ export const ADD_DISCUSSION_THREAD_COMMENT = gql`
 `
 
 // Chat
-export const CONNECT_TO_CHAT = gql`
-  mutation ConnectToChat($status: UserChatStatus!) {
-    connectToChat(status: $status) {
-      users {
-        user {
-          id
-          username
-          avatar
-        }
-        status
-      }
-    }
-  }
-`
-
 export const SEND_PRIVATE_CHAT_MESSAGE = gql`
   mutation SendPrivateChatMessage($input: SendPrivateChatMessageInput!) {
     sendPrivateChatMessage(input: $input) {
@@ -533,29 +527,5 @@ export const SEND_PRIVATE_CHAT_MESSAGE = gql`
 export const UPDATE_STATUS = gql`
   mutation UpdateStatus($status: UserChatStatus!) {
     updateStatus(status: $status)
-  }
-`
-
-export const FRIEND_STATUS_CHANGE = gql`
-  subscription FriendStatusChange {
-    friendStatusChange {
-      user {
-        id
-        username
-        avatar
-      }
-      status
-    }
-  }
-`
-
-export const NEW_PRIVATE_CHAT_MESSAGE = gql`
-  subscription NewPrivateChatMessage {
-    newPrivateChatMessage {
-      id
-      authorId
-      content
-      creationDate
-    }
   }
 `

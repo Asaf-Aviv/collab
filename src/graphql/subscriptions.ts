@@ -25,3 +25,27 @@ export const NEW_FRIEND_REQUEST = gql`
     }
   }
 `
+
+export const FRIEND_STATUS_CHANGE = gql`
+  subscription FriendStatusChange {
+    friendStatusChange {
+      user {
+        id
+        username
+        avatar
+      }
+      status
+    }
+  }
+`
+
+export const NEW_PRIVATE_CHAT_MESSAGE = gql`
+  subscription NewPrivateChatMessage {
+    newPrivateChatMessage {
+      id
+      authorId
+      content
+      creationDate
+    }
+  }
+`
