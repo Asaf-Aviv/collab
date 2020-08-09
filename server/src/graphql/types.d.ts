@@ -38,6 +38,7 @@ export type Query = {
   currentUser?: Maybe<CurrentUser>;
   getConversation: GetConversationPayload;
   languages: Array<Scalars['String']>;
+  onlineChatFriends: OnlineFriendsPayload;
   searchFriends: Array<User>;
   searchPostsByTitle: CollabPostsSearchResultsPayload;
   searchUsers: Array<User>;
@@ -134,7 +135,6 @@ export type Mutation = {
   addCollabPostReaction: CollabPost;
   addCollabTaskCommentReaction: Scalars['Boolean'];
   cancelRequestToJoin: Scalars['Boolean'];
-  connectToChat: ConnectToChatPayload;
   createCollabDiscussionThread: CollabDiscussionThread;
   createCollabDiscussionThreadComment: CollabDiscussionThreadComment;
   createCollabPost: CollabPost;
@@ -232,11 +232,6 @@ export type MutationAddCollabTaskCommentReactionArgs = {
 
 export type MutationCancelRequestToJoinArgs = {
   collabId: Scalars['ID'];
-};
-
-
-export type MutationConnectToChatArgs = {
-  status: UserChatStatus;
 };
 
 
@@ -635,14 +630,13 @@ export type CollabPostArgs = {
   title: Scalars['String'];
 };
 
-export enum Experience {
-  All = 'ALL',
-  Junior = 'JUNIOR',
-  JuniorMid = 'JUNIOR_MID',
-  Mid = 'MID',
-  MidSenior = 'MID_SENIOR',
-  Senior = 'SENIOR'
-}
+export type Experience = 
+  | 'ALL'
+  | 'JUNIOR'
+  | 'JUNIOR_MID'
+  | 'MID'
+  | 'MID_SENIOR'
+  | 'SENIOR';
 
 export type CollabPostComment = {
   __typename?: 'CollabPostComment';
@@ -712,7 +706,7 @@ export type CollabWallMessagesInput = {
 
 export type Subscription = {
   __typename?: 'Subscription';
-  friendStatusChange: ChatUsersPayload;
+  friendStatusChange: ChatUserPayload;
   newFriendRequest: NewFriendRequestPayload;
   newNotification: Notification;
   newPrivateChatMessage: PrivateChatMessage;
@@ -729,20 +723,19 @@ export type Notification = {
   url: Scalars['String'];
 };
 
-export enum UserChatStatus {
-  Away = 'AWAY',
-  Dnd = 'DND',
-  Offline = 'OFFLINE',
-  Online = 'ONLINE'
-}
+export type UserChatStatus = 
+  | 'AWAY'
+  | 'DND'
+  | 'OFFLINE'
+  | 'ONLINE';
 
-export type ConnectToChatPayload = {
-  __typename?: 'ConnectToChatPayload';
-  users: Array<ChatUsersPayload>;
+export type OnlineFriendsPayload = {
+  __typename?: 'OnlineFriendsPayload';
+  users: Array<ChatUserPayload>;
 };
 
-export type ChatUsersPayload = {
-  __typename?: 'ChatUsersPayload';
+export type ChatUserPayload = {
+  __typename?: 'ChatUserPayload';
   status: UserChatStatus;
   user: User;
 };
@@ -772,7 +765,7 @@ export type PrivateMessage = {
 
 export type PrivateMessagePreview = {
   __typename?: 'PrivateMessagePreview';
-  avatar: Scalars['String'];
+  avatar?: Maybe<Scalars['String']>;
   content: Scalars['String'];
   userId: Scalars['ID'];
   username: Scalars['String'];
@@ -1013,6 +1006,19 @@ export type UpdateUserInfoMutation = (
   & { updateUserInfo: (
     { __typename?: 'CurrentUser' }
     & Pick<CurrentUser, 'id' | 'firstName' | 'lastName' | 'title' | 'country' | 'bio'>
+  ) }
+);
+
+export type UploadAvatarMutationVariables = Exact<{
+  avatar: Scalars['Upload'];
+}>;
+
+
+export type UploadAvatarMutation = (
+  { __typename?: 'Mutation' }
+  & { uploadAvatar: (
+    { __typename?: 'CurrentUser' }
+    & Pick<CurrentUser, 'id' | 'avatar'>
   ) }
 );
 
@@ -1591,26 +1597,6 @@ export type CreateDiscussionThreadCommentMutation = (
   ) }
 );
 
-export type ConnectToChatMutationVariables = Exact<{
-  status: UserChatStatus;
-}>;
-
-
-export type ConnectToChatMutation = (
-  { __typename?: 'Mutation' }
-  & { connectToChat: (
-    { __typename?: 'ConnectToChatPayload' }
-    & { users: Array<(
-      { __typename?: 'ChatUsersPayload' }
-      & Pick<ChatUsersPayload, 'status'>
-      & { user: (
-        { __typename?: 'User' }
-        & Pick<User, 'id' | 'username' | 'avatar'>
-      ) }
-    )> }
-  ) }
-);
-
 export type SendPrivateChatMessageMutationVariables = Exact<{
   input: SendPrivateChatMessageInput;
 }>;
@@ -1632,32 +1618,6 @@ export type UpdateStatusMutationVariables = Exact<{
 export type UpdateStatusMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'updateStatus'>
-);
-
-export type FriendStatusChangeSubscriptionVariables = Exact<{ [key: string]: never; }>;
-
-
-export type FriendStatusChangeSubscription = (
-  { __typename?: 'Subscription' }
-  & { friendStatusChange: (
-    { __typename?: 'ChatUsersPayload' }
-    & Pick<ChatUsersPayload, 'status'>
-    & { user: (
-      { __typename?: 'User' }
-      & Pick<User, 'id' | 'username' | 'avatar'>
-    ) }
-  ) }
-);
-
-export type NewPrivateChatMessageSubscriptionVariables = Exact<{ [key: string]: never; }>;
-
-
-export type NewPrivateChatMessageSubscription = (
-  { __typename?: 'Subscription' }
-  & { newPrivateChatMessage: (
-    { __typename?: 'PrivateChatMessage' }
-    & Pick<PrivateChatMessage, 'id' | 'authorId' | 'content' | 'creationDate'>
-  ) }
 );
 
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
@@ -2207,6 +2167,24 @@ export type TaskCommentsQuery = (
   )> }
 );
 
+export type OnlineChatFriendsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OnlineChatFriendsQuery = (
+  { __typename?: 'Query' }
+  & { onlineChatFriends: (
+    { __typename?: 'OnlineFriendsPayload' }
+    & { users: Array<(
+      { __typename?: 'ChatUserPayload' }
+      & Pick<ChatUserPayload, 'status'>
+      & { user: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'avatar'>
+      ) }
+    )> }
+  ) }
+);
+
 export type NewNotificationSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -2229,6 +2207,32 @@ export type NewFriendRequestSubscription = (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
     ) }
+  ) }
+);
+
+export type FriendStatusChangeSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FriendStatusChangeSubscription = (
+  { __typename?: 'Subscription' }
+  & { friendStatusChange: (
+    { __typename?: 'ChatUserPayload' }
+    & Pick<ChatUserPayload, 'status'>
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    ) }
+  ) }
+);
+
+export type NewPrivateChatMessageSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type NewPrivateChatMessageSubscription = (
+  { __typename?: 'Subscription' }
+  & { newPrivateChatMessage: (
+    { __typename?: 'PrivateChatMessage' }
+    & Pick<PrivateChatMessage, 'id' | 'authorId' | 'content' | 'creationDate'>
   ) }
 );
 
@@ -2348,8 +2352,8 @@ export type ResolversTypes = ResolversObject<{
   Subscription: ResolverTypeWrapper<{}>;
   Notification: ResolverTypeWrapper<Notification>;
   UserChatStatus: UserChatStatus;
-  ConnectToChatPayload: ResolverTypeWrapper<Omit<ConnectToChatPayload, 'users'> & { users: Array<ResolversTypes['ChatUsersPayload']> }>;
-  ChatUsersPayload: ResolverTypeWrapper<Omit<ChatUsersPayload, 'user'> & { user: ResolversTypes['User'] }>;
+  OnlineFriendsPayload: ResolverTypeWrapper<Omit<OnlineFriendsPayload, 'users'> & { users: Array<ResolversTypes['ChatUserPayload']> }>;
+  ChatUserPayload: ResolverTypeWrapper<Omit<ChatUserPayload, 'user'> & { user: ResolversTypes['User'] }>;
   PrivateChatMessage: ResolverTypeWrapper<PrivateChatMessage>;
   SendPrivateChatMessageInput: SendPrivateChatMessageInput;
   PrivateMessage: ResolverTypeWrapper<GQLPrivateMessage>;
@@ -2420,8 +2424,8 @@ export type ResolversParentTypes = ResolversObject<{
   CollabWallMessagesInput: CollabWallMessagesInput;
   Subscription: {};
   Notification: Notification;
-  ConnectToChatPayload: Omit<ConnectToChatPayload, 'users'> & { users: Array<ResolversParentTypes['ChatUsersPayload']> };
-  ChatUsersPayload: Omit<ChatUsersPayload, 'user'> & { user: ResolversParentTypes['User'] };
+  OnlineFriendsPayload: Omit<OnlineFriendsPayload, 'users'> & { users: Array<ResolversParentTypes['ChatUserPayload']> };
+  ChatUserPayload: Omit<ChatUserPayload, 'user'> & { user: ResolversParentTypes['User'] };
   PrivateChatMessage: PrivateChatMessage;
   SendPrivateChatMessageInput: SendPrivateChatMessageInput;
   PrivateMessage: GQLPrivateMessage;
@@ -2466,6 +2470,7 @@ export type QueryResolvers<ContextType = CollabContext, ParentType extends Resol
   currentUser?: Resolver<Maybe<ResolversTypes['CurrentUser']>, ParentType, ContextType>;
   getConversation?: Resolver<ResolversTypes['GetConversationPayload'], ParentType, ContextType, RequireFields<QueryGetConversationArgs, 'limit' | 'offset' | 'userId'>>;
   languages?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  onlineChatFriends?: Resolver<ResolversTypes['OnlineFriendsPayload'], ParentType, ContextType>;
   searchFriends?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QuerySearchFriendsArgs, 'input'>>;
   searchPostsByTitle?: Resolver<ResolversTypes['CollabPostsSearchResultsPayload'], ParentType, ContextType, RequireFields<QuerySearchPostsByTitleArgs, 'input'>>;
   searchUsers?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QuerySearchUsersArgs, 'input'>>;
@@ -2486,7 +2491,6 @@ export type MutationResolvers<ContextType = CollabContext, ParentType extends Re
   addCollabPostReaction?: Resolver<ResolversTypes['CollabPost'], ParentType, ContextType, RequireFields<MutationAddCollabPostReactionArgs, 'reaction'>>;
   addCollabTaskCommentReaction?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationAddCollabTaskCommentReactionArgs, 'reaction'>>;
   cancelRequestToJoin?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCancelRequestToJoinArgs, 'collabId'>>;
-  connectToChat?: Resolver<ResolversTypes['ConnectToChatPayload'], ParentType, ContextType, RequireFields<MutationConnectToChatArgs, 'status'>>;
   createCollabDiscussionThread?: Resolver<ResolversTypes['CollabDiscussionThread'], ParentType, ContextType, RequireFields<MutationCreateCollabDiscussionThreadArgs, 'thread'>>;
   createCollabDiscussionThreadComment?: Resolver<ResolversTypes['CollabDiscussionThreadComment'], ParentType, ContextType, RequireFields<MutationCreateCollabDiscussionThreadCommentArgs, 'input'>>;
   createCollabPost?: Resolver<ResolversTypes['CollabPost'], ParentType, ContextType, RequireFields<MutationCreateCollabPostArgs, 'post'>>;
@@ -2660,7 +2664,7 @@ export type CollabWallMessagesPayloadResolvers<ContextType = CollabContext, Pare
 }>;
 
 export type SubscriptionResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
-  friendStatusChange?: SubscriptionResolver<ResolversTypes['ChatUsersPayload'], "friendStatusChange", ParentType, ContextType>;
+  friendStatusChange?: SubscriptionResolver<ResolversTypes['ChatUserPayload'], "friendStatusChange", ParentType, ContextType>;
   newFriendRequest?: SubscriptionResolver<ResolversTypes['NewFriendRequestPayload'], "newFriendRequest", ParentType, ContextType>;
   newNotification?: SubscriptionResolver<ResolversTypes['Notification'], "newNotification", ParentType, ContextType>;
   newPrivateChatMessage?: SubscriptionResolver<ResolversTypes['PrivateChatMessage'], "newPrivateChatMessage", ParentType, ContextType>;
@@ -2677,12 +2681,12 @@ export type NotificationResolvers<ContextType = CollabContext, ParentType extend
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 }>;
 
-export type ConnectToChatPayloadResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['ConnectToChatPayload'] = ResolversParentTypes['ConnectToChatPayload']> = ResolversObject<{
-  users?: Resolver<Array<ResolversTypes['ChatUsersPayload']>, ParentType, ContextType>;
+export type OnlineFriendsPayloadResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['OnlineFriendsPayload'] = ResolversParentTypes['OnlineFriendsPayload']> = ResolversObject<{
+  users?: Resolver<Array<ResolversTypes['ChatUserPayload']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 }>;
 
-export type ChatUsersPayloadResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['ChatUsersPayload'] = ResolversParentTypes['ChatUsersPayload']> = ResolversObject<{
+export type ChatUserPayloadResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['ChatUserPayload'] = ResolversParentTypes['ChatUserPayload']> = ResolversObject<{
   status?: Resolver<ResolversTypes['UserChatStatus'], ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
@@ -2707,7 +2711,7 @@ export type PrivateMessageResolvers<ContextType = CollabContext, ParentType exte
 }>;
 
 export type PrivateMessagePreviewResolvers<ContextType = CollabContext, ParentType extends ResolversParentTypes['PrivateMessagePreview'] = ResolversParentTypes['PrivateMessagePreview']> = ResolversObject<{
-  avatar?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  avatar?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -2848,8 +2852,8 @@ export type Resolvers<ContextType = CollabContext> = ResolversObject<{
   CollabWallMessagesPayload?: CollabWallMessagesPayloadResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
   Notification?: NotificationResolvers<ContextType>;
-  ConnectToChatPayload?: ConnectToChatPayloadResolvers<ContextType>;
-  ChatUsersPayload?: ChatUsersPayloadResolvers<ContextType>;
+  OnlineFriendsPayload?: OnlineFriendsPayloadResolvers<ContextType>;
+  ChatUserPayload?: ChatUserPayloadResolvers<ContextType>;
   PrivateChatMessage?: PrivateChatMessageResolvers<ContextType>;
   PrivateMessage?: PrivateMessageResolvers<ContextType>;
   PrivateMessagePreview?: PrivateMessagePreviewResolvers<ContextType>;

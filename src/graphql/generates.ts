@@ -26,6 +26,7 @@ export type Query = {
   currentUser: Maybe<CurrentUser>;
   getConversation: GetConversationPayload;
   languages: Array<Scalars['String']>;
+  onlineChatFriends: OnlineFriendsPayload;
   searchFriends: Array<User>;
   searchPostsByTitle: CollabPostsSearchResultsPayload;
   searchUsers: Array<User>;
@@ -122,7 +123,6 @@ export type Mutation = {
   addCollabPostReaction: CollabPost;
   addCollabTaskCommentReaction: Scalars['Boolean'];
   cancelRequestToJoin: Scalars['Boolean'];
-  connectToChat: ConnectToChatPayload;
   createCollabDiscussionThread: CollabDiscussionThread;
   createCollabDiscussionThreadComment: CollabDiscussionThreadComment;
   createCollabPost: CollabPost;
@@ -220,11 +220,6 @@ export type MutationAddCollabTaskCommentReactionArgs = {
 
 export type MutationCancelRequestToJoinArgs = {
   collabId: Scalars['ID'];
-};
-
-
-export type MutationConnectToChatArgs = {
-  status: UserChatStatus;
 };
 
 
@@ -700,7 +695,7 @@ export type CollabWallMessagesInput = {
 
 export type Subscription = {
   __typename?: 'Subscription';
-  friendStatusChange: ChatUsersPayload;
+  friendStatusChange: ChatUserPayload;
   newFriendRequest: NewFriendRequestPayload;
   newNotification: Notification;
   newPrivateChatMessage: PrivateChatMessage;
@@ -724,13 +719,13 @@ export enum UserChatStatus {
   Online = 'ONLINE'
 }
 
-export type ConnectToChatPayload = {
-  __typename?: 'ConnectToChatPayload';
-  users: Array<ChatUsersPayload>;
+export type OnlineFriendsPayload = {
+  __typename?: 'OnlineFriendsPayload';
+  users: Array<ChatUserPayload>;
 };
 
-export type ChatUsersPayload = {
-  __typename?: 'ChatUsersPayload';
+export type ChatUserPayload = {
+  __typename?: 'ChatUserPayload';
   status: UserChatStatus;
   user: User;
 };
@@ -760,7 +755,7 @@ export type PrivateMessage = {
 
 export type PrivateMessagePreview = {
   __typename?: 'PrivateMessagePreview';
-  avatar: Scalars['String'];
+  avatar: Maybe<Scalars['String']>;
   content: Scalars['String'];
   userId: Scalars['ID'];
   username: Scalars['String'];
@@ -1001,6 +996,19 @@ export type UpdateUserInfoMutation = (
   & { updateUserInfo: (
     { __typename?: 'CurrentUser' }
     & Pick<CurrentUser, 'id' | 'firstName' | 'lastName' | 'title' | 'country' | 'bio'>
+  ) }
+);
+
+export type UploadAvatarMutationVariables = Exact<{
+  avatar: Scalars['Upload'];
+}>;
+
+
+export type UploadAvatarMutation = (
+  { __typename?: 'Mutation' }
+  & { uploadAvatar: (
+    { __typename?: 'CurrentUser' }
+    & Pick<CurrentUser, 'id' | 'avatar'>
   ) }
 );
 
@@ -1579,26 +1587,6 @@ export type CreateDiscussionThreadCommentMutation = (
   ) }
 );
 
-export type ConnectToChatMutationVariables = Exact<{
-  status: UserChatStatus;
-}>;
-
-
-export type ConnectToChatMutation = (
-  { __typename?: 'Mutation' }
-  & { connectToChat: (
-    { __typename?: 'ConnectToChatPayload' }
-    & { users: Array<(
-      { __typename?: 'ChatUsersPayload' }
-      & Pick<ChatUsersPayload, 'status'>
-      & { user: (
-        { __typename?: 'User' }
-        & Pick<User, 'id' | 'username' | 'avatar'>
-      ) }
-    )> }
-  ) }
-);
-
 export type SendPrivateChatMessageMutationVariables = Exact<{
   input: SendPrivateChatMessageInput;
 }>;
@@ -1620,32 +1608,6 @@ export type UpdateStatusMutationVariables = Exact<{
 export type UpdateStatusMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'updateStatus'>
-);
-
-export type FriendStatusChangeSubscriptionVariables = Exact<{ [key: string]: never; }>;
-
-
-export type FriendStatusChangeSubscription = (
-  { __typename?: 'Subscription' }
-  & { friendStatusChange: (
-    { __typename?: 'ChatUsersPayload' }
-    & Pick<ChatUsersPayload, 'status'>
-    & { user: (
-      { __typename?: 'User' }
-      & Pick<User, 'id' | 'username' | 'avatar'>
-    ) }
-  ) }
-);
-
-export type NewPrivateChatMessageSubscriptionVariables = Exact<{ [key: string]: never; }>;
-
-
-export type NewPrivateChatMessageSubscription = (
-  { __typename?: 'Subscription' }
-  & { newPrivateChatMessage: (
-    { __typename?: 'PrivateChatMessage' }
-    & Pick<PrivateChatMessage, 'id' | 'authorId' | 'content' | 'creationDate'>
-  ) }
 );
 
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
@@ -2195,6 +2157,24 @@ export type TaskCommentsQuery = (
   )> }
 );
 
+export type OnlineChatFriendsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OnlineChatFriendsQuery = (
+  { __typename?: 'Query' }
+  & { onlineChatFriends: (
+    { __typename?: 'OnlineFriendsPayload' }
+    & { users: Array<(
+      { __typename?: 'ChatUserPayload' }
+      & Pick<ChatUserPayload, 'status'>
+      & { user: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'avatar'>
+      ) }
+    )> }
+  ) }
+);
+
 export type NewNotificationSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -2217,6 +2197,32 @@ export type NewFriendRequestSubscription = (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'avatar'>
     ) }
+  ) }
+);
+
+export type FriendStatusChangeSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FriendStatusChangeSubscription = (
+  { __typename?: 'Subscription' }
+  & { friendStatusChange: (
+    { __typename?: 'ChatUserPayload' }
+    & Pick<ChatUserPayload, 'status'>
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'avatar'>
+    ) }
+  ) }
+);
+
+export type NewPrivateChatMessageSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type NewPrivateChatMessageSubscription = (
+  { __typename?: 'Subscription' }
+  & { newPrivateChatMessage: (
+    { __typename?: 'PrivateChatMessage' }
+    & Pick<PrivateChatMessage, 'id' | 'authorId' | 'content' | 'creationDate'>
   ) }
 );
 
@@ -2322,6 +2328,39 @@ export function useUpdateUserInfoMutation(baseOptions?: ApolloReactHooks.Mutatio
 export type UpdateUserInfoMutationHookResult = ReturnType<typeof useUpdateUserInfoMutation>;
 export type UpdateUserInfoMutationResult = ApolloReactCommon.MutationResult<UpdateUserInfoMutation>;
 export type UpdateUserInfoMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateUserInfoMutation, UpdateUserInfoMutationVariables>;
+export const UploadAvatarDocument = gql`
+    mutation UploadAvatar($avatar: Upload!) {
+  uploadAvatar(avatar: $avatar) {
+    id
+    avatar
+  }
+}
+    `;
+export type UploadAvatarMutationFn = ApolloReactCommon.MutationFunction<UploadAvatarMutation, UploadAvatarMutationVariables>;
+
+/**
+ * __useUploadAvatarMutation__
+ *
+ * To run a mutation, you first call `useUploadAvatarMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUploadAvatarMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [uploadAvatarMutation, { data, loading, error }] = useUploadAvatarMutation({
+ *   variables: {
+ *      avatar: // value for 'avatar'
+ *   },
+ * });
+ */
+export function useUploadAvatarMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UploadAvatarMutation, UploadAvatarMutationVariables>) {
+        return ApolloReactHooks.useMutation<UploadAvatarMutation, UploadAvatarMutationVariables>(UploadAvatarDocument, baseOptions);
+      }
+export type UploadAvatarMutationHookResult = ReturnType<typeof useUploadAvatarMutation>;
+export type UploadAvatarMutationResult = ApolloReactCommon.MutationResult<UploadAvatarMutation>;
+export type UploadAvatarMutationOptions = ApolloReactCommon.BaseMutationOptions<UploadAvatarMutation, UploadAvatarMutationVariables>;
 export const MarkNotificationAsReadDocument = gql`
     mutation MarkNotificationAsRead($notificationId: ID!) {
   markNotificationAsRead(notificationId: $notificationId) {
@@ -3808,45 +3847,6 @@ export function useCreateDiscussionThreadCommentMutation(baseOptions?: ApolloRea
 export type CreateDiscussionThreadCommentMutationHookResult = ReturnType<typeof useCreateDiscussionThreadCommentMutation>;
 export type CreateDiscussionThreadCommentMutationResult = ApolloReactCommon.MutationResult<CreateDiscussionThreadCommentMutation>;
 export type CreateDiscussionThreadCommentMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateDiscussionThreadCommentMutation, CreateDiscussionThreadCommentMutationVariables>;
-export const ConnectToChatDocument = gql`
-    mutation ConnectToChat($status: UserChatStatus!) {
-  connectToChat(status: $status) {
-    users {
-      user {
-        id
-        username
-        avatar
-      }
-      status
-    }
-  }
-}
-    `;
-export type ConnectToChatMutationFn = ApolloReactCommon.MutationFunction<ConnectToChatMutation, ConnectToChatMutationVariables>;
-
-/**
- * __useConnectToChatMutation__
- *
- * To run a mutation, you first call `useConnectToChatMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useConnectToChatMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [connectToChatMutation, { data, loading, error }] = useConnectToChatMutation({
- *   variables: {
- *      status: // value for 'status'
- *   },
- * });
- */
-export function useConnectToChatMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ConnectToChatMutation, ConnectToChatMutationVariables>) {
-        return ApolloReactHooks.useMutation<ConnectToChatMutation, ConnectToChatMutationVariables>(ConnectToChatDocument, baseOptions);
-      }
-export type ConnectToChatMutationHookResult = ReturnType<typeof useConnectToChatMutation>;
-export type ConnectToChatMutationResult = ApolloReactCommon.MutationResult<ConnectToChatMutation>;
-export type ConnectToChatMutationOptions = ApolloReactCommon.BaseMutationOptions<ConnectToChatMutation, ConnectToChatMutationVariables>;
 export const SendPrivateChatMessageDocument = gql`
     mutation SendPrivateChatMessage($input: SendPrivateChatMessageInput!) {
   sendPrivateChatMessage(input: $input) {
@@ -3912,70 +3912,6 @@ export function useUpdateStatusMutation(baseOptions?: ApolloReactHooks.MutationH
 export type UpdateStatusMutationHookResult = ReturnType<typeof useUpdateStatusMutation>;
 export type UpdateStatusMutationResult = ApolloReactCommon.MutationResult<UpdateStatusMutation>;
 export type UpdateStatusMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateStatusMutation, UpdateStatusMutationVariables>;
-export const FriendStatusChangeDocument = gql`
-    subscription FriendStatusChange {
-  friendStatusChange {
-    user {
-      id
-      username
-      avatar
-    }
-    status
-  }
-}
-    `;
-
-/**
- * __useFriendStatusChangeSubscription__
- *
- * To run a query within a React component, call `useFriendStatusChangeSubscription` and pass it any options that fit your needs.
- * When your component renders, `useFriendStatusChangeSubscription` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useFriendStatusChangeSubscription({
- *   variables: {
- *   },
- * });
- */
-export function useFriendStatusChangeSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<FriendStatusChangeSubscription, FriendStatusChangeSubscriptionVariables>) {
-        return ApolloReactHooks.useSubscription<FriendStatusChangeSubscription, FriendStatusChangeSubscriptionVariables>(FriendStatusChangeDocument, baseOptions);
-      }
-export type FriendStatusChangeSubscriptionHookResult = ReturnType<typeof useFriendStatusChangeSubscription>;
-export type FriendStatusChangeSubscriptionResult = ApolloReactCommon.SubscriptionResult<FriendStatusChangeSubscription>;
-export const NewPrivateChatMessageDocument = gql`
-    subscription NewPrivateChatMessage {
-  newPrivateChatMessage {
-    id
-    authorId
-    content
-    creationDate
-  }
-}
-    `;
-
-/**
- * __useNewPrivateChatMessageSubscription__
- *
- * To run a query within a React component, call `useNewPrivateChatMessageSubscription` and pass it any options that fit your needs.
- * When your component renders, `useNewPrivateChatMessageSubscription` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useNewPrivateChatMessageSubscription({
- *   variables: {
- *   },
- * });
- */
-export function useNewPrivateChatMessageSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<NewPrivateChatMessageSubscription, NewPrivateChatMessageSubscriptionVariables>) {
-        return ApolloReactHooks.useSubscription<NewPrivateChatMessageSubscription, NewPrivateChatMessageSubscriptionVariables>(NewPrivateChatMessageDocument, baseOptions);
-      }
-export type NewPrivateChatMessageSubscriptionHookResult = ReturnType<typeof useNewPrivateChatMessageSubscription>;
-export type NewPrivateChatMessageSubscriptionResult = ApolloReactCommon.SubscriptionResult<NewPrivateChatMessageSubscription>;
 export const GetCurrentUserDocument = gql`
     query GetCurrentUser {
   currentUser {
@@ -5266,6 +5202,45 @@ export function useTaskCommentsLazyQuery(baseOptions?: ApolloReactHooks.LazyQuer
 export type TaskCommentsQueryHookResult = ReturnType<typeof useTaskCommentsQuery>;
 export type TaskCommentsLazyQueryHookResult = ReturnType<typeof useTaskCommentsLazyQuery>;
 export type TaskCommentsQueryResult = ApolloReactCommon.QueryResult<TaskCommentsQuery, TaskCommentsQueryVariables>;
+export const OnlineChatFriendsDocument = gql`
+    query OnlineChatFriends {
+  onlineChatFriends {
+    users {
+      user {
+        id
+        username
+        avatar
+      }
+      status
+    }
+  }
+}
+    `;
+
+/**
+ * __useOnlineChatFriendsQuery__
+ *
+ * To run a query within a React component, call `useOnlineChatFriendsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOnlineChatFriendsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnlineChatFriendsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useOnlineChatFriendsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<OnlineChatFriendsQuery, OnlineChatFriendsQueryVariables>) {
+        return ApolloReactHooks.useQuery<OnlineChatFriendsQuery, OnlineChatFriendsQueryVariables>(OnlineChatFriendsDocument, baseOptions);
+      }
+export function useOnlineChatFriendsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<OnlineChatFriendsQuery, OnlineChatFriendsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<OnlineChatFriendsQuery, OnlineChatFriendsQueryVariables>(OnlineChatFriendsDocument, baseOptions);
+        }
+export type OnlineChatFriendsQueryHookResult = ReturnType<typeof useOnlineChatFriendsQuery>;
+export type OnlineChatFriendsLazyQueryHookResult = ReturnType<typeof useOnlineChatFriendsLazyQuery>;
+export type OnlineChatFriendsQueryResult = ApolloReactCommon.QueryResult<OnlineChatFriendsQuery, OnlineChatFriendsQueryVariables>;
 export const NewNotificationDocument = gql`
     subscription NewNotification {
   newNotification {
@@ -5332,3 +5307,67 @@ export function useNewFriendRequestSubscription(baseOptions?: ApolloReactHooks.S
       }
 export type NewFriendRequestSubscriptionHookResult = ReturnType<typeof useNewFriendRequestSubscription>;
 export type NewFriendRequestSubscriptionResult = ApolloReactCommon.SubscriptionResult<NewFriendRequestSubscription>;
+export const FriendStatusChangeDocument = gql`
+    subscription FriendStatusChange {
+  friendStatusChange {
+    user {
+      id
+      username
+      avatar
+    }
+    status
+  }
+}
+    `;
+
+/**
+ * __useFriendStatusChangeSubscription__
+ *
+ * To run a query within a React component, call `useFriendStatusChangeSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useFriendStatusChangeSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFriendStatusChangeSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFriendStatusChangeSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<FriendStatusChangeSubscription, FriendStatusChangeSubscriptionVariables>) {
+        return ApolloReactHooks.useSubscription<FriendStatusChangeSubscription, FriendStatusChangeSubscriptionVariables>(FriendStatusChangeDocument, baseOptions);
+      }
+export type FriendStatusChangeSubscriptionHookResult = ReturnType<typeof useFriendStatusChangeSubscription>;
+export type FriendStatusChangeSubscriptionResult = ApolloReactCommon.SubscriptionResult<FriendStatusChangeSubscription>;
+export const NewPrivateChatMessageDocument = gql`
+    subscription NewPrivateChatMessage {
+  newPrivateChatMessage {
+    id
+    authorId
+    content
+    creationDate
+  }
+}
+    `;
+
+/**
+ * __useNewPrivateChatMessageSubscription__
+ *
+ * To run a query within a React component, call `useNewPrivateChatMessageSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useNewPrivateChatMessageSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNewPrivateChatMessageSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useNewPrivateChatMessageSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<NewPrivateChatMessageSubscription, NewPrivateChatMessageSubscriptionVariables>) {
+        return ApolloReactHooks.useSubscription<NewPrivateChatMessageSubscription, NewPrivateChatMessageSubscriptionVariables>(NewPrivateChatMessageDocument, baseOptions);
+      }
+export type NewPrivateChatMessageSubscriptionHookResult = ReturnType<typeof useNewPrivateChatMessageSubscription>;
+export type NewPrivateChatMessageSubscriptionResult = ApolloReactCommon.SubscriptionResult<NewPrivateChatMessageSubscription>;
