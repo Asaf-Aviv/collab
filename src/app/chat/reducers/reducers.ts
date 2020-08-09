@@ -102,14 +102,22 @@ const messagesSlice = createSlice({
     clear: () => initialState,
   },
   extraReducers: builder => {
-    builder.addCase(userActions.receivedInitialUsers, (state, action) => {
-      action.payload.forEach(user => {
-        state.byUserIds[user.id] = {
+    builder
+      .addCase(userActions.receivedInitialUsers, (state, action) => {
+        action.payload.forEach(user => {
+          state.byUserIds[user.id] = {
+            messages: [],
+            unreadCount: 0,
+          }
+        })
+      })
+      .addCase(userActions.userStatusChanged, (state, action) => {
+        if (state.byUserIds[action.payload.id]) return
+        state.byUserIds[action.payload.id] = {
           messages: [],
           unreadCount: 0,
         }
       })
-    })
   },
 })
 
