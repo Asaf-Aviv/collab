@@ -8,8 +8,8 @@ import {
   PseudoBox,
   Heading,
 } from '@chakra-ui/core'
-import { useCurrentUserFriendRequestsQuery } from '../../../graphql/generates'
 import { useFriendRequestActions } from './friendRequestActions'
+import { useCurrentUserFriendRequestsQuery } from '../../../graphql/generates'
 import { Loader } from '../../../components/Loader'
 import { DisplayError } from '../../../components/DisplayError'
 import { SEO } from '../../../components/SEO'

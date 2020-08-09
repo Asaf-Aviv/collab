@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react'
 import { Text, Box } from '@chakra-ui/core'
 import produce from 'immer'
 import qs from 'qs'
+import { useLocation } from 'react-router-dom'
 import {
   useAdvancedPostsSearchLazyQuery,
   Experience,
@@ -11,7 +12,6 @@ import { CollabPostCard } from '../../../components/CollabPostCard'
 import { DisplayError } from '../../../components/DisplayError'
 import { Loader } from '../../../components/Loader'
 import { useOnVisibilty } from '../../../hooks/useOnVisibilty'
-import { useLocation } from 'react-router-dom'
 import { SectionHorizonalHeader } from '../../../components/SectionHorizonalHeader'
 import { SearchOptions } from '../SearchOptions'
 import { SEO } from '../../../components/SEO'
@@ -65,6 +65,7 @@ export const SearchPage = () => {
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev
 
+        // eslint-disable-next-line no-shadow
         const { hasNextPage, posts } = fetchMoreResult.advancedPostsSearch
 
         const advancedPostsSearch = produce(prev.advancedPostsSearch, draft => {

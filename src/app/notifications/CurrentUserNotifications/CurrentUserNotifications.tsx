@@ -1,4 +1,6 @@
 import React from 'react'
+import { useApolloClient } from '@apollo/react-hooks'
+import { DataProxy } from 'apollo-cache'
 import {
   useNewNotificationSubscription,
   CurrentUserNotificationsDocument,
@@ -9,8 +11,6 @@ import {
 } from '../../../graphql/generates'
 import { useCurrentUser } from '../../../providers'
 import { useToastNotification } from '../useToastNotification'
-import { useApolloClient } from '@apollo/react-hooks'
-import { DataProxy } from 'apollo-cache'
 
 const increaseUnreadNotificationsCount = (store: DataProxy) => {
   const { currentUser } = store.readQuery<GetCurrentUserQuery>({
@@ -83,6 +83,7 @@ export const CurrentUserNotifications = ({ children }: Props) => {
   })
 
   if (error) {
+    // eslint-disable-next-line no-console
     console.error(error)
   }
 

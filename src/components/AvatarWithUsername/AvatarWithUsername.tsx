@@ -1,7 +1,7 @@
 import React from 'react'
 import { Flex, Text, Avatar, AvatarProps, Box, BoxProps } from '@chakra-ui/core'
-import { User } from '../../graphql/generates'
 import { Link } from 'react-router-dom'
+import { User } from '../../graphql/generates'
 import { getAvatarUrl } from '../../utils'
 
 type Props = BoxProps &

@@ -6,6 +6,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { setContext } from 'apollo-link-context'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { createUploadLink } from 'apollo-upload-client'
+import { OperationDefinitionNode } from 'graphql'
 
 const endpoint = process.env.REACT_APP_GRAPHQL_URI!
 const subscriptionEndpoint = process.env.REACT_APP_GRAPHQL_SUBSCRIPTION_URI!
@@ -41,7 +42,9 @@ const wsLink = new WebSocketLink(wsClient)
 // depending on what kind of operation is being sent
 const terminatingLink = split(
   ({ query }) => {
-    const { kind, operation } = getMainDefinition(query) as any
+    const { kind, operation } = getMainDefinition(
+      query,
+    ) as OperationDefinitionNode
     // split based on operation type
     return kind === 'OperationDefinition' && operation === 'subscription'
   },
@@ -50,7 +53,6 @@ const terminatingLink = split(
   uploadLink,
 )
 
-// order matters, httpLink needs to read headers from auth
 const link = ApolloLink.from([authLink, terminatingLink])
 
 const cache = new InMemoryCache()

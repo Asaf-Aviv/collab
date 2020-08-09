@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { TaskListQuery } from '../../../graphql/generates'
 import {
   Heading,
   Box,
@@ -13,10 +12,11 @@ import {
   PopoverHeader,
 } from '@chakra-ui/core'
 import { Draggable } from 'react-beautiful-dnd'
+import styled from '@emotion/styled'
+import { TaskListQuery } from '../../../graphql/generates'
 import { TaskComments } from '../TaskComments'
 import { EditTaskModal } from '../EditTaskModal'
 import { DotsMenu } from '../../../components/DotsMenu/Index'
-import styled from '@emotion/styled'
 import { IconButtonWithTooltip } from '../../../components/IconButtonWithTooltip'
 
 type TaskListResult = NonNullable<TaskListQuery['taskList']>

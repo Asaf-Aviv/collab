@@ -1,5 +1,3 @@
-import { CreateThreadArgs } from './../../graphql/types.d'
-import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 import {
   Model,
   Table,
@@ -13,10 +11,12 @@ import {
   CreatedAt,
 } from 'sequelize-typescript'
 import { v4 as uuid } from 'uuid'
+import { CreateThreadArgs } from './../../graphql/types'
 import { Collab } from './Collab'
 import { User } from './User'
 import { CollabMember } from './CollabMember'
 import { CollabDiscussionThreadComment } from './CollabDiscussionThreadComment'
+import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 
 @Table({ tableName: 'collab_discussion_threads' })
 export class CollabDiscussionThread extends Model<CollabDiscussionThread> {

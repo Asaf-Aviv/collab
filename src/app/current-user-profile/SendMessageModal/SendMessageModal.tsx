@@ -1,10 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react'
 import {
-  User,
-  useSearchFriendsLazyQuery,
-  useSendPrivateMessageMutation,
-} from '../../../graphql/generates'
-import {
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -22,6 +17,11 @@ import {
 } from '@chakra-ui/core'
 import Select from 'react-select'
 import { debounce } from 'lodash-es'
+import {
+  User,
+  useSearchFriendsLazyQuery,
+  useSendPrivateMessageMutation,
+} from '../../../graphql/generates'
 import { useToastNotification } from '../../notifications'
 import { getAvatarUrl } from '../../../utils'
 

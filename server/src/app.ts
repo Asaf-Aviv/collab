@@ -1,8 +1,8 @@
 import express from 'express'
-import path from 'path'
 import helmet from 'helmet'
 import { ApolloServer, makeExecutableSchema } from 'apollo-server-express'
 import { applyMiddleware } from 'graphql-middleware'
+import path from 'path'
 import { typeDefs } from './graphql/typeDefs'
 import { apolloContext, createContext } from './graphql/context/CollabContext'
 import { permissions } from './graphql/middleware/permissions'
@@ -55,15 +55,6 @@ export const apolloServer = new ApolloServer({
         user,
       }
     },
-  },
-  formatError(err) {
-    console.error(err)
-
-    if (err.extensions?.code === 'INTERNAL_SERVER_ERROR') {
-      return new Error('Something went wrong')
-    }
-
-    return err
   },
 })
 

@@ -1,7 +1,7 @@
 import React from 'react'
+import { FlexProps, Flex } from '@chakra-ui/core'
 import { User } from '../../graphql/generates'
 import { DisplayDate } from '../DisplayDate/DisplayDate'
-import { FlexProps, Flex } from '@chakra-ui/core'
 import { AvatarWithUsername } from '../AvatarWithUsername/AvatarWithUsername'
 
 type Props = FlexProps & {

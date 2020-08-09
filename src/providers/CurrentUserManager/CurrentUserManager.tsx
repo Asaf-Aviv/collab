@@ -6,13 +6,13 @@ import React, {
   useCallback,
   useMemo,
 } from 'react'
+import { useApolloClient } from '@apollo/react-hooks'
 import {
   GetCurrentUserQuery,
   useGetCurrentUserLazyQuery,
   GetCurrentUserDocument,
 } from '../../graphql/generates'
 import { wsClient } from '../../apolloClient'
-import { useApolloClient } from '@apollo/react-hooks'
 import { useTokenValidation } from '..'
 import { CurrentUserSubscriptionsManager } from '../../app/current-user-subscriptions'
 

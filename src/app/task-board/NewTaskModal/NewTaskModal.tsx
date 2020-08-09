@@ -1,10 +1,4 @@
 import React, { useState, useRef } from 'react'
-import {
-  useCreateTaskMutation,
-  TaskListQueryResult,
-  TaskListDocument,
-  useCollabMembersQuery,
-} from '../../../graphql/generates'
 import { useParams } from 'react-router-dom'
 import {
   Modal,
@@ -23,6 +17,12 @@ import {
   Textarea,
 } from '@chakra-ui/core'
 import Select from 'react-select'
+import {
+  useCreateTaskMutation,
+  TaskListQueryResult,
+  TaskListDocument,
+  useCollabMembersQuery,
+} from '../../../graphql/generates'
 import { getAvatarUrl } from '../../../utils'
 
 type Props = {

@@ -1,9 +1,9 @@
 import React, { useState, FormEvent } from 'react'
-import { useLoginMutation } from '../../../graphql/generates'
 import { Button, Box, Stack, Heading, Link, Text } from '@chakra-ui/core'
+import { Link as RouterLink } from 'react-router-dom'
+import { useLoginMutation } from '../../../graphql/generates'
 import { Container } from '../../../components/global'
 import { InputWithLabel } from '../../../components/InputWithLabel/InputWithLabel'
-import { Link as RouterLink } from 'react-router-dom'
 import { useAuthActions } from '../../../providers'
 import { useToastNotification } from '../../notifications'
 
@@ -16,8 +16,8 @@ export const Login = () => {
     variables: {
       credentials: { email, password },
     },
-    onCompleted: async ({ login }) => {
-      localStorage.setItem('token', login.token)
+    onCompleted: data => {
+      localStorage.setItem('token', data.login.token)
       getCurrentUser()
     },
     onError({ message }) {

@@ -13,12 +13,12 @@ import {
 import { v4 as uuid } from 'uuid'
 import { Collab } from './Collab'
 import { User } from './User'
+import { CollabMember } from './CollabMember'
 import {
   CreateWallMessageInput,
   CollabWallMessagesInput,
 } from '../../graphql/types'
 import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
-import { CollabMember } from './CollabMember'
 
 @Table({ tableName: 'collab_wall_messages', updatedAt: false })
 export class CollabWallMessage extends Model<CollabWallMessage> {

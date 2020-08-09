@@ -15,16 +15,16 @@ import { v4 as uuid } from 'uuid'
 import { CollabTaskList } from './CollabTaskList'
 import { CollabTaskComment } from './CollabTaskComment'
 import { User } from './User'
+import { GQLResolverTypes } from './../../graphql/helpers/GQLResolverTypes'
+import { CollabMember } from './CollabMember'
+import { Collab } from './Collab'
 import {
   UpdateTaskPositionInput,
   MoveTaskToListInput,
   CreateTaskInput,
   UpdateTaskAssigneeInput,
   UpdateTaskInput,
-} from '../../graphql/types.d'
-import { GQLResolverTypes } from './../../graphql/helpers/GQLResolverTypes'
-import { CollabMember } from './CollabMember'
-import { Collab } from './Collab'
+} from '../../graphql/types'
 
 @Table({ tableName: 'collab_tasks' })
 export class CollabTask extends Model<CollabTask> {
@@ -223,10 +223,15 @@ export class CollabTask extends Model<CollabTask> {
 
     const task = await this.findOne({
       where: { taskListId: oldTaskListId, order: oldTaskPosition },
+      include: [Collab],
     })
 
     if (!task) {
       throw new Error('Task not found')
+    }
+
+    if (task?.collab.ownerId !== userId) {
+      throw new Error('You are not allowed to reorder tasks')
     }
 
     return this.sequelize!.transaction(async () => {

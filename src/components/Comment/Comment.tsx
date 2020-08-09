@@ -1,8 +1,8 @@
 import React from 'react'
 import { Text, Flex, Box } from '@chakra-ui/core'
+import styled from '@emotion/styled'
 import { AvatarWithUsername } from '../AvatarWithUsername/AvatarWithUsername'
 import { User } from '../../graphql/generates'
-import styled from '@emotion/styled'
 import { Paper } from '../global'
 import { DisplayDate } from '../DisplayDate'
 

@@ -1,5 +1,5 @@
-import { collabTaskListResolver } from './TaskList'
 import { mergeResolvers } from 'merge-graphql-schemas'
+import { collabTaskListResolver } from './TaskList'
 import { collabPostCommentResolver } from './CollabPostComment'
 import { userResolver } from './User'
 import { collabResolver } from './Collab'

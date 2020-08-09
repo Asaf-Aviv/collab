@@ -1,13 +1,13 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
+import { Text, Flex, Button, FlexProps } from '@chakra-ui/core'
+import styled from '@emotion/styled'
 import {
   useRequestToJoinMutation,
   useDeclineCollabInvitationMutation,
   useAcceptCollabInvitationMutation,
   useCancelCollabRequestToJoinMutation,
 } from '../../../graphql/generates'
-import { Text, Flex, Button, FlexProps } from '@chakra-ui/core'
-import styled from '@emotion/styled'
 import { GET_COLLAB_POST } from '../../../graphql/queries'
 import { useToastNotification } from '../../notifications'
 

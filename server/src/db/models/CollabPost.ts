@@ -17,17 +17,17 @@ import {
 } from 'sequelize-typescript'
 import { Op } from 'sequelize'
 import { v4 as uuid } from 'uuid'
-import { CollabPostArgs, AdvancedPostsSearchInput } from '../../graphql/types'
+import { subDays } from 'date-fns'
 import { CollabMember } from './CollabMember'
 import { User } from './User'
 import { Collab } from './Collab'
-import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 import { CollabPostComment } from './CollabPostComment'
 import { CollabPostLanguage } from './CollabPostLanguage'
 import { Stack } from './Stack'
 import { CollabPostStack } from './CollabPostStack'
 import { CollabPostReaction } from './CollabPostReaction'
-import { subDays } from 'date-fns'
+import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
+import { CollabPostArgs, AdvancedPostsSearchInput } from '../../graphql/types'
 
 @Table({ tableName: 'collab_posts' })
 export class CollabPost extends Model<CollabPost> {

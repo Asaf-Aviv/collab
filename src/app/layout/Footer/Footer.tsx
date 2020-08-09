@@ -1,8 +1,8 @@
 import React from 'react'
 import { Box, Flex, Text } from '@chakra-ui/core'
-import { Container } from '../../../components/global'
 import { Link } from 'react-router-dom'
 import styled from '@emotion/styled'
+import { Container } from '../../../components/global'
 
 export const Footer = () => {
   return (

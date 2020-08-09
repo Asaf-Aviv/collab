@@ -1,15 +1,15 @@
-import path from 'path'
-import { promises as fs } from 'fs'
 import { v4 as uuid } from 'uuid'
-import { createWriteStream } from 'fs'
 import { and } from 'graphql-shield'
 import { Op } from 'sequelize'
-import { generateToken } from '../../utils/index'
+import { withFilter } from 'apollo-server-express'
+import path from 'path'
+import { promises as fs , createWriteStream } from 'fs'
+
 import { GQLUser } from './../../db/models/User'
+import { generateToken } from '../../utils/index'
 import { isAuthenticated } from '../middleware/isAuthenticated'
 import { Resolvers, ResolversTypes, Maybe } from '../types'
 import { formatNotification } from '../helpers/formatNotification'
-import { withFilter } from 'apollo-server-express'
 
 export const userResolver: Resolvers = {
   Query: {

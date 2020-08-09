@@ -1,5 +1,5 @@
-import { redis } from '../../redis/redis'
 import { ApolloServerExpressConfig } from 'apollo-server-express'
+import { redis } from '../../redis/redis'
 import { models, Models } from '../../db/models/index'
 import { decodeToken } from '../../utils/index'
 import { createLoaders, Loaders } from '../loaders/loaders'

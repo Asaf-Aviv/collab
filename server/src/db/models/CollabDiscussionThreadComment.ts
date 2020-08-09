@@ -1,4 +1,3 @@
-import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 import {
   Model,
   Table,
@@ -15,6 +14,7 @@ import { Collab } from './Collab'
 import { User } from './User'
 import { CollabMember } from './CollabMember'
 import { CollabDiscussionThread } from './CollabDiscussionThread'
+import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 import { CreateCollabDiscussionThreadCommentInput } from '../../graphql/types'
 
 @Table({ tableName: 'collab_discussion_thread_comments' })

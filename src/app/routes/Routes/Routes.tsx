@@ -11,6 +11,7 @@ import { UserProfile } from '../../../components/UserProfile'
 import { ProtectedRoute } from '../ProtectedRoute'
 import { PublicOnlyRoute } from '../PublicOnlyRoute'
 import { SearchPage } from '../../search-page'
+import { Faq } from '../../Faq'
 
 export const Routes = () => (
   <Switch>
@@ -37,6 +38,9 @@ export const Routes = () => (
     </Route>
     <Route path="/user/:userId">
       <UserProfile />
+    </Route>
+    <Route path="/faq">
+      <Faq />
     </Route>
     <PublicOnlyRoute path="/login">
       <Login />

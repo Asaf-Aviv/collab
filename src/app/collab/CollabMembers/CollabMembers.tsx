@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { Grid, Button, Box } from '@chakra-ui/core'
 import {
   useCollabMembersQuery,
   useRemoveMemberMutation,
   CollabMembersDocument,
 } from '../../../graphql/generates'
 import { UserCard } from '../../../components/UserCard/UserCard'
-import { Grid, Button, Box } from '@chakra-ui/core'
 import { useCurrentUser } from '../../../providers'
 import { InviteMembersModal } from '../InviteMembersModal'
 import { useToastNotification } from '../../notifications'

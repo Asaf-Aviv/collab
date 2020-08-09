@@ -9,16 +9,16 @@ import {
   IsUUID,
   HasMany,
 } from 'sequelize-typescript'
+import { v4 as uuid } from 'uuid'
+import { Op } from 'sequelize'
+import { Collab } from './Collab'
+import { CollabTask } from './CollabTask'
 import {
   CreateTaskListInput,
   UpdateTaskListPositionInput,
   UpdateTaskListNameInput,
-} from '../../graphql/types.d'
-import { v4 as uuid } from 'uuid'
-import { Collab } from './Collab'
-import { CollabTask } from './CollabTask'
+} from '../../graphql/types'
 import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
-import { Op } from 'sequelize'
 
 @Table({ tableName: 'collab_task_list', timestamps: false })
 export class CollabTaskList extends Model<CollabTaskList> {

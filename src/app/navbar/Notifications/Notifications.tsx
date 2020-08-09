@@ -2,11 +2,11 @@ import React from 'react'
 import { Flex, Text, Box } from '@chakra-ui/core'
 import ChatIcon from '@material-ui/icons/Chat'
 import DeleteIcon from '@material-ui/icons/Delete'
+import NotificationsIcon from '@material-ui/icons/Notifications'
+import { DataProxy } from 'apollo-cache'
 import { useCurrentUser } from '../../../providers'
 import { Ballon } from '../../../components/Ballon'
 import { IconButtonWithTooltip } from '../../../components/IconButtonWithTooltip'
-import NotificationsIcon from '@material-ui/icons/Notifications'
-import { DataProxy } from 'apollo-cache'
 import { Badge } from '../../../components/Badge'
 import {
   useCurrentUserNotificationsLazyQuery,
@@ -95,9 +95,9 @@ export const Notifications = () => {
     },
   })
   const [deleteNotification] = useDeleteNotificationMutation({
-    update(store, { data }) {
-      if (!data) return
-      removeNotificationFromCache(store, data.deleteNotification)
+    update(store, { data: notificationData }) {
+      if (!notificationData) return
+      removeNotificationFromCache(store, notificationData.deleteNotification)
     },
     onError() {
       notify('error', {

@@ -1,5 +1,5 @@
-import { CollabContext } from './../context/CollabContext'
 import { rule } from 'graphql-shield'
+import { CollabContext } from './../context/CollabContext'
 
 export const isAuthenticated = rule({
   cache: 'contextual',

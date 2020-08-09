@@ -230,7 +230,7 @@ const formatRequestToJoinApprovedNotification = async (
   }
 }
 
-export const formatNotification = async (
+export const formatNotification = (
   notification: InstanceType<typeof models.Notification>,
 ): Promise<Notification> => {
   switch (notification.type) {

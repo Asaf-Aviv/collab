@@ -9,6 +9,7 @@ import {
   Box,
 } from '@chakra-ui/core'
 import Select from 'react-select'
+import styled from '@emotion/styled'
 import { countryOptions } from '../../../data/countryOptions'
 import {
   useUpdateUserInfoMutation,
@@ -16,11 +17,12 @@ import {
   useGetCurrentUserInfoQuery,
 } from '../../../graphql/generates'
 import { InputWithLabel } from '../../../components/InputWithLabel'
-import styled from '@emotion/styled'
 import { Loader } from '../../../components/Loader'
 import { DisplayError } from '../../../components/DisplayError'
 import { useToastNotification } from '../../notifications'
 import { SEO } from '../../../components/SEO'
+import { useWindowWidth } from '../../../providers'
+import { UploadAvatar } from '../UploadAvatar'
 
 export const Information = () => {
   const {
@@ -31,6 +33,7 @@ export const Information = () => {
   } = useGetCurrentUserInfoQuery({
     notifyOnNetworkStatusChange: true,
   })
+  const width = useWindowWidth()
   const [infoInput, setInfoInput] = useState<UpdateUserInfoInput>(null as any)
   const notify = useToastNotification()
   const [
@@ -84,6 +87,7 @@ export const Information = () => {
         <Heading as="h1" size="md" mb={4} fontWeight={500}>
           Edit your Information
         </Heading>
+        {width < 480 && <UploadAvatar />}
         {/* wait for the initial values to populate the inputs */}
         {infoInput && (
           <>

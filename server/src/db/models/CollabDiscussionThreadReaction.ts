@@ -1,12 +1,12 @@
+import { Table, ForeignKey, Column, BelongsTo } from 'sequelize-typescript'
+import { Reaction } from './Reaction'
+import { CollabDiscussionThread } from './CollabDiscussionThread'
+import { CollabMember } from './CollabMember'
+import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 import {
   AddCollabDiscussionThreadReactionInput,
   RemoveCollabDiscussionThreadReactionInput,
 } from '../../graphql/types'
-import { Table, ForeignKey, Column, BelongsTo } from 'sequelize-typescript'
-import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
-import { Reaction } from './Reaction'
-import { CollabDiscussionThread } from './CollabDiscussionThread'
-import { CollabMember } from './CollabMember'
 
 @Table({ tableName: 'collab_discussion_thread_reactions', timestamps: false })
 export class CollabDiscussionThreadReaction extends Reaction {

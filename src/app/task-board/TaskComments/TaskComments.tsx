@@ -1,12 +1,12 @@
 import React, { useState, FormEvent } from 'react'
 import { useParams } from 'react-router-dom'
+import { Flex, Box, Textarea, Button, Text } from '@chakra-ui/core'
 import {
   useTaskCommentsQuery,
   useCreateTaskCommentMutation,
   useAddTaskCommentReactionMutation,
   useRemoveTaskCommentReactionMutation,
 } from '../../../graphql/generates'
-import { Flex, Box, Textarea, Button, Text } from '@chakra-ui/core'
 import { ReactionPanel } from '../../../components/ReactionPanel/ReactionPanel'
 import { Loader } from '../../../components/Loader'
 import { AvatarWithUsername } from '../../../components/AvatarWithUsername'

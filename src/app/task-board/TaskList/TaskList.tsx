@@ -1,18 +1,18 @@
 import React, { useState, memo } from 'react'
+import { Heading, Box, Flex } from '@chakra-ui/core'
+import { Droppable, Draggable } from 'react-beautiful-dnd'
+import styled from '@emotion/styled'
+import { useParams } from 'react-router-dom'
 import {
   TaskListQuery,
   useDeleteTaskListMutation,
   useDeleteTaskMutation,
   useCollabQuery,
 } from '../../../graphql/generates'
-import { Heading, Box, Flex } from '@chakra-ui/core'
-import { Droppable, Draggable } from 'react-beautiful-dnd'
 import { NewTaskModal } from '../NewTaskModal'
 import { EditTaskListNamePopover } from '../EditTaskListNamePopover'
 import { DotsMenu } from '../../../components/DotsMenu/Index'
 import { IconButtonWithTooltip } from '../../../components/IconButtonWithTooltip'
-import styled from '@emotion/styled'
-import { useParams } from 'react-router-dom'
 import { MemoizedTasksWrapper } from '../MemoizedTasksWrapper'
 
 export const MemoizedTaskListWrapper = memo(({ taskList, refetch }: any) => (
@@ -111,10 +111,10 @@ const TaskList = ({ taskList, tasks, refetch, index }: Props) => {
             )}
           </Flex>
           <Droppable droppableId={taskList.id} type="task">
-            {provided => (
+            {roppableProvided => (
               <Box
-                ref={provided.innerRef}
-                {...provided.droppableProps}
+                ref={roppableProvided.innerRef}
+                {...roppableProvided.droppableProps}
                 flex={1}
                 overflowY="auto"
               >
@@ -125,7 +125,7 @@ const TaskList = ({ taskList, tasks, refetch, index }: Props) => {
                   isDraggable={Boolean(collabData?.collab?.isOwner)}
                   setSelectedTaskId={setSelectedTaskId}
                 />
-                {provided.placeholder}
+                {roppableProvided.placeholder}
               </Box>
             )}
           </Droppable>

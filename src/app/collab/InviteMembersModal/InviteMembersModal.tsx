@@ -2,10 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import { debounce } from 'lodash-es'
 import {
-  useSearchUsersLazyQuery,
-  useInviteMemberMutation,
-} from '../../../graphql/generates'
-import {
   Button,
   Modal,
   ModalOverlay,
@@ -19,6 +15,10 @@ import {
   Flex,
   Text,
 } from '@chakra-ui/core'
+import {
+  useSearchUsersLazyQuery,
+  useInviteMemberMutation,
+} from '../../../graphql/generates'
 import { Loader } from '../../../components/Loader'
 import { DisplayError } from '../../../components/DisplayError'
 import { AvatarWithUsername } from '../../../components/AvatarWithUsername'

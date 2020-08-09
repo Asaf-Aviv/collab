@@ -1,11 +1,18 @@
 import React from 'react'
 import { Provider } from 'react-redux'
 import { store } from '../reducers'
+import { Chat } from '../Chat'
+import { useCurrentUser, useWindowWidth } from '../../../providers'
 
-type Props = {
-  children: React.ReactNode
-}
+export const ChatProvider = () => {
+  const currentUser = useCurrentUser()
+  const windowWidth = useWindowWidth()
 
-export const ChatProvider = ({ children }: Props) => {
-  return <Provider store={store}>{children}</Provider>
+  if (!currentUser || windowWidth < 768) return null
+
+  return (
+    <Provider store={store}>
+      <Chat />
+    </Provider>
+  )
 }

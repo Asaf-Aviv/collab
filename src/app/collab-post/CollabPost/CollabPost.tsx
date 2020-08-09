@@ -1,14 +1,14 @@
 import React from 'react'
 import { useParams, Link } from 'react-router-dom'
+import { Text, Heading, Stack, Flex, Box, Icon } from '@chakra-ui/core'
 import {
   useGetCollabPostQuery,
   useAddCollabPostCommentMutation,
   useRemoveCollabPostReactionMutation,
   useAddCollabPostReactionMutation,
 } from '../../../graphql/generates'
-import { Text, Heading, Stack, Flex, Box, Icon } from '@chakra-ui/core'
 import { AvatarWithUsername } from '../../../components/AvatarWithUsername/AvatarWithUsername'
-import { Container } from '../../../components/global'
+import { Container, Paper } from '../../../components/global'
 import { COLLAB_POST_COMMENTS } from '../../../graphql/queries'
 import { ReactionPanel } from '../../../components/ReactionPanel/ReactionPanel'
 import { PostAuthorHeader } from '../../../components/PostAuthorHeader/PostAuthorHeader'
@@ -16,7 +16,7 @@ import { CommentForm } from '../../../components/CommentForm/CommentForm'
 import { PostTag } from '../../../components/PostTag'
 import { PostComments } from '../PostComments'
 import { MemberInvitationActions } from '../MemberInvitationActions'
-import { Paper } from '../../../components/global'
+
 import { SectionHorizonalHeader } from '../../../components/SectionHorizonalHeader/SectionHorizonalHeader'
 import { Loader } from '../../../components/Loader'
 import { DisplayError } from '../../../components/DisplayError'
@@ -112,7 +112,6 @@ export const CollabPost = () => {
   }
 
   const {
-    name,
     title,
     description,
     creationDate,

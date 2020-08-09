@@ -8,13 +8,12 @@ import {
   BelongsTo,
   Default,
   IsUUID,
-  Index,
   CreatedAt,
 } from 'sequelize-typescript'
 import { v4 as uuid } from 'uuid'
-import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 import { User } from './User'
 import { UserFriendRequest } from './UserFriendRequest'
+import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 
 @Table({ tableName: 'user_friendships', timestamps: true })
 export class UserFriend extends Model<UserFriend> {
@@ -42,10 +41,10 @@ export class UserFriend extends Model<UserFriend> {
   creationDate!: Date
 
   static async createFriendship(friendId: string, userId: string) {
-    const exist = this.findOne({ where: { userId, friendId } })
+    const exist = await this.findOne({ where: { userId, friendId } })
 
     if (exist) {
-      throw new Error('Friendship exist already')
+      throw new Error('Friendship already exist')
     }
 
     return this.sequelize!.transaction(async () => {

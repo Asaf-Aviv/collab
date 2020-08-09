@@ -1,10 +1,9 @@
-import { isAuthenticated } from './../middleware/isAuthenticated'
 import { and } from 'graphql-shield'
 import { Op } from 'sequelize'
-import { Resolvers, Reaction } from '../types'
-import { replaceErrorWithNull } from '../helpers/replaceErrorWithNull'
 import { differenceInDays } from 'date-fns'
 import { Sequelize } from 'sequelize-typescript'
+import { isAuthenticated } from './../middleware/isAuthenticated'
+import { Resolvers, Reaction } from '../types'
 import { GQLCollabPost } from '../../db/models/CollabPost'
 
 export const collabPostResolver: Resolvers = {
@@ -54,7 +53,7 @@ export const collabPostResolver: Resolvers = {
         limit: limit + 1,
       })
 
-      const posts = postsByStack.map(stack => stack.post)
+      const posts = postsByStack.map(({ post }) => post)
 
       return {
         posts: posts.slice(0, limit),
@@ -82,7 +81,7 @@ export const collabPostResolver: Resolvers = {
       models.CollabPost.search(input),
   },
   Mutation: {
-    createCollabPost: async (root, { post }, { user, models }) =>
+    createCollabPost: (root, { post }, { user, models }) =>
       models.CollabPost.createPost(post, user!.id),
     deleteCollabPost: (root, { postId }, { models, user }) =>
       models.CollabPost.deletePost(postId, user!.id),
@@ -164,7 +163,7 @@ export const collabPostResolver: Resolvers = {
 
       return Boolean(invitation)
     },
-    members: async ({ collabId }, args, { loaders, models }) => {
+    members: async ({ collabId }, args, { models }) => {
       const members = await models.CollabMember.findAll({
         where: { collabId },
         include: [models.User],

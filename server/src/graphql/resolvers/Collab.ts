@@ -1,5 +1,5 @@
-import { isAuthenticated } from './../middleware/isAuthenticated'
 import { and } from 'graphql-shield'
+import { isAuthenticated } from './../middleware/isAuthenticated'
 import { Resolvers } from '../types'
 import { replaceErrorWithNull } from '../helpers/replaceErrorWithNull'
 import { GQLUser } from '../../db/models/User'

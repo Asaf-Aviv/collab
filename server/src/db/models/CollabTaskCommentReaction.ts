@@ -1,13 +1,13 @@
-import {
-  AddCollabTaskCommentReactionInput,
-  RemoveCollabTaskCommentReactionInput,
-} from '../../graphql/types'
 import { Table, ForeignKey, Column, BelongsTo } from 'sequelize-typescript'
-import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 import { Reaction } from './Reaction'
 import { CollabTaskComment } from './CollabTaskComment'
 import { CollabMember } from './CollabMember'
 import { CollabTask } from './CollabTask'
+import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
+import {
+  AddCollabTaskCommentReactionInput,
+  RemoveCollabTaskCommentReactionInput,
+} from '../../graphql/types'
 
 @Table({ tableName: 'collab_task_comment_reactions', timestamps: false })
 export class CollabTaskCommentReaction extends Reaction {

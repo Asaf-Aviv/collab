@@ -1,4 +1,3 @@
-import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 import {
   Model,
   Table,
@@ -9,6 +8,7 @@ import {
 import { CollabPost } from './CollabPost'
 import { Collab } from './Collab'
 import { Stack } from './Stack'
+import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 
 @Table({ tableName: 'collab_post_stack', timestamps: false })
 export class CollabPostStack extends Model<CollabPostStack> {

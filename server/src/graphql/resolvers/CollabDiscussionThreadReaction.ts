@@ -1,5 +1,5 @@
-import { Resolvers } from '../types'
 import { and } from 'graphql-shield'
+import { Resolvers } from '../types'
 import { isAuthenticated } from '../middleware/isAuthenticated'
 
 export const collabDiscussionThreadReactionResolver: Resolvers = {
@@ -9,7 +9,7 @@ export const collabDiscussionThreadReactionResolver: Resolvers = {
         ...reaction,
         userId: user!.id,
       }),
-    removeCollabDiscussionThreadReaction: async (
+    removeCollabDiscussionThreadReaction: (
       root,
       { reaction },
       { user, models },

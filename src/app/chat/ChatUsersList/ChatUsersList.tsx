@@ -1,9 +1,9 @@
 import React, { memo, useMemo } from 'react'
-import { RootState, selectChatUsers } from '../reducers/reducers'
 import { Flex, Box, Heading } from '@chakra-ui/core'
+import { useStore } from 'react-redux'
+import { RootState, selectChatUsers } from '../reducers/reducers'
 import { ChatUserListItem } from '../ChatUserListItem'
 import { useTypedSelector } from '../useTypedSelector'
-import { useStore } from 'react-redux'
 
 type Props = {
   onFriendClick: (friendId: string) => void

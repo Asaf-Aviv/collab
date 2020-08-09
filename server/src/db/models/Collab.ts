@@ -1,5 +1,3 @@
-import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
-import { CollabMemberRequest } from './CollabMemberRequest'
 import {
   Model,
   Column,
@@ -10,11 +8,11 @@ import {
   ForeignKey,
   BelongsTo,
   CreatedAt,
-  UpdatedAt,
   HasMany,
   AllowNull,
 } from 'sequelize-typescript'
 import { v4 as uuid } from 'uuid'
+import { CollabMemberRequest } from './CollabMemberRequest'
 import { CollabMember } from './CollabMember'
 import { User } from './User'
 import { CollabTaskList } from './CollabTaskList'
@@ -22,6 +20,7 @@ import { CollabDiscussionThreadComment } from './CollabDiscussionThreadComment'
 import { CollabPost } from './CollabPost'
 import { CollabPostStack } from './CollabPostStack'
 import { CollabWallMessage } from './CollabWallMessage'
+import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 
 @Table({ tableName: 'collabs' })
 export class Collab extends Model<Collab> {
@@ -101,11 +100,7 @@ export class Collab extends Model<Collab> {
     return collab
   }
 
-  static async removeMember(
-    collabId: string,
-    ownerId: string,
-    memberId: string,
-  ) {
+  static removeMember(collabId: string, ownerId: string, memberId: string) {
     return this.sequelize!.transaction(async () => {
       const collab = await Collab.findByPk(collabId, { raw: false })
       const isMember = await CollabMember.findOne({
@@ -240,7 +235,7 @@ export class Collab extends Model<Collab> {
     return collab
   }
 
-  static async acceptMemberRequest(
+  static acceptMemberRequest(
     collabId: string,
     ownerId: string,
     memberId: string,

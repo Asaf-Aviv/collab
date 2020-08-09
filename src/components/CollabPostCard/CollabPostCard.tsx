@@ -1,12 +1,12 @@
 import React, { memo } from 'react'
-import { CollabPostsQuery } from '../../graphql/generates'
 import { Link as RouterLink } from 'react-router-dom'
 import { Flex, Heading, Link, Text, PseudoBoxProps, Box } from '@chakra-ui/core'
+import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline'
+import { CollabPostsQuery } from '../../graphql/generates'
 import { AvatarWithUsername } from '../AvatarWithUsername'
 import { Paper } from '../global'
 import { CommentsAndReactionsCount } from '../CommentsAndReactionsCount'
 import { DisplayDate } from '../DisplayDate/DisplayDate'
-import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline'
 import { PostTag } from '../PostTag'
 
 type Post = NonNullable<CollabPostsQuery['collabPosts']>['posts'][0]

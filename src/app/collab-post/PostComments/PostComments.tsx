@@ -1,5 +1,6 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
+import { Box, Text } from '@chakra-ui/core'
 import {
   useCollabPostCommentsQuery,
   useAddCollabPostCommentReactionMutation,
@@ -8,7 +9,6 @@ import {
 import { Comment } from '../../../components/Comment'
 import { ReactionPanel } from '../../../components/ReactionPanel/ReactionPanel'
 import { COLLAB_POST_COMMENTS } from '../../../graphql/queries'
-import { Box, Text } from '@chakra-ui/core'
 import { Loader } from '../../../components/Loader'
 import { DisplayError } from '../../../components/DisplayError'
 import { useToastNotification } from '../../notifications'

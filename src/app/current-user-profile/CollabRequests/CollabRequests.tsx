@@ -36,7 +36,7 @@ const removeRequestFromCache = (store: DataProxy, requestId: string) => {
 
 export const CollabRequests = () => {
   const {
-    data,
+    data: collabRequestsData,
     loading,
     error,
     refetch,
@@ -56,7 +56,7 @@ export const CollabRequests = () => {
     },
   })
 
-  const { collabRequests } = data?.currentUser || {}
+  const { collabRequests } = collabRequestsData?.currentUser || {}
 
   return (
     <>

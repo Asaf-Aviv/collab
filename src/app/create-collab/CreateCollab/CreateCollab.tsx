@@ -1,5 +1,4 @@
 import React, { useState, ChangeEvent } from 'react'
-import { Container } from '../../../components/global'
 import { useHistory } from 'react-router-dom'
 import ReactSelect from 'react-select'
 import Creatable from 'react-select/creatable'
@@ -18,15 +17,16 @@ import {
   TagCloseButton,
   Box,
 } from '@chakra-ui/core'
+import { Option } from 'react-select/src/filters'
+import styled from '@emotion/styled'
 import {
   useCreateCollabPostMutation,
   Experience,
   CollabPostArgs,
   useCollabPostLanguagesQuery,
 } from '../../../graphql/generates'
-import { Option } from 'react-select/src/filters'
 import { InputWithLabel } from '../../../components/InputWithLabel'
-import styled from '@emotion/styled'
+import { Container } from '../../../components/global'
 import { useToastNotification } from '../../notifications'
 import { SEO } from '../../../components/SEO'
 
@@ -55,12 +55,12 @@ export const CreateCollab = () => {
   const [selectedStack, setSelectedStack] = useState<
     { label: string; value: string }[]
   >([])
-  const { data } = useCollabPostLanguagesQuery()
+  const { data: languagesData } = useCollabPostLanguagesQuery()
   const history = useHistory()
   const notify = useToastNotification()
   const [createCollabPost] = useCreateCollabPostMutation({
-    onCompleted: ({ createCollabPost }) => {
-      history.push(`/collabs/posts/${createCollabPost.id}`)
+    onCompleted: data => {
+      history.push(`/collabs/posts/${data.createCollabPost.id}`)
     },
     onError({ message }) {
       notify('error', {
@@ -202,9 +202,9 @@ export const CreateCollab = () => {
                 hideSelectedOptions
                 value={selectedLanguages}
                 onChange={values => setSelectedLanguages(values as any)}
-                options={data?.languages.map(name => ({
-                  value: name,
-                  label: name,
+                options={languagesData?.languages.map(languageName => ({
+                  value: languageName,
+                  label: languageName,
                 }))}
                 styles={{
                   control: (base: any, state: any) => ({

@@ -38,7 +38,7 @@ const removeInvitationFromCache = (store: DataProxy, collabId: string) => {
 
 export const CollabInvitations = () => {
   const {
-    data,
+    data: collabInvitationsData,
     loading,
     error,
     refetch,
@@ -56,7 +56,7 @@ export const CollabInvitations = () => {
     },
   })
 
-  const { collabInvites } = data?.currentUser || {}
+  const { collabInvites } = collabInvitationsData?.currentUser || {}
 
   return (
     <>

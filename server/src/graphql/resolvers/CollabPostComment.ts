@@ -1,8 +1,8 @@
-import { Reaction } from '../types'
-import { isAuthenticated } from '../middleware/isAuthenticated'
 import { and } from 'graphql-shield'
-import { Resolvers } from '../types'
 import { Sequelize } from 'sequelize-typescript'
+import { Reaction , Resolvers } from '../types'
+import { isAuthenticated } from '../middleware/isAuthenticated'
+
 import { formatNotification } from '../helpers/formatNotification'
 
 export const collabPostCommentResolver: Resolvers = {

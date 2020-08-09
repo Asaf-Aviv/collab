@@ -1,5 +1,9 @@
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
+import produce from 'immer'
+import { Flex } from '@chakra-ui/core'
+import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
+import { useApolloClient } from '@apollo/react-hooks'
 import {
   useTaskListQuery,
   useUpdateTaskPositionMutation,
@@ -9,15 +13,11 @@ import {
   TaskListQuery,
   TaskListDocument,
 } from '../../../graphql/generates'
-import produce from 'immer'
-import { Flex } from '@chakra-ui/core'
-import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
 import { NewTaskListModal } from '../NewTaskListModal'
 import { MemoizedTaskListWrapper } from '../TaskList'
 import { IconButtonWithTooltip } from '../../../components/IconButtonWithTooltip'
 import { Loader } from '../../../components/Loader'
 import { DisplayError } from '../../../components/DisplayError'
-import { useApolloClient } from '@apollo/react-hooks'
 
 export const TaskBoard = () => {
   const { collabId } = useParams<{ collabId: string }>()
@@ -191,7 +191,7 @@ export const TaskBoard = () => {
       const oldTasklist = draft.taskList.taskList.find(
         ({ id }) => id === oldTaskListId,
       )
-      const task = oldTasklist!.tasks.splice(oldTaskPosition, 1)[0]
+      const taskToMove = oldTasklist!.tasks.splice(oldTaskPosition, 1)[0]
 
       oldTasklist!.tasks.forEach((task, i) => {
         task.order = i
@@ -200,7 +200,7 @@ export const TaskBoard = () => {
       const newTasklist = draft.taskList.taskList.find(
         ({ id }) => id === newTaskListId,
       )
-      newTasklist!.tasks.splice(newTaskPosition, 0, task)
+      newTasklist!.tasks.splice(newTaskPosition, 0, taskToMove)
 
       newTasklist!.tasks.forEach((task, i) => {
         task.order = i

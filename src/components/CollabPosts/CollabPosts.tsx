@@ -9,7 +9,13 @@ import { useOnVisibilty } from '../../hooks/useOnVisibilty'
 import { SEO } from '../SEO'
 
 export const CollabPosts = () => {
-  const { data, loading, error, fetchMore, refetch } = useCollabPostsQuery({
+  const {
+    data: postsData,
+    loading,
+    error,
+    fetchMore,
+    refetch,
+  } = useCollabPostsQuery({
     variables: {
       offset: 0,
       limit: 10,
@@ -19,7 +25,7 @@ export const CollabPosts = () => {
   })
   const loadNextPageTriggerRef = useRef<HTMLSpanElement | null>(null)
 
-  const { posts, hasNextPage } = data?.collabPosts ?? {}
+  const { posts, hasNextPage } = postsData?.collabPosts ?? {}
 
   const handleNextPageLoad = () => {
     if (!posts) return
@@ -32,6 +38,7 @@ export const CollabPosts = () => {
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev
 
+        // eslint-disable-next-line no-shadow
         const { hasNextPage, posts } = fetchMoreResult.collabPosts
 
         const collabPosts = produce(prev.collabPosts, draft => {

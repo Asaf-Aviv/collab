@@ -9,6 +9,7 @@ import {
   useCurrentUser,
   useAuthActions,
 } from './CurrentUserManager'
+import { CurrentUserNotifications } from '../app/notifications'
 
 type Props = {
   children: React.ReactNode
@@ -17,7 +18,9 @@ type Props = {
 export const AppProviders = ({ children }: Props) => (
   <WindowWidthProvider>
     <TokenValidationProvider>
-      <CurrentUserManager>{children}</CurrentUserManager>
+      <CurrentUserManager>
+        <CurrentUserNotifications>{children}</CurrentUserNotifications>
+      </CurrentUserManager>
     </TokenValidationProvider>
   </WindowWidthProvider>
 )

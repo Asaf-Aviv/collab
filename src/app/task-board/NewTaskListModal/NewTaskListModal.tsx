@@ -1,9 +1,4 @@
 import React, { useState, useRef } from 'react'
-import {
-  useCreateTaskListMutation,
-  TaskListDocument,
-  TaskListQueryResult,
-} from '../../../graphql/generates'
 import { useParams } from 'react-router-dom'
 import {
   Modal,
@@ -19,6 +14,11 @@ import {
   Box,
   Flex,
 } from '@chakra-ui/core'
+import {
+  useCreateTaskListMutation,
+  TaskListDocument,
+  TaskListQueryResult,
+} from '../../../graphql/generates'
 
 type Props = {
   closeModal: () => void

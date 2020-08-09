@@ -1,4 +1,3 @@
-import { CollabMember } from './CollabMember'
 import {
   Model,
   Column,
@@ -19,23 +18,24 @@ import {
 import { v4 as uuid } from 'uuid'
 import bcrypt from 'bcrypt'
 import {
-  Op,
   HasManyGetAssociationsMixin,
   HasManyAddAssociationMixin,
   HasManyHasAssociationMixin,
   HasManyCreateAssociationMixin,
   HasManyCountAssociationsMixin,
+  QueryTypes,
 } from 'sequelize'
-import { SignUpArgs, LoginArgs } from '../../graphql/types'
+import { CollabMember } from './CollabMember'
 import { Collab } from './Collab'
-import { passwordRegex } from '../../utils'
 import { CollabMemberRequest } from './CollabMemberRequest'
-import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 import { CollabPostReaction } from './CollabPostReaction'
 import { CollabTask } from './CollabTask'
 import { UserFriend } from './UserFriend'
 import { UserFriendRequest } from './UserFriendRequest'
 import { Notification } from './Notification'
+import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
+import { SignUpArgs, LoginArgs } from '../../graphql/types'
+import { passwordRegex } from '../../utils'
 
 @DefaultScope(() => ({
   attributes: { exclude: ['password'] },
@@ -144,7 +144,7 @@ export class User extends Model<User> {
   friendRequests!: User[]
 
   @HasMany(() => UserFriend, { foreignKey: 'userId' })
-  friends!: User[]
+  friends!: UserFriend[]
 
   @HasMany(() => CollabPostReaction)
   reactions!: CollabPostReaction[]
@@ -241,20 +241,14 @@ export class User extends Model<User> {
   }
 
   static getAllUserFriends(userId: string) {
-    return this.findAll({
-      where: { id: { [Op.ne]: userId } },
-      include: [
-        {
-          attributes: [],
-          on: {
-            friend_id: { [Op.col]: 'User.id' },
-            user_id: userId,
-          },
-          model: UserFriend,
-        },
-      ],
-      raw: true,
-    })
+    return this.sequelize!.query<GQLUser>(
+      `
+      Select id, username, avatar From users 
+      Where id in(
+        Select friend_id From user_friendships Where user_id = :userId
+      )`,
+      { replacements: { userId }, type: QueryTypes.SELECT },
+    )
   }
 }
 

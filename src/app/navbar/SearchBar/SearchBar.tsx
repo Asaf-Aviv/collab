@@ -133,6 +133,7 @@ export const SearchBar = (props: Props) => {
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev
 
+        // eslint-disable-next-line no-shadow
         const { hasNextPage, posts } = fetchMoreResult.searchPostsByTitle
 
         const searchPostsByTitle = produce(prev.searchPostsByTitle, draft => {

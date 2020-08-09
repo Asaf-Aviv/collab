@@ -1,7 +1,7 @@
 import Dataloader from 'dataloader'
+import { find } from 'lodash'
 import { Collab } from '../../db/models/Collab'
 import { User } from '../../db/models/User'
-import { find } from 'lodash'
 
 const createUserLoader = () =>
   new Dataloader<string, User | null>(async ids => {

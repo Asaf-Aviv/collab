@@ -18,6 +18,7 @@ import {
   TaskListDocument,
   TaskListQuery,
 } from '../../../graphql/generates'
+import { useToastNotification } from '../../notifications'
 
 type Props = {
   task: NonNullable<NonNullable<TaskListQuery>['taskList']['taskList']>[0]
@@ -28,7 +29,8 @@ export const NewTaskListModal = ({ closeModal, task }: Props) => {
   const { collabId } = useParams<{ collabId: string }>()
   const [taskListName, setTaskListName] = useState(task.name)
   const inputRef = useRef<HTMLInputElement>(null!)
-  const [createTaskList, { loading, error }] = useCreateTaskListMutation({
+  const notify = useToastNotification()
+  const [createTaskList, { loading }] = useCreateTaskListMutation({
     variables: {
       input: {
         collabId,
@@ -55,6 +57,11 @@ export const NewTaskListModal = ({ closeModal, task }: Props) => {
       })
 
       closeModal()
+    },
+    onError({ message }) {
+      notify('error', {
+        message,
+      })
     },
   })
 

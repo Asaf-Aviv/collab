@@ -1,5 +1,5 @@
-import { Resolvers } from '../types'
 import { Op } from 'sequelize'
+import { Resolvers } from '../types'
 import { formatNotification } from '../helpers/formatNotification'
 
 export const privateMessageResolver: Resolvers = {

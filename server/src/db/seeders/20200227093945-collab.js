@@ -1,5 +1,6 @@
 const { v4: uuid } = require('uuid')
 const faker = require('faker')
+const _ = require('lodash')
 const {
   seededCollabs,
   collabOwners,
@@ -7,7 +8,6 @@ const {
   threadComments,
   allInvites,
 } = require('../mocks/collabs')
-const _ = require('lodash')
 
 const createTaskList = (index, collabId) => ({
   id: uuid(),

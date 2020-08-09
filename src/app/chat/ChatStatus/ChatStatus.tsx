@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import {
-  UserChatStatus,
-  useUpdateStatusMutation,
-} from '../../../graphql/generates'
-import {
   Menu,
   MenuButton,
   MenuList,
@@ -13,6 +9,10 @@ import {
   MenuItemProps,
   Box,
 } from '@chakra-ui/core'
+import {
+  UserChatStatus,
+  useUpdateStatusMutation,
+} from '../../../graphql/generates'
 import { useCurrentUser } from '../../../providers'
 import { ChatUserListItem } from '../ChatUserListItem'
 import { useIsFirstRender } from '../../../hooks/useIsFirstRender'

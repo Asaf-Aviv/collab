@@ -1,4 +1,3 @@
-import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 import {
   Model,
   Table,
@@ -13,6 +12,7 @@ import {
 import { v4 as uuid } from 'uuid'
 import { User } from './User'
 import { CollabPost } from './CollabPost'
+import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 
 @Table({ tableName: 'collab_post_comments' })
 export class CollabPostComment extends Model<CollabPostComment> {

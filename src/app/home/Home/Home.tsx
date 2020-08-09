@@ -1,13 +1,13 @@
 import React from 'react'
+import { Heading, Box, Stack, Flex, Button, Text } from '@chakra-ui/core'
+import styled from '@emotion/styled'
+import { Link } from 'react-router-dom'
 import { ReactComponent as TaskBoardSvg } from '../../../assets/illustrations/undraw_scrum_board_cesn.svg'
 import { ReactComponent as CoWorkers } from '../../../assets/illustrations/undraw_co-workers_ujs6.svg'
 import { ReactComponent as CollabSvg4 } from '../../../assets/illustrations/undraw_having_fun_iais.svg'
 import { ReactComponent as CollabSvg5 } from '../../../assets/illustrations/undraw_hang_out_h9ud.svg'
 import { ReactComponent as FeedbackSvg } from '../../../assets/illustrations/feedback.svg'
 import { Container } from '../../../components/global'
-import { Heading, Box, Stack, Flex, Button, Text } from '@chakra-ui/core'
-import styled from '@emotion/styled'
-import { Link } from 'react-router-dom'
 import { SEO } from '../../../components/SEO'
 
 export const Home = () => {
@@ -101,6 +101,7 @@ export const Home = () => {
               variantColor="purple"
               size="lg"
               boxShadow="xl"
+              _focus={{ boxShadow: 'xl' }}
             >
               Get Started
             </Button>

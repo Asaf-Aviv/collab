@@ -1,11 +1,11 @@
+import { Table, ForeignKey, Column, BelongsTo } from 'sequelize-typescript'
+import { Reaction } from './Reaction'
+import { CollabPostComment } from './CollabPostComment'
+import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 import {
   AddCollabPostCommentReactionInput,
   RemoveCollabPostCommentReactionInput,
 } from '../../graphql/types'
-import { Table, ForeignKey, Column, BelongsTo } from 'sequelize-typescript'
-import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
-import { Reaction } from './Reaction'
-import { CollabPostComment } from './CollabPostComment'
 
 @Table({ tableName: 'collab_post_comment_reactions', timestamps: false })
 export class CollabPostCommentReaction extends Reaction {
@@ -19,7 +19,7 @@ export class CollabPostCommentReaction extends Reaction {
   })
   comment!: CollabPostComment
 
-  static async addReaction(
+  static addReaction(
     reaction: AddCollabPostCommentReactionInput & { userId: string },
   ) {
     return this.create(reaction)

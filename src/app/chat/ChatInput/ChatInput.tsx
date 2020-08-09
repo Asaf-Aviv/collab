@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { useSendPrivateChatMessageMutation } from '../../../graphql/generates'
-import { messagesActions, RootState } from '../reducers/reducers'
 import { useDispatch, useSelector } from 'react-redux'
 import { Textarea, Box } from '@chakra-ui/core'
+import { useSendPrivateChatMessageMutation } from '../../../graphql/generates'
+import { messagesActions, RootState } from '../reducers/reducers'
 
 export const ChatInput = () => {
   const dispatch = useDispatch()

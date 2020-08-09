@@ -27,7 +27,7 @@ export const privateMessageTypeDefs = gql`
   type PrivateMessagePreview {
     userId: ID!
     username: String!
-    avatar: String!
+    avatar: String
     content: String!
   }
 

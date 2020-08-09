@@ -1,15 +1,15 @@
 {
   "development": {
-    "username": "postgres",
-    "password": "postgres",
+    "username": "collab",
+    "password": "collab",
     "database": "collab_dev",
     "host": "127.0.0.1",
     "dialect": "postgres",
     "logging": false
   },
   "test": {
-    "username": "postgres",
-    "password": "postgres",
+    "username": "collab",
+    "password": "collab",
     "database": "collab_test",
     "host": "127.0.0.1",
     "dialect": "postgres",

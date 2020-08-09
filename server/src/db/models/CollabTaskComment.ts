@@ -1,4 +1,3 @@
-import { CollabMember } from './CollabMember'
 import {
   Model,
   Table,
@@ -11,6 +10,7 @@ import {
   CreatedAt,
 } from 'sequelize-typescript'
 import { v4 as uuid } from 'uuid'
+import { CollabMember } from './CollabMember'
 import { User } from './User'
 import { CollabTask } from './CollabTask'
 import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'

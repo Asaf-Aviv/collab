@@ -1,4 +1,3 @@
-import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 import {
   Model,
   Table,
@@ -11,6 +10,7 @@ import {
 import { CollabPost } from './CollabPost'
 import { Language } from './Language'
 import { Collab } from './Collab'
+import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 
 @Table({ tableName: 'collab_post_languages', timestamps: false })
 export class CollabPostLanguage extends Model<CollabPostLanguage> {

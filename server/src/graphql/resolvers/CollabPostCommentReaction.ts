@@ -1,6 +1,6 @@
+import { and } from 'graphql-shield'
 import { Resolvers } from '../types'
 import { formatNotification } from '../helpers/formatNotification'
-import { and } from 'graphql-shield'
 import { isAuthenticated } from '../middleware/isAuthenticated'
 
 export const collabPostCommentReactionResolver: Resolvers = {
@@ -27,7 +27,7 @@ export const collabPostCommentReactionResolver: Resolvers = {
         throw new Error('Comment not found')
       }
 
-      if (comment.authorId === user!.id) {
+      if (comment.authorId !== user!.id) {
         Notification.newCollabPostCommentReactionNotification(
           comment.authorId,
           commentReaction.id,
@@ -48,11 +48,7 @@ export const collabPostCommentReactionResolver: Resolvers = {
 
       return true
     },
-    removeCollabPostCommentReaction: async (
-      root,
-      { reaction },
-      { user, models },
-    ) =>
+    removeCollabPostCommentReaction: (root, { reaction }, { user, models }) =>
       models.CollabPostCommentReaction.deleteReaction({
         ...reaction,
         userId: user!.id,

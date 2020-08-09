@@ -1,5 +1,5 @@
-import { Resolvers } from '../types'
 import { and } from 'graphql-shield'
+import { Resolvers } from '../types'
 import { isAuthenticated } from '../middleware/isAuthenticated'
 
 export const collabTaskCommentReactionResolver: Resolvers = {
@@ -9,11 +9,7 @@ export const collabTaskCommentReactionResolver: Resolvers = {
         ...reaction,
         userId: user!.id,
       }),
-    removeCollabTaskCommentReaction: async (
-      root,
-      { reaction },
-      { user, models },
-    ) =>
+    removeCollabTaskCommentReaction: (root, { reaction }, { user, models }) =>
       models.CollabTaskCommentReaction.deleteReaction({
         ...reaction,
         userId: user!.id,

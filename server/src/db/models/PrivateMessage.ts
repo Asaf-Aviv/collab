@@ -1,5 +1,3 @@
-import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
-import { SendPrivateMessageInput } from '../../graphql/types.d'
 import {
   Model,
   Table,
@@ -16,6 +14,8 @@ import { QueryTypes } from 'sequelize'
 import { v4 as uuid } from 'uuid'
 import { User } from './User'
 import { UserFriend } from './UserFriend'
+import { SendPrivateMessageInput } from '../../graphql/types'
+import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 
 @Table({ tableName: 'private_messages', updatedAt: false })
 export class PrivateMessage extends Model<PrivateMessage> {

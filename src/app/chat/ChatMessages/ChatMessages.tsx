@@ -1,19 +1,20 @@
 import React, { useLayoutEffect, useRef, useEffect, useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Box } from '@chakra-ui/core'
 import { debounce } from 'lodash-es'
 import styled from '@emotion/styled'
 import { useCurrentUser } from '../../../providers'
-import { RootState, messagesActions } from '../reducers'
+import { messagesActions } from '../reducers'
 import { ChatMessageBubble } from '../ChatMessageBubble'
+import { useTypedSelector } from '../useTypedSelector'
 
 export const ChatMessages = () => {
   const currentUser = useCurrentUser()!
-  const friend = useSelector(
-    ({ users, messages }: RootState) => users[messages.selectedFriendId!],
+  const friend = useTypedSelector(
+    ({ users, messages }) => users[messages.selectedFriendId!],
   )
-  const messages = useSelector(
-    ({ messages }: RootState) => messages.byUserIds[friend.id].messages,
+  const messages = useTypedSelector(
+    state => state.messages.byUserIds[friend.id].messages,
   )
   const dispatch = useDispatch()
   const [showNewMessagesPopup, setShowNewMessagesPopup] = useState(false)

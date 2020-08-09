@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import {
   useNewPrivateChatMessageSubscription,
   useFriendStatusChangeSubscription,
 } from '../../../graphql/generates'
 import { userActions, messagesActions } from '../reducers/reducers'
-import { useDispatch } from 'react-redux'
 
 const formatUser = ({ user, status }: any) => ({
   ...user,

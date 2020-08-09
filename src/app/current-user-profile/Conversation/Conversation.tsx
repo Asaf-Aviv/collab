@@ -39,6 +39,7 @@ export const Conversation = () => {
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev
 
+        // eslint-disable-next-line no-shadow
         const { hasNextPage, messages } = fetchMoreResult.getConversation
 
         const getConversation = produce(prev.getConversation, draft => {

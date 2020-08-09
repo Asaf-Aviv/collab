@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import produce from 'immer'
+import { useParams } from 'react-router-dom'
+import { Box, Button, Textarea } from '@chakra-ui/core'
 import {
   useCreateWallMessageMutation,
   CollabWallMessagesQuery,
   CollabWallMessagesDocument,
 } from '../../../graphql/generates'
-import { useParams } from 'react-router-dom'
-import { Box, Button, Textarea } from '@chakra-ui/core'
 import { useToastNotification } from '../../notifications'
 
 export const AddWallMessageForm = () => {

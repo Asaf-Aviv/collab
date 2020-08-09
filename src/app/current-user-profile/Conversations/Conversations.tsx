@@ -94,7 +94,7 @@ export const Conversations = () => {
           {loading && <Loader />}
           {error && (
             <DisplayError
-              message="Could not fetch friends"
+              message="Could not fetch conversations"
               onClick={() => refetch()}
             />
           )}

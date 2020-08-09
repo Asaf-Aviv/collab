@@ -1,11 +1,11 @@
+import { Table, ForeignKey, Column, BelongsTo } from 'sequelize-typescript'
 import {
   AddCollabPostReactionInput,
   RemoveCollabPostReactionInput,
-} from './../../graphql/types.d'
-import { Table, ForeignKey, Column, BelongsTo } from 'sequelize-typescript'
+} from './../../graphql/types'
 import { CollabPost } from './CollabPost'
-import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 import { Reaction } from './Reaction'
+import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 
 @Table({ tableName: 'collab_post_reactions', timestamps: false })
 export class CollabPostReaction extends Reaction {

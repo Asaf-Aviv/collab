@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Redirect, RouteProps } from 'react-router-dom'
-import { useTokenValidation } from '../../../providers'
-import { useCurrentUser } from '../../../providers'
+import { useTokenValidation , useCurrentUser } from '../../../providers'
+
 
 export const PublicOnlyRoute = ({ children, ...props }: RouteProps) => {
   const currentUser = useCurrentUser()

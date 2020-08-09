@@ -6,7 +6,6 @@ import {
   PrimaryKey,
   Default,
   BelongsTo,
-  AllowNull,
   IsUUID,
   CreatedAt,
 } from 'sequelize-typescript'

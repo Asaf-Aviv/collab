@@ -11,8 +11,8 @@ import {
 } from 'sequelize-typescript'
 import { Op } from 'sequelize'
 import { v4 as uuid } from 'uuid'
-import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 import { User } from './User'
+import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 
 @Table({
   tableName: 'user_friendship_requests',

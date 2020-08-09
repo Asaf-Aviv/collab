@@ -18,7 +18,16 @@ export const UserAccountMenu = () => {
 
   return (
     <Menu>
-      <MenuButton ml={4}>
+      <MenuButton
+        ml={4}
+        outline="none"
+        _active={{
+          boxShadow: 'outline',
+        }}
+        _focus={{
+          boxShadow: 'outline',
+        }}
+      >
         <Avatar size="sm" src={getAvatarUrl(avatar)} name={username} />
       </MenuButton>
       <MenuList>

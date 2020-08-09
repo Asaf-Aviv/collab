@@ -1,8 +1,11 @@
 import { gql } from 'apollo-server-express'
 
 export const privateChatTypeDefs = gql`
+  type Query {
+    onlineChatFriends: OnlineFriendsPayload!
+  }
+
   type Mutation {
-    connectToChat(status: UserChatStatus!): ConnectToChatPayload!
     sendPrivateChatMessage(
       input: SendPrivateChatMessageInput!
     ): PrivateChatMessage!
@@ -11,7 +14,7 @@ export const privateChatTypeDefs = gql`
 
   type Subscription {
     newPrivateChatMessage: PrivateChatMessage!
-    friendStatusChange: ChatUsersPayload!
+    friendStatusChange: ChatUserPayload!
   }
 
   enum UserChatStatus {
@@ -21,11 +24,11 @@ export const privateChatTypeDefs = gql`
     OFFLINE
   }
 
-  type ConnectToChatPayload {
-    users: [ChatUsersPayload!]!
+  type OnlineFriendsPayload {
+    users: [ChatUserPayload!]!
   }
 
-  type ChatUsersPayload {
+  type ChatUserPayload {
     user: User!
     status: UserChatStatus!
   }

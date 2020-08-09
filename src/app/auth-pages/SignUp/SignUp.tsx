@@ -1,9 +1,9 @@
 import React, { useState, FormEvent } from 'react'
-import { useSignUpMutation } from '../../../graphql/generates'
 import { Button, Box, Stack, Heading, Link, Text } from '@chakra-ui/core'
+import { Link as RouterLink } from 'react-router-dom'
+import { useSignUpMutation } from '../../../graphql/generates'
 import { Container } from '../../../components/global'
 import { InputWithLabel } from '../../../components/InputWithLabel/InputWithLabel'
-import { Link as RouterLink } from 'react-router-dom'
 import { useAuthActions } from '../../../providers'
 import { useToastNotification } from '../../notifications'
 
@@ -17,7 +17,7 @@ export const SignUp = () => {
     variables: {
       credentials: { username, email, password },
     },
-    onCompleted: async ({ signUp }) => {
+    onCompleted: ({ signUp }) => {
       localStorage.setItem('token', signUp.token)
       getCurrentUser()
     },

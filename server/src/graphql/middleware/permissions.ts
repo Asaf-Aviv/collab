@@ -15,6 +15,7 @@ import { collabDiscussionThreadReactionMiddleware } from '../resolvers/CollabDis
 import { collabDiscussionThreadCommentReactionMiddleware } from '../resolvers/CollabDiscussionThreadCommentReaction'
 import { collabTaskCommentReactionMiddleware } from '../resolvers/CollabTaskCommentReaction'
 import { collabWallMessageMiddleware } from '../resolvers/CollabWallMessage'
+import { privateChatMiddleware } from '../resolvers/PrivateChat'
 
 export const permissions = shield(
   merge(
@@ -33,6 +34,7 @@ export const permissions = shield(
     collabDiscussionThreadReactionMiddleware,
     collabDiscussionThreadCommentMiddleware,
     collabDiscussionThreadCommentReactionMiddleware,
+    privateChatMiddleware,
   ),
   { allowExternalErrors: true },
 )

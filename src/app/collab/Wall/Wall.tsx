@@ -1,14 +1,14 @@
 import React, { useRef } from 'react'
 import produce from 'immer'
+import { useParams } from 'react-router-dom'
+import { Text, Box, Flex, PseudoBox, Button } from '@chakra-ui/core'
 import {
   useCollabWallMessagesQuery,
   useDeleteWallMessageMutation,
   CollabWallMessagesDocument,
   CollabWallMessagesQuery,
 } from '../../../graphql/generates'
-import { useParams } from 'react-router-dom'
 import { AvatarWithUsername } from '../../../components/AvatarWithUsername'
-import { Text, Box, Flex, PseudoBox, Button } from '@chakra-ui/core'
 import { DisplayError } from '../../../components/DisplayError'
 import { DisplayDate } from '../../../components/DisplayDate'
 import { Loader } from '../../../components/Loader'
@@ -20,7 +20,7 @@ import { AddWallMessageForm } from '../AddWallMessageForm'
 export const Wall = () => {
   const { collabId } = useParams<{ collabId: string }>()
   const {
-    data,
+    data: wallMessagesData,
     loading,
     error,
     refetch,
@@ -78,7 +78,7 @@ export const Wall = () => {
     },
   })
 
-  const { hasNextPage, messages } = data?.collabWallMessages ?? {}
+  const { hasNextPage, messages } = wallMessagesData?.collabWallMessages ?? {}
 
   const handleNextPageLoad = () => {
     if (!messages || loading) return
@@ -94,6 +94,7 @@ export const Wall = () => {
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev
 
+        // eslint-disable-next-line no-shadow
         const { hasNextPage, messages } = fetchMoreResult.collabWallMessages
 
         const collabWallMessages = produce(prev.collabWallMessages, draft => {

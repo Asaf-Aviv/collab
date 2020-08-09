@@ -1,5 +1,5 @@
-import { Resolvers } from '../types'
 import { and } from 'graphql-shield'
+import { Resolvers } from '../types'
 import { isAuthenticated } from '../middleware/isAuthenticated'
 
 export const collabWallMessageResolver: Resolvers = {

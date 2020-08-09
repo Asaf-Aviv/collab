@@ -1,8 +1,4 @@
 import React, { useState, useRef } from 'react'
-import {
-  useCollabMembersQuery,
-  useUpdateTaskMutation,
-} from '../../../graphql/generates'
 import { useParams } from 'react-router-dom'
 import {
   Modal,
@@ -21,7 +17,11 @@ import {
   Textarea,
 } from '@chakra-ui/core'
 import Select from 'react-select'
-import { TaskListQuery } from '../../../graphql/generates'
+import {
+  useCollabMembersQuery,
+  useUpdateTaskMutation,
+ TaskListQuery } from '../../../graphql/generates'
+
 import { getAvatarUrl } from '../../../utils'
 
 type TaskListResult = NonNullable<TaskListQuery['taskList']>

@@ -1,6 +1,6 @@
+import { and } from 'graphql-shield'
 import { Resolvers } from '../types'
 import { formatNotification } from '../helpers/formatNotification'
-import { and } from 'graphql-shield'
 import { isAuthenticated } from '../middleware/isAuthenticated'
 
 export const collabPostReactionResolver: Resolvers = {

@@ -1,7 +1,7 @@
-import { isAuthenticated } from '../middleware/isAuthenticated'
 import { and } from 'graphql-shield'
-import { Resolvers, Reaction } from '../types'
 import { Sequelize } from 'sequelize-typescript'
+import { isAuthenticated } from '../middleware/isAuthenticated'
+import { Resolvers, Reaction } from '../types'
 
 export const collabDiscussionThreadCommentResolver: Resolvers = {
   Mutation: {

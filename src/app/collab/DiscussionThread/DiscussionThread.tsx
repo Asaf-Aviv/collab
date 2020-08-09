@@ -1,5 +1,6 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
+import { Box, Heading, Text } from '@chakra-ui/core'
 import {
   useCollabThreadQuery,
   useCollabThreadCommentsQuery,
@@ -9,7 +10,6 @@ import {
   useRemoveDiscussionThreadCommentReactionMutation,
   useCreateDiscussionThreadCommentMutation,
 } from '../../../graphql/generates'
-import { Box, Heading, Text } from '@chakra-ui/core'
 import { Comment } from '../../../components/Comment/Comment'
 import { ReactionPanel } from '../../../components/ReactionPanel/ReactionPanel'
 import {
