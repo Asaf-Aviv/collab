@@ -43,6 +43,7 @@ module.exports = {
     'react/prop-types': 'off',
     'no-console': 'warn',
     'no-shadow': ['error'],
+    'require-await': 'error',
     '@typescript-eslint/no-unused-vars': [
       'error',
       {
@@ -51,6 +52,8 @@ module.exports = {
         ignoreRestSiblings: false,
       },
     ],
+    'import/namespace': 'off',
+    'import/no-named-as-default': 'off',
     'import/order': [
       'error',
       {
