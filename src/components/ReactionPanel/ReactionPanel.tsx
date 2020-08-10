@@ -117,7 +117,6 @@ export const ReactionPanel = ({
               showPreview={false}
               sheetSize={64}
               showSkinTones={false}
-              exclude={['symbols']}
               onSelect={handleEmojiSelect}
             />
           </FocusLock>
