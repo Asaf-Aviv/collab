@@ -50,6 +50,7 @@ export const Chat = () => {
           animate={{ width: isChatMinimized ? 0 : 230 }}
           exit={{ width: 0 }}
           transition={{ duration: 0.8, ease: 'anticipate' }}
+          style={{ zIndex: 2 }}
         >
           <Flex
             height="100%"
@@ -60,7 +61,6 @@ export const Chat = () => {
             maxHeight="calc(100vh - 64px)"
             overflowY="hidden"
             p={2}
-            zIndex={2}
           >
             <CloseButton
               aria-label="minimize chat"

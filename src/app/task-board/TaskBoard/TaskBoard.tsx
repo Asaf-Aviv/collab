@@ -243,7 +243,8 @@ export const TaskBoard = () => {
                     icon="add"
                     onClick={() => setIsCreateTaskListModalOpen(true)}
                     position="absolute"
-                    left="247px"
+                    left="255px"
+                    variantColor="purple"
                   />
                   {isCreateTaskListModalOpen && (
                     <NewTaskListModal

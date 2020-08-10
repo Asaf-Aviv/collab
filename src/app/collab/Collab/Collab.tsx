@@ -49,7 +49,7 @@ export const Collab = () => {
           height="calc(100vh - 64px)"
           bg="purple.600"
           color="white"
-          width={250}
+          minWidth={250}
           zIndex={5}
         >
           <StyledNavLink to={`${match.url}/wall`}>Wall</StyledNavLink>
@@ -67,7 +67,7 @@ export const Collab = () => {
       <Box
         flex={1}
         py={[0, 0, 4]}
-        px="2.5%"
+        px={12}
         maxWidth={['100%', '100%', 'calc(100vw - 250px)']}
       >
         <Switch>

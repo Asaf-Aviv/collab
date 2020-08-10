@@ -27,7 +27,7 @@ export const IconButtonWithTooltip = ({
     >
       <IconButton
         size={size}
-        bg="transparent"
+        {...(!props.variantColor && { bg: 'transparent' })}
         aria-label={ariaLabel}
         onClick={onClick}
         icon={icon}
