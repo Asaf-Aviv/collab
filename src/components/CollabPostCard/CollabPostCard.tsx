@@ -47,6 +47,7 @@ export const CollabPostCard = memo(
             // @ts-ignore
             to={`/collabs/posts/${id}`}
             py={2}
+            pr={4}
             position="relative"
             display="block"
             _hover={{ textDecoration: 'none' }}
