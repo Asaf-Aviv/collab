@@ -1,7 +1,7 @@
 const { v4: uuid } = require('uuid')
 const faker = require('faker')
-const { seededUsers } = require('../mocks/users')
 const _ = require('lodash')
+const { seededUsers } = require('../mocks/users')
 
 const generageCollab = owner_id => ({
   id: uuid(),
@@ -29,7 +29,7 @@ exports.collabOwners = collabOwners
 
 const memberInvitations = _.flatten(
   seededCollabs.map(({ id, owner_id }) =>
-    _.filter(seededUsers, ({ id }) => id !== owner_id).map(
+    _.filter(seededUsers, user => user.id !== owner_id).map(
       ({ id: userId }) => ({
         id: uuid(),
         collab_id: id,

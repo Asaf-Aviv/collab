@@ -1,10 +1,9 @@
-const { v4: uuid } = require('uuid')
 const bcrypt = require('bcrypt')
 const faker = require('faker')
 const _ = require('lodash')
 
 const generageUser = (__, i) => ({
-  id: uuid(),
+  id: String(i + 2),
   username: faker.name
     .findName()
     .replace(/[\W_]+/g, '')
@@ -18,7 +17,7 @@ const generageUser = (__, i) => ({
 })
 
 const asaf = {
-  id: '6d480813-c854-40fc-a3cf-cea0944854ab',
+  id: '1',
   username: 'AsafAviv',
   email: 'asafaviv89@gmail.com',
   bio: faker.random.words(_.random(5, 10)),

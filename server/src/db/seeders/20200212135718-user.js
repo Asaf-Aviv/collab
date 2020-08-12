@@ -11,16 +11,17 @@ const friendRequests = seededUsers
     updated_at: new Date(),
   }))
 
-const friends = seededUsers.flatMap(user =>
-  seededUsers
-    .filter(x => x !== user)
-    .map(user2 => ({
-      user_id: user.id,
-      friend_id: user2.id,
-      creation_date: new Date(),
-      updated_at: new Date(),
-    })),
-)
+// const friends = seededUsers.flatMap(user =>
+//   seededUsers
+//     .filter(x => x !== user)
+//     .map(user2 => ({
+//       id: uuid(),
+//       user_id: user.id,
+//       friend_id: user2.id,
+//       creation_date: new Date(),
+//       updated_at: new Date(),
+//     })),
+// )
 
 const messages = seededUsers
   .map(user =>
@@ -42,14 +43,15 @@ module.exports = {
   up: queryInterface =>
     queryInterface
       .bulkInsert({ tableName: 'users' }, seededUsers)
-      .then(
-        () =>
-          queryInterface.bulkInsert(
-            { tableName: 'user_friendship_requests' },
-            friendRequests,
-          ),
-        queryInterface.bulkInsert({ tableName: 'user_friendships' }, friends),
+      .then(() =>
+        queryInterface.bulkInsert(
+          { tableName: 'user_friendship_requests' },
+          friendRequests,
+        ),
       )
+      // .then(() =>
+      //   queryInterface.bulkInsert({ tableName: 'user_friendships' }, friends),
+      // )
       .then(() =>
         queryInterface.bulkInsert({ tableName: 'private_messages' }, messages),
       )
