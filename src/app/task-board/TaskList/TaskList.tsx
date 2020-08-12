@@ -90,14 +90,14 @@ const TaskList = ({ taskList, tasks, refetch, index }: Props) => {
                       onClick={() => setIsNewTaskModalOpen(true)}
                       icon="add"
                     />
+                    <EditTaskListNamePopover
+                      taskListId={taskList.id}
+                      taskListName={taskList.name}
+                    />
                     <IconButtonWithTooltip
                       ariaLabel="Delete Tasklist"
                       onClick={() => deleteTaskList()}
                       icon="delete"
-                    />
-                    <EditTaskListNamePopover
-                      taskListId={taskList.id}
-                      taskListName={taskList.name}
                     />
                   </StyledOptionMenu>
                 </DotsMenu>
@@ -117,6 +117,7 @@ const TaskList = ({ taskList, tasks, refetch, index }: Props) => {
                 {...roppableProvided.droppableProps}
                 flex={1}
                 overflowY="auto"
+                p={2}
               >
                 <MemoizedTasksWrapper
                   tasks={tasks}

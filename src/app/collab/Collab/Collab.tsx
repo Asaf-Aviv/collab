@@ -67,7 +67,7 @@ export const Collab = () => {
       <Box
         flex={1}
         py={[0, 0, 4]}
-        px={12}
+        px={[2, 0, 12]}
         maxWidth={['100%', '100%', 'calc(100vw - 250px)']}
       >
         <Switch>

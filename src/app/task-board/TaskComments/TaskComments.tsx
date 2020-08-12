@@ -85,7 +85,7 @@ export const TaskComments = ({ taskId }: { taskId: string }) => {
   const { comments } = data?.task || {}
 
   return (
-    <div>
+    <Box>
       {loading && <Loader />}
       {error && (
         <DisplayError
@@ -93,28 +93,30 @@ export const TaskComments = ({ taskId }: { taskId: string }) => {
           onClick={() => refetch()}
         />
       )}
-      {comments?.map(comment => (
-        <Box
-          key={comment.id}
-          bg="#f2f2fe"
-          p={2}
-          borderBottom="1px solid #cfcfcf"
-        >
-          <Flex mb={2}>
-            {comment.author ? (
-              <AvatarWithUsername size="xs" {...comment.author} />
-            ) : (
-              <Text as="span">Deleted User</Text>
-            )}
-          </Flex>
-          <Text mb={2}>{comment.content}</Text>
-          <ReactionPanel
-            reactions={comment.reactions}
-            addReaction={handleAddReaction(comment.id)}
-            removeReaction={handleRemoveReaction(comment.id)}
-          />
-        </Box>
-      ))}
+      <Box as="section" maxHeight="60vh" overflowY="auto">
+        {comments?.map(comment => (
+          <Box
+            key={comment.id}
+            bg="#f2f2fe"
+            p={2}
+            borderBottom="1px solid #cfcfcf"
+          >
+            <Flex mb={2}>
+              {comment.author ? (
+                <AvatarWithUsername size="xs" {...comment.author} />
+              ) : (
+                <Text as="span">Deleted User</Text>
+              )}
+            </Flex>
+            <Text mb={2}>{comment.content}</Text>
+            <ReactionPanel
+              reactions={comment.reactions}
+              addReaction={handleAddReaction(comment.id)}
+              removeReaction={handleRemoveReaction(comment.id)}
+            />
+          </Box>
+        ))}
+      </Box>
       <Box as="form" p={2} onSubmit={handleCommentSubmit}>
         <Flex direction="column" justify="end">
           <Textarea
@@ -134,6 +136,6 @@ export const TaskComments = ({ taskId }: { taskId: string }) => {
           </Button>
         </Flex>
       </Box>
-    </div>
+    </Box>
   )
 }

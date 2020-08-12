@@ -59,7 +59,7 @@ export const Task = ({
               : '0px 2px 4px 0 rgb(216,216,216)'
           }
         >
-          <Popover placement="right-start" isOpen={showComments}>
+          <Popover placement="right-start" usePortal isOpen={showComments}>
             <PopoverTrigger>
               <Box p={2} fontSize="0.875rem">
                 <Flex
@@ -115,7 +115,10 @@ export const Task = ({
                 </CommentsButton>
               </Box>
             </PopoverTrigger>
-            <PopoverContent zIndex={4}>
+            <PopoverContent
+              zIndex={4}
+              boxShadow="0 20px 40px 8px rgb(0 0 0 / 29%), 0 10px 10px -5px rgba(0,0,0,0.04)"
+            >
               <PopoverHeader p={3}>
                 <Heading as="h3" size="sm">
                   Comments
