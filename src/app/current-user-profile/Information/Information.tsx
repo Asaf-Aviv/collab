@@ -152,8 +152,10 @@ export const Information = () => {
               />
               <FormControl>
                 <FormLabel htmlFor="country">Country</FormLabel>
-                <Select
+                <StyledReactSelect
+                  open
                   id="country"
+                  classNamePrefix="react-select"
                   options={countryOptions}
                   onChange={(e: any) =>
                     setInfoInput({ ...infoInput, country: e?.value ?? null })
@@ -161,6 +163,20 @@ export const Information = () => {
                   defaultValue={countryOptions.find(
                     x => x.label === infoInput.country,
                   )}
+                  styles={{
+                    control: (base: any, state: any) => ({
+                      ...base,
+                      borderWidth: 2,
+                      '&:hover': {
+                        borderColor: '#cab3ff',
+                      },
+                      borderColor:
+                        state.isFocused || state.menuIsOpen
+                          ? '#805ad5 !important'
+                          : 'transparent',
+                      boxShadow: 'none',
+                    }),
+                  }}
                 />
               </FormControl>
               <FormControl width="100%">
@@ -212,6 +228,37 @@ const StyledFlex = styled(Flex)`
     margin-bottom: 1rem;
     @media (min-width: 786px) {
       width: 48%;
+    }
+  }
+`
+
+const StyledReactSelect = styled(Select)`
+  .react-select__control {
+    background-color: #f2f2ff;
+    cursor: pointer;
+  }
+
+  .react-select__menu-list {
+    background-color: white;
+  }
+
+  .react-select__option {
+    cursor: pointer;
+  }
+
+  .react-select__option--is-selected {
+    color: inherit;
+    background-color: #dcd2f5;
+  }
+
+  .react-select__option--is-focused {
+    background-color: #dcd2f5;
+  }
+
+  .react-select__indicator {
+    color: hsl(0, 0%, 60%);
+    &:hover {
+      color: hsl(0, 0%, 40%);
     }
   }
 `

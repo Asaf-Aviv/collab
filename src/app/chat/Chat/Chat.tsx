@@ -49,7 +49,7 @@ export const Chat = () => {
           initial={{ width: isChatMinimized ? 230 : 0 }}
           animate={{ width: isChatMinimized ? 0 : 230 }}
           exit={{ width: 0 }}
-          transition={{ duration: 0.8, ease: 'anticipate' }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
           style={{ zIndex: 2 }}
         >
           <Flex
@@ -59,7 +59,7 @@ export const Chat = () => {
             position="sticky"
             bg="#eaeaea"
             maxHeight="calc(100vh - 64px)"
-            overflowY="hidden"
+            overflow="hidden"
             p={2}
           >
             <CloseButton
@@ -70,10 +70,10 @@ export const Chat = () => {
             <ChatStatus />
             <Divider />
             <ChatUsersList onFriendClick={handleFriendClick} />
-            {selectedFriendId && <ChatBox />}
+            {selectedFriendId && <ChatBox isChatMinimized={isChatMinimized} />}
           </Flex>
         </StyledChatContainer>
-        <Box position="fixed" bottom={0} right="1rem">
+        <Box position="fixed" bottom={0} right="0.5rem">
           <Box position="relative">
             <IconButton
               onClick={toggleMinimize}

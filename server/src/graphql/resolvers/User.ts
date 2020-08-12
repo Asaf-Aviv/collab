@@ -3,7 +3,7 @@ import { and } from 'graphql-shield'
 import { Op } from 'sequelize'
 import { withFilter } from 'apollo-server-express'
 import path from 'path'
-import { promises as fs , createWriteStream } from 'fs'
+import { promises as fs, createWriteStream } from 'fs'
 
 import { GQLUser } from './../../db/models/User'
 import { generateToken } from '../../utils/index'
@@ -133,7 +133,7 @@ export const userResolver: Resolvers = {
           })
         })
         .catch(err => {
-          console.error('Could not send newFriendNotification', err)
+          console.error('Could not send sendFriendRequest notification', err)
         })
 
       pubsub.publish('NEW_FRIEND_REQUEST', {
@@ -152,9 +152,12 @@ export const userResolver: Resolvers = {
       { models, user, pubsub },
     ) => {
       const { UserFriend, Notification } = models
-      const friendship = await UserFriend.createFriendship(friendId, user!.id)
+      const { friendshipId, newFriend } = await UserFriend.createFriendship(
+        friendId,
+        user!.id,
+      )
 
-      Notification.newFriendNotification(friendId, user!.id, friendship.id)
+      Notification.newFriendNotification(friendId, user!.id, friendshipId)
         .then(formatNotification)
         .then(notification => {
           pubsub.publish('NEW_NOTIFICATION', {
@@ -165,7 +168,7 @@ export const userResolver: Resolvers = {
           console.error('Could not send newFriendNotification', err)
         })
 
-      return friendship
+      return newFriend
     },
     declineFriendRequest: async (root, { senderId }, { models, user }) => {
       const { UserFriendRequest, User } = models
