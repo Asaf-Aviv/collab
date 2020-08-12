@@ -50,7 +50,7 @@ export class UserFriend extends Model<UserFriend> {
     return this.sequelize!.transaction(async () => {
       await UserFriendRequest.deleteFriendRequest(userId, friendId)
       // creates a row for each side of the friendship
-      await this.bulkCreate([
+      const [friendship] = await this.bulkCreate([
         { friendId, userId },
         { friendId: userId, userId: friendId },
       ])
@@ -58,7 +58,7 @@ export class UserFriend extends Model<UserFriend> {
       if (!newFriend) {
         throw new Error('User not found')
       }
-      return newFriend
+      return { friendshipId: friendship.id, newFriend }
     })
   }
 
