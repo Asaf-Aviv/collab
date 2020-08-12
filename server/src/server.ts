@@ -13,10 +13,11 @@ apolloServer.installSubscriptionHandlers(httpServer)
 redis
   .flushall()
   .then(() =>
-    sequelize.authenticate().then(() => {
-      // builds the database tables, make sure you comment it
+    // eslint-disable-next-line require-await
+    sequelize.authenticate().then(async () => {
+      // builds the database tables, make sure to comment it
       // after you build the database for the first time
-      // sequelize.sync({ force: true })
+      // await sequelize.sync({ force: true })
 
       httpServer.listen(PORT, () =>
         console.info(`Server running on port ${PORT}`),
