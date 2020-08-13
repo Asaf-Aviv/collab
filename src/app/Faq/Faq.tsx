@@ -39,7 +39,7 @@ export const Faq = () => {
                 Feel free to open an issue on github{' '}
                 <a
                   style={{ color: '#8048ff' }}
-                  href="https://github.com/Asaf-Aviv/collab/issues"
+                  href="https://github.com/Asaf-Aviv/lets-collab/issues"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -64,7 +64,7 @@ export const Faq = () => {
               <Text>
                 <a
                   style={{ color: '#8048ff' }}
-                  href="https://github.com/Asaf-Aviv/collab/blob/master/README.md"
+                  href="https://github.com/Asaf-Aviv/lets-collab/blob/master/README.md"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
