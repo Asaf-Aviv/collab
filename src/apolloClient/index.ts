@@ -23,7 +23,7 @@ const authLink = setContext((_, { headers }) => ({
   },
 }))
 
-export const wsClient = new SubscriptionClient(subscriptionEndpoint!, {
+export const wsClient = new SubscriptionClient(subscriptionEndpoint, {
   reconnect: true,
   lazy: true,
   connectionParams: () => ({
