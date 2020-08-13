@@ -43,7 +43,7 @@ export const Footer = () => {
           color="#848484"
           fontSize="sm"
         >
-          copyright © 2020 Asaf Aviv and the Collab contributors
+          copyright © 2020 Asaf Aviv and Lets Collab contributors
         </Text>
       </Box>
     </Box>
