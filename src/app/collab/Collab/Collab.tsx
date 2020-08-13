@@ -129,7 +129,14 @@ const TabMenu = () => {
 
   return (
     <Container width="100%">
-      <Flex as="nav" overflowX="scroll" width="100%" py={2} height="50px">
+      <Flex
+        as="nav"
+        overflowX="scroll"
+        width="100%"
+        py={2}
+        height="50px"
+        mb={2}
+      >
         <StyledTab to={`${match.url}/wall`}>Wall</StyledTab>
         <StyledTab to={`${match.url}/task-board`}>Task Board</StyledTab>
         <StyledTab to={`${match.url}/members`}>Members</StyledTab>

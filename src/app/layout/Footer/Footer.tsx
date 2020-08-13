@@ -21,10 +21,6 @@ export const Footer = () => {
           </StyledFlex>
           <StyledFlex>
             <StyledLink to="/faq">Faq</StyledLink>
-            <StyledLink to="/help">Help</StyledLink>
-            <StyledLink to="/suggestions">Suggestions</StyledLink>
-          </StyledFlex>
-          <Box width="100%" color="white" py={4}>
             <p>
               Join us on{' '}
               <a
@@ -36,7 +32,7 @@ export const Footer = () => {
                 Discord!
               </a>
             </p>
-          </Box>
+          </StyledFlex>
         </Flex>
       </Container>
       <Box bg="#19021d">
