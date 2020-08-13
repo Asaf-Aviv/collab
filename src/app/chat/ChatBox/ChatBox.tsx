@@ -1,7 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Flex, Heading, Avatar } from '@chakra-ui/core'
-import { motion } from 'framer-motion'
 import { ChatInput } from '../ChatInput'
 import { ChatMessages } from '../ChatMessages'
 import { RootState, messagesActions } from '../reducers'

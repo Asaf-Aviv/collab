@@ -4,7 +4,7 @@ import { keyframes } from '@emotion/core'
 
 export const Loader = () => {
   return (
-    <Box p={4} opacity={0} animation={`${fadeIn} 200ms ease-in 200ms forwards`}>
+    <Box p={4} opacity={0} animation={`${fadeIn} 250ms ease-in 200ms forwards`}>
       <Spinner
         thickness="3px"
         speed="0.75s"

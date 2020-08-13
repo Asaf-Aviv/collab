@@ -3,8 +3,8 @@ import { Box, PseudoBox, PseudoBoxProps } from '@chakra-ui/core'
 
 export const Container = styled(Box)`
   margin: 0 auto;
-  padding-left: 2.5%;
-  padding-right: 2.5%;
+  padding-left: 1rem;
+  padding-right: 1rem;
 `
 
 export const PageHeaderSpacing = styled.div`

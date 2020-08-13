@@ -1,5 +1,6 @@
 import React, { useRef } from 'react'
 import produce from 'immer'
+import { Text } from '@chakra-ui/core'
 import { Container } from '../global'
 import { useCollabPostsQuery } from '../../graphql/generates'
 import { CollabPostCard } from '../CollabPostCard'
@@ -72,6 +73,11 @@ export const CollabPosts = () => {
         )}
         {loading && <Loader />}
         {!error && <span ref={loadNextPageTriggerRef} />}
+        {hasNextPage === false && (
+          <Text textAlign="center" py={6} fontWeight={500}>
+            No more Collabs
+          </Text>
+        )}
       </Container>
     </>
   )
