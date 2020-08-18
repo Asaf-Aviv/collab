@@ -18,7 +18,7 @@ if (process.env.NODE_ENV === 'production') {
 ReactGA.initialize(process.env.REACT_APP_GA!)
 
 ReactDOM.render(
-  <ErrorBoundary text="Oh Oh, Our App crushed! Please refresh the page">
+  <ErrorBoundary text="Oh Oh, Our App crashed! Please refresh the page">
     <ApolloProvider client={apolloClient}>
       <BrowserRouter>
         <AppProviders>
