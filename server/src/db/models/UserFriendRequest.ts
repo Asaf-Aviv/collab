@@ -12,6 +12,7 @@ import {
 import { Op } from 'sequelize'
 import { v4 as uuid } from 'uuid'
 import { User } from './User'
+import { UserFriend } from './UserFriend'
 import { GQLResolverTypes } from '../../graphql/helpers/GQLResolverTypes'
 
 @Table({
@@ -43,20 +44,37 @@ export class UserFriendRequest extends Model<UserFriendRequest> {
   creationDate!: Date
 
   static async createFriendRequest(receiverId: string, senderId: string) {
-    const exist = await this.findOne({
-      where: {
-        [Op.or]: [
-          {
-            senderId,
-            receiverId,
-          },
-          { senderId: receiverId, receiverId: senderId },
-        ],
-      },
-    })
+    const [receiver, requestExist, areFriends] = await Promise.all([
+      User.findByPk(receiverId),
+      this.findOne({
+        where: {
+          [Op.or]: [
+            {
+              senderId,
+              receiverId,
+            },
+            { senderId: receiverId, receiverId: senderId },
+          ],
+        },
+      }),
+      UserFriend.findOne({
+        where: {
+          userId: senderId,
+          friendId: receiverId,
+        },
+      }),
+    ])
 
-    if (exist) {
+    if (!receiver) {
+      throw new Error('User not found')
+    }
+
+    if (requestExist) {
       throw new Error('There is already a request pending')
+    }
+
+    if (areFriends) {
+      throw new Error(`You are already friends with ${receiver.username}`)
     }
 
     return this.create({ receiverId, senderId }, { raw: true })
