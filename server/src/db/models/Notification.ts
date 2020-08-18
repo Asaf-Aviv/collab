@@ -418,6 +418,7 @@ export class Notification extends Model<Notification> {
     }
 
     notification.isRead = true
+    await notification.save()
     return notification.get() as typeof notification
   }
 
