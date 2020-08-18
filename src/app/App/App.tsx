@@ -4,10 +4,14 @@ import { ThemeProvider, CSSReset } from '@chakra-ui/core'
 import { Layout } from '../layout'
 import { lightTheme } from '../../themes'
 import './index.css'
+import { CurrentUserNotifications } from '../notifications'
 
 export const App = hot(() => (
   <ThemeProvider theme={lightTheme}>
-    <CSSReset />
-    <Layout />
+    {/*  CurrentUserNotifications must be inside the ThemeProvider */}
+    <CurrentUserNotifications>
+      <CSSReset />
+      <Layout />
+    </CurrentUserNotifications>
   </ThemeProvider>
 ))
