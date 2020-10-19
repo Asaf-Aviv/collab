@@ -235,8 +235,8 @@ export const SearchBar = (props: Props) => {
                     {post.title}
                   </Text>
                   <CommentsAndReactionsCount
-                    reactionsCount={4}
-                    commentsCount={4}
+                    reactionsCount={post.reactionsCount}
+                    commentsCount={post.commentsCount}
                     emojiSize={16}
                     commentIconSize="14px"
                   />
