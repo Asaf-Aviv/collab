@@ -71,7 +71,7 @@ export const Home = () => {
         <Container bg="#582398">
           <FeatureSection
             title="Showcase"
-            text="Launch your app and show the community what you have built together!"
+            text="Launch your App and show the community what you have built together!"
             svg={CollabSvg4}
             textColor="white"
           />
