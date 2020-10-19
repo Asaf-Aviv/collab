@@ -6,10 +6,13 @@ import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
 import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined'
 import SearchRoundedIcon from '@material-ui/icons/SearchRounded'
 import PostAddIcon from '@material-ui/icons/PostAdd'
+import PersonAddIcon from '@material-ui/icons/PersonAdd'
 import { Flex, Divider, Text } from '@chakra-ui/core'
 import styled from '@emotion/styled'
 import { NavLink } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { ReactComponent as SignInIcon } from '../../../assets/svgs/sign-in.svg'
+import { ReactComponent as ShakeHandsIcon } from '../../../assets/svgs/shake-hands.svg'
 import { useCurrentUser } from '../../../providers'
 import { Container } from '../../../components/global'
 import { NavUserPanel } from '../NavUserPanel'
@@ -74,7 +77,7 @@ export const SmallScreenNav = () => {
               <ArrowForwardIosIcon />
             </StyledLink>
             <StyledLink exact to="/collabs/posts">
-              <HomeOutlinedIcon />
+              <ShakeHandsIcon height={24} width={24} />
               Collabs
               <ArrowForwardIosIcon />
             </StyledLink>
@@ -113,12 +116,12 @@ export const SmallScreenNav = () => {
             ) : (
               <>
                 <StyledLink to="/login">
-                  <PostAddIcon />
+                  <SignInIcon height={24} width={24} />
                   Log in
                   <ArrowForwardIosIcon />
                 </StyledLink>
                 <StyledLink to="/signup">
-                  <PostAddIcon />
+                  <PersonAddIcon />
                   Sign up
                   <ArrowForwardIosIcon />
                 </StyledLink>
@@ -161,6 +164,7 @@ const StyledLink = styled(NavLink)`
   align-items: center;
   font-weight: 300;
   svg:first-of-type {
+    fill: currentColor;
     margin-right: 0.5rem;
   }
   svg:last-of-type {
